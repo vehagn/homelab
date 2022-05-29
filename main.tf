@@ -18,10 +18,10 @@ provider "helm" {
 }
 
 resource "helm_release" "cilium" {
-  name = "cilium-cni"
+  name = "cilium"
 
-  repository = "https://helm.cilium.io/"
-  chart      = "cilium/cilium"
+  repository = "https://helm.cilium.io"
+  chart      = "cilium"
   namespace  = "kube-system"
   version    = "1.11.5"
 
