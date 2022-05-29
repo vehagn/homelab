@@ -1,5 +1,17 @@
 A Terraform script to provision a Kubernetes Cluster with stuff
 
+
+# MAYBE JUST USE MINIKUBE?
+
+```
+minikube start --network-plugin=cni --cni=false
+```
+
+Need CNI (Cilium) LoadBalancer (MetaLB) and IngressController (Traefik) I think.
+https://pgillich.medium.com/setup-on-premise-kubernetes-with-kubeadm-metallb-traefik-and-vagrant-8a9d8d28951a
+
+Interesting: https://github.com/Mosibi/mosibi-kubernetes
+
 # Setup cluster with kubeadm
 
 Disable swap for kubelet to work properly
@@ -22,8 +34,11 @@ sudo apt-get install -y containerd conntrack socat kubelet kubeadm kubectl
 cri-ctl: https://github.com/kubernetes-sigs/cri-tools
 nerdctl?
 
+
+We are going to use Cilium kube-proxy
 ```shell
-sudo kubeadm init
+sudo kubeadm init --skip-phases=addon/kube-proxy
+sudo kubeadm init 
 ```
 
 ## Set up kubectl
@@ -31,8 +46,17 @@ https://kubernetes.io/docs/tasks/tools/
 
 ```shell
 mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
+For remote kubectl
+```shell
+scp veh@192.168.1.12:/home/veh/.kube/config ~/.kube/config
+```
+
+## (Optional) Remove taint for single node use
+```shell
+kubectl taint nodes --all node-role.kubernetes.io/control-plane- node-role.kubernetes.io/master-
 ```
 
 ## Install CNI
@@ -40,13 +64,20 @@ We choose Cilium
 https://docs.cilium.io/en/stable/gettingstarted/k8s-install-helm/
 
 ```shell
-helm repo add cilium https://helm.cilium.io/
-helm install cilium cilium/cilium --version 1.11.5 --namespace kube-system
+cilium install
 ```
 
-## (Optional) Remove taint for single node use
 ```shell
-kubectl taint nodes --all node-role.kubernetes.io/control-plane- node-role.kubernetes.io/master-
+helm repo add cilium https://helm.cilium.io/
+```
+
+```shell
+kubectl -n kube-system get pods --watch
+```
+
+### Validate
+```shell
+kubectl -n kube-system get pods -l k8s-app=cilium
 ```
 
 ## Deploy using Terraform
@@ -58,6 +89,8 @@ terraform apply
 
 ## Cleanup
 ```shell
-kubectl drain <node name> --delete-emptydir-data --force --ignore-daemonsets
-kubeadm reset
+kubectl drain ratatoskr --delete-emptydir-data --force --ignore-daemonsets
+sudo kubeadm reset
+sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X
+sudo ipvsadm -C
 ```

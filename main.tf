@@ -28,22 +28,42 @@ resource "helm_release" "cilium" {
   chart      = "cilium"
   namespace  = "kube-system"
   version    = "1.11.5"
-
 }
 
-resource "kubernetes_namespace" "traefik" {
-  metadata {
-    name = "traefik"
-  }
-}
+#resource "kubernetes_namespace" "traefik" {
+#  metadata {
+#    name = "traefik"
+#  }
+#}
 
-resource "helm_release" "traefik" {
-  name = "traefik"
+#resource "helm_release" "traefik" {
+#  name = "traefik"
+#
+#  repository = "https://helm.traefik.io/traefik"
+#  chart = "traefik"
+#  namespace = "traefik"
+#  version = "10.20.0"
+#}
 
-  repository = "https://helm.traefik.io/traefik"
-  chart = "traefik"
-  namespace = "traefik"
-}
+#resource "kubernetes_service" "traefik" {
+#  metadata {
+#    name      = "traefik"
+#    namespace = kubernetes_namespace.traefik.metadata.0.name
+#  }
+#  spec {
+#    selector = {
+#      app = helm_release.traefik.manifest
+#      #app = kubernetes_deployment.test.spec.0.template.0.metadata.0.labels.app
+#    }
+#
+#    type = "NodePort"
+#    port {
+#      node_port   = 9001
+#      port        = 9000
+#      target_port = 9000
+#    }
+#  }
+#}
 
 #resource "kubernetes_namespace" "test" {
 #  metadata {
