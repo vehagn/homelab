@@ -35,9 +35,9 @@ cri-ctl: https://github.com/kubernetes-sigs/cri-tools
 nerdctl?
 
 
-We are going to use Cilium kube-proxy
+We are going to use Cilium kube-proxy (TODO)
 ```shell
-sudo kubeadm init --skip-phases=addon/kube-proxy
+sudo kubeadm init --skip-phases=addon/kube-proxy (TODO)
 sudo kubeadm init 
 ```
 
@@ -80,12 +80,25 @@ kubectl -n kube-system get pods --watch
 kubectl -n kube-system get pods -l k8s-app=cilium
 ```
 
+## MetalLB
+```shell
+helm repo add metallb https://metallb.github.io/metallb
+helm install metallb metallb/metallb
+```
+
 ## Deploy using Terraform
 https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/guides/getting-started
 ```shell
 terraform plan 
 terraform apply
 ```
+
+## Traefik IngressRoute CRD
+https://doc.traefik.io/traefik/v2.0/routing/providers/kubernetes-crd/
+```shell
+
+```
+
 
 ## Cleanup
 ```shell
