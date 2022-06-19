@@ -1,7 +1,8 @@
 kubespray
 Argo autopilot
 
-Cilium
+CNI: Cilium
+LoadBalancer: MetalLB
 Traefik
 cert-manager?
 ArgoCD
