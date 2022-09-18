@@ -30,41 +30,41 @@ provider "helm" {
 #  version    = "1.11.5"
 #}
 
-resource "kubernetes_namespace" "traefik" {
-  metadata {
-    name = "traefik"
-  }
-}
-
-resource "helm_release" "traefik" {
-  name = "traefik"
-
-  repository = "https://helm.traefik.io/traefik"
-  chart      = "traefik"
-  namespace  = "traefik"
-  version    = "10.20.0"
-
-}
-
-resource "kubernetes_service" "traefik" {
-  metadata {
-    name      = "traefik"
-    namespace = kubernetes_namespace.traefik.metadata.0.name
-  }
-  spec {
-    selector = {
-      # Standard Helm chart label to locate pods
-      "app.kubernetes.io/name" = helm_release.traefik.name
-    }
-
-    type = "LoadBalancer"
-    port {
-      protocol    = "TCP"
-      port        = 80    # External exposed port to reach container
-      target_port = 9000  # Internal exposed port of container
-    }
-  }
-}
+#resource "kubernetes_namespace" "traefik" {
+#  metadata {
+#    name = "traefik"
+#  }
+#}
+#
+#resource "helm_release" "traefik" {
+#  name = "traefik"
+#
+#  repository = "https://helm.traefik.io/traefik"
+#  chart      = "traefik"
+#  namespace  = "traefik"
+#  version    = "10.20.0"
+#
+#}
+#
+#resource "kubernetes_service" "traefik" {
+#  metadata {
+#    name      = "traefik"
+#    namespace = kubernetes_namespace.traefik.metadata.0.name
+#  }
+#  spec {
+#    selector = {
+#      # Standard Helm chart label to locate pods
+#      "app.kubernetes.io/name" = helm_release.traefik.name
+#    }
+#
+#    type = "LoadBalancer"
+#    port {
+#      protocol    = "TCP"
+#      port        = 80    # External exposed port to reach container
+#      target_port = 9000  # Internal exposed port of container
+#    }
+#  }
+#}
 
 resource "kubernetes_namespace" "test" {
   metadata {
