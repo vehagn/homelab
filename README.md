@@ -1,23 +1,12 @@
-A Terraform script to provision a Kubernetes Cluster with stuff
-
-
-# MAYBE JUST USE MINIKUBE?
-
-```
-minikube start --network-plugin=cni --cni=false
-```
-
-Need CNI (Cilium) LoadBalancer (MetaLB) and IngressController (Traefik) I think.
-https://pgillich.medium.com/setup-on-premise-kubernetes-with-kubeadm-metallb-traefik-and-vagrant-8a9d8d28951a
-
-Interesting: https://github.com/Mosibi/mosibi-kubernetes
-
 # Setup cluster with kubeadm
 
 Disable swap for kubelet to work properly
+
 ```shell
 swapoff -a
 ```
+
+## Install prerequisites
 
 ```shell
 sudo apt-get update
@@ -32,16 +21,18 @@ sudo apt-get install -y containerd conntrack socat kubelet kubeadm kubectl
 ```
 
 cri-ctl: https://github.com/kubernetes-sigs/cri-tools
-nerdctl?
-
+TODO: nerdctl?
 
 We are going to use Cilium kube-proxy (TODO)
+
+## Initialise cluster
+
 ```shell
-sudo kubeadm init --skip-phases=addon/kube-proxy (TODO)
 sudo kubeadm init 
 ```
 
 ## Set up kubectl
+
 https://kubernetes.io/docs/tasks/tools/
 
 ```shell
@@ -49,61 +40,147 @@ mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
-For remote kubectl
+For remote kubectl copy the config file to local machine
+
 ```shell
 scp veh@192.168.1.12:/home/veh/.kube/config ~/.kube/config
 ```
 
 ## (Optional) Remove taint for single node use
+
+Get taints on nodes
+
 ```shell
-kubectl taint nodes --all node-role.kubernetes.io/control-plane- node-role.kubernetes.io/master-
+kubectl get nodes -o json | jq '.items[].spec.taints'
 ```
 
-## Install CNI
-We choose Cilium
-https://docs.cilium.io/en/stable/gettingstarted/k8s-install-helm/
+Remove taint on master node to allow scheduling of all deployments
+
+```shell
+kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+```
+
+## Install Cilium as Container Network Interface (CNI)
+
+https://docs.cilium.io/en/stable/gettingstarted/k8s-install-default/
+
+Install Cilium CLI
+
+```shell
+CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/master/stable.txt)
+CLI_ARCH=amd64
+if [ "$(uname -m)" = "aarch64" ]; then CLI_ARCH=arm64; fi
+curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
+sha256sum --check cilium-linux-${CLI_ARCH}.tar.gz.sha256sum
+sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin
+rm cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
+```
+
+Install Cilium
 
 ```shell
 cilium install
 ```
 
-```shell
-helm repo add cilium https://helm.cilium.io/
-```
+Validate install
 
 ```shell
-kubectl -n kube-system get pods --watch
+cilium status
 ```
 
-### Validate
+### (Optional) Replace kube-proxy with Cilium [TODO]
+https://docs.cilium.io/en/v1.12/gettingstarted/kubeproxy-free/
+
+*NB* Cluster should be initialised with 
+
 ```shell
-kubectl -n kube-system get pods -l k8s-app=cilium
+sudo kubeadm init --skip-phases=addon/kube-proxy
 ```
+
 
 ## MetalLB
+
+For load balancing
+
+https://metallb.universe.tf/installation/
+
+Installation
+https://raw.githubusercontent.com/metallb/metallb/v0.13.5/config/manifests/metallb-native.yaml
+
 ```shell
-helm repo add metallb https://metallb.github.io/metallb
-helm install metallb metallb/metallb
+kubectl apply -f metallb/00-manifest.yml
 ```
 
-## Deploy using Terraform
-https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/guides/getting-started
-```shell
-terraform plan 
-terraform apply
+Configure IP-pool and advertise as Level 2
+https://metallb.universe.tf/configuration/
+
+```yaml
+kubectl apply -f metallb/02-configuration
 ```
 
-## Traefik IngressRoute CRD
-https://doc.traefik.io/traefik/v2.0/routing/providers/kubernetes-crd/
-```shell
+# Traefik
 
+## Traefik IngressRoute Custom Resource Definition (CRD)
+
+https://doc.traefik.io/traefik/v2.8/routing/providers/kubernetes-crd/
+https://doc.traefik.io/traefik/v2.8/user-guides/crd-acme/
+
+Create Custom Resource Definitions for Traefik
+
+```shell
+kubectl apply -f traefik/00-crd-definition.yml
+kubectl apply -f traefik/01-crd-rbac.yml
 ```
 
+## Service
 
-## Cleanup
+Create service for exposing Traefik deployment
+
+```shell
+kubectl apply -f traefik/02-service.yml
+```
+
+## Deployment
+
+Create deployment for Traefik
+
+```shell
+kubectl apply -f traefik/03-deployment.yml
+```
+
+## Port forward Traefik
+
+Port forward Traefik ports from 8000 to 80 for http and 4443 to 443 for https.
+IP can be found with `kubectl get svc`.
+
+# Test-application
+
+Create a test-application with
+
+```shell
+kubectl apply -f whoami/00-whoami.yml
+```
+
+`whoami` should now be available using https at `https://test.ratatoskr.myddns.rocks/tls`
+and using http at `http://test.ratatoskr.myddns.rocks/notls`.
+
+# Cleanup
+
 ```shell
 kubectl drain ratatoskr --delete-emptydir-data --force --ignore-daemonsets
 sudo kubeadm reset
 sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X
 sudo ipvsadm -C
 ```
+
+# TODO
+
+## Deploy using Terraform
+
+https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/guides/getting-started
+
+```shell
+terraform plan 
+terraform apply
+```
+
