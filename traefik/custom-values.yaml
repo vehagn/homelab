@@ -1,0 +1,9 @@
+# File custom-values.yml
+## Install with "helm install --values=traefik/custom-values.yml traefik traefik/traefik
+additionalArguments:
+  - "--log.level=DEBUG"
+  - "--api.insecure"
+  - "--accesslog"
+  - "--certificatesresolvers.myresolver.acme.tlschallenge"
+  - "--certificatesresolvers.myresolver.acme.email=veghag@gmail.com"
+  - "--certificatesresolvers.myresolver.acme.storage=acme.json"

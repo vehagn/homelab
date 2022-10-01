@@ -43,7 +43,7 @@ kubectl apply -f metallb/00-manifest.yml
 ## Configure MetalLB
 
 ```shell
-kubectl apply -f metallb/02-configration.yml
+kubectl apply -f metallb/01-configuration.yml
 ```
 
 # Traefik

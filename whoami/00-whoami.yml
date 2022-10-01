@@ -42,23 +42,6 @@ spec:
               containerPort: 80
 
 ---
-# IngressRoute for insecure whoami address
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: simpleingressroute
-  namespace: default
-spec:
-  entryPoints:
-    - web
-  routes:
-    - match: Host(`test.ratatoskr.myddns.rocks`) && PathPrefix(`/notls`)
-      kind: Rule
-      services:
-        - name: whoami
-          port: 80
-
----
 # IngressRoute for secure whoami address
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -69,10 +52,27 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`test.ratatoskr.myddns.rocks`) && PathPrefix(`/tls`)
+    - match: Host(`whoami.ratatoskr.myddns.rocks`)
       kind: Rule
       services:
         - name: whoami
           port: 80
   tls:
     certResolver: myresolver
+
+---
+## IngressRoute for insecure whoami address
+#apiVersion: traefik.containo.us/v1alpha1
+#kind: IngressRoute
+#metadata:
+#  name: simpleingressroute
+#  namespace: default
+#spec:
+#  entryPoints:
+#    - web
+#  routes:
+#    - match: Host(`test.ratatoskr.myddns.rocks`) && PathPrefix(`/notls`)
+#      kind: Rule
+#      services:
+#        - name: whoami
+#          port: 80

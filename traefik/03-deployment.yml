@@ -31,7 +31,7 @@ spec:
             - --api.insecure
             - --accesslog
             - --entrypoints.web.Address=:8000
-            - --entrypoints.websecure.Address=:4443
+            - --entrypoints.websecure.Address=:8443
             - --providers.kubernetescrd
             - --certificatesresolvers.myresolver.acme.tlschallenge
             - --certificatesresolvers.myresolver.acme.email=veghag@gmail.com
@@ -43,6 +43,6 @@ spec:
             - name: web
               containerPort: 8000
             - name: websecure
-              containerPort: 4443
+              containerPort: 8443
             - name: admin
               containerPort: 8080
