@@ -1,9 +1,15 @@
+# Namespace for whoami
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: whoami
+
 ---
 # Service for exposing deployment of whoami
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: default
+  namespace: whoami
   name: whoami
 
 spec:
@@ -20,7 +26,7 @@ spec:
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  namespace: default
+  namespace: whoami
   name: whoami
   labels:
     app: whoami
@@ -48,12 +54,12 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: ingressroutetls
-  namespace: default
+  namespace: whoami
 spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`whoami.stonegarden.dev`)
+    - match: Host(`whoami2.stonegarden.dev`)
       kind: Rule
       services:
         - name: whoami

@@ -30,40 +30,66 @@ provider "helm" {
 #  version    = "1.11.5"
 #}
 
+## Create namespace for Traefik
 resource "kubernetes_namespace" "traefik" {
   metadata {
     name = "traefik-system"
   }
 }
 
+## Create StorageClass for local volumes
+resource "kubernetes_storage_class" "cert-storage" {
+  metadata {
+    name = "cert-storage"
+  }
+  storage_provisioner = "kubernetes.io/no-provisioner"
+  volume_binding_mode = "WaitForFirstCustomer"
+}
+
+## Create PersistentVolume for Traefik certs
+resource "kubernetes_persistent_volume" "traefik-cert-pv" {
+  metadata {
+    name = "traefik-cert-pv"
+  }
+  spec {
+    capacity                         = {
+      storage = "128Mi"
+    }
+    volume_mode                      = "Filesystem"
+    access_modes                     = ["ReadWriteOnce"]
+    persistent_volume_reclaim_policy = "Retain"
+    storage_class_name               = "cert-storage"
+    persistent_volume_source {
+      local {
+        path = "/mnt/sdb1/terrakube/certs"
+      }
+    }
+    node_affinity {
+      required {
+        node_selector_term {
+          match_expressions {
+            key      = "kubernetes.io/hostname"
+            operator = "In"
+            values   = ["ratatoskr"]
+          }
+        }
+      }
+    }
+  }
+}
+
+## Install Traefik
 resource "helm_release" "traefik" {
   name = "traefik"
 
   repository = "https://helm.traefik.io/traefik"
   chart      = "traefik"
-  namespace  = "traefik"
-  version    = "10.20.0"
+  namespace  = kubernetes_namespace.traefik.metadata.0.name
+  #version    = "10.30.1"
+
+  values = [file("traefik2/custom-values.yaml")]
 }
 
-#resource "kubernetes_service" "traefik" {
-#  metadata {
-#    name      = "traefik"
-#    namespace = kubernetes_namespace.traefik.metadata.0.name
-#  }
-#  spec {
-#    selector = {
-#      # Standard Helm chart label to locate pods
-#      "app.kubernetes.io/name" = helm_release.traefik.name
-#    }
-#
-#    type = "LoadBalancer"
-#    port {
-#      protocol    = "TCP"
-#      port        = 80    # External exposed port to reach container
-#      target_port = 9000  # Internal exposed port of container
-#    }
-#  }
-#}
 
 //resource "kubernetes_namespace" "test" {
 //  metadata {
