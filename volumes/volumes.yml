@@ -1,0 +1,29 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: cert-storage
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: traefik-certs-pv
+spec:
+  capacity:
+    storage: 128Mi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: cert-storage
+  local:
+    path: "/mnt/sdb1/terrakube/certs"
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - ratatoskr

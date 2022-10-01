@@ -82,6 +82,10 @@ Install Cilium
 cilium install
 ```
 
+```shell
+helm template --namespace kube-system cilium cilium/cilium --version 1.12.1 --set cluster.id=0,cluster.name=kubernetes,encryption.nodeEncryption=false,kubeProxyReplacement=disabled,operator.replicas=1,serviceAccounts.cilium.name=cilium,serviceAccounts.operator.name=cilium-operator,tunnel=vxlan
+```
+
 Validate install
 
 ```shell
@@ -89,14 +93,14 @@ cilium status
 ```
 
 ### (Optional) Replace kube-proxy with Cilium [TODO]
+
 https://docs.cilium.io/en/v1.12/gettingstarted/kubeproxy-free/
 
-*NB* Cluster should be initialised with 
+*NB* Cluster should be initialised with
 
 ```shell
 sudo kubeadm init --skip-phases=addon/kube-proxy
 ```
-
 
 ## MetalLB
 
@@ -115,10 +119,23 @@ Configure IP-pool and advertise as Level 2
 https://metallb.universe.tf/configuration/
 
 ```yaml
-kubectl apply -f metallb/02-configuration
+kubectl apply -f metallb/01-configuration.yml
 ```
 
 # Traefik
+
+## Install using Helm
+
+```shell
+kubectl apply -f volumes/volumes.yml
+```
+
+**NB:** It appears we need the "volume-permissions" init container for Traefik if using `StorageClass` with
+provisioner `kubernetes.io/no-provisioner`
+
+```shell
+helm install --values=helm/traefik-values.yaml traefik traefik/traefik
+```
 
 ## Traefik IngressRoute Custom Resource Definition (CRD)
 

@@ -50,23 +50,16 @@ kubectl apply -f metallb/01-configuration.yml
 
 https://doc.traefik.io/traefik/v2.8/user-guides/crd-acme/
 
-## Create Traefik CRDs
+## Create persistent volume for certs
 
 ```shell
-kubectl apply -f traefik/00-crd-definition.yml
-kubectl apply -f traefik/01-crd-rbac.yml
+kubectl appy -f volumes/volumes.yml
 ```
 
-## Create Service
+## Install using Helm
 
 ```shell
-kubectl apply -f traefik/02-service.yml
-```
-
-## Create Deployment
-
-```shell
-kubectl apply -f traefik/03-deployment.yml
+helm install --values=helm/traefik-values.yaml traefik traefik/traefik
 ```
 
 ## Create test application "whoami" with IngressRoutes

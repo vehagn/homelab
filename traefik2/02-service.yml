@@ -8,12 +8,14 @@ spec:
   ports:
     - protocol: TCP
       name: web
-      port: 8000
+      port: 80
+      targetPort: 8000
     - protocol: TCP
       name: admin
       port: 8080
     - protocol: TCP
       name: websecure
-      port: 4443
+      port: 443
+      targetPort: 8443
   selector:
     app: traefik
