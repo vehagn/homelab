@@ -43,7 +43,7 @@ resource "kubernetes_storage_class" "cert-storage" {
     name = "cert-storage"
   }
   storage_provisioner = "kubernetes.io/no-provisioner"
-  volume_binding_mode = "WaitForFirstCustomer"
+  volume_binding_mode = "WaitForFirstConsumer"
 }
 
 ## Create PersistentVolume for Traefik certs
@@ -87,9 +87,75 @@ resource "helm_release" "traefik" {
   namespace  = kubernetes_namespace.traefik.metadata.0.name
   #version    = "10.30.1"
 
-  values = [file("traefik2/custom-values.yaml")]
+  values = [file("helm/traefik-values.yaml")]
 }
 
+# --- whoami
+resource "kubernetes_namespace" "whoami" {
+  metadata {
+    name = "whoami"
+  }
+}
+
+resource "kubernetes_service" "whoami" {
+  metadata {
+    name = "whoami"
+    namespace = kubernetes_namespace.whoami.metadata.0.name
+  }
+  spec {
+    selector = {
+      app = kubernetes_deployment.whoami.spec.0.template.0.metadata.0.labels.app
+    }
+
+    type = "LoadBalancer"
+    port {
+      protocol = "TCP"
+      name = "web"
+      port = 80
+    }
+  }
+}
+
+resource "kubernetes_deployment" "whoami" {
+  metadata {
+    name = "whoami"
+    namespace = kubernetes_namespace.whoami.metadata.0.name
+  }
+  spec {
+    replicas = "2"
+    selector {
+      match_labels = {
+        app = "whoami"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          app = "whoami"
+        }
+      }
+      spec {
+        container {
+          name = "whoami"
+          image = "traefik/whoami"
+          port {
+            name = "web"
+            container_port = 80
+          }
+        }
+      }
+    }
+  }
+}
+
+resource "helm_release" "whoami" {
+  name       = "whoami"
+  repository = "https://charts.itscontained.io"
+  chart      = "raw"
+  version    = "0.2.5"
+
+  values = [file("helm/whoami-values.yaml")]
+}
 
 //resource "kubernetes_namespace" "test" {
 //  metadata {
