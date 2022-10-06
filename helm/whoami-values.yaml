@@ -1,0 +1,17 @@
+resources:
+  - apiVersion: traefik.containo.us/v1alpha1
+    kind: IngressRoute
+    metadata:
+      name: whoami
+      namespace: whoami
+    spec:
+      entryPoints:
+        - websecure
+      routes:
+        - match: Host(`whoami.stonegarden.dev`)
+          kind: Rule
+          services:
+            - name: whoami
+              port: 80
+      tls:
+        certResolver: letsencrypt

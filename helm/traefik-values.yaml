@@ -27,4 +27,4 @@ certResolvers:
     tlsChallenge: true
     storage: /data/acme.json
     # Remove staging server when it's working
-    caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+    #caServer: https://acme-staging-v02.api.letsencrypt.org/directory
