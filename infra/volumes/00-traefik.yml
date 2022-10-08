@@ -8,7 +8,7 @@ volumeBindingMode: WaitForFirstConsumer
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: traefik-certs-pv
+  name: traefik-cert-pv
 spec:
   capacity:
     storage: 128Mi

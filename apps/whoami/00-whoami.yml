@@ -3,6 +3,8 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: whoami
+  label:
+    name: whoami
 
 ---
 # Service for exposing deployment of whoami
@@ -11,7 +13,6 @@ kind: Service
 metadata:
   namespace: whoami
   name: whoami
-
 spec:
   type: LoadBalancer
   ports:
@@ -30,7 +31,6 @@ metadata:
   name: whoami
   labels:
     app: whoami
-
 spec:
   replicas: 2
   selector:
@@ -53,13 +53,13 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: ingressroutetls
+  name: ingressroute-whoami
   namespace: whoami
 spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`whoami2.stonegarden.dev`)
+    - match: Host(`whoami.stonegarden.dev`)
       kind: Rule
       services:
         - name: whoami

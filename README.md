@@ -82,6 +82,7 @@ Install Cilium
 cilium install
 ```
 
+// TODO: Directly by Helm chart
 ```shell
 helm template --namespace kube-system cilium cilium/cilium --version 1.12.1 --set cluster.id=0,cluster.name=kubernetes,encryption.nodeEncryption=false,kubeProxyReplacement=disabled,operator.replicas=1,serviceAccounts.cilium.name=cilium,serviceAccounts.operator.name=cilium-operator,tunnel=vxlan
 ```
@@ -112,74 +113,43 @@ Installation
 https://raw.githubusercontent.com/metallb/metallb/v0.13.5/config/manifests/metallb-native.yaml
 
 ```shell
-kubectl apply -f metallb/00-manifest.yml
+kubectl apply -f infra/metallb/00-manifest.yml
 ```
 
 Configure IP-pool and advertise as Level 2
 https://metallb.universe.tf/configuration/
 
 ```yaml
-kubectl apply -f metallb/01-configuration.yml
+kubectl apply -f infra/metallb/01-configuration.yml
 ```
 
 # Traefik
 
-## Install using Helm
+## Install using Terraform and Helm
 
 ```shell
-kubectl apply -f volumes/volumes.yml
+terraform init
+terraform plan
+terraform apply
 ```
 
 **NB:** It appears we need the "volume-permissions" init container for Traefik if using `StorageClass` with
 provisioner `kubernetes.io/no-provisioner`
 
-```shell
-helm install --values=helm/traefik-values.yaml traefik traefik/traefik
-```
-
-## Traefik IngressRoute Custom Resource Definition (CRD)
-
-https://doc.traefik.io/traefik/v2.8/routing/providers/kubernetes-crd/
-https://doc.traefik.io/traefik/v2.8/user-guides/crd-acme/
-
-Create Custom Resource Definitions for Traefik
-
-```shell
-kubectl apply -f traefik/00-crd-definition.yml
-kubectl apply -f traefik/01-crd-rbac.yml
-```
-
-## Service
-
-Create service for exposing Traefik deployment
-
-```shell
-kubectl apply -f traefik/02-service.yml
-```
-
-## Deployment
-
-Create deployment for Traefik
-
-```shell
-kubectl apply -f traefik/03-deployment.yml
-```
-
 ## Port forward Traefik
 
-Port forward Traefik ports from 8000 to 80 for http and 4443 to 443 for https.
+Port forward Traefik ports in router from 8000 to 80 for http and 4443 to 443 for https.
 IP can be found with `kubectl get svc`.
 
 # Test-application
 
-Create a test-application with
+Create a test-application (if not already created with Terraform) with
 
 ```shell
-kubectl apply -f whoami/00-whoami.yml
+kubectl apply -f apps/whoami/00-whoami.yml
 ```
 
-`whoami` should now be available using https at `https://test.ratatoskr.myddns.rocks/tls`
-and using http at `http://test.ratatoskr.myddns.rocks/notls`.
+`whoami` should now be available at `https://whoami.${DOMAIN}`.
 
 # Cleanup
 
@@ -189,15 +159,3 @@ sudo kubeadm reset
 sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X
 sudo ipvsadm -C
 ```
-
-# TODO
-
-## Deploy using Terraform
-
-https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/guides/getting-started
-
-```shell
-terraform plan 
-terraform apply
-```
-
