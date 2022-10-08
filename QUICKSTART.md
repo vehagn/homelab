@@ -39,13 +39,13 @@ cilium install
 https://raw.githubusercontent.com/metallb/metallb/v0.13.5/config/manifests/metallb-native.yaml
 
 ```shell
-kubectl apply -f metallb/00-manifest.yml
+kubectl apply -f infra/metallb/00-manifest.yml
 ```
 
 ## Configure MetalLB
 
 ```shell
-kubectl apply -f metallb/01-configuration.yml
+kubectl apply -f infra/metallb/01-configuration.yml
 ```
 
 # Traefik
@@ -64,8 +64,10 @@ terraform plan
 terraform apply
 ```
 
-## Create test application "whoami" with IngressRoutes
+## Test application
+
+If not already created with Terraform run
 
 ```shell
-kubectl apply -f whoami/00-whoami.yml
+kubectl apply -f apps/whoami/00-whoami.yml
 ```
