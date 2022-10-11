@@ -9,6 +9,10 @@ deployment:
         - name: data
           mountPath: /data
 
+providers:
+  kubernetesCRD:
+    allowCrossNamespace: true
+
 additionalArguments:
   - "--log.level=DEBUG"
   - "--api.insecure"
