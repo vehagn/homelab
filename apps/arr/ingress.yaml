@@ -1,0 +1,53 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  namespace: arr
+  name: ingressroute-arr
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`auth-arr.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: traefik-forward-auth
+          port: 4181
+      middlewares:
+        - name: traefik-forward-auth
+    - match: Host(`torrent.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: qbittorrent
+          port: 8112
+      middlewares:
+        - name: traefik-forward-auth
+    - match: Host(`prowlarr.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: prowlarr
+          port: 9696
+      middlewares:
+        - name: traefik-forward-auth
+    - match: Host(`sonarr.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: sonarr
+          port: 8989
+      middlewares:
+        - name: traefik-forward-auth
+    - match: Host(`radarr.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: radarr
+          port: 7878
+      middlewares:
+        - name: traefik-forward-auth
+    - match: Host(`lidarr.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: lidarr
+          port: 8686
+      middlewares:
+        - name: traefik-forward-auth
+  tls:
+    certResolver: letsencrypt
