@@ -1,0 +1,42 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: arr
+  name: radarr
+  labels:
+    app: radarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: radarr
+  template:
+    metadata:
+      labels:
+        app: radarr
+    spec:
+      volumes:
+        - name: radarr-config
+          hostPath:
+            path: "/mnt/sdb1/homelab/config/radarr"
+        - name: media-data
+          hostPath:
+            path: "/mnt/sdb1/data"
+      containers:
+        - name: radarr
+          image: lscr.io/linuxserver/radarr
+          volumeMounts:
+            - mountPath: "/config"
+              name: radarr-config
+            - mountPath: "/app/data"
+              name: media-data
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: Europe/Oslo
+          ports:
+            - name: web
+              containerPort: 7878

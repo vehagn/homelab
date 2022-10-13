@@ -1,0 +1,42 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: arr
+  name: sonarr
+  labels:
+    app: sonarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarr
+  template:
+    metadata:
+      labels:
+        app: sonarr
+    spec:
+      volumes:
+        - name: sonarr-config
+          hostPath:
+            path: "/mnt/sdb1/homelab/config/sonarr"
+        - name: media-data
+          hostPath:
+            path: "/mnt/sdb1/data"
+      containers:
+        - name: sonarr
+          image: lscr.io/linuxserver/sonarr
+          volumeMounts:
+            - mountPath: "/config"
+              name: sonarr-config
+            - mountPath: "/app/data"
+              name: media-data
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: Europe/Oslo
+          ports:
+            - name: web
+              containerPort: 8989

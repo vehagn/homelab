@@ -1,0 +1,16 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ingressroute-plex
+  namespace: plex
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`plex.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: plex
+          port: 32400
+  tls:
+    certResolver: letsencrypt

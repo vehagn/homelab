@@ -1,0 +1,42 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: arr
+  name: lidarr
+  labels:
+    app: lidarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lidarr
+  template:
+    metadata:
+      labels:
+        app: lidarr
+    spec:
+      volumes:
+        - name: lidarr-config
+          hostPath:
+            path: "/mnt/sdb1/homelab/config/lidarr"
+        - name: media-data
+          hostPath:
+            path: "/mnt/sdb1/data"
+      containers:
+        - name: lidarr
+          image: lscr.io/linuxserver/lidarr
+          volumeMounts:
+            - mountPath: "/config"
+              name: lidarr-config
+            - mountPath: "/app/data"
+              name: media-data
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: Europe/Oslo
+          ports:
+            - name: web
+              containerPort: 8686

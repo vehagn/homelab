@@ -1,0 +1,68 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: arr
+  name: qbittorrent
+  labels:
+    app: qbittorrent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qbittorrent
+  template:
+    metadata:
+      labels:
+        app: qbittorrent
+    spec:
+      volumes:
+        - name: qbittorrent-config
+          hostPath:
+            path: "/mnt/sdb1/homelab/config/qbittorrent"
+        - name: media-data
+          hostPath:
+            path: "/mnt/sdb1/data"
+      containers:
+        - name: qbittorrent
+          image: lscr.io/linuxserver/qbittorrent:14.3.9.99202110311443-7435-01519b5e7ubuntu20.04.1-ls166
+          volumeMounts:
+            - mountPath: "/config"
+              name: qbittorrent-config
+            - mountPath: "/app/data"
+              name: media-data
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: Europe/Oslo
+            - name: WEBUI_PORT
+              value: "8112"
+          ports:
+            - name: web
+              containerPort: 8112
+            - containerPort: 11010
+              protocol: TCP
+            - containerPort: 11011
+              protocol: TCP
+            - containerPort: 11012
+              protocol: TCP
+            - containerPort: 11013
+              protocol: TCP
+            - containerPort: 11014
+              protocol: TCP
+            - containerPort: 11015
+              protocol: TCP
+            - containerPort: 11010
+              protocol: UDP
+            - containerPort: 11011
+              protocol: UDP
+            - containerPort: 11012
+              protocol: UDP
+            - containerPort: 11013
+              protocol: UDP
+            - containerPort: 11014
+              protocol: UDP
+            - containerPort: 11015
+              protocol: UDP
