@@ -27,20 +27,6 @@ spec:
           env:
             - name: CONFIG
               value: "/config"
-            #- name: DOMAIN
-            #  value: "gmail.com"
-            # INSECURE_COOKIE is required if not using a https entrypoint
-            #- name: INSECURE_COOKIE
-            #  value: "true"
-            # Remove COOKIE_DOMAIN if not using auth host mode
-            - name: COOKIE_DOMAIN
-              value: "stonegarden.dev"
-            - name: AUTH_HOST
-              value: "auth.stonegarden.dev"
-            - name: LOG_LEVEL
-              value: "trace"
-            - name: WHITELIST
-              value: veghag@gmail.com
             - name: PROVIDERS_GOOGLE_CLIENT_ID
               valueFrom:
                 secretKeyRef:
