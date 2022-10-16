@@ -1,19 +1,13 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  namespace: plex
   name: plex
-  labels:
-    app: plex
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: plex
   template:
-    metadata:
-      labels:
-        app: plex
     spec:
       volumes:
         - name: plex-config

@@ -2,8 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: whoami
-  labels:
-    app: whoami
 spec:
   replicas: 1
   selector:

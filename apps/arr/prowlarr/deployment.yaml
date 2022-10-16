@@ -1,19 +1,13 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  namespace: arr
   name: prowlarr
-  labels:
-    app: prowlarr
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: prowlarr
   template:
-    metadata:
-      labels:
-        app: prowlarr
     spec:
       volumes:
         - name: prowlarr-config

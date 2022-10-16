@@ -1,19 +1,13 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  namespace: arr
   name: sonarr
-  labels:
-    app: sonarr
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: sonarr
   template:
-    metadata:
-      labels:
-        app: sonarr
     spec:
       volumes:
         - name: sonarr-config

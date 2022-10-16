@@ -2,8 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: traefik-forward-auth
-  labels:
-    app: traefik-forward-auth
 spec:
   replicas: 1
   selector:
@@ -12,9 +10,6 @@ spec:
   strategy:
     type: Recreate
   template:
-    metadata:
-      labels:
-        app: traefik-forward-auth
     spec:
       terminationGracePeriodSeconds: 60
       containers:

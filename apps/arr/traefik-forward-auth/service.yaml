@@ -1,12 +1,7 @@
-#
-# Auth Service
-#
 apiVersion: v1
 kind: Service
 metadata:
   name: traefik-forward-auth
-  labels:
-    app: traefik-forward-auth
 spec:
   type: ClusterIP
   selector:

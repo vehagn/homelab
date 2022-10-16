@@ -1,19 +1,13 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  namespace: arr
   name: lidarr
-  labels:
-    app: lidarr
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: lidarr
   template:
-    metadata:
-      labels:
-        app: lidarr
     spec:
       volumes:
         - name: lidarr-config

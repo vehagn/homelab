@@ -1,19 +1,13 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  namespace: arr
   name: qbittorrent
-  labels:
-    app: qbittorrent
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: qbittorrent
   template:
-    metadata:
-      labels:
-        app: qbittorrent
     spec:
       volumes:
         - name: qbittorrent-config

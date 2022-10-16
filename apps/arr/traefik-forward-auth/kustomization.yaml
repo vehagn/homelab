@@ -8,18 +8,12 @@ resources:
   - service.yaml
   - middleware.yaml
 
-#
-# Configs
-#
 configMapGenerator:
   - name: configs
     files:
       - configs/traefik-forward-auth.ini
 
-#
-# Secrets
-#
 secretGenerator:
   - name: traefik-forward-auth-secrets
     envs:
-    - secrets/traefik-forward-auth.env
+      - secrets/traefik-forward-auth.env
