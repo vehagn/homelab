@@ -11,11 +11,18 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`auth.stonegarden.dev`)
+    - match: Host(`auth-whoami.stonegarden.dev`)
       kind: Rule
       services:
         - name: traefik-forward-auth
           port: 4181
+      middlewares:
+        - name: traefik-forward-auth
+    - match: Host(`whoami.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: whoami
+          port: 80
       middlewares:
         - name: traefik-forward-auth
   tls:

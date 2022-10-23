@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-forward-auth
+spec:
+  type: ClusterIP
+  selector:
+    app: traefik-forward-auth
+  ports:
+    - name: auth-http
+      port: 4181

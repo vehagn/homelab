@@ -1,0 +1,24 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ingressroute-arr
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`auth-hass.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: traefik-forward-auth
+          port: 4181
+      middlewares:
+        - name: traefik-forward-auth
+    - match: Host(`hass.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: home-assistant
+          port: 8123
+      middlewares:
+        - name: traefik-forward-auth
+  tls:
+    certResolver: letsencrypt

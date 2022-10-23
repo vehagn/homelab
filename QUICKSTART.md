@@ -63,11 +63,3 @@ terraform init
 terraform plan
 terraform apply
 ```
-
-## Test application
-
-If not already created with Terraform run
-
-```shell
-kubectl apply -f apps/whoami/00-whoami.yml
-```

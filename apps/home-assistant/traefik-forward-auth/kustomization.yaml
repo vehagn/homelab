@@ -4,9 +4,8 @@ commonLabels:
   app: traefik-forward-auth
 
 resources:
-  - deployment.yaml
   - service.yaml
-  - ingress.yaml
+  - deployment.yaml
   - middleware.yaml
 
 configMapGenerator:

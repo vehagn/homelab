@@ -143,13 +143,7 @@ IP can be found with `kubectl get svc`.
 
 # Test-application
 
-Create a test-application (if not already created with Terraform) with
-
-```shell
-kubectl apply -f apps/whoami/00-whoami.yml
-```
-
-`whoami` should now be available at `https://whoami.${DOMAIN}`.
+A test-application `whoami` should be available at `https://whoami.${DOMAIN}`.
 
 # Cleanup
 

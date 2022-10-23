@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: home-assistant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: home-assistant
+  template:
+    spec:
+      volumes:
+        - name: home-assistant-config
+          hostPath:
+            path: "/mnt/sdb1/config/home-assistant"
+      containers:
+        - image: homeassistant/home-assistant
+          name: home-assistant
+          volumeMounts:
+            - mountPath: "/config"
+              name: home-assistant-config
+          ports:
+            - name: web
+              containerPort: 8123
