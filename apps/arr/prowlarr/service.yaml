@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: prowlarr
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: web
       port: 9696

@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: home-assistant
 spec:
+  type: LoadBalancer
   ports:
     - name: web
       port: 8123

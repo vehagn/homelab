@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: lidarr
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: web
       port: 8686

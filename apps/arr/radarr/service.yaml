@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: radarr
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: web
       port: 7878
