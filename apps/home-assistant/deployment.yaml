@@ -15,6 +15,7 @@ spec:
             path: "/mnt/sdb1/config/home-assistant"
       containers:
         - image: homeassistant/home-assistant
+          imagePullPolicy: Always
           name: home-assistant
           volumeMounts:
             - mountPath: "/config"

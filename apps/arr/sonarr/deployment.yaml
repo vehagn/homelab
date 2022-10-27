@@ -19,6 +19,7 @@ spec:
       containers:
         - name: sonarr
           image: lscr.io/linuxserver/sonarr
+          imagePullPolicy: Always
           volumeMounts:
             - mountPath: "/config"
               name: sonarr-config

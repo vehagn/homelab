@@ -14,4 +14,5 @@ spec:
     spec:
       containers:
         - image: containous/whoami
+          imagePullPolicy: Always
           name: whoami

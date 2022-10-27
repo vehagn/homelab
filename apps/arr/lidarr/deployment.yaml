@@ -19,6 +19,7 @@ spec:
       containers:
         - name: lidarr
           image: lscr.io/linuxserver/lidarr
+          imagePullPolicy: Always
           volumeMounts:
             - mountPath: "/config"
               name: lidarr-config

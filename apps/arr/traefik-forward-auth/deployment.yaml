@@ -15,6 +15,7 @@ spec:
       containers:
         - image: thomseddon/traefik-forward-auth:2
           name: traefik-forward-auth
+          imagePullPolicy: Always
           ports:
             - containerPort: 4181
               protocol: TCP

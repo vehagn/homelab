@@ -25,6 +25,7 @@ spec:
       containers:
         - name: plex
           image: lscr.io/linuxserver/plex
+          imagePullPolicy: Always
           volumeMounts:
             - mountPath: "/config"
               name: plex-config

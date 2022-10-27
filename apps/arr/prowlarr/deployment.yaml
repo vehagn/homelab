@@ -16,6 +16,7 @@ spec:
       containers:
         - name: prowlarr
           image: lscr.io/linuxserver/prowlarr:develop
+          imagePullPolicy: Always
           volumeMounts:
             - mountPath: "/config"
               name: prowlarr-config

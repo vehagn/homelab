@@ -19,6 +19,7 @@ spec:
       containers:
         - name: radarr
           image: lscr.io/linuxserver/radarr
+          imagePullPolicy: Always
           volumeMounts:
             - mountPath: "/config"
               name: radarr-config
