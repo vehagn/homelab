@@ -90,20 +90,20 @@ resource "helm_release" "traefik" {
   values = [file("helm/traefik-values.yaml")]
 }
 
-resource "kubernetes_namespace" "whoami" {
+resource "kubernetes_namespace" "test" {
   metadata {
-    name = "whoami"
+    name = "test"
   }
 }
 
-resource "kubernetes_service" "whoami" {
+resource "kubernetes_service" "test" {
   metadata {
-    name = "whoami"
-    namespace = kubernetes_namespace.whoami.metadata.0.name
+    name = "test"
+    namespace = kubernetes_namespace.test.metadata.0.name
   }
   spec {
     selector = {
-      app = kubernetes_deployment.whoami.spec.0.template.0.metadata.0.labels.app
+      app = kubernetes_deployment.test.spec.0.template.0.metadata.0.labels.app
     }
 
     type = "LoadBalancer"
@@ -115,27 +115,27 @@ resource "kubernetes_service" "whoami" {
   }
 }
 
-resource "kubernetes_deployment" "whoami" {
+resource "kubernetes_deployment" "test" {
   metadata {
-    name = "whoami"
-    namespace = kubernetes_namespace.whoami.metadata.0.name
+    name = "test"
+    namespace = kubernetes_namespace.test.metadata.0.name
   }
   spec {
     replicas = "2"
     selector {
       match_labels = {
-        app = "whoami"
+        app = "test"
       }
     }
     template {
       metadata {
         labels = {
-          app = "whoami"
+          app = "test"
         }
       }
       spec {
         container {
-          name = "whoami"
+          name = "test"
           image = "traefik/whoami"
           port {
             name = "web"
