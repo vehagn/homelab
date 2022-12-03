@@ -12,10 +12,10 @@ spec:
       volumes:
         - name: plex-config
           hostPath:
-            path: "/mnt/sdb1/homelab/config/plex"
+            path: "/disk/etc/plex"
         - name: media-data
           hostPath:
-            path: "/mnt/sdb1/data"
+            path: "/disk/data"
         #- name: plex-config-pv
         #  persistentVolumeClaim:
         #    claimName: plex-config

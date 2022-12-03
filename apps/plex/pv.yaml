@@ -11,7 +11,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: plex-config
   local:
-    path: "/mnt/sdb1/homelab/config/plex"
+    path: "/disk/etc/plex"
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -27,14 +27,14 @@ metadata:
   name: media-data-pv
 spec:
   capacity:
-    storage: 1.8Ti
+    storage: 11Ti
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   storageClassName: media-data
   local:
-    path: "/mnt/sdb1/data"
+    path: "/disk/data"
   nodeAffinity:
     required:
       nodeSelectorTerms:

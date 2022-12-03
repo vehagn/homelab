@@ -148,7 +148,7 @@ A test-application `whoami` should be available at `https://whoami.${DOMAIN}`.
 # Cleanup
 
 ```shell
-kubectl drain ratatoskr --delete-emptydir-data --force --ignore-daemonsets
+kubectl drain gauss --delete-emptydir-data --force --ignore-daemonsets
 sudo kubeadm reset
 sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X
 sudo ipvsadm -C

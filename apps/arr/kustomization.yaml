@@ -6,7 +6,7 @@ resources:
   - namespace.yaml
   - ingress.yaml
   - traefik-forward-auth
-  - qbittorrent
+  - torrent
   - prowlarr
   - sonarr
   - radarr

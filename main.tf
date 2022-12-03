@@ -61,7 +61,7 @@ resource "kubernetes_persistent_volume" "traefik-cert-pv" {
     storage_class_name               = "cert-storage"
     persistent_volume_source {
       local {
-        path = "/mnt/sdb1/terrakube/certs"
+        path = "/disk/etc/traefik/certs"
       }
     }
     node_affinity {
@@ -70,7 +70,7 @@ resource "kubernetes_persistent_volume" "traefik-cert-pv" {
           match_expressions {
             key      = "kubernetes.io/hostname"
             operator = "In"
-            values   = ["ratatoskr"]
+            values   = ["gauss"]
           }
         }
       }
@@ -89,69 +89,3 @@ resource "helm_release" "traefik" {
 
   values = [file("helm/traefik-values.yaml")]
 }
-
-resource "kubernetes_namespace" "test" {
-  metadata {
-    name = "test"
-  }
-}
-
-resource "kubernetes_service" "test" {
-  metadata {
-    name = "test"
-    namespace = kubernetes_namespace.test.metadata.0.name
-  }
-  spec {
-    selector = {
-      app = kubernetes_deployment.test.spec.0.template.0.metadata.0.labels.app
-    }
-
-    type = "LoadBalancer"
-    port {
-      protocol = "TCP"
-      name = "web"
-      port = 80
-    }
-  }
-}
-
-resource "kubernetes_deployment" "test" {
-  metadata {
-    name = "test"
-    namespace = kubernetes_namespace.test.metadata.0.name
-  }
-  spec {
-    replicas = "2"
-    selector {
-      match_labels = {
-        app = "test"
-      }
-    }
-    template {
-      metadata {
-        labels = {
-          app = "test"
-        }
-      }
-      spec {
-        container {
-          name = "test"
-          image = "traefik/whoami"
-          port {
-            name = "web"
-            container_port = 80
-          }
-        }
-      }
-    }
-  }
-}
-
-#resource "helm_release" "whoami" {
-#  name       = "whoami"
-#  repository = "https://charts.itscontained.io"
-#  chart      = "raw"
-#  version    = "0.2.5"
-#
-#  values = [file("helm/whoami-values.yaml")]
-#}

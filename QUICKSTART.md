@@ -39,13 +39,7 @@ cilium install
 https://raw.githubusercontent.com/metallb/metallb/v0.13.5/config/manifests/metallb-native.yaml
 
 ```shell
-kubectl apply -f infra/metallb/00-manifest.yml
-```
-
-## Configure MetalLB
-
-```shell
-kubectl apply -f infra/metallb/01-configuration.yml
+kubectl apply -k infra/metallb
 ```
 
 # Traefik

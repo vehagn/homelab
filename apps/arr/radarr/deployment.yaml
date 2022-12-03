@@ -12,10 +12,10 @@ spec:
       volumes:
         - name: radarr-config
           hostPath:
-            path: "/mnt/sdb1/homelab/config/radarr"
+            path: "/disk/etc/radarr"
         - name: media-data
           hostPath:
-            path: "/mnt/sdb1/data"
+            path: "/disk/data"
       containers:
         - name: radarr
           image: lscr.io/linuxserver/radarr

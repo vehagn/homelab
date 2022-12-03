@@ -12,10 +12,10 @@ spec:
       volumes:
         - name: lidarr-config
           hostPath:
-            path: "/mnt/sdb1/homelab/config/lidarr"
+            path: "/disk/etc/lidarr"
         - name: media-data
           hostPath:
-            path: "/mnt/sdb1/data"
+            path: "/disk/data"
       containers:
         - name: lidarr
           image: lscr.io/linuxserver/lidarr

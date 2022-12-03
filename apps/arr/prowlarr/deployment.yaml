@@ -12,7 +12,7 @@ spec:
       volumes:
         - name: prowlarr-config
           hostPath:
-            path: "/mnt/sdb1/homelab/config/prowlarr"
+            path: "/disk/etc/prowlarr"
       containers:
         - name: prowlarr
           image: lscr.io/linuxserver/prowlarr:develop

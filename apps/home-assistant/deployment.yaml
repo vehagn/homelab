@@ -12,7 +12,7 @@ spec:
       volumes:
         - name: home-assistant-config
           hostPath:
-            path: "/mnt/sdb1/config/home-assistant"
+            path: "/disk/etc/home-assistant"
       containers:
         - image: homeassistant/home-assistant
           imagePullPolicy: Always

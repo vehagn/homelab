@@ -12,10 +12,10 @@ spec:
       volumes:
         - name: sonarr-config
           hostPath:
-            path: "/mnt/sdb1/homelab/config/sonarr"
+            path: "/disk/etc/sonarr"
         - name: media-data
           hostPath:
-            path: "/mnt/sdb1/data"
+            path: "/disk/data"
       containers:
         - name: sonarr
           image: lscr.io/linuxserver/sonarr
