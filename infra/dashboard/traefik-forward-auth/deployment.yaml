@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traefik-forward-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traefik-forward-auth
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: traefik-forward-auth
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+        - image: thomseddon/traefik-forward-auth:2
+          imagePullPolicy: Always
+          name: traefik-forward-auth
+          ports:
+            - containerPort: 4181
+              protocol: TCP
+          env:
+            - name: CONFIG
+              value: "/config"
+            - name: PROVIDERS_GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: traefik-forward-auth-secrets
+                  key: google-client-id
+            - name: PROVIDERS_GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: traefik-forward-auth-secrets
+                  key: google-client-secret
+            - name: SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: traefik-forward-auth-secrets
+                  key: secret
+          volumeMounts:
+            - name: configs
+              mountPath: /config
+              subPath: traefik-forward-auth.ini
+
+      volumes:
+        - name: configs
+          configMap:
+            name: configs
+        - name: traefik-forward-auth-secrets
+          secret:
+            secretName: traefik-forward-auth-secrets

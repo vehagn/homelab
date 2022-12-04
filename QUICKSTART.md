@@ -36,7 +36,7 @@ cilium install
 
 ## Install MetalLB for LoadBalancing
 
-https://raw.githubusercontent.com/metallb/metallb/v0.13.5/config/manifests/metallb-native.yaml
+https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml
 
 ```shell
 kubectl apply -k infra/metallb
@@ -44,7 +44,7 @@ kubectl apply -k infra/metallb
 
 # Traefik
 
-https://doc.traefik.io/traefik/v2.8/user-guides/crd-acme/
+https://doc.traefik.io/traefik/v2.9/user-guides/crd-acme/
 
 ## Run Terraform-script
 

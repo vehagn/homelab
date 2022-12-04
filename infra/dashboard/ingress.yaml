@@ -11,24 +11,19 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`auth-whoami.stonegarden.dev`)
+    - match: Host(`auth-dash.stonegarden.dev`)
       kind: Rule
       services:
         - name: traefik-forward-auth
           port: 4181
       middlewares:
         - name: traefik-forward-auth
-    - match: Host(`whoami.stonegarden.dev`)
+    - match: Host(`dashboard.stonegarden.dev`)
       kind: Rule
       services:
-        - name: whoami
+        - name: kubernetes-dashboard
           port: 80
       middlewares:
         - name: traefik-forward-auth
-    - match: Host(`test.stonegarden.dev`)
-      kind: Rule
-      services:
-        - name: whoami
-          port: 80
   tls:
     certResolver: letsencrypt

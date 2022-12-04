@@ -83,6 +83,7 @@ cilium install
 ```
 
 // TODO: Directly by Helm chart
+
 ```shell
 helm template --namespace kube-system cilium cilium/cilium --version 1.12.1 --set cluster.id=0,cluster.name=kubernetes,encryption.nodeEncryption=false,kubeProxyReplacement=disabled,operator.replicas=1,serviceAccounts.cilium.name=cilium,serviceAccounts.operator.name=cilium-operator,tunnel=vxlan
 ```
@@ -125,13 +126,15 @@ kubectl apply -f infra/metallb/01-configuration.yml
 
 # Traefik
 
-## Install using Terraform and Helm
+Configure `helm/traefik-values.ymal` and run
 
 ```shell
 terraform init
 terraform plan
 terraform apply
 ```
+
+to deploy Traefik using Helm
 
 **NB:** It appears we need the "volume-permissions" init container for Traefik if using `StorageClass` with
 provisioner `kubernetes.io/no-provisioner`
@@ -143,7 +146,25 @@ IP can be found with `kubectl get svc`.
 
 # Test-application
 
-A test-application `whoami` should be available at `https://whoami.${DOMAIN}`.
+Deploy a test-application by running
+
+```shell
+kubectl apply -k apps/whoami
+```
+
+An unsecured test-application `whoami` should be available at [https://test.${DOMAIN}](https://test.${DOMAIN}).
+If you configured `apps/whoami/traefik-forward-auth` correctly a secured version should be available
+at [https://whoami.${DOMAIN}](https://whoami.${DOMAIN})
+
+# Kubernetes Dashboard
+
+An OIDC (treaefik-forward-auth)
+protected [Kubernetes Dashboard](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/) can be
+deployed using
+
+```shell
+kubectl apply -k infra/dashboard
+```
 
 # Cleanup
 
