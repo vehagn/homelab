@@ -5,4 +5,4 @@ namespace: metallb-system
 
 resources:
   - github.com/metallb/metallb/config/native?ref=v0.13.7
-  - configuration.yml
+  - configuration.yaml

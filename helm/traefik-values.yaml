@@ -14,7 +14,7 @@ providers:
     allowCrossNamespace: true
 
 additionalArguments:
-  - "--log.level=DEBUG"
+  - "--log.level=ERROR"
   - "--api.insecure"
 
 persistence:
