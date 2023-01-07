@@ -6,7 +6,7 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default
+  project: applications
   source:
     path: apps/arr
     repoURL: https://github.com/vehagn/homelab

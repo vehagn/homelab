@@ -6,14 +6,14 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  destination:
-    namespace: home-assistant
-    name: in-cluster
-  project: default
+  project: applications
   source:
     path: apps/home-assistant
     repoURL: https://github.com/vehagn/homelab
     targetRevision: HEAD
+  destination:
+    namespace: home-assistant
+    name: in-cluster
   syncPolicy:
     automated: {}
     syncOptions:

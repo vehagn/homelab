@@ -1,17 +1,33 @@
 apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: infrastructure
+  namespace: argocd
+spec:
+  sourceRepos:
+    - 'https://github.com/vehagn/*'
+  destinations:
+    - namespace: 'metallb-system'
+      server: '*'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+---
+apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: infra
+  name: infrastructure
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: infra
+  project: app-of-apps
   source:
     path: infra
     repoURL: https://github.com/vehagn/homelab
     targetRevision: HEAD
   destination:
+    namespace: argocd
     name: in-cluster
   syncPolicy:
     automated:

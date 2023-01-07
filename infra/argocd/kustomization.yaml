@@ -6,7 +6,8 @@ resources:
   - namespace.yaml
   - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
   - ingress.yaml
-  - infra.yaml
+  - project.yaml
+  - infrastructure.yaml
   - applications.yaml
 
 # Let Traefik manage TLS-termination

@@ -1,4 +1,22 @@
 apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: applications
+  namespace: argocd
+spec:
+  sourceRepos:
+    - 'https://github.com/vehagn/*'
+  destinations:
+    - namespace: 'arr'
+      server: '*'
+    - namespace: 'home-assistant'
+      server: '*'
+    - namespace: 'plex'
+      server: '*'
+    - namespace: 'whoami'
+      server: '*'
+---
+apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: applications
@@ -6,12 +24,13 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default
+  project: app-of-apps
   source:
     path: apps
     repoURL: https://github.com/vehagn/homelab
     targetRevision: HEAD
   destination:
+    namespace: argocd
     name: in-cluster
   syncPolicy:
     automated:
