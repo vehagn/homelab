@@ -32,3 +32,4 @@ override.tf.json
 .idea
 certs/
 **/secrets/*
+!secrets/kustomization.yaml
