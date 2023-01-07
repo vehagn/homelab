@@ -15,7 +15,6 @@ spec:
     namespace: whoami
     name: in-cluster
   syncPolicy:
-    automated:
-      selfHeal: true
+    automated: {}
     syncOptions:
       - CreateNamespace=true

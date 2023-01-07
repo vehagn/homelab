@@ -3,7 +3,6 @@ kind: Kustomization
 namespace: arr
 
 resources:
-  - namespace.yaml
   - ingress.yaml
   - traefik-forward-auth
   - torrent

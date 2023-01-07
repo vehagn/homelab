@@ -14,3 +14,7 @@ spec:
     path: apps/plex
     repoURL: https://github.com/vehagn/homelab
     targetRevision: HEAD
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - CreateNamespace=true

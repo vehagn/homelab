@@ -12,8 +12,3 @@ configMapGenerator:
   - name: configs
     files:
       - configs/traefik-forward-auth.ini
-
-secretGenerator:
-  - name: traefik-forward-auth-secrets
-    envs:
-      - secrets/traefik-forward-auth.env

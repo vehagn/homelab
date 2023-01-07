@@ -1,19 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: home-assistant
+  name: arr
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  destination:
-    namespace: home-assistant
-    name: in-cluster
   project: default
   source:
-    path: apps/home-assistant
+    path: apps/arr
     repoURL: https://github.com/vehagn/homelab
     targetRevision: HEAD
+  destination:
+    namespace: arr
+    name: in-cluster
   syncPolicy:
     automated: {}
     syncOptions:

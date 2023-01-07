@@ -6,14 +6,15 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  destination:
-    namespace: applications
-    name: in-cluster
   project: default
   source:
     path: apps
     repoURL: https://github.com/vehagn/homelab
     targetRevision: HEAD
+  destination:
+    namespace: applications
+    name: in-cluster
   syncPolicy:
+    automated: {}
     syncOptions:
       - CreateNamespace=true
