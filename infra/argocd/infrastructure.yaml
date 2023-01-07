@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: applications
+  name: infra
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default
+  project: infra
   source:
-    path: apps
+    path: infra
     repoURL: https://github.com/vehagn/homelab
     targetRevision: HEAD
   destination:
