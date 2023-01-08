@@ -9,6 +9,8 @@ spec:
   destinations:
     - namespace: 'argocd'
       server: '*'
+    - namespace: 'kubernetes-dashboard'
+      server: '*'
     - namespace: 'metallb-system'
       server: '*'
   clusterResourceWhitelist:
