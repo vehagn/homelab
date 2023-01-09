@@ -10,7 +10,9 @@ resources:
   - infrastructure.yaml
   - applications.yaml
 
-# Let Traefik manage TLS-termination
 patchesStrategicMerge:
-  - config/argocd-cmd-params-cm-patch.yaml
+  # Kustomize Helm plugin
+  - config/argocd-cm-kustomize-helm-patch.yaml
+  # Let Traefik manage TLS-termination
+  - config/argocd-cmd-params-cm-server-insecrure-patch.yaml
 

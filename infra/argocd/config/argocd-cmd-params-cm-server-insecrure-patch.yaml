@@ -3,4 +3,5 @@ kind: ConfigMap
 metadata:
   name: argocd-cmd-params-cm
 data:
+  # Traefik handles TLS
   server.insecure: "true"
