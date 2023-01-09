@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: traefik
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: infrastructure
+  source:
+    chart: traefik
+    repoURL: https://helm.traefik.io/traefik
+    targetRevision: 20.7.0
+    helm:
+      #parameters:
+      #  - name: providers.kubernetesCRD.allowCrossNamespace
+      #    value: "true"
+      #  - name: additionalArguments
+      #    value: "--api.insecure"
+      #  - name: persistence.enabled
+      #    value: "true"
+      valueFiles:
+        - https://raw.githubusercontent.com/vehagn/homelab/main/helm/traefik-values.yaml
+  destination:
+    namespace: traefik-system
+    name: in-cluster
+  syncPolicy:
+    automated:
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

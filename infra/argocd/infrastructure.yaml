@@ -6,12 +6,15 @@ metadata:
 spec:
   sourceRepos:
     - 'https://github.com/vehagn/*'
+    - 'https://helm.traefik.io/*'
   destinations:
     - namespace: 'argocd'
       server: '*'
     - namespace: 'kubernetes-dashboard'
       server: '*'
     - namespace: 'metallb-system'
+      server: '*'
+    - namespace: 'traefik-system'
       server: '*'
   clusterResourceWhitelist:
     - group: '*'
