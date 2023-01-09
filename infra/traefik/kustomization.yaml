@@ -2,8 +2,13 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: traefik-system
 
+resources:
+  - storageClass.yaml
+  - persistentVolume.yaml
+
 helmCharts:
   - name: traefik
     repo: https://helm.traefik.io/traefik
     version: 20.8.0
+    releaseName: "traefik"
     valuesFile: values.yaml

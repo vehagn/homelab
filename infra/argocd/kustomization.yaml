@@ -11,7 +11,7 @@ resources:
   - applications.yaml
 
 patchesStrategicMerge:
-  # Kustomize Helm plugin
+  # Kustomize --enable-helm plugin for Helm charts
   - config/argocd-cm-kustomize-helm-patch.yaml
   # Let Traefik manage TLS-termination
   - config/argocd-cmd-params-cm-server-insecrure-patch.yaml

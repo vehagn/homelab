@@ -8,45 +8,17 @@ metadata:
 spec:
   project: infrastructure
   source:
-    chart: traefik
-    repoURL: https://helm.traefik.io/traefik
-    targetRevision: 20.8.0
-#    path: infra/traefik
-#    repoURL: https://github.com/vehagn/homelab
-#    targetRevision: HEAD
-    helm:
-      values: |
-        deployment:
-          initContainers:
-            - name: volume-permissions
-              image: busybox:1.31.1
-              command: [ "sh", "-c", "chmod -Rv 600 /data/*" ]
-              volumeMounts:
-                - name: data
-                  mountPath: /data
-        providers:
-          kubernetesCRD:
-            allowCrossNamespace: true
-        additionalArguments:
-          - "--log.level=ERROR"
-          - "--api.insecure"
-        persistence:
-          enabled: true
-          name: data
-          accessMode: ReadWriteOnce
-          size: 128Mi
-          storageClass: cert-storage
-          path: /data
-        certResolvers:
-          letsencrypt:
-            email: veghag@gmail.com
-            tlsChallenge: true
-            storage: /data/acme.json
+    plugin:
+      name: kustomize-build-with-helm
+    path: infra/traefik
+    repoURL: https://github.com/vehagn/homelab
+    targetRevision: HEAD
   destination:
     namespace: traefik-system
     name: in-cluster
   syncPolicy:
     automated:
       selfHeal: true
+      prune: true
     syncOptions:
       - CreateNamespace=true

@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  finalizers:
+    - kubernetes.io/pv-protection
+  name: traefik-cert-pv
+spec:
+  capacity:
+    storage: 128Mi
+#  claimRef:
+#    apiVersion: v1
+#    kind: PersistentVolumeClaim
+#    name: traefik
+#    namespace: traefik-system
+#    resourceVersion: "5491071"
+#    uid: 60ee134d-dcba-4615-a218-7f06a523fb46
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: cert-storage
+  local:
+    path: /disk/etc/traefik/certs
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - gauss
