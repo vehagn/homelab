@@ -30,12 +30,12 @@ provider "helm" {
 #  version    = "1.11.5"
 #}
 
-## Create namespace for Traefik
-resource "kubernetes_namespace" "traefik" {
-  metadata {
-    name = "traefik-system"
-  }
-}
+### Create namespace for Traefik
+#resource "kubernetes_namespace" "traefik" {
+#  metadata {
+#    name = "traefik-system"
+#  }
+#}
 
 ## Create StorageClass for local volumes
 resource "kubernetes_storage_class" "cert-storage" {
@@ -78,14 +78,14 @@ resource "kubernetes_persistent_volume" "traefik-cert-pv" {
   }
 }
 
-## Install Traefik
-resource "helm_release" "traefik" {
-  name = "traefik"
-
-  repository = "https://helm.traefik.io/traefik"
-  chart      = "traefik"
-  namespace  = kubernetes_namespace.traefik.metadata.0.name
-  #version    = "10.30.1"
-
-  values = [file("helm/traefik-values.yaml")]
-}
+### Install Traefik
+#resource "helm_release" "traefik" {
+#  name = "traefik"
+#
+#  repository = "https://helm.traefik.io/traefik"
+#  chart      = "traefik"
+#  namespace  = kubernetes_namespace.traefik.metadata.0.name
+#  #version    = "10.30.1"
+#
+#  values = [file("helm/traefik-values.yaml")]
+#}

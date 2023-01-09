@@ -10,17 +10,38 @@ spec:
   source:
     chart: traefik
     repoURL: https://helm.traefik.io/traefik
-    targetRevision: 20.7.0
+    targetRevision: 20.8.0
+#    path: infra/traefik
+#    repoURL: https://github.com/vehagn/homelab
+#    targetRevision: HEAD
     helm:
-      #parameters:
-      #  - name: providers.kubernetesCRD.allowCrossNamespace
-      #    value: "true"
-      #  - name: additionalArguments
-      #    value: "--api.insecure"
-      #  - name: persistence.enabled
-      #    value: "true"
-      valueFiles:
-        - https://raw.githubusercontent.com/vehagn/homelab/main/helm/traefik-values.yaml
+      values: |
+        deployment:
+          initContainers:
+            - name: volume-permissions
+              image: busybox:1.31.1
+              command: [ "sh", "-c", "chmod -Rv 600 /data/*" ]
+              volumeMounts:
+                - name: data
+                  mountPath: /data
+        providers:
+          kubernetesCRD:
+            allowCrossNamespace: true
+        additionalArguments:
+          - "--log.level=ERROR"
+          - "--api.insecure"
+        persistence:
+          enabled: true
+          name: data
+          accessMode: ReadWriteOnce
+          size: 128Mi
+          storageClass: cert-storage
+          path: /data
+        certResolvers:
+          letsencrypt:
+            email: veghag@gmail.com
+            tlsChallenge: true
+            storage: /data/acme.json
   destination:
     namespace: traefik-system
     name: in-cluster
