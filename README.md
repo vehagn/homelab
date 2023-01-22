@@ -180,3 +180,17 @@ sudo kubeadm reset
 sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X
 sudo ipvsadm -C
 ```
+
+# Troubleshoot
+
+Missing runc-config in containerd
+
+```shell
+sudo cat /etc/containerd/config.toml
+```
+
+```toml
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+  runtime_path = "/usr/bin/runc"
+  runtime_type = "io.containerd.runc.v2"
+```

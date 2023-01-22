@@ -4,6 +4,8 @@ metadata:
   name: applications
   namespace: argocd
 spec:
+  sourceNamespaces:
+    - '*'
   sourceRepos:
     - 'https://github.com/vehagn/*'
   destinations:
