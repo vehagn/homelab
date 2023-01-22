@@ -32,7 +32,7 @@ kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 cilium install
 ```
 
-# Load Balancer
+# MetalLB
 
 ## Install MetalLB for LoadBalancing
 
@@ -42,18 +42,18 @@ https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metal
 kubectl apply -k infra/metallb
 ```
 
-# Traefik
+# Traefik reverse proxy
 
 https://doc.traefik.io/traefik/v2.9/user-guides/crd-acme/
 
-## Run Terraform-script
+```shell
+kubectl kustomize --enable-helm infra/traefik | ku apply -f -
+```
 
-This will create a cert-storage `StorageClass` and a traefik-cert-pv `PersistentVolume` for use by Traefik before
-installing Traefik in the `kube-system` namespace using the official Traefik Helm chart which binds to the
-traefik-cert-pv `PersistentVolume` for persistent storage of certificates using the traefik `PersistentVolumeClaim`.
+# ArgoCD
+
+https://argo-cd.readthedocs.io/en/stable/getting_started/
 
 ```shell
-terraform init
-terraform plan
-terraform apply
+kubectl apply -k infra/traefik
 ```

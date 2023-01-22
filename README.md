@@ -20,18 +20,12 @@ sudo apt-get update
 sudo apt-get install -y containerd conntrack socat kubelet kubeadm kubectl 
 ```
 
-cri-ctl: https://github.com/kubernetes-sigs/cri-tools
-TODO: nerdctl?
-
-We are going to use Cilium kube-proxy (TODO)
+Kubelet 1.26 requires containerd 1.6.0 or later.
 
 ## Initialise cluster
 
-```shell
-sudo kubeadm init 
-```
-
-Kubelet 1.26 requires containerd 1.6.0+
+We are going to use cilium in place of kube-proxy
+https://docs.cilium.io/en/v1.12/gettingstarted/kubeproxy-free/
 
 ```shell
 sudo kubeadm init --skip-phases=addon/kube-proxy
@@ -88,26 +82,10 @@ Install Cilium
 cilium install
 ```
 
-// TODO: Directly by Helm chart
-
-```shell
-helm template --namespace kube-system cilium cilium/cilium --version 1.12.1 --set cluster.id=0,cluster.name=kubernetes,encryption.nodeEncryption=false,kubeProxyReplacement=disabled,operator.replicas=1,serviceAccounts.cilium.name=cilium,serviceAccounts.operator.name=cilium-operator,tunnel=vxlan
-```
-
 Validate install
 
 ```shell
 cilium status
-```
-
-### (Optional) Replace kube-proxy with Cilium [TODO]
-
-https://docs.cilium.io/en/v1.12/gettingstarted/kubeproxy-free/
-
-*NB* Cluster should be initialised with
-
-```shell
-sudo kubeadm init --skip-phases=addon/kube-proxy
 ```
 
 ## MetalLB
@@ -116,34 +94,17 @@ For load balancing
 
 https://metallb.universe.tf/installation/
 
-Installation
-https://raw.githubusercontent.com/metallb/metallb/v0.13.5/config/manifests/metallb-native.yaml
-
 ```shell
-kubectl apply -f infra/metallb/00-manifest.yml
-```
-
-Configure IP-pool and advertise as Level 2
-https://metallb.universe.tf/configuration/
-
-```yaml
-kubectl apply -f infra/metallb/01-configuration.yml
+kubectl apply -f infra/metallb
 ```
 
 # Traefik
 
-Configure `helm/traefik-values.ymal` and run
+Install Traefik
 
 ```shell
-terraform init
-terraform plan
-terraform apply
+kubectl kustomize --enable-helm infra/traefik | ku apply -f -
 ```
-
-to deploy Traefik using Helm
-
-**NB:** It appears we need the "volume-permissions" init container for Traefik if using `StorageClass` with
-provisioner `kubernetes.io/no-provisioner`
 
 ## Port forward Traefik
 
@@ -151,6 +112,21 @@ Port forward Traefik ports in router from 8000 to 80 for http and 4443 to 443 fo
 IP can be found with `kubectl get svc`.
 
 # Test-application
+
+## Generate secret
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: traefik-forward-auth-secrets
+  namespace: whoami
+type: Opaque
+data:
+  google-client-id: <...>
+  google-client-secret: <...>
+  secret: <...>
+```
 
 Deploy a test-application by running
 
@@ -162,9 +138,17 @@ An unsecured test-application `whoami` should be available at [https://test.${DO
 If you configured `apps/whoami/traefik-forward-auth` correctly a secured version should be available
 at [https://whoami.${DOMAIN}](https://whoami.${DOMAIN})
 
+# ArgoCD
+
+[ArgoCD](https://argo-cd.readthedocs.io/en/stable/getting_started/) is configured to bootstrap the rest of the cluster
+
+```shell
+kubectl apply -k infra/traefik
+```
+
 # Kubernetes Dashboard
 
-An OIDC (treaefik-forward-auth)
+An OIDC (traefik-forward-auth)
 protected [Kubernetes Dashboard](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/) can be
 deployed using
 
@@ -181,9 +165,12 @@ sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sud
 sudo ipvsadm -C
 ```
 
-# Troubleshoot
+# Troubleshooting
 
-Missing runc-config in containerd
+Kubernetes 1.26 requires containerd 1.6.0 or later due to the removal of support for CRI
+version `v1alpha2` ([link](https://kubernetes.io/blog/2022/11/18/upcoming-changes-in-kubernetes-1-26/#cri-api-removal)).
+
+Make sure that `runc` is properly configured in containerd.
 
 ```shell
 sudo cat /etc/containerd/config.toml
@@ -191,6 +178,6 @@ sudo cat /etc/containerd/config.toml
 
 ```toml
 [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
-  runtime_path = "/usr/bin/runc"
-  runtime_type = "io.containerd.runc.v2"
+runtime_path = "/usr/bin/runc"
+runtime_type = "io.containerd.runc.v2"
 ```
