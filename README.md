@@ -31,6 +31,12 @@ We are going to use Cilium kube-proxy (TODO)
 sudo kubeadm init 
 ```
 
+Kubelet 1.26 requires containerd 1.6.0+
+
+```shell
+sudo kubeadm init --skip-phases=addon/kube-proxy
+```
+
 ## Set up kubectl
 
 https://kubernetes.io/docs/tasks/tools/
