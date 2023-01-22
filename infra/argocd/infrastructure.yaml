@@ -5,8 +5,9 @@ metadata:
   namespace: argocd
 spec:
   sourceRepos:
-    - 'https://github.com/vehagn/*'
+    - 'https://github.com/vehagn/homelab'
     - 'https://helm.traefik.io/*'
+    - 'https://helm.cilium.io/*'
   destinations:
     - namespace: 'argocd'
       server: '*'
@@ -15,6 +16,8 @@ spec:
     - namespace: 'metallb-system'
       server: '*'
     - namespace: 'traefik-system'
+      server: '*'
+    - namespace: 'kube-system'
       server: '*'
   clusterResourceWhitelist:
     - group: '*'

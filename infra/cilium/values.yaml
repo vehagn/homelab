@@ -1,0 +1,19 @@
+cluster:
+  id: 0
+  name: kubernetes
+
+encryption:
+  nodeEncryption: false
+
+kubeProxyReplacement: disabled
+
+operator:
+  replicas: 1
+
+serviceAccounts:
+  cilium:
+    name: cilium
+  operator:
+    name: cilium-operator
+
+tunnel: vxlan

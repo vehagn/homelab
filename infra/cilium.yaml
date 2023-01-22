@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cilium
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: infrastructure
+  source:
+    plugin:
+      name: kustomize-build-with-helm
+    path: infra/cilium
+    repoURL: https://github.com/vehagn/homelab
+    targetRevision: HEAD
+  destination:
+    namespace: kube-system
+    name: in-cluster
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
