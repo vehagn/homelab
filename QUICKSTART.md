@@ -47,7 +47,7 @@ kubectl apply -k infra/metallb
 https://doc.traefik.io/traefik/v2.9/user-guides/crd-acme/
 
 ```shell
-kubectl kustomize --enable-helm infra/traefik | ku apply -f -
+kubectl kustomize --enable-helm infra/traefik | kubectl apply -f -
 ```
 
 # ArgoCD

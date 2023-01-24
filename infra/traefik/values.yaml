@@ -12,6 +12,11 @@ deployment:
 providers:
   kubernetesCRD:
     allowCrossNamespace: true
+  kubernetesIngress:
+    publishedService:
+      enabled: true
+      # Need to override path since otherwise the namespace is set as default
+      pathOverride: traefik-system/traefik
 
 additionalArguments:
   - "--log.level=ERROR"
