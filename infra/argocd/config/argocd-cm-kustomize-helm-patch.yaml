@@ -8,3 +8,10 @@ data:
       generate:
         command: [ "sh", "-c" ]
         args: [ "kustomize build --enable-helm" ]
+  resource.exclusions: |
+    - apiGroups:
+        - cilium.io
+      kinds:
+        - CiliumIdentity
+      clusters:
+        - "*"
