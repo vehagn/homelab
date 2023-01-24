@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: whoami
 
 resources:
+  - issuer.yaml
   - ingress.yaml
   - ingress-route.yaml
   - traefik-forward-auth

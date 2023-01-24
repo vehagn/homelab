@@ -4,14 +4,14 @@ metadata:
   name: whoami
   namespace: whoami
   annotations:
-    cert-manager.io/issuer: "le-example-http"
+    cert-manager.io/issuer: "le-whoami-http"
 spec:
   tls:
     - hosts:
-        - whoami.ratatoskr.myddns.rocks
+        - cert.stonegarden.dev
       secretName: tls-whoami-ingress-http
   rules:
-    - host: whoami.ratatoskr.myddns.rocks
+    - host: cert.stonegarden.dev
       http:
         paths:
           - path: /
@@ -20,4 +20,4 @@ spec:
               service:
                 name: whoami
                 port:
-                  name: web
+                  number: 80
