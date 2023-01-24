@@ -4,5 +4,6 @@ namespace: whoami
 
 resources:
   - ingress.yaml
+  - ingress-route.yaml
   - traefik-forward-auth
   - whoami

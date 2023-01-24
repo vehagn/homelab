@@ -11,6 +11,8 @@ spec:
   destinations:
     - namespace: 'argocd'
       server: '*'
+    - namespace: 'cert-manager'
+      server: '*'
     - namespace: 'kubernetes-dashboard'
       server: '*'
     - namespace: 'metallb-system'
