@@ -12,7 +12,9 @@ resources:
 
 patchesStrategicMerge:
   # Kustomize --enable-helm plugin for Helm charts
-  - config/argocd-cm-kustomize-helm-patch.yaml
+  - patches/argocd-cm-kustomize-helm-patch.yaml
+  # Ignore CiliumIdentity CRDs
+  - patches/argocd-cm-resource-exclusion-cilium-identity-patch.yaml
   # Let Traefik manage TLS-termination
-  - config/argocd-cmd-params-cm-server-insecrure-patch.yaml
+  - patches/argocd-cmd-params-cm-server-insecrure-patch.yaml
 

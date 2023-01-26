@@ -1,0 +1,25 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hubble
+  namespace: kube-system
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`auth-hubble.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: traefik-forward-auth
+          port: 4181
+      middlewares:
+        - name: traefik-forward-auth
+    - match: Host(`hubble.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: hubble-ui
+          port: 80
+      middlewares:
+        - name: traefik-forward-auth
+  tls:
+    certResolver: letsencrypt

@@ -2,6 +2,9 @@ cluster:
   id: 0
   name: kubernetes
 
+debug:
+  enabled: true
+
 encryption:
   nodeEncryption: false
 
@@ -9,6 +12,14 @@ k8sServiceHost: 192.168.1.12
 k8sServicePort: 6443
 
 kubeProxyReplacement: strict
+
+# -- Roll out cilium agent pods automatically when configmap is updated.
+rollOutCiliumPods: false
+
+containerRuntime:
+  integration: containerd
+
+enableCiliumEndpointSlice: true
 
 operator:
   replicas: 1
@@ -20,3 +31,26 @@ serviceAccounts:
     name: cilium-operator
 
 tunnel: vxlan
+
+
+
+hubble:
+  enabled: true
+  peerService:
+    enabled: true
+    clusterDomain: cluster.local
+  relay:
+    enabled: true
+    rollOutPods: true
+  ui:
+    enabled: true
+    rollOutPods: true
+    frontend:
+      server:
+        ipv6:
+          enabled: false
+  tls:
+    auto:
+      enabled: true
+      method: helm
+      certValidityDuration: 1095
