@@ -5,6 +5,8 @@ namespace: traefik-system
 resources:
   - storageClass.yaml
   - persistentVolume.yaml
+  - traefik-forward-auth
+  - ingress-route.yaml
 
 helmCharts:
   - name: traefik

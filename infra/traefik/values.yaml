@@ -22,6 +22,10 @@ additionalArguments:
   - "--log.level=ERROR"
   - "--api.insecure"
 
+ingressRoute:
+  dashboard:
+    enabled: false
+
 persistence:
   enabled: true
   name: data
