@@ -1,6 +1,3 @@
-#
-# Auth Ingress
-#
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -25,7 +22,7 @@ spec:
           port: 80
       middlewares:
         - name: traefik-forward-auth
-    - match: Host(`test.stonegarden.dev`)
+    - match: Host(`whoami-open.stonegarden.dev`)
       kind: Rule
       services:
         - name: whoami

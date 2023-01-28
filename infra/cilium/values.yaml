@@ -32,8 +32,6 @@ serviceAccounts:
 
 tunnel: vxlan
 
-
-
 hubble:
   enabled: true
   peerService:

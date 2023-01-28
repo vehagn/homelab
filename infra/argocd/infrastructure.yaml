@@ -6,6 +6,7 @@ metadata:
 spec:
   sourceRepos:
     - 'https://github.com/vehagn/homelab'
+    - 'https://prometheus-community.github.io/helm-charts'
     - 'https://helm.traefik.io/*'
     - 'https://helm.cilium.io/*'
   destinations:
@@ -16,6 +17,8 @@ spec:
     - namespace: 'kubernetes-dashboard'
       server: '*'
     - namespace: 'metallb-system'
+      server: '*'
+    - namespace: 'monitoring'
       server: '*'
     - namespace: 'traefik-system'
       server: '*'

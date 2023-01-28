@@ -1,22 +1,25 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cert-manager
+  name: monitoring
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: infrastructure
   source:
-    path: infra/cert-manager
+    plugin:
+      name: kustomize-build-with-helm
+    path: infra/monitoring
     repoURL: https://github.com/vehagn/homelab
     targetRevision: HEAD
   destination:
+    namespace: monitoring
     name: in-cluster
-    namespace: cert-manager
   syncPolicy:
     automated:
       selfHeal: true
       prune: true
     syncOptions:
+      - ServerSideApply=true
       - CreateNamespace=true

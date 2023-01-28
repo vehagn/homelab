@@ -8,10 +8,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - cert.stonegarden.dev
+        - whoami-cert.stonegarden.dev
       secretName: tls-whoami-ingress-http
   rules:
-    - host: cert.stonegarden.dev
+    - host: whoami-cert.stonegarden.dev
       http:
         paths:
           - path: /
