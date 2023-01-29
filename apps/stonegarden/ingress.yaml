@@ -1,15 +1,15 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: home-assistant
+  name: ingressroute-arr
 spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`hass.stonegarden.dev`)
+    - match: Host(`stonegarden.dev`)
       kind: Rule
       services:
-        - name: home-assistant
-          port: 8123
+        - name: stonegarden
+          port: web
   tls:
     certResolver: letsencrypt

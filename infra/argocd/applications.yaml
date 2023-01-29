@@ -15,6 +15,8 @@ spec:
       server: '*'
     - namespace: 'plex'
       server: '*'
+    - namespace: 'stonegarden'
+      server: '*'
     - namespace: 'whoami'
       server: '*'
 ---

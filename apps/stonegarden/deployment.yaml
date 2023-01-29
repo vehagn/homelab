@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stonegarden
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: stonegarden
+  template:
+    spec:
+      containers:
+        - image: registry.gitlab.com/vehagn/stonegarden
+          name: stonegarden
+          imagePullPolicy: Always
+          ports:
+            - name: web
+              containerPort: 3000
