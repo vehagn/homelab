@@ -1,0 +1,15 @@
+{{- if and .Values.auth.create .Values.auth.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-forward-auth
+  namespace: {{ .Values.namespace }}
+spec:
+  type: ClusterIP
+  selector:
+    app: traefik-forward-auth
+  ports:
+    - name: auth
+      port: {{ .Values.auth.port }}
+      targetPort: auth
+  {{- end }}

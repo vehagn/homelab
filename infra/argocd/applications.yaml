@@ -19,6 +19,11 @@ spec:
       server: '*'
     - namespace: 'whoami'
       server: '*'
+    - namespace: 'test'
+      server: '*'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application

@@ -1,0 +1,31 @@
+{{- if .Values.ingressRoute.enabled }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: traefik
+spec:
+  entryPoints:
+    - websecure
+  tls:
+    certResolver: letsencrypt
+  routes:
+    - match: Host(`{{ .Values.name }}.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: {{ .Values.name }}
+          port: 80
+    {{- if .Values.auth.enabled }}
+      middlewares:
+        - name: traefik-forward-auth
+    - match: Host(`{{ .Values.auth.host }}.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: traefik-forward-auth
+          port: {{ .Values.auth.port }}
+      middlewares:
+        - name: traefik-forward-auth
+    {{- end }}
+{{- end }}

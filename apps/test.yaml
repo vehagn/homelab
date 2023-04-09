@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: test
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: applications
+  source:
+    path: helm/application
+    repoURL: https://github.com/vehagn/homelab
+    targetRevision: HEAD
+    helm:
+      values: |
+        name: test
+        namespace: test
+        image: 
+          name: containous/whoami
+        service:
+          containerPort: 80
+        auth:
+          enabled: true
+          host: auth-test
+          whitelist:
+            - veghag@gmail.com
+            - wiredmatrices@gmail.com
+  destination:
+    namespace: test
+    name: in-cluster
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true

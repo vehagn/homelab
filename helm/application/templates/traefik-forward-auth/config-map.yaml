@@ -1,0 +1,24 @@
+{{- if and .Values.auth.create .Values.auth.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: traefik-forward-auth
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: traefik-forward-auth
+data:
+  traefik-forward-auth.ini: |-
+    cookie-name = "{{ .Values.auth.cookieName }}"
+    log-level = "{{ .Values.auth.logLevel }}"
+    cookie-domain = "{{ .Values.auth.cookieDomain }}"
+    auth-host = "{{ .Values.auth.host}}.{{ .Values.auth.cookieDomain }}"
+    {{- range .Values.auth.domains }}
+    domain = "{{ . }}"
+    {{- end }}
+    {{- range .Values.auth.whitelist }}
+    whitelist = {{ . }}
+    {{- end }}
+    {{- with .Values.auth.extraConfig -}}
+    {{ . | nindent 4 }}
+    {{- end }}
+{{- end }}

@@ -1,0 +1,13 @@
+{{- if and .Values.auth.create .Values.auth.enabled }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-forward-auth
+  namespace: {{ .Values.namespace }}
+spec:
+  forwardAuth:
+    address: "http://traefik-forward-auth.{{ .Values.namespace }}.svc.cluster.local:{{ .Values.auth.port }}"
+    authResponseHeaders:
+      - X-Forwarded-User
+    trustForwardHeader: true
+  {{- end }}

@@ -33,3 +33,5 @@ override.tf.json
 certs/
 **/secrets/*
 !secrets/kustomization.yaml
+
+helm/example

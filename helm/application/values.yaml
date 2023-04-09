@@ -1,0 +1,40 @@
+name: name
+namespace: namespace
+
+image:
+  name: image
+  tag: latest
+  pullPolicy: Always
+
+replicas: 1
+
+service:
+  type: ClusterIP
+  port: 80
+  containerPort: 8080
+
+ingressRoute:
+  enabled: true
+
+resources: { }
+#  limits:
+#    cpu: 100m
+#    memory: 128Mi
+#  requests:
+#    cpu: 100m
+#    memory: 128Mi
+
+auth:
+  # Enable authentication with traefik-forward-auth
+  enabled: true
+  # Create traefik-forward-auth deployment
+  # Set to "false" to reuse a different deployment in the same namespace
+  create: true
+  port: 4181
+  cookieName: _forward_auth
+  cookieDomain: stonegarden.dev
+  host: auth
+  domains: {}
+  whitelist: {}
+  logLevel: error
+  extraConfig: {}
