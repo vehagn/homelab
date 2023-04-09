@@ -1,4 +1,4 @@
-{{- if and .Values.auth.create .Values.auth.enabled }}
+{{- if include "auth.create" . }}
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:

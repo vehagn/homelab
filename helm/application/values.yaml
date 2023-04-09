@@ -1,6 +1,9 @@
 name: name
 namespace: namespace
 
+# Skip deployment and only do auth
+authOnly: false
+
 image:
   name: image
   tag: latest
@@ -9,12 +12,13 @@ image:
 replicas: 1
 
 service:
+  create: true
   type: ClusterIP
   port: 80
   containerPort: 8080
 
 ingressRoute:
-  enabled: true
+  create: true
 
 resources: { }
 #  limits:

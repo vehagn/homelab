@@ -1,3 +1,4 @@
+{{- if include "service.create" .}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -12,3 +13,4 @@ spec:
       protocol: TCP
   selector:
     app: {{ .Values.name }}
+{{- end }}

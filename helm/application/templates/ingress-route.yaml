@@ -1,4 +1,4 @@
-{{- if .Values.ingressRoute.enabled }}
+{{- if include "ingressRoute.create" . }}
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -12,6 +12,7 @@ spec:
   tls:
     certResolver: letsencrypt
   routes:
+    {{- if include "service.create" . }}
     - match: Host(`{{ .Values.name }}.stonegarden.dev`)
       kind: Rule
       services:
@@ -20,6 +21,9 @@ spec:
     {{- if .Values.auth.enabled }}
       middlewares:
         - name: traefik-forward-auth
+    {{- end }}
+    {{- end }}
+    {{- if include "auth.create" . }}
     - match: Host(`{{ .Values.auth.host }}.stonegarden.dev`)
       kind: Rule
       services:

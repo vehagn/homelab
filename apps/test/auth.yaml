@@ -1,18 +1,28 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: test
+  name: test-auth
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: app-of-apps
+  project: applications
   source:
-    path: apps/test
+    path: helm/application
     repoURL: https://github.com/vehagn/homelab
     targetRevision: HEAD
+    helm:
+      values: |
+        name: test-auth
+        namespace: test
+        authOnly: true
+        auth:
+          host: auth-test
+          whitelist:
+            - veghag@gmail.com
+            - wiredmatrices@gmail.com
   destination:
-    namespace: argocd
+    namespace: test
     name: in-cluster
   syncPolicy:
     automated:

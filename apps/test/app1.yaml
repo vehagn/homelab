@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: test2
+  name: test-app1
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -13,7 +13,7 @@ spec:
     targetRevision: HEAD
     helm:
       values: |
-        name: test2
+        name: app1
         namespace: test
         image: 
           name: containous/whoami
