@@ -13,8 +13,8 @@ data:
   traefik-forward-auth.ini: |-
     cookie-name = {{ .Values.auth.cookieName | default (print "_" .Values.namespace "_auth") | quote }}
     cookie-domain = {{ .Values.auth.cookieDomain | quote }}
-    auth-host = {{ .Values.auth.host | default (print "auth-" .Values.namespace "." .Values.auth.cookieDomain ) | quote}}
-    log-level = {{ .Values.auth.logLevel | quote}}
+    auth-host = {{ include "auth.host" . | quote }}
+    log-level = {{ .Values.auth.logLevel | quote }}
     {{- range .Values.auth.domains }}
     domain = {{ . | quote }}
     {{- end }}

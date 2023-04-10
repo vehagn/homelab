@@ -24,7 +24,7 @@ spec:
     {{- end }}
     {{- end }}
     {{- if include "auth.create" . }}
-    - match: Host(`{{ .Values.auth.host }}.stonegarden.dev`)
+    - match: Host(`{{ include "auth.host" . }}`)
       kind: Rule
       services:
         - name: traefik-forward-auth

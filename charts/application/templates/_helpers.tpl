@@ -52,3 +52,10 @@ Returns string "true" or empty which will be evaluated to boolean false
 {{- true }}
 {{- end }}
 {{- end }}
+
+{{/*
+Return default auth host or custom value if set
+*/}}
+{{- define "auth.host" -}}
+{{ .Values.auth.host | default (print "auth-" .Values.namespace "." .Values.auth.cookieDomain ) }}
+{{- end }}
