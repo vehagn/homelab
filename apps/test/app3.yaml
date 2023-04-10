@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: auth
+  name: app3
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -11,8 +11,11 @@ spec:
     - repoURL: https://github.com/vehagn/homelab
       path: helm/application
       helm:
+        parameters:
+          - name: name
+            value: app3
         valueFiles:
-          - $values/apps/test/auth-values.yaml
+          - $values/apps/test/common-values.yaml
     - repoURL: https://github.com/vehagn/homelab
       ref: values
   destination:

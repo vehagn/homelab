@@ -1,27 +1,23 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: test-app2
+  name: app2
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: applications
-  source:
-    path: helm/application
-    repoURL: https://github.com/vehagn/homelab
-    targetRevision: HEAD
-    helm:
-      values: |
-        name: app2
-        namespace: test
-        image: 
-          name: containous/whoami
-        service:
-          containerPort: 80
-        auth:
-          enabled: true
-          create: false
+  sources:
+    - repoURL: https://github.com/vehagn/homelab
+      path: helm/application
+      helm:
+        parameters:
+          - name: name
+            value: app2
+        valueFiles:
+          - $values/apps/test/common-values.yaml
+    - repoURL: https://github.com/vehagn/homelab
+      ref: values
   destination:
     namespace: test
     name: in-cluster

@@ -1,0 +1,11 @@
+namespace: arr
+env:
+  - name: PUID
+    value: "1000"
+  - name: PGID
+    value: "1000"
+  - name: TZ
+    value: Europe/Oslo
+auth:
+  enabled: true
+  create: false

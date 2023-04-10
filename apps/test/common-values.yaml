@@ -1,0 +1,9 @@
+name: app
+namespace: test
+image:
+  name: containous/whoami
+service:
+  containerPort: 80
+auth:
+  enabled: true
+  create: false

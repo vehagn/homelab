@@ -4,4 +4,18 @@ kind: Kustomization
 resources:
   - app1.yaml
   - app2.yaml
+  - app3.yaml
   - auth.yaml
+
+#helmGlobals:
+#  chartHome: ../../helm
+#
+#helmCharts:
+#  - name: application
+#    valuesFile: auth.yaml
+#  - name: application
+#    valuesFile: app1.yaml
+#  - name: application
+#    valuesFile: app2.yaml
+#  - name: application
+#    valuesFile: app3.yaml

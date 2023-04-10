@@ -1,0 +1,8 @@
+name: auth
+namespace: test
+authOnly: true
+auth:
+  host: auth-test
+  whitelist:
+    - veghag@gmail.com
+    - wiredmatrices@gmail.com

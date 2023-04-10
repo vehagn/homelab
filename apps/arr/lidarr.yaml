@@ -8,13 +8,11 @@ metadata:
 spec:
   project: applications
   source:
-    path: helm/application
     repoURL: https://github.com/vehagn/homelab
-    targetRevision: HEAD
+    path: helm/application
     helm:
-      values: |
+      values: |-
         name: lidarr
-        namespace: arr
         image: 
           name: lscr.io/linuxserver/lidarr
         hostVolumes:
@@ -24,18 +22,10 @@ spec:
           - name: media-data
             hostPath: /disk/data
             mountPath: /app/data
-        env:
-          - name: PUID
-            value: "1000"
-          - name: PGID
-            value: "1000"
-          - name: TZ
-            value: Europe/Oslo
         service:
           containerPort: 8686
-        auth:
-          enabled: true
-          create: false
+      valueFiles:
+        - ../../apps/arr/common-values.yaml
   destination:
     namespace: arr
     name: in-cluster
