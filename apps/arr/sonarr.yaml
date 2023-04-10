@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sonarr
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: applications
+  source:
+    repoURL: https://github.com/vehagn/homelab
+    path: helm/application
+    helm:
+      values: |-
+        name: sonarr
+        image: 
+          name: lscr.io/linuxserver/sonarr
+        hostVolumes:
+          - name: sonarr-config
+            hostPath: /disk/etc/sonarr
+            mountPath: /config
+        service:
+          containerPort: 8989
+      valueFiles:
+        - ../../apps/arr/common-values.yaml
+  destination:
+    namespace: arr
+    name: in-cluster
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
