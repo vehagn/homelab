@@ -14,13 +14,26 @@ spec:
       labels:
         app: {{ .Values.name }}
     spec:
+      volumes:
+      {{- range .Values.hostVolumes }}
+        - name: {{ .name }}
+          hostPath:
+            path: {{ .hostPath }}
+      {{- end }}
       containers:
         - name: {{ .Values.name }}
           image: {{ .Values.image.name }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            {{- range .Values.hostVolumes }}
+            - name: {{ .name }}
+              mountPath: {{ .mountPath }}
+            {{- end }}
+          env:
+            {{- toYaml .Values.env | nindent 12 }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.service.containerPort }}
               protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

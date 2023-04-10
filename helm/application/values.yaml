@@ -20,7 +20,14 @@ service:
 ingressRoute:
   create: true
 
-resources: { }
+env: []
+
+hostVolumes: []
+  # - name: volume-name
+  #   hostPath: /host/path
+  #   mountPath: /container/path
+
+resources: {}
 #  limits:
 #    cpu: 100m
 #    memory: 128Mi

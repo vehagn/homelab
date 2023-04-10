@@ -9,6 +9,8 @@ spec:
   sourceRepos:
     - 'https://github.com/vehagn/*'
   destinations:
+    - namespace: 'argocd'
+      server: '*'
     - namespace: 'arr'
       server: '*'
     - namespace: 'home-assistant'

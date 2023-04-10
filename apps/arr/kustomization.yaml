@@ -1,6 +1,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: arr
 
 resources:
   - ingress.yaml
@@ -9,4 +8,4 @@ resources:
   - prowlarr
   - sonarr
   - radarr
-  - lidarr
+  - lidarr.yaml

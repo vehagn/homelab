@@ -1,0 +1,47 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: lidarr
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: applications
+  source:
+    path: helm/application
+    repoURL: https://github.com/vehagn/homelab
+    targetRevision: HEAD
+    helm:
+      values: |
+        name: lidarr
+        namespace: arr
+        image: 
+          name: lscr.io/linuxserver/lidarr
+        hostVolumes:
+          - name: lidarr-config
+            hostPath: /disk/etc/lidarr
+            mountPath: /config
+          - name: media-data
+            hostPath: /disk/data
+            mountPath: /app/data
+        env:
+          - name: PUID
+            value: "1000"
+          - name: PGID
+            value: "1000"
+          - name: TZ
+            value: Europe/Oslo
+        service:
+          containerPort: 8686
+        auth:
+          enabled: true
+          create: false
+  destination:
+    namespace: arr
+    name: in-cluster
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
