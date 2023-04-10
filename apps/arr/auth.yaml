@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: radarr
+  name: auth-arr
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -12,17 +12,15 @@ spec:
     path: helm/application
     helm:
       values: |-
-        name: radarr
-        image: 
-          name: lscr.io/linuxserver/radarr
-        hostVolumes:
-          - name: radarr-config
-            hostPath: /disk/etc/radarr
-            mountPath: /config
-        service:
-          containerPort: 7878
-      valueFiles:
-        - ../../apps/arr/common-values.yaml
+        name: auth
+        namespace: arr
+        authOnly: true
+        auth:
+          host: auth-arr
+          cookieDomain: stonegarden.dev
+          cookieName: _arr_auth
+          whitelist:
+            - veghag@gmail.com
   destination:
     namespace: arr
     name: in-cluster

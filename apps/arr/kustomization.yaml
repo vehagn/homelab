@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - cm-common-env.yaml
   - ingress.yaml
-  - traefik-forward-auth
+  - auth.yaml
   - torrent
   - prowlarr.yaml
   - sonarr.yaml
