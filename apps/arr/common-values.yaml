@@ -1,11 +1,20 @@
 namespace: arr
 env:
   - name: PUID
-    value: "1000"
+    valueFrom:
+      configMapKeyRef:
+        name: common-env
+        key: PUID
   - name: PGID
-    value: "1000"
+    valueFrom:
+      configMapKeyRef:
+        name: common-env
+        key: PGID
   - name: TZ
-    value: Europe/Oslo
+    valueFrom:
+      configMapKeyRef:
+        name: common-env
+        key: TZ
 additionalVolumes:
   - name: data
     mountPath: /app/data
