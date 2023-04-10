@@ -1,0 +1,16 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: prowlarr
+spec:
+  template:
+    spec:
+      volumes:
+        - name: media2
+          hostPath:
+            path: /disk/data2
+      containers:
+        - name: prowlarr
+          volumeMounts:
+            - mountPath: "/app/data2"
+              name: media2
