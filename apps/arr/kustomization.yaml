@@ -5,7 +5,7 @@ resources:
   - ingress.yaml
   - traefik-forward-auth
   - torrent
-  - prowlarr
+  - prowlarr.yaml
   - sonarr
   - radarr
   - lidarr.yaml

@@ -20,13 +20,6 @@ spec:
           port: 8112
       middlewares:
         - name: traefik-forward-auth
-    - match: Host(`prowlarr.stonegarden.dev`)
-      kind: Rule
-      services:
-        - name: prowlarr
-          port: 9696
-      middlewares:
-        - name: traefik-forward-auth
     - match: Host(`sonarr.stonegarden.dev`)
       kind: Rule
       services:
