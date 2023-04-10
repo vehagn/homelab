@@ -16,9 +16,7 @@ spec:
         namespace: arr
         authOnly: true
         auth:
-          host: auth-arr
           cookieDomain: stonegarden.dev
-          cookieName: _arr_auth
           whitelist:
             - veghag@gmail.com
   destination:

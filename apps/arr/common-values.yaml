@@ -21,6 +21,8 @@ additionalVolumes:
     value:
       hostPath:
         path: /disk/data
+additionalLabels:
+  app.kubernetes.io/part-of: arr
 auth:
   enabled: true
   create: false

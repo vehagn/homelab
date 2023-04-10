@@ -1,4 +1,23 @@
 {{/*
+Common labels
+*/}}
+{{- define "common.labels" -}}
+app.kubernetes.io/name: {{ .Values.name }}
+{{- with .Values.additionalLabels }}
+{{ toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
+Common labels
+*/}}
+{{- define "common.annotations" -}}
+{{- with .Values.annotations }}
+{{ toYaml . }}
+{{- end }}
+{{- end }}
+
+{{/*
 Returns string "true" or empty which will be evaluated to boolean false
 */}}
 {{- define "deployment.create" -}}

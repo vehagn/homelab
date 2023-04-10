@@ -2,7 +2,7 @@ name: auth
 namespace: test
 authOnly: true
 auth:
-  host: auth-test
+  cookieDomain: stonegarden.dev
   whitelist:
     - veghag@gmail.com
     - wiredmatrices@gmail.com

@@ -4,6 +4,10 @@ kind: Middleware
 metadata:
   name: traefik-forward-auth
   namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "common.labels" . | nindent 4 }}
+  annotations:
+    {{- include "common.annotations" . | nindent 4 }}
 spec:
   forwardAuth:
     address: "http://traefik-forward-auth.{{ .Values.namespace }}.svc.cluster.local:{{ .Values.auth.port }}"

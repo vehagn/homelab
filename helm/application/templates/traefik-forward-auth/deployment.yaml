@@ -4,6 +4,10 @@ kind: Deployment
 metadata:
   name: traefik-forward-auth
   namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "common.labels" . | nindent 4 }}
+  annotations:
+    {{- include "common.annotations" . | nindent 4 }}
 spec:
   replicas: 1
   selector:

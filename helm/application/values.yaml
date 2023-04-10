@@ -32,6 +32,10 @@ additionalVolumes:
   #  mountPath: /container/path
   #  value: {}
 
+additionalLabels: {}
+
+annotations: {}
+
 resources: {}
 #  limits:
 #    cpu: 100m
@@ -47,9 +51,9 @@ auth:
   # Set to "false" to reuse a different deployment in the same namespace
   create: true
   port: 4181
-  cookieName: _forward_auth
-  cookieDomain: stonegarden.dev
-  host: auth
+  cookieName: ""
+  cookieDomain: ""
+  host: ""
   domains: {}
   whitelist: {}
   logLevel: error

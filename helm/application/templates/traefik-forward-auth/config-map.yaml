@@ -6,19 +6,22 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     app: traefik-forward-auth
+    {{- include "common.labels" . | nindent 4 }}
+  annotations:
+    {{- include "common.annotations" . | nindent 4 }}
 data:
   traefik-forward-auth.ini: |-
-    cookie-name = "{{ .Values.auth.cookieName }}"
-    log-level = "{{ .Values.auth.logLevel }}"
-    cookie-domain = "{{ .Values.auth.cookieDomain }}"
-    auth-host = "{{ .Values.auth.host}}.{{ .Values.auth.cookieDomain }}"
+    cookie-name = {{ .Values.auth.cookieName | default (print "_" .Values.namespace "_auth") | quote }}
+    cookie-domain = {{ .Values.auth.cookieDomain | quote }}
+    auth-host = {{ .Values.auth.host | default (print "auth-" .Values.namespace "." .Values.auth.cookieDomain ) | quote}}
+    log-level = {{ .Values.auth.logLevel | quote}}
     {{- range .Values.auth.domains }}
-    domain = "{{ . }}"
+    domain = {{ . | quote }}
     {{- end }}
     {{- range .Values.auth.whitelist }}
-    whitelist = {{ . }}
+    whitelist = {{ . | quote }}
     {{- end }}
-    {{- with .Values.auth.extraConfig -}}
-    {{ . | nindent 4 }}
+    {{- range $key, $val := .Values.auth.extraConfig -}}
+    {{ $key | nindent 4 }} = {{ $val | quote }}
     {{- end }}
 {{- end }}

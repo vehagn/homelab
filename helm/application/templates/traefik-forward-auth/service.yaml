@@ -4,6 +4,10 @@ kind: Service
 metadata:
   name: traefik-forward-auth
   namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "common.labels" . | nindent 4 }}
+  annotations:
+    {{- include "common.annotations" . | nindent 4 }}
 spec:
   type: ClusterIP
   selector:
