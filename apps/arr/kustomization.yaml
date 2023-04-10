@@ -8,5 +8,5 @@ resources:
   - torrent
   - prowlarr.yaml
   - sonarr.yaml
-  - radarr
+  - radarr.yaml
   - lidarr.yaml
