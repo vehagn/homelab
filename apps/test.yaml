@@ -1,24 +1,24 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: test
-  namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
-spec:
-  project: applications
-  source:
-    plugin:
-      name: kustomize-build-with-helm
-    path: apps/test
-    repoURL: https://github.com/vehagn/homelab
-    targetRevision: HEAD
-  destination:
-    namespace: argocd
-    name: in-cluster
-  syncPolicy:
-    automated:
-      selfHeal: true
-      prune: true
-    syncOptions:
-      - CreateNamespace=true
+#apiVersion: argoproj.io/v1alpha1
+#kind: Application
+#metadata:
+#  name: test
+#  namespace: argocd
+#  finalizers:
+#    - resources-finalizer.argocd.argoproj.io
+#spec:
+#  project: applications
+#  source:
+#    plugin:
+#      name: kustomize-build-with-helm
+#    path: apps/test
+#    repoURL: https://github.com/vehagn/homelab
+#    targetRevision: HEAD
+#  destination:
+#    namespace: argocd
+#    name: in-cluster
+#  syncPolicy:
+#    automated:
+#      selfHeal: true
+#      prune: true
+#    syncOptions:
+#      - CreateNamespace=true

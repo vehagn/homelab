@@ -9,7 +9,7 @@ spec:
   project: applications
   source:
     repoURL: https://github.com/vehagn/homelab
-    path: helm/application
+    path: charts/application
     helm:
       values: |-
         name: prowlarr

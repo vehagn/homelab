@@ -34,4 +34,4 @@ certs/
 **/secrets/*
 !secrets/kustomization.yaml
 
-helm/example
+charts/example
