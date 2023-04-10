@@ -20,12 +20,20 @@ spec:
           hostPath:
             path: {{ .hostPath }}
       {{- end }}
+      {{- range .Values.additionalVolumes }}
+        - name: {{ .name }}
+          {{- toYaml .value | nindent 10 }}
+      {{- end }}
       containers:
         - name: {{ .Values.name }}
           image: {{ .Values.image.name }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
             {{- range .Values.hostVolumes }}
+            - name: {{ .name }}
+              mountPath: {{ .mountPath }}
+            {{- end }}
+            {{- range .Values.additionalVolumes }}
             - name: {{ .name }}
               mountPath: {{ .mountPath }}
             {{- end }}

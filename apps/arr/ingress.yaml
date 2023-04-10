@@ -41,12 +41,5 @@ spec:
           port: 7878
       middlewares:
         - name: traefik-forward-auth
-#    - match: Host(`lidarr.stonegarden.dev`)
-#      kind: Rule
-#      services:
-#        - name: lidarr
-#          port: 8686
-#      middlewares:
-#        - name: traefik-forward-auth
   tls:
     certResolver: letsencrypt

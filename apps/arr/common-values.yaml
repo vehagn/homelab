@@ -6,6 +6,12 @@ env:
     value: "1000"
   - name: TZ
     value: Europe/Oslo
+additionalVolumes:
+  - name: data
+    mountPath: /app/data
+    value:
+      hostPath:
+        path: /disk/data
 auth:
   enabled: true
   create: false

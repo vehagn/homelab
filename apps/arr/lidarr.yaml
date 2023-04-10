@@ -19,9 +19,6 @@ spec:
           - name: lidarr-config
             hostPath: /disk/etc/lidarr
             mountPath: /config
-          - name: media-data
-            hostPath: /disk/data
-            mountPath: /app/data
         service:
           containerPort: 8686
       valueFiles:
