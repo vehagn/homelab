@@ -15,7 +15,6 @@ spec:
         name: prowlarr
         image: 
           name: lscr.io/linuxserver/prowlarr
-          tag: develop
         hostVolumes:
           - name: prowlarr-config
             hostPath: /disk/etc/prowlarr

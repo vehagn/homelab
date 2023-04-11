@@ -30,7 +30,7 @@ spec:
       {{- end }}
       containers:
         - name: {{ .Values.name }}
-          image: {{ .Values.image.name }}
+          image: {{ .Values.image.name }}:{{ .Values.image.tag | default "latest" }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
             {{- range .Values.hostVolumes }}
