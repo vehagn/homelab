@@ -15,6 +15,12 @@ spec:
       port: {{ .Values.service.port }}
       targetPort: http
       protocol: TCP
+    {{- range .Values.service.additionalPorts }}
+    - name: {{ .name }}
+      port: {{ .port | default .containerPort }}
+      targetPort: {{ .name }}
+      protocol: {{ .protocol | default "TCP" }}
+    {{- end }}
   selector:
     app: {{ .Values.name }}
 {{- end }}

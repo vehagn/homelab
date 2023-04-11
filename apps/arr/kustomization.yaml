@@ -8,7 +8,7 @@ resources:
   - cm-common-env.yaml
   - ingress.yaml
   - auth.yaml
-  - torrent
+  - torrent.yaml
   - prowlarr.yaml
   - sonarr.yaml
   - radarr.yaml

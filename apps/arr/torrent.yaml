@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: torrent
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: applications
+  source:
+    repoURL: https://github.com/vehagn/homelab
+    path: charts/application
+    targetRevision: HEAD
+    helm:
+      values: |-
+        name: torrent
+        image: 
+          name: cr.hotio.dev/hotio/qbittorrent
+          tag: legacy
+        hostVolumes:
+          - name: torrent-config
+            hostPath: /disk/etc/qbittorrent
+            mountPath: /config
+        service:
+          type: LoadBalancer
+          containerPort: 8080
+          additionalPorts:
+            - name: tcp
+              protocol: TCP
+              containerPort: 11011
+            - name: udp
+              protocol: UDP
+              containerPort: 11011
+      valueFiles:
+        - ../../apps/arr/common-values.yaml
+  destination:
+    namespace: arr
+    name: in-cluster
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true

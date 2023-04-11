@@ -43,10 +43,18 @@ spec:
             {{- end }}
           env:
             {{- toYaml .Values.env | nindent 12 }}
+            {{- with .Values.additionalEnv }}
+            {{ . | nindent 12 }}
+            {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.service.containerPort }}
               protocol: TCP
+            {{- range .Values.service.additionalPorts }}
+            - name: {{ .name }}
+              containerPort: {{ .containerPort }}
+              protocol: {{ .protocol | default "TCP" }}
+            {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
 {{- end }}

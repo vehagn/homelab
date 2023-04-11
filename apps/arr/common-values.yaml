@@ -10,6 +10,11 @@ env:
       configMapKeyRef:
         name: common-env
         key: PGID
+  - name: UMASK
+    valueFrom:
+      configMapKeyRef:
+        name: common-env
+        key: UMASK
   - name: TZ
     valueFrom:
       configMapKeyRef:

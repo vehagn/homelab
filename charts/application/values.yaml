@@ -16,11 +16,17 @@ service:
   type: ClusterIP
   port: 80
   containerPort: 8080
+  additionalPorts: []
+#    - name: ""
+#      protocol: TCP
+#      containerPort: ""
+#      port: ""
 
 ingressRoute:
   create: true
 
 env: []
+additionalEnv: []
 
 hostVolumes: []
   #- name: volume-name
