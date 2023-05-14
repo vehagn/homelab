@@ -8,5 +8,5 @@ resources:
   - home-assistant.yaml
   - plex.yaml
   - stonegarden.yaml
-  - test.yaml
+#  - test.yaml
   - whoami.yaml
