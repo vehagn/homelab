@@ -6,7 +6,6 @@ commonLabels:
 
 resources:
   - cm-common-env.yaml
-  - ingress.yaml
   - auth.yaml
   - torrent.yaml
   - prowlarr.yaml
