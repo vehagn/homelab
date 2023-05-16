@@ -11,6 +11,6 @@ resources:
 helmCharts:
   - name: traefik
     repo: https://helm.traefik.io/traefik
-    version: 22.3.0
+    version: 23.0.1
     releaseName: "traefik"
     valuesFile: values.yaml
