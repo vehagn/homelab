@@ -31,7 +31,5 @@ override.tf.json
 .terraform.lock.hcl
 .idea
 certs/
-**/secrets/*
-!secrets/kustomization.yaml
 
 charts/example
