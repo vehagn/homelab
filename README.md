@@ -103,7 +103,7 @@ kubectl apply -f infra/metallb
 Install Traefik
 
 ```shell
-kubectl kustomize --enable-helm infra/traefik | ku apply -f -
+kubectl kustomize --enable-helm infra/traefik | kubectl apply -f -
 ```
 
 ## Port forward Traefik
@@ -143,7 +143,7 @@ at [https://whoami.${DOMAIN}](https://whoami.${DOMAIN})
 [ArgoCD](https://argo-cd.readthedocs.io/en/stable/getting_started/) is configured to bootstrap the rest of the cluster
 
 ```shell
-kubectl apply -k infra/traefik
+kubectl apply -k infra/argocd
 ```
 
 # Kubernetes Dashboard
@@ -172,6 +172,10 @@ version `v1alpha2` ([link](https://kubernetes.io/blog/2022/11/18/upcoming-change
 
 Make sure that `runc` is properly configured in containerd.
 
+NB: Make sure the correct `containerd` daemon is running. 
+(Check the loaded `containerd` service definition as reported by `systemctl status containerd`)
+Follow https://github.com/containerd/containerd/blob/main/docs/getting-started.md for further instructions.
+
 ```shell
 sudo cat /etc/containerd/config.toml
 ```
@@ -181,3 +185,15 @@ sudo cat /etc/containerd/config.toml
 runtime_path = "/usr/bin/runc"
 runtime_type = "io.containerd.runc.v2"
 ```
+
+## Wrong containerd version
+
+1.7.x doesn't work?
+
+## Traefik CRDS
+
+Apply manually :(
+
+## Sealed Secrets
+
+Restart pod after applying master-key

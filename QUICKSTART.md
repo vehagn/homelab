@@ -55,5 +55,5 @@ kubectl kustomize --enable-helm infra/traefik | kubectl apply -f -
 https://argo-cd.readthedocs.io/en/stable/getting_started/
 
 ```shell
-kubectl apply -k infra/traefik
+kubectl apply -k infra/argocd
 ```
