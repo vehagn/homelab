@@ -1,2 +1,5 @@
 .idea
 charts/example
+**/cilium/charts
+**/traefik/charts
+secret.yaml

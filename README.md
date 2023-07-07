@@ -62,6 +62,10 @@ kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 
 ## Install Cilium as Container Network Interface (CNI)
 
+```shell
+kubectl kustomize --enable-helm infra/cilium | kubectl apply -f -
+```
+
 https://docs.cilium.io/en/stable/gettingstarted/k8s-install-default/
 
 Install Cilium CLI
@@ -97,6 +101,21 @@ https://metallb.universe.tf/installation/
 ```shell
 kubectl apply -k infra/metallb
 ```
+
+# Sealed Secrets
+
+Used to create encrypted secrets
+
+```shell
+kubectl apply -k infra/sealed-secrets
+```
+
+Be sure to store the generated sealed secret key in a safa place!
+```shell
+kubectl -n kube-system get secrets
+```
+
+*NB!*: There will be errors if you use my sealed secrets as you (hopefully) don't have the decryption key
 
 # Traefik
 
@@ -159,6 +178,11 @@ deployed using
 
 ```shell
 kubectl apply -k infra/dashboard
+```
+
+Create a token
+```shell
+kubectl -n kubernetes-dashboard create token admin-user
 ```
 
 # ApplicationSets

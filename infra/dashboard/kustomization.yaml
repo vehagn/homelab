@@ -3,7 +3,6 @@ kind: Kustomization
 namespace: kubernetes-dashboard
 
 resources:
-  - namespace.yaml
   - https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/alternative.yaml
   - traefik-forward-auth
   - ingress.yaml
