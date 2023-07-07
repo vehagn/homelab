@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: infrastructure
+  namespace: argocd
+  labels:
+    dev.stonegarden: infrastructure
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/vehagn/homelab
+        revision: HEAD
+        directories:
+          - path: infra/*
+  template:
+    metadata:
+      name: '{{ path.basename }}'
+      labels:
+        dev.stonegarden: infrastructure
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: infrastructure
+      source:
+        plugin:
+          name: kustomize-build-with-helm
+        repoURL: https://github.com/vehagn/homelab
+        targetRevision: HEAD
+        path: '{{ path }}'
+      destination:
+        name: in-cluster
+        namespace: argocd
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true

@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: traefik-system
 
 resources:
+  - namespace.yaml
   - storageClass.yaml
   - persistentVolume.yaml
   - traefik-forward-auth
@@ -13,4 +14,5 @@ helmCharts:
     repo: https://helm.traefik.io/traefik
     version: 23.0.1
     releaseName: "traefik"
+    includeCRDs: true
     valuesFile: values.yaml
