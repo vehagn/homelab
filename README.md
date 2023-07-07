@@ -95,7 +95,7 @@ For load balancing
 https://metallb.universe.tf/installation/
 
 ```shell
-kubectl apply -f infra/metallb
+kubectl apply -k infra/metallb
 ```
 
 # Traefik
@@ -146,6 +146,11 @@ at [https://whoami.${DOMAIN}](https://whoami.${DOMAIN})
 kubectl apply -k infra/argocd
 ```
 
+Get ArgoCD initial secret
+```shell
+kubectl -n argocd get secrets argocd-initial-admin-secret -o json | jq -r .data.password | base64 -d
+```
+
 # Kubernetes Dashboard
 
 An OIDC (traefik-forward-auth)
@@ -154,6 +159,14 @@ deployed using
 
 ```shell
 kubectl apply -k infra/dashboard
+```
+
+# ApplicationSets
+
+Once you've tested everything get the ball rolling with
+
+```shell
+kubectl apply -k sets
 ```
 
 # Cleanup
@@ -189,10 +202,6 @@ runtime_type = "io.containerd.runc.v2"
 ## Wrong containerd version
 
 1.7.x doesn't work?
-
-## Traefik CRDS
-
-Apply manually :(
 
 ## Sealed Secrets
 
