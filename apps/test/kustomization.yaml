@@ -5,6 +5,7 @@ commonLabels:
   app.kubernetes.io/part-of: test
 
 resources:
+  - auth-secret.yaml
   - app1.yaml
   - app2.yaml
   - app3.yaml

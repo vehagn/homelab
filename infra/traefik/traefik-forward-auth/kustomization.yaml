@@ -4,6 +4,7 @@ commonLabels:
   app: traefik-forward-auth
 
 resources:
+  - auth-secret.yaml
   - service.yaml
   - deployment.yaml
   - middleware.yaml

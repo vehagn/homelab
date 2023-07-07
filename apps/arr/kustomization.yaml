@@ -5,6 +5,9 @@ commonLabels:
   app.kubernetes.io/part-of: arr
   app.kubernetes.io/managed-by: argocd
 
+resources:
+  - auth-secret.yaml
+
 configMapGenerator:
   - name: common-env
     literals:
