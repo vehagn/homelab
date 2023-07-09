@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: infrastructure
+  namespace: argocd
+spec:
+  sourceRepos:
+    - 'https://github.com/vehagn/homelab'
+    - 'https://prometheus-community.github.io/helm-charts'
+    - 'https://helm.traefik.io/*'
+    - 'https://helm.cilium.io/*'
+  destinations:
+    - namespace: 'argocd'
+      server: '*'
+    - namespace: 'cert-manager'
+      server: '*'
+    - namespace: 'kubernetes-dashboard'
+      server: '*'
+    - namespace: 'metallb-system'
+      server: '*'
+    - namespace: 'monitoring'
+      server: '*'
+    - namespace: 'traefik-system'
+      server: '*'
+    - namespace: 'kube-system'
+      server: '*'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'

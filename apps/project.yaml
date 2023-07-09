@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: applications
+  namespace: argocd
+spec:
+  sourceNamespaces:
+    - '*'
+  sourceRepos:
+    - 'https://github.com/vehagn/*'
+  destinations:
+    - namespace: 'argocd'
+      server: '*'
+    - namespace: 'arr'
+      server: '*'
+    - namespace: 'blog'
+      server: '*'
+    - namespace: 'home-assistant'
+      server: '*'
+    - namespace: 'plex'
+      server: '*'
+    - namespace: 'stonegarden'
+      server: '*'
+    - namespace: 'whoami'
+      server: '*'
+    - namespace: 'test'
+      server: '*'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
