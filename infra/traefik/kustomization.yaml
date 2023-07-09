@@ -4,6 +4,8 @@ namespace: traefik-system
 
 resources:
   - namespace.yaml
+  - cloudflare.yaml
+  - tlsStore.yaml
   - storageClass.yaml
   - persistentVolume.yaml
   - traefik-forward-auth
