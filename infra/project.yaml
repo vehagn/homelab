@@ -14,6 +14,8 @@ spec:
       server: '*'
     - namespace: 'cert-manager'
       server: '*'
+    - namespace: 'cloudflared'
+      server: '*'
     - namespace: 'kubernetes-dashboard'
       server: '*'
     - namespace: 'metallb-system'

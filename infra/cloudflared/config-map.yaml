@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloudflared
+data:
+  config.yaml: |
+    metrics: 0.0.0.0:2000
+    no-autoupdate: true
