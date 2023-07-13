@@ -6,7 +6,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`stonegarden.dev`)
+    - match: Host(`stonegarden.dev`) || Host(`www.stonegarden.dev`)
       kind: Rule
       services:
         - name: stonegarden
