@@ -1,0 +1,136 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: pi-hole
+  name: pi-hole
+  namespace: pi-hole
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pi-hole
+  #strategy:
+  #  rollingUpdate:
+  #    maxSurge: 1
+  #    maxUnavailable: 0
+  #  type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: pi-hole
+    spec:
+      containers:
+        - env:
+            - name: TZ
+              value: Europe/Oslo
+            - name: WEBPASSWORD
+              value: password
+            #- name: DNS1
+            #  value: 1.1.1.1
+            #  #value: 185.228.168.168
+            #- name: DNS2
+            #  value: 8.8.8.8
+            #  #value: 185.228.169.168
+            - name: CONDITIONAL_FORWARDING
+              value: 'true'
+            - name: CONDITIONAL_FORWARDING_DOMAIN
+              value: stonegarden.dev
+            - name: CONDITIONAL_FORWARDING_IP
+              value: 192.168.1.128
+          image: pihole/pihole:latest
+          imagePullPolicy: Always
+          name: pi-hole
+          ports:
+            - name: dns-tcp
+              containerPort: 53
+              protocol: TCP
+            - name: dns-udp
+              containerPort: 53
+              protocol: UDP
+            - name: dchp
+              containerPort: 67
+              protocol: UDP
+            - name: web
+              containerPort: 80
+              protocol: TCP
+            - name: https
+              containerPort: 443
+              protocol: TCP
+          resources:
+            requests:
+              cpu: "20m"
+              memory: "512Mi"
+            limits:
+              cpu: "250m"
+              memory: "896Mi"
+          #readinessProbe:
+          #  exec:
+          #    command: ['dig', '@127.0.0.1', 'cnn.com']
+          #  timeoutSeconds: 20
+          #  initialDelaySeconds: 5
+          #  periodSeconds: 60
+          #livenessProbe:
+          #  tcpSocket:
+          #    port: dns-tcp
+          #  initialDelaySeconds: 15
+          #  periodSeconds: 30
+          volumeMounts:
+            - name: etc-pihole
+              mountPath: /etc/pihole
+            - name: etc-dnsmasq
+              mountPath: /etc/dnsmasq.d
+           # - name: var-log
+           #   mountPath: /var/log
+           # - name: var-log-lighttpd
+           #   mountPath: /var/log/lighttpd
+           # - name: ftlconf
+           #   mountPath: /etc/pihole/pihole-FTL.conf
+           #   subPath: pihole-FTL.conf
+           # - name: regex
+           #   mountPath: /etc/pihole/regex.list
+           #   subPath: regex.list
+           # - name: whitelist
+           #   mountPath: /etc/pihole/whitelist.txt
+           #   subPath: whitelist.txt
+           # - name: adlists
+           #   mountPath: /etc/pihole/adlists.list
+           #   subPath: adlists.list
+      restartPolicy: Always
+      volumes:
+        - name: etc-pihole
+          emptyDir:
+            medium: Memory
+        - name: etc-dnsmasq
+          emptyDir:
+            medium: Memory
+        #- name: var-log
+        #  emptyDir:
+        #    medium: Memory
+        #- name: var-log-lighttpd
+        #  emptyDir:
+        #    medium: Memory
+        #- name: ftlconf
+        #  configMap:
+        #    name: pihole-ftl.conf
+        #    items:
+        #      - key: pihole-FTL.conf
+        #        path: pihole-FTL.conf
+        #- name: regex
+        #  configMap:
+        #    name: regex.list
+        #    items:
+        #      - key: regex.list
+        #        path: regex.list
+        #- name: whitelist
+        #  configMap:
+        #    name: whitelist.txt
+        #    items:
+        #      - key: whitelist.txt
+        #        path: whitelist.txt
+        #- name: adlists
+        #  configMap:
+        #    name: adlists.list
+        #    items:
+        #      - key: adlists.list
+        #        path: adlists.list

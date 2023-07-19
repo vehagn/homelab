@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: adlists.list
+  namespace: pi-hole
+data:
+  adlists.list: |
+    https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+    https://mirror1.malwaredomains.com/files/justdomains
+    http://sysctl.org/cameleon/hosts
+    https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
+    https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
+    https://hosts-file.net/ad_servers.txt
+    https://blocklist.site/app/dl/porn
+    https://blocklist.site/app/dl/fakenews
+    https://blocklist.site/app/dl/tracking
+    https://blocklist.site/app/dl/drugs
+    https://blocklist.site/app/dl/phishing
+    https://blocklist.site/app/dl/gambling
+    https://blocklist.site/app/dl/malware
+    https://blocklist.site/app/dl/spam
+    https://blocklist.site/app/dl/ads
+    https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/SmartTV.txt
+    https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/android-tracking.txt
+    https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
+    https://raw.githubusercontent.com/StevenBlack/hosts/master/data/add.2o7Net/hosts
+    https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-blocklist.txt
+    https://v.firebog.net/hosts/Easyprivacy.txt
+    https://v.firebog.net/hosts/Prigent-Ads.txt
+    https://blocklist.site/app/dl/scam
+    https://blocklist.site/app/dl/proxy
+    https://blocklist.site/app/dl/redirect
