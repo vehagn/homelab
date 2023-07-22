@@ -12,4 +12,5 @@ spec:
         - name: home-assistant
           port: 8123
   tls:
-    certResolver: letsencrypt
+    store:
+      name: cloudflare-tls
