@@ -6,4 +6,4 @@ resources:
   - namespace.yaml
   - config-map.yaml
   - tunnel-token.yaml
-#  - deployment.yaml
+  - deployment.yaml

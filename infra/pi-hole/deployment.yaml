@@ -10,37 +10,28 @@ spec:
   selector:
     matchLabels:
       app: pi-hole
-  #strategy:
-  #  rollingUpdate:
-  #    maxSurge: 1
-  #    maxUnavailable: 0
-  #  type: RollingUpdate
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
       labels:
         app: pi-hole
     spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 127.0.0.1
+          - 8.8.8.8
       containers:
-        - env:
-            - name: TZ
-              value: Europe/Oslo
-            - name: WEBPASSWORD
-              value: password
-            #- name: DNS1
-            #  value: 1.1.1.1
-            #  #value: 185.228.168.168
-            #- name: DNS2
-            #  value: 8.8.8.8
-            #  #value: 185.228.169.168
-            - name: CONDITIONAL_FORWARDING
-              value: 'true'
-            - name: CONDITIONAL_FORWARDING_DOMAIN
-              value: stonegarden.dev
-            - name: CONDITIONAL_FORWARDING_IP
-              value: 192.168.1.128
-          image: pihole/pihole:latest
-          imagePullPolicy: Always
-          name: pi-hole
+        - name: pi-hole
+          image: pihole/pihole:2023.05.2
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: pi-hole-env
           ports:
             - name: dns-tcp
               containerPort: 53
@@ -51,7 +42,7 @@ spec:
             - name: dchp
               containerPort: 67
               protocol: UDP
-            - name: web
+            - name: http
               containerPort: 80
               protocol: TCP
             - name: https
@@ -75,11 +66,26 @@ spec:
           #    port: dns-tcp
           #  initialDelaySeconds: 15
           #  periodSeconds: 30
+          livenessProbe:
+            httpGet:
+              path: /admin/index.php
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 60
+            failureThreshold: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /admin/index.php
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 60
+            failureThreshold: 3
+            timeoutSeconds: 5
           volumeMounts:
-            - name: etc-pihole
-              mountPath: /etc/pihole
-            - name: etc-dnsmasq
-              mountPath: /etc/dnsmasq.d
+            - name: custom-dnsmasq
+              mountPath: /etc/dnsmasq.d/02-custom.conf
+              subPath: 02-custom.conf
            # - name: var-log
            #   mountPath: /var/log
            # - name: var-log-lighttpd
@@ -98,12 +104,10 @@ spec:
            #   subPath: adlists.list
       restartPolicy: Always
       volumes:
-        - name: etc-pihole
-          emptyDir:
-            medium: Memory
-        - name: etc-dnsmasq
-          emptyDir:
-            medium: Memory
+        - name: custom-dnsmasq
+          configMap:
+            name: custom-dnsmasq
+            defaultMode: 420
         #- name: var-log
         #  emptyDir:
         #    medium: Memory

@@ -2,37 +2,52 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: pi-hole-udp
+  name: pi-hole-dns-udp
   namespace: pi-hole
   annotations:
-    metallb.universe.tf/allow-shared-ip: dns
+    metallb.universe.tf/allow-shared-ip: pi-hole
 spec:
   selector:
     app: pi-hole
   ports:
-    - protocol: UDP
+    - name: dns-udp
       port: 53
-      name: dnsudp
-      targetPort: 53
+      protocol: UDP
+      targetPort: dns-udp
   type: LoadBalancer
 ---
 kind: Service
 apiVersion: v1
 metadata:
-  name: pi-hole-tcp
+  name: pi-hole-dns-tcp
   namespace: pi-hole
   annotations:
-    metallb.universe.tf/allow-shared-ip: dns
+    metallb.universe.tf/allow-shared-ip: pi-hole
 spec:
   selector:
     app: pi-hole
   ports:
-    - protocol: TCP
+    - name: dns-tcp
       port: 53
-      name: dnstcp
-      targetPort: 53
-    - protocol: TCP
+      protocol: TCP
+      targetPort: dns-tcp
+  type: LoadBalancer
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: pi-hole-web
+  namespace: pi-hole
+  annotations:
+    metallb.universe.tf/allow-shared-ip: pi-hole
+spec:
+  selector:
+    app: pi-hole
+  ports:
+    - name: http
       port: 80
-      name: web
-      targetPort: 80
+      targetPort: http
+    - name: https
+      port: 443
+      targetPort: https
   type: LoadBalancer

@@ -7,7 +7,7 @@ spec:
   selector:
     matchLabels:
       app: cloudflared
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:

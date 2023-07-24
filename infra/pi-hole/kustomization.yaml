@@ -4,11 +4,31 @@ namespace: pi-hole
 commonLabels:
   app: pi-hole
 
+
+configMapGenerator:
+  - name: pi-hole-env
+    envs:
+      - config/pi-hole-env
+  - name: custom-dnsmasq
+    files:
+      - config/02-custom.conf
+
 resources:
   - namespace.yaml
+  - auth-secret.yaml
+  - ingress-route.yaml
   - service.yaml
+  #- cm-dnsmasq.yaml
   #- cm-adlists.yaml
   #- cm-ftl.yaml
   #- cm-regex.yaml
   #- cm-whitelist.yaml
   - deployment.yaml
+
+helmGlobals:
+  chartHome: ../../charts
+
+helmCharts:
+  - name: application
+    releaseName: auth
+    valuesFile: auth-values.yaml
