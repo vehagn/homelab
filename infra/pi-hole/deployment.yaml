@@ -11,10 +11,10 @@ spec:
     matchLabels:
       app: pi-hole
   strategy:
+    type: RollingUpdate
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
-    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -55,86 +55,62 @@ spec:
             limits:
               cpu: "250m"
               memory: "896Mi"
-          #readinessProbe:
-          #  exec:
-          #    command: ['dig', '@127.0.0.1', 'cnn.com']
-          #  timeoutSeconds: 20
-          #  initialDelaySeconds: 5
-          #  periodSeconds: 60
-          #livenessProbe:
-          #  tcpSocket:
-          #    port: dns-tcp
-          #  initialDelaySeconds: 15
-          #  periodSeconds: 30
           livenessProbe:
-            httpGet:
-              path: /admin/index.php
-              port: http
-              scheme: HTTP
+            tcpSocket:
+              port: dns-tcp
             initialDelaySeconds: 60
             failureThreshold: 10
             timeoutSeconds: 5
           readinessProbe:
-            httpGet:
-              path: /admin/index.php
-              port: http
-              scheme: HTTP
+            exec:
+              command:
+                - 'dig'
+                - '@127.0.0.1'
+                - 'github.com'
             initialDelaySeconds: 60
             failureThreshold: 3
             timeoutSeconds: 5
           volumeMounts:
+            - name: config
+              mountPath: /etc/pihole
             - name: custom-dnsmasq
               mountPath: /etc/dnsmasq.d/02-custom.conf
               subPath: 02-custom.conf
-           # - name: var-log
-           #   mountPath: /var/log
-           # - name: var-log-lighttpd
-           #   mountPath: /var/log/lighttpd
-           # - name: ftlconf
-           #   mountPath: /etc/pihole/pihole-FTL.conf
-           #   subPath: pihole-FTL.conf
-           # - name: regex
-           #   mountPath: /etc/pihole/regex.list
-           #   subPath: regex.list
-           # - name: whitelist
-           #   mountPath: /etc/pihole/whitelist.txt
-           #   subPath: whitelist.txt
-           # - name: adlists
-           #   mountPath: /etc/pihole/adlists.list
-           #   subPath: adlists.list
+            #- name: ftl-conf
+            #  mountPath: /etc/pihole/pihole-FTL.conf
+            #  subPath: pihole-FTL.conf
+            - name: ad-lists
+              mountPath: /etc/pihole/adlists.list
+              subPath: adlists.list
+            - name: regex
+              mountPath: /etc/pihole/regex.list
+              subPath: regex.list
+            - name: whitelist
+              mountPath: /etc/pihole/whitelist.txt
+              subPath: whitelist.txt
       restartPolicy: Always
       volumes:
+        - name: config
+          emptyDir: {}
+        #  persistentVolumeClaim:
+        #    claimName: pi-hole-config
         - name: custom-dnsmasq
           configMap:
+        #    defaultMode: 420
             name: custom-dnsmasq
-            defaultMode: 420
-        #- name: var-log
-        #  emptyDir:
-        #    medium: Memory
-        #- name: var-log-lighttpd
-        #  emptyDir:
-        #    medium: Memory
-        #- name: ftlconf
+        #- name: ftl-conf
         #  configMap:
-        #    name: pihole-ftl.conf
-        #    items:
-        #      - key: pihole-FTL.conf
-        #        path: pihole-FTL.conf
-        #- name: regex
-        #  configMap:
-        #    name: regex.list
-        #    items:
-        #      - key: regex.list
-        #        path: regex.list
-        #- name: whitelist
-        #  configMap:
-        #    name: whitelist.txt
-        #    items:
-        #      - key: whitelist.txt
-        #        path: whitelist.txt
-        #- name: adlists
-        #  configMap:
-        #    name: adlists.list
-        #    items:
-        #      - key: adlists.list
-        #        path: adlists.list
+        #    defaultMode: 420
+        #    name: ftl-conf
+        - name: ad-lists
+          configMap:
+        #    defaultMode: 420
+            name: adlists.list
+        - name: regex
+          configMap:
+        #    defaultMode: 420
+            name: regex.list
+        - name: whitelist
+          configMap:
+        #    defaultMode: 420
+            name: whitelist.txt

@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: whitelist.txt
-  namespace: pi-hole
-data:
-  whitelist.txt: |
-    ichnaea.netflix.com
-    nrdp.nccp.netflix.com

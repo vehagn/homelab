@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: pihole-ftl.conf
-  namespace: pi-hole
-data:
-  pihole-FTL.conf: |
-    MAXDBDAYS=7
-    LOGFILE=/var/log/pihole/pihole-FTL.log

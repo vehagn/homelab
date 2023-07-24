@@ -4,25 +4,32 @@ namespace: pi-hole
 commonLabels:
   app: pi-hole
 
-
 configMapGenerator:
   - name: pi-hole-env
     envs:
       - config/pi-hole-env
+  - name: ftl-conf
+    files:
+      - config/pihole-FTL.conf
   - name: custom-dnsmasq
     files:
       - config/02-custom.conf
+  - name: adlists.list
+    files:
+      - config/adlists.list
+  - name: regex.list
+    files:
+      - config/regex.list
+  - name: whitelist.txt
+    files:
+      - config/whitelist.txt
 
 resources:
   - namespace.yaml
   - auth-secret.yaml
   - ingress-route.yaml
   - service.yaml
-  #- cm-dnsmasq.yaml
-  #- cm-adlists.yaml
-  #- cm-ftl.yaml
-  #- cm-regex.yaml
-  #- cm-whitelist.yaml
+#  - pvc.yaml
   - deployment.yaml
 
 helmGlobals:
