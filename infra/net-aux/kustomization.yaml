@@ -1,35 +1,38 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: pi-hole
+namespace: net-aux
 commonLabels:
   app: pi-hole
 
 configMapGenerator:
   - name: pi-hole-env
     envs:
-      - config/env
+      - config/pi-hole/env
   - name: ftl-conf
     files:
-      - config/pihole-FTL.conf
+      - config/pi-hole/pihole-FTL.conf
   - name: custom-dnsmasq
     files:
-      - config/02-custom.conf
+      - config/pi-hole/02-custom.conf
   - name: adlists.list
     files:
-      - config/adlists.list
+      - config/pi-hole/adlists.list
   - name: regex.list
     files:
-      - config/regex.list
+      - config/pi-hole/regex.list
   - name: whitelist.txt
     files:
-      - config/whitelist.txt
+      - config/pi-hole/whitelist.txt
+  - name: cloudflared-config
+    files:
+      - config/cloudflared/config.yaml
 
 resources:
   - namespace.yaml
   - auth-secret.yaml
+  - tunnel-token.yaml
   - ingress-route.yaml
   - service.yaml
-#  - pvc.yaml
   - deployment.yaml
 
 helmGlobals:

@@ -1,0 +1,14 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: tunnel-token
+  namespace: net-aux
+spec:
+  encryptedData:
+    tunnel-token: AgDp++v1aHWzqI52J7DI1xdt7h0l2aOvYSDxMuJdx1jPHSFtGFYEGwU6H5a9wJZ5A374ob4UFrrM68g6KMNImn61Vp8HDsYh33b2BdqA7JdmqE3I+HvB0I5Y85m1btIOrhcCs/+dABTv0bZD0lue2GZYWL9T8GbyUBLsD3PMrI5MXYnMFlKhpWUGweFRuDDLYTNPgaLx9tPNRYaXR3aX4gm6wdhv++u065tDhhyHgy0tMoviYmFjpLQrhnm4dHg6uzWRhbX5Z296S/kIygmf4ydh+petIeAGf87PuI/t0o94MM1uC+rx+ldvvzi+oRVXSyQ/K9JXOqqt/4cfqcIigZiT1w/DO2O8uKJZGkoKGoUhf9cCqE609iqf/tjTqa2uWl6fO/SlQWfeVz9KjRq0NWDYzYfgyMrzN4kWoAi7jYLpccGEq5YgVFNNVYbvyVjqN4lkqjPGnw7fKa4+pxbjwHwdk09KEVjVwYe/GRz6By62QKqzndZA020paJbfB99t3UcufiSW9V6/x5Jp1ekYtijeVx7BhYrzJPtyhWu2yYoB4DS674LE0oanjxfIAar6cThT4Iqxl5UPYq9hoQo1Ojcg7ALYNhgX5pHijr491e6kBAyfdq3CgCRDX9ImdYLDdAHGnd9au2cKQRbKHVylnRh37Otb1GcTMMw3pZBLcf//PAzDSbgtG7MgGQhPJrDRXA5vCcnPPACpVLeRqccAflr3NzYXzEZ8AAkgkQSu0+Ek5Gw1v+nPI3IUGvW41G2eEiddfu3nN60cxn1FoM/ctMez9gXZgEDhn7feAMYcERsmuIllD/mAqIGl04sofnBWN600s49D1+cH38simPv6tV39MFnUj1oQNr1bcEx7MzlDOyBd45DFMrNrtQIwEqU1fXWvKz6ipJKUHklaujQBCKj7a/WcqTKPBkX9Dvax4i6t6IxLhJO53AZe
+  template:
+    metadata:
+      name: tunnel-token
+      namespace: net-aux
+    type: Opaque
+
