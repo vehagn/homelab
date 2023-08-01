@@ -25,6 +25,34 @@ spec:
         nameservers:
           - 127.0.0.1
       containers:
+        - name: unbound
+          image: mvance/unbound:1.17.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: dns-tcp
+              containerPort: 5335
+              protocol: TCP
+            - name: dns-udp
+              containerPort: 5335
+              protocol: UDP
+          startupProbe:
+            exec:
+              command:
+                - 'drill'
+                - '@127.0.0.1'
+                - '-p'
+                - '5335'
+                - 'cnn.com'
+            initialDelaySeconds: 60
+            failureThreshold: 3
+            timeoutSeconds: 5
+          volumeMounts:
+            - name: unbound-config
+              mountPath: /opt/unbound/etc/unbound/unbound.conf
+              subPath: unbound.conf
+            - name: unbound-root-hints
+              mountPath: /opt/unbound/etc/unbound/root.hints
+              subPath: root.hints
         - name: pi-hole
           image: pihole/pihole:2023.05.2
           imagePullPolicy: IfNotPresent
@@ -55,29 +83,19 @@ spec:
               cpu: "250m"
               memory: "896Mi"
           livenessProbe:
-            tcpSocket:
-              port: dns-tcp
+            httpGet:
+              path: /admin/index.php
+              port: http
+              scheme: HTTP
             initialDelaySeconds: 60
             failureThreshold: 10
             timeoutSeconds: 5
-          readinessProbe:
-            exec:
-              command:
-                - 'dig'
-                - '@127.0.0.1'
-                - 'github.com'
-            initialDelaySeconds: 60
-            failureThreshold: 3
-            timeoutSeconds: 5
           volumeMounts:
-            - name: config
+            - name: pi-hole-config
               mountPath: /etc/pihole
             - name: custom-dnsmasq
               mountPath: /etc/dnsmasq.d/02-custom.conf
               subPath: 02-custom.conf
-            #- name: ftl-conf
-            #  mountPath: /etc/pihole/pihole-FTL.conf
-            #  subPath: pihole-FTL.conf
             - name: ad-lists
               mountPath: /etc/pihole/adlists.list
               subPath: adlists.list
@@ -89,16 +107,18 @@ spec:
               subPath: whitelist.txt
       restartPolicy: Always
       volumes:
-        - name: config
-          emptyDir: {}
-        #  persistentVolumeClaim:
-        #    claimName: pi-hole-config
+        - name: unbound-root-hints
+          configMap:
+            name: unbound-root-hints
+        - name: unbound-config
+          configMap:
+            name: unbound-config
+        - name: pi-hole-config
+          persistentVolumeClaim:
+            claimName: pi-hole-config
         - name: custom-dnsmasq
           configMap:
             name: custom-dnsmasq
-        #- name: ftl-conf
-        #  configMap:
-        #    name: ftl-conf
         - name: ad-lists
           configMap:
             name: adlists.list

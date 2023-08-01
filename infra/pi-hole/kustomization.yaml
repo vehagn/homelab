@@ -5,12 +5,15 @@ commonLabels:
   app: pi-hole
 
 configMapGenerator:
+  - name: unbound-config
+    files:
+      - config/unbound/unbound.conf
+  - name: unbound-root-hints
+    files:
+      - config/unbound/root.hints
   - name: pi-hole-env
     envs:
       - config/env
-  - name: ftl-conf
-    files:
-      - config/pihole-FTL.conf
   - name: custom-dnsmasq
     files:
       - config/02-custom.conf
@@ -29,7 +32,8 @@ resources:
   - auth-secret.yaml
   - ingress-route.yaml
   - service.yaml
-#  - pvc.yaml
+  - pv-pi-hole.yaml
+  - pvc-pi-hole.yaml
   - deployment.yaml
 
 helmGlobals:
