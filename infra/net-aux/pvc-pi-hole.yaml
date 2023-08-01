@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pi-hole-config
+  namespace: net-aux
+  labels:
+    app: pi-hole
+spec:
+  storageClassName: pi-hole-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi

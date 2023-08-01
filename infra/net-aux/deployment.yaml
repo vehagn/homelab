@@ -25,6 +25,31 @@ spec:
         nameservers:
           - 127.0.0.1
       containers:
+        - name: unbound
+          image: mvance/unbound:1.17.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: dns-tcp
+              containerPort: 5335
+              protocol: TCP
+            - name: dns-udp
+              containerPort: 5335
+              protocol: UDP
+          startupProbe:
+            exec:
+              command:
+                - 'drill'
+                - '@127.0.0.1'
+                - '-p'
+                - '5335'
+                - 'cnn.com'
+            initialDelaySeconds: 60
+            failureThreshold: 3
+            timeoutSeconds: 5
+          volumeMounts:
+             - name: unbound-config
+               mountPath: /opt/unbound/etc/unbound/unbound.conf
+               subPath: unbound.conf
         - name: pi-hole
           image: pihole/pihole:2023.05.2
           imagePullPolicy: IfNotPresent
@@ -55,12 +80,14 @@ spec:
               cpu: "250m"
               memory: "896Mi"
           livenessProbe:
-            tcpSocket:
-              port: dns-tcp
+            httpGet:
+              path: /admin/index.php
+              port: http
+              scheme: HTTP
             initialDelaySeconds: 60
             failureThreshold: 10
             timeoutSeconds: 5
-          readinessProbe:
+          startupProbe:
             exec:
               command:
                 - 'dig'
@@ -70,14 +97,11 @@ spec:
             failureThreshold: 3
             timeoutSeconds: 5
           volumeMounts:
-            - name: config
+            - name: pi-hole-config
               mountPath: /etc/pihole
             - name: custom-dnsmasq
               mountPath: /etc/dnsmasq.d/02-custom.conf
               subPath: 02-custom.conf
-            #- name: ftl-conf
-            #  mountPath: /etc/pihole/pihole-FTL.conf
-            #  subPath: pihole-FTL.conf
             - name: ad-lists
               mountPath: /etc/pihole/adlists.list
               subPath: adlists.list
@@ -88,7 +112,8 @@ spec:
               mountPath: /etc/pihole/whitelist.txt
               subPath: whitelist.txt
         - name: cloudflared
-          image: cloudflare/cloudflared:latest
+          image: cloudflare/cloudflared:2023.7.3
+          imagePullPolicy: IfNotPresent
           args:
             - tunnel
             - --config
@@ -98,8 +123,8 @@ spec:
             httpGet:
               path: /ready
               port: 2000
-            failureThreshold: 1
-            initialDelaySeconds: 10
+            initialDelaySeconds: 60
+            failureThreshold: 5
             periodSeconds: 10
           env:
             - name: TUNNEL_TOKEN
@@ -113,16 +138,15 @@ spec:
               subPath: config.yaml
       restartPolicy: Always
       volumes:
-        - name: config
-          emptyDir: {}
-        #  persistentVolumeClaim:
-        #    claimName: pi-hole-config
+        - name: unbound-config
+          configMap:
+            name: unbound-config
+        - name: pi-hole-config
+          persistentVolumeClaim:
+            claimName: pi-hole-config
         - name: custom-dnsmasq
           configMap:
             name: custom-dnsmasq
-        #- name: ftl-conf
-        #  configMap:
-        #    name: ftl-conf
         - name: ad-lists
           configMap:
             name: adlists.list
