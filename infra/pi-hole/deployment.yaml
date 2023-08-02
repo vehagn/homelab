@@ -29,10 +29,10 @@ spec:
           image: mvance/unbound:1.17.1
           imagePullPolicy: IfNotPresent
           ports:
-            - name: dns-tcp
+            - name: unbound-dns-tcp
               containerPort: 5335
               protocol: TCP
-            - name: dns-udp
+            - name: unbound-dns-udp
               containerPort: 5335
               protocol: UDP
           startupProbe:
@@ -55,7 +55,7 @@ spec:
               subPath: root.hints
         - name: pi-hole
           image: pihole/pihole:2023.05.2
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: pi-hole-env

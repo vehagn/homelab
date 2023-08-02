@@ -3,12 +3,12 @@ kind: Service
 apiVersion: v1
 metadata:
   name: pi-hole-dns-udp
-  namespace: pi-hole
+  namespace: net-aux
   annotations:
     metallb.universe.tf/allow-shared-ip: net-aux
 spec:
   selector:
-    app: pi-hole
+    app: net-aux
   ports:
     - name: dns-udp
       port: 53
@@ -20,12 +20,12 @@ kind: Service
 apiVersion: v1
 metadata:
   name: pi-hole-dns-tcp
-  namespace: pi-hole
+  namespace: net-aux
   annotations:
     metallb.universe.tf/allow-shared-ip: net-aux
 spec:
   selector:
-    app: pi-hole
+    app: net-aux
   ports:
     - name: dns-tcp
       port: 53
@@ -37,12 +37,12 @@ kind: Service
 apiVersion: v1
 metadata:
   name: pi-hole-web
-  namespace: pi-hole
+  namespace: net-aux
   annotations:
     metallb.universe.tf/allow-shared-ip: net-aux
 spec:
   selector:
-    app: pi-hole
+    app: net-aux
   ports:
     - name: http
       port: 80
@@ -50,4 +50,25 @@ spec:
     - name: https
       port: 443
       targetPort: https
+  type: LoadBalancer
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: unbound-dns
+  namespace: net-aux
+  annotations:
+    metallb.universe.tf/allow-shared-ip: net-aux
+spec:
+  selector:
+    app: net-aux
+  ports:
+    - name: unbound-dns-tcp
+      port: 5335
+      protocol: TCP
+      targetPort: unbound-dns-tcp
+    - name: unbound-dns-udp
+      port: 5335
+      protocol: UDP
+      targetPort: unbound-dns-udp
   type: LoadBalancer
