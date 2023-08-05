@@ -1,2 +1,24 @@
+tunnel: gauss-k8s
+credentials-file: /etc/cloudflared/creds/credentials.json
 metrics: 0.0.0.0:2000
 no-autoupdate: true
+
+warp-routing:
+  enabled: true
+
+ingress:
+  - hostname: hello.stonegarden.dev
+    service: hello_world
+  - hostname: hei.stonegarden.dev
+    service: hello_world
+    originRequest:
+      access:
+        required: true
+        teamName: stonegarden
+  - hostname: ssh.stonegarden.dev
+    service: ssh://192.168.1.12:22
+  - hostname: stonegarden.dev
+    service: https://stonegarden.dev
+  - hostname: "*.stonegarden.dev"
+    service: https://stonegarden.dev
+  - service: http_status:404

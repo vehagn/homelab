@@ -32,7 +32,7 @@ resources:
   - pv-pi-hole.yaml
   - pvc-pi-hole.yaml
   - auth-secret.yaml
-  - tunnel-token.yaml
+  - tunnel-credentials.yaml
   - ingress-route.yaml
   - service.yaml
   - deployment.yaml

@@ -126,16 +126,13 @@ spec:
             initialDelaySeconds: 60
             failureThreshold: 5
             periodSeconds: 10
-          env:
-            - name: TUNNEL_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  key: tunnel-token
-                  name: tunnel-token
           volumeMounts:
             - name: cloudflared-config
               mountPath: /etc/cloudflared/config/config.yaml
               subPath: config.yaml
+            - name: tunnel-credentials
+              mountPath: /etc/cloudflared/creds
+              readOnly: true
       restartPolicy: Always
       volumes:
         - name: unbound-config
@@ -159,6 +156,6 @@ spec:
         - name: cloudflared-config
           configMap:
             name: cloudflared-config
-        - name: tunnel-token
+        - name: tunnel-credentials
           secret:
-            secretName: tunnel-token
+            secretName: tunnel-credentials
