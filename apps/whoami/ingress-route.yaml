@@ -27,7 +27,3 @@ spec:
       services:
         - name: whoami
           port: 80
-  tls:
-    store:
-      name: cloudflare-tls
-    certResolver: letsencrypt

@@ -13,6 +13,3 @@ spec:
           port: http
       middlewares:
         - name: traefik-forward-auth
-  tls:
-    store:
-      name: cloudflare-tls

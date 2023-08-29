@@ -9,9 +9,6 @@ metadata:
 spec:
   entryPoints:
     - websecure
-  tls:
-    store:
-      name: cloudflare-tls
   routes:
     {{- if include "service.create" . }}
     - match: Host(`{{ .Values.name }}.stonegarden.dev`)

@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-stonegarden-dev
+  namespace: traefik-system
+spec:
+  secretName: wildcard-stonegarden-dev-tls
+  dnsNames:
+    - "stonegarden.dev"
+    - "*.stonegarden.dev"
+  issuerRef:
+    name: cloudflare-issuer
+    kind: Issuer

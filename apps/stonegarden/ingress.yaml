@@ -11,6 +11,3 @@ spec:
       services:
         - name: stonegarden
           port: web
-  tls:
-    store:
-      name: cloudflare-tls

@@ -25,5 +25,3 @@ spec:
           port: 80
       middlewares:
         - name: traefik-forward-auth
-  tls:
-    certResolver: letsencrypt

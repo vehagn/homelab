@@ -11,5 +11,3 @@ spec:
       services:
         - name: plex
           port: 32400
-  tls:
-    certResolver: letsencrypt

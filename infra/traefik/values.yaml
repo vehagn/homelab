@@ -34,10 +34,7 @@ persistence:
   storageClass: cert-storage
   path: /data
 
-certResolvers:
-  letsencrypt:
-    email: veghag@gmail.com
-    tlsChallenge: true
-    storage: /data/acme.json
-    # Remove staging server when it's working
-    #caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+tlsStore:
+  default:
+    defaultCertificate:
+      secretName: wildcard-stonegarden-dev-tls
