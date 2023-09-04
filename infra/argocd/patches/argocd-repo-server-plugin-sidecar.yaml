@@ -9,7 +9,7 @@ spec:
       containers:
         - name: kustomize-build-with-helm
           command: [/var/run/argocd/argocd-cmp-server]
-          image: quay.io/argoproj/argocd:v2.7.11
+          image: quay.io/argoproj/argocd:v2.8.2
           securityContext:
             runAsNonRoot: true
             runAsUser: 999
