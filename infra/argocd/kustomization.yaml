@@ -6,12 +6,13 @@ resources:
   - namespace.yaml
   - https://raw.githubusercontent.com/argoproj/argo-cd/v2.7.11/manifests/install.yaml
   - ingress.yaml
+  - cm-argocd-plugin.yaml
 
 patchesStrategicMerge:
-  # Kustomize --enable-helm plugin for Helm charts
-  - patches/argocd-cm-kustomize-helm-patch.yaml
+  # Plugin to enable Kustomize with Helm
+  - patches/argocd-repo-server-plugin-sidecar.yaml
   # Ignore CiliumIdentity CRDs
   - patches/argocd-cm-resource-exclusion-cilium-identity-patch.yaml
   # Let Traefik manage TLS-termination
-  - patches/argocd-cmd-params-cm-server-insecrure-patch.yaml
+  - patches/argocd-cmd-params-cm-server-insecure-patch.yaml
 

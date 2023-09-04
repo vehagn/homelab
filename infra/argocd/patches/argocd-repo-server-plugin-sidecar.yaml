@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argocd-repo-server
+spec:
+  selector: {}
+  template:
+    spec:
+      containers:
+        - name: kustomize-build-with-helm
+          command: [/var/run/argocd/argocd-cmp-server]
+          image: quay.io/argoproj/argocd:v2.7.11
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 999
+          volumeMounts:
+            - name: var-files
+              mountPath: /var/run/argocd
+            - name: plugins
+              mountPath: /home/argocd/cmp-server/plugins
+            - name: argocd-plugin-config
+              mountPath: /home/argocd/cmp-server/config/plugin.yaml
+              subPath: plugin.yaml
+            - mountPath: /tmp
+              name: cmp-tmp
+      volumes:
+        - name: argocd-plugin-config
+          configMap:
+            name: argocd-plugin-config
+        - name: cmp-tmp
+          emptyDir: {}
