@@ -6,13 +6,14 @@ resources:
   - namespace.yaml
   - https://raw.githubusercontent.com/argoproj/argo-cd/v2.8.2/manifests/install.yaml
   - ingress.yaml
-  - cm-argocd-plugin.yaml
+  - argocd-cm-cmp-kustomize-build-with-helm.yaml
 
-patchesStrategicMerge:
+patches:
+  # Copy binaries from ArgoCD-image
+  - path: patches/argocd-repo-copyutil-patch.yaml
   # Plugin to enable Kustomize with Helm
-  - patches/argocd-repo-server-plugin-sidecar.yaml
+  - path: patches/argocd-repo-server-plugin-sidecar-patch.yaml
   # Ignore CiliumIdentity CRDs
-  - patches/argocd-cm-resource-exclusion-cilium-identity-patch.yaml
-  # Let Traefik manage TLS-termination
-  - patches/argocd-cmd-params-cm-server-insecure-patch.yaml
-
+  - path: patches/argocd-cm-resource-exclusion-cilium-identity-patch.yaml
+  # Traefik handles TLS
+  - path: patches/argocd-cmd-params-cm-server-insecure-patch.yaml

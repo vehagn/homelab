@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argocd-repo-server
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: copyutil
+          command: [ /bin/bash ]
+          args:
+            - -c
+            - >-
+              /bin/cp -n /usr/local/bin/argocd /var/run/argocd/argocd-cmp-server &&
+              /bin/cp -n /usr/local/bin/kustomize /var/run/argocd/kustomize &&
+              /bin/cp -n /usr/local/bin/helm /var/run/argocd/helm
