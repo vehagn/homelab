@@ -29,6 +29,8 @@ spec:
                 name: remark42-secret
             - secretRef:
                 name: remark42-github
+            - secretRef:
+                name: remark42-google
             - configMapRef:
                 name: remark42-env
           volumeMounts:

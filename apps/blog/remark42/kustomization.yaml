@@ -15,6 +15,7 @@ resources:
   - pv.yaml
   - pvc.yaml
   - secret-github.yaml
+  - secret-google.yaml
   - secret-remark42.yaml
   - service.yaml
 
