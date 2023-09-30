@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: blog
+commonLabels:
+  app.kubernetes.io/managed-by: argocd
+
+configMapGenerator:
+  - name: remark42-env
+    envs:
+      - config/env-remark42
+
+resources:
+  - deployment.yaml
+  - ingress-route.yaml
+  - pv.yaml
+  - pvc.yaml
+  - secret-github.yaml
+  - secret-remark42.yaml
+  - service.yaml
+

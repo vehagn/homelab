@@ -4,6 +4,9 @@ namespace: blog
 commonLabels:
   app.kubernetes.io/managed-by: argocd
 
+resources:
+  - remark42
+
 helmGlobals:
   chartHome: ../../charts
 

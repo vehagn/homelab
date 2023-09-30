@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: remark42
+  namespace: blog
+  labels:
+    app: remark42
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: remark42
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      namespace: remark42
+      labels:
+        app: remark42
+    spec:
+      containers:
+        - name: remark42
+          image: umputun/remark42:v1.12.1
+          ports:
+            # http:
+            - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: remark42-secret
+            - secretRef:
+                name: remark42-github
+            - configMapRef:
+                name: remark42-env
+          volumeMounts:
+            - name: remark42
+              mountPath: /srv/var
+          securityContext:
+            readOnlyRootFilesystem: false
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "25Mi"
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+      securityContext: {}
+      # Has its own root privilege drop. Can't do runAsUser / runAsGroup.
+      volumes:
+        - name: remark42
+          persistentVolumeClaim:
+            claimName: remark42
+      
