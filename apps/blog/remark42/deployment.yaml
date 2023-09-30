@@ -22,8 +22,8 @@ spec:
         - name: remark42
           image: umputun/remark42:v1.12.1
           ports:
-            # http:
-            - containerPort: 8080
+            - name: http
+              containerPort: 8080
           envFrom:
             - secretRef:
                 name: remark42-secret
@@ -40,13 +40,12 @@ spec:
             readOnlyRootFilesystem: false
           resources:
             requests:
-              cpu: "100m"
-              memory: "25Mi"
+              cpu: 100m
+              memory: 25Mi
             limits:
-              cpu: "1"
-              memory: "1Gi"
+              cpu: 500m
+              memory: 256Mi
       securityContext: {}
-      # Has its own root privilege drop. Can't do runAsUser / runAsGroup.
       volumes:
         - name: remark42
           persistentVolumeClaim:

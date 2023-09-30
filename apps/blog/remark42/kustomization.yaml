@@ -18,4 +18,3 @@ resources:
   - secret-google.yaml
   - secret-remark42.yaml
   - service.yaml
-

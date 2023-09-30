@@ -11,4 +11,4 @@ spec:
       kind: Rule
       services:
         - name: remark42-web
-          port: 8080
+          port: http
