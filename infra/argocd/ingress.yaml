@@ -10,6 +10,8 @@ spec:
     - kind: Rule
       match: Host(`argocd.stonegarden.dev`)
       priority: 10
+      middlewares:
+        - name: traefik-forward-auth
       services:
         - name: argocd-server
           port: 80

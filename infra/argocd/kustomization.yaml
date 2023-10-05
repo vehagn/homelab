@@ -2,8 +2,17 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: argocd
 
+helmGlobals:
+  chartHome: ../../charts
+
+helmCharts:
+  - name: application
+    releaseName: auth
+    valuesFile: auth-values.yaml
+
 resources:
   - namespace.yaml
+  - traefik-forward-auth-secrets.yaml
   - https://raw.githubusercontent.com/argoproj/argo-cd/v2.8.2/manifests/install.yaml
   - ingress.yaml
   - argocd-cm-cmp-kustomize-build-with-helm.yaml
