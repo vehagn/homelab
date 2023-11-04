@@ -17,6 +17,8 @@ spec:
       server: '*'
     - namespace: 'home-assistant'
       server: '*'
+    - namespace: 'jellyfin'
+      server: '*'
     - namespace: 'plex'
       server: '*'
     - namespace: 'stonegarden'

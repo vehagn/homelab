@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jellyfin-svc
+  namespace: jellyfin
+spec:
+  type: LoadBalancer
+  ports:
+    - name: web
+      port: 8096
+  selector:
+    app: jellyfin
