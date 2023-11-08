@@ -9,17 +9,24 @@ spec:
       app: home-assistant
   template:
     spec:
-      volumes:
-        - name: home-assistant-config
-          hostPath:
-            path: "/disk/etc/home-assistant"
       containers:
         - image: homeassistant/home-assistant
           imagePullPolicy: Always
           name: home-assistant
-          volumeMounts:
-            - mountPath: "/config"
-              name: home-assistant-config
           ports:
             - name: web
               containerPort: 8123
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: hass-config-pvc

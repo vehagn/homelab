@@ -5,6 +5,8 @@ commonLabels:
   app: home-assistant
 
 resources:
+  - pv-hass-config.yaml
+  - pvc-hass-config.yaml
   - service.yaml
   - deployment.yaml
   - ingress.yaml
