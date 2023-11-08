@@ -1,3 +1,6 @@
-cdi:
-  enabled: true
-  default: true
+driver.enabled: false
+toolkit.enabled: false
+
+#cdi:
+#  enabled: true
+#  default: true
