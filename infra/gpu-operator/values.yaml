@@ -1,5 +1,12 @@
-driver.enabled: false
-toolkit.enabled: false
+driver:
+  enabled: false
+toolkit:
+  enabled: false
+
+devicePlugin:
+  config:
+    name: device-plugin-time-slicing
+    default: any
 
 #cdi:
 #  enabled: true

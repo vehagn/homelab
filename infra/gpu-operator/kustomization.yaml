@@ -4,6 +4,7 @@ namespace: gpu-operator
 
 resources:
   - namespace.yaml
+  - cm-device-plugin-time-slicing.yaml
 
 helmCharts:
   - name: gpu-operator
