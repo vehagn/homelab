@@ -9,60 +9,33 @@ spec:
       app: plex
   template:
     spec:
-      volumes:
-        - name: plex-config
-          hostPath:
-            path: "/disk/etc/plex"
-        - name: media-data
-          hostPath:
-            path: "/disk/data"
-        #- name: plex-config-pv
-        #  persistentVolumeClaim:
-        #    claimName: plex-config
-        #- name: media-data-pv
-        #  persistentVolumeClaim:
-        #    claimName: media-data
       containers:
         - name: plex
           image: lscr.io/linuxserver/plex
           imagePullPolicy: Always
-          volumeMounts:
-            - mountPath: "/config"
-              name: plex-config
-            - mountPath: "/app/data"
-              name: media-data
-            #- mountPath: "/config"
-            #  name: plex-config-pv
-            #- mountPath: "/app/data"
-            #  name: media-data-pv
-          env:
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
-            - name: TZ
-              value: Europe/Oslo
+          resources:
+            requests:
+              cpu: 2000m
+              memory: 6Gi
+            limits:
+              cpu: 10000m
+              memory: 12Gi
+              nvidia.com/gpu: "1"
+          envFrom:
+            - configMapRef:
+                name: plex-env
           ports:
             - name: web
               containerPort: 32400
-            - name: a
-              containerPort: 1900
-              protocol: UDP
-            - name: b
-              containerPort: 3005
-            - name: c
-              containerPort: 8324
-            - name: d
-              containerPort: 32410
-              protocol: UDP
-            - name: e
-              containerPort: 32412
-              protocol: UDP
-            - name: f
-              containerPort: 32413
-              protocol: UDP
-            - name: g
-              containerPort: 32414
-              protocol: UDP
-            - name: h
-              containerPort: 32469
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: media
+              mountPath: /app/data
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: plex-config-pvc
+        - name: media
+          persistentVolumeClaim:
+            claimName: plex-media-pvc

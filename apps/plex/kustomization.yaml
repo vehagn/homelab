@@ -4,9 +4,19 @@ namespace: plex
 commonLabels:
   app: plex
 
+configMapGenerator:
+  - name: plex-env
+    literals:
+      - PUID="1000"
+      - PGID="1000"
+      - UMASK="002"
+      - TZ="Europe/Oslo"
+
 resources:
-  #  - pv.yaml
-  #  - pvc.yaml
+  - pv-plex-config.yaml
+  - pvc-plex-config.yaml
+  - pv-plex-media.yaml
+  - pvc-plex-media.yaml
   - service.yaml
   - deployment.yaml
   - ingress.yaml
