@@ -24,6 +24,8 @@ spec:
       server: '*'
     - namespace: 'monitoring'
       server: '*'
+    - namespace: 'nvidia-device-plugin'
+      server: '*'
     - namespace: 'pi-hole'
       server: '*'
     - namespace: 'net-aux'
