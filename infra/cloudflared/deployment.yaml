@@ -20,7 +20,7 @@ spec:
           - 192.168.1.131
       containers:
         - name: cloudflared
-          image: cloudflare/cloudflared:latest
+          image: cloudflare/cloudflared:2023.10.0
           args:
             - tunnel
             - --config

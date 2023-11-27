@@ -26,7 +26,7 @@ spec:
           - 127.0.0.1
       containers:
         - name: unbound
-          image: mvance/unbound:1.17.1
+          image: mvance/unbound:1.19.0
           imagePullPolicy: IfNotPresent
           ports:
             - name: unbound-dns-tcp
@@ -54,7 +54,7 @@ spec:
               mountPath: /opt/unbound/etc/unbound/root.hints
               subPath: root.hints
         - name: pi-hole
-          image: pihole/pihole:2023.05.2
+          image: pihole/pihole:2023.11.0
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
