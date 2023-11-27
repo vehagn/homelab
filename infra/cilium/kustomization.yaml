@@ -13,6 +13,6 @@ patchesStrategicMerge:
 helmCharts:
   - name: cilium
     repo: https://helm.cilium.io
-    version: 1.13.1
+    version: 1.14.4
     releaseName: "cilium"
     valuesFile: values.yaml
