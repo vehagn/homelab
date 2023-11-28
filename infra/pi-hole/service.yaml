@@ -1,53 +1,38 @@
----
 kind: Service
 apiVersion: v1
 metadata:
-  name: pi-hole-dns-udp
+  name: pi-hole
   namespace: pi-hole
   annotations:
+    metallb.universe.tf/loadBalancerIPs: 192.168.1.154
     metallb.universe.tf/allow-shared-ip: pi-hole
 spec:
   selector:
     app: pi-hole
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+    - name: dns-tcp
+      port: 53
+      protocol: TCP
+      targetPort: dns-tcp
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: pi-hole-udp
+  namespace: pi-hole
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: 192.168.1.154
+    metallb.universe.tf/allow-shared-ip: pi-hole
+spec:
+  selector:
+    app: pi-hole
+  type: LoadBalancer
   ports:
     - name: dns-udp
       port: 53
       protocol: UDP
       targetPort: dns-udp
-  type: LoadBalancer
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: pi-hole-dns-tcp
-  namespace: pi-hole
-  annotations:
-    metallb.universe.tf/allow-shared-ip: pi-hole
-spec:
-  selector:
-    app: pi-hole
-  ports:
-    - name: dns-tcp
-      port: 53
-      protocol: TCP
-      targetPort: dns-tcp
-  type: LoadBalancer
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: pi-hole-web
-  namespace: pi-hole
-  annotations:
-    metallb.universe.tf/allow-shared-ip: pi-hole
-spec:
-  selector:
-    app: pi-hole
-  ports:
-    - name: http
-      port: 80
-      targetPort: http
-    - name: https
-      port: 443
-      targetPort: https
-  type: LoadBalancer

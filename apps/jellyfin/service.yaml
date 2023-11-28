@@ -4,9 +4,8 @@ metadata:
   name: jellyfin-svc
   namespace: jellyfin
 spec:
-  type: LoadBalancer
+  selector:
+    app: jellyfin
   ports:
     - name: web
       port: 8096
-  selector:
-    app: jellyfin

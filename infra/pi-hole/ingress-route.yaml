@@ -9,7 +9,7 @@ spec:
     - match: Host(`pi-hole.stonegarden.dev`)
       kind: Rule
       services:
-        - name: pi-hole-web
+        - name: pi-hole
           port: http
       middlewares:
         - name: traefik-forward-auth

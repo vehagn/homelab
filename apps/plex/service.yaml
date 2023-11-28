@@ -3,9 +3,9 @@ kind: Service
 metadata:
   name: plex
 spec:
+  selector:
+    app: plex
   type: LoadBalancer
   ports:
     - name: web
       port: 32400
-  selector:
-    app: plex

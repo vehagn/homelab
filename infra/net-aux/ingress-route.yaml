@@ -9,7 +9,7 @@ spec:
     - match: Host(`net-aux.stonegarden.dev`)
       kind: Rule
       services:
-        - name: pi-hole-web
+        - name: net-aux
           port: http
       middlewares:
         - name: traefik-forward-auth

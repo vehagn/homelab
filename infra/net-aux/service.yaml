@@ -1,74 +1,46 @@
----
 kind: Service
 apiVersion: v1
 metadata:
-  name: pi-hole-dns-udp
+  name: net-aux
   namespace: net-aux
   annotations:
+    metallb.universe.tf/loadBalancerIPs: 192.168.1.153
     metallb.universe.tf/allow-shared-ip: net-aux
 spec:
   selector:
     app: net-aux
-  ports:
-    - name: dns-udp
-      port: 53
-      protocol: UDP
-      targetPort: dns-udp
   type: LoadBalancer
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: pi-hole-dns-tcp
-  namespace: net-aux
-  annotations:
-    metallb.universe.tf/allow-shared-ip: net-aux
-spec:
-  selector:
-    app: net-aux
-  ports:
-    - name: dns-tcp
-      port: 53
-      protocol: TCP
-      targetPort: dns-tcp
-  type: LoadBalancer
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: pi-hole-web
-  namespace: net-aux
-  annotations:
-    metallb.universe.tf/allow-shared-ip: net-aux
-spec:
-  selector:
-    app: net-aux
-  ports:
-    - name: http
-      port: 80
-      targetPort: http
-    - name: https
-      port: 443
-      targetPort: https
-  type: LoadBalancer
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: unbound-dns
-  namespace: net-aux
-  annotations:
-    metallb.universe.tf/allow-shared-ip: net-aux
-spec:
-  selector:
-    app: net-aux
   ports:
     - name: unbound-dns-tcp
       port: 5335
       protocol: TCP
       targetPort: unbound-dns-tcp
+    - name: dns-tcp
+      port: 53
+      protocol: TCP
+      targetPort: dns-tcp
+    - name: http
+      port: 80
+      targetPort: http
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: net-aux-udp
+  namespace: net-aux
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: 192.168.1.153
+    metallb.universe.tf/allow-shared-ip: net-aux
+spec:
+  selector:
+    app: net-aux
+  type: LoadBalancer
+  ports:
     - name: unbound-dns-udp
       port: 5335
       protocol: UDP
       targetPort: unbound-dns-udp
-  type: LoadBalancer
+    - name: dns-udp
+      port: 53
+      protocol: UDP
+      targetPort: dns-udp
