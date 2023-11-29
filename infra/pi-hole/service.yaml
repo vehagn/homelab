@@ -4,8 +4,8 @@ metadata:
   name: pi-hole
   namespace: pi-hole
   annotations:
-    metallb.universe.tf/loadBalancerIPs: 192.168.1.154
-    metallb.universe.tf/allow-shared-ip: pi-hole
+    io.cilium/lb-ipam-ips: 192.168.1.154
+    io.cilium/lb-ipam-sharing-key: pi-hole
 spec:
   selector:
     app: pi-hole
@@ -24,9 +24,9 @@ apiVersion: v1
 metadata:
   name: pi-hole-udp
   namespace: pi-hole
-  annotations:
-    metallb.universe.tf/loadBalancerIPs: 192.168.1.154
-    metallb.universe.tf/allow-shared-ip: pi-hole
+#  annotations:
+#    io.cilium/lb-ipam-ips: 192.168.1.154
+#    io.cilium/lb-ipam-sharing-key: pi-hole
 spec:
   selector:
     app: pi-hole

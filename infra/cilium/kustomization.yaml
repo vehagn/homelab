@@ -5,6 +5,8 @@ namespace: kube-system
 resources:
   - traefik-forward-auth
   - ingress-route.yaml
+  - ip-pool.yaml
+  - announce.yaml
 
 patchesStrategicMerge:
   # peer-service: "hubble-peer.default.svc.cluster.local:443"

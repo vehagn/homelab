@@ -92,14 +92,19 @@ Validate install
 cilium status
 ```
 
-## MetalLB
+## Cilium LB IPAM
 
-For load balancing
-
-https://metallb.universe.tf/installation/
+For [Cilium to act as a load balancer](https://docs.cilium.io/en/stable/network/lb-ipam/) and start assigning IPs
+to `LoadBalancer` services create a viable IP pool, e.g. `192.168.1.128/5`, by creating a `CiliumLoadBalancerIPPool`
 
 ```shell
-kubectl apply -k infra/metallb
+kubectl apply infra/cilium/ip-pool.yaml
+```
+
+and announce using a `CiliumL2AnnouncementPolicy`
+
+```shell
+kubectl apply infra/cilium/announce.yaml
 ```
 
 # Sealed Secrets
@@ -111,6 +116,7 @@ kubectl apply -k infra/sealed-secrets
 ```
 
 Be sure to store the generated sealed secret key in a safa place!
+
 ```shell
 kubectl -n kube-system get secrets
 ```
@@ -166,6 +172,7 @@ kubectl apply -k infra/argocd
 ```
 
 Get ArgoCD initial secret
+
 ```shell
 kubectl -n argocd get secrets argocd-initial-admin-secret -o json | jq -r .data.password | base64 -d
 ```
@@ -181,6 +188,7 @@ kubectl apply -k infra/dashboard
 ```
 
 Create a token
+
 ```shell
 kubectl -n kubernetes-dashboard create token admin-user
 ```
@@ -209,7 +217,7 @@ version `v1alpha2` ([link](https://kubernetes.io/blog/2022/11/18/upcoming-change
 
 Make sure that `runc` is properly configured in containerd.
 
-NB: Make sure the correct `containerd` daemon is running. 
+NB: Make sure the correct `containerd` daemon is running.
 (Check the loaded `containerd` service definition as reported by `systemctl status containerd`)
 Follow https://github.com/containerd/containerd/blob/main/docs/getting-started.md for further instructions.
 

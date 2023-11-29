@@ -17,7 +17,7 @@ spec:
       dnsConfig:
         # Use Pi-Hole DNS
         nameservers:
-          - 192.168.1.131
+          - 192.168.1.154
       containers:
         - name: cloudflared
           image: cloudflare/cloudflared:2023.10.0
