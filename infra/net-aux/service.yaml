@@ -4,8 +4,8 @@ metadata:
   name: net-aux
   namespace: net-aux
   annotations:
-    metallb.universe.tf/loadBalancerIPs: 192.168.1.153
-    metallb.universe.tf/allow-shared-ip: net-aux
+    io.cilium/lb-ipam-ips: 192.168.1.153
+    io.cilium/lb-ipam-sharing-key: net-aux
 spec:
   selector:
     app: net-aux
@@ -28,9 +28,9 @@ apiVersion: v1
 metadata:
   name: net-aux-udp
   namespace: net-aux
-  annotations:
-    metallb.universe.tf/loadBalancerIPs: 192.168.1.153
-    metallb.universe.tf/allow-shared-ip: net-aux
+#  annotations:
+#    io.cilium/lb-ipam-ips: 192.168.1.153
+#    io.cilium/lb-ipam-sharing-key: net-aux
 spec:
   selector:
     app: net-aux

@@ -13,6 +13,14 @@ k8sServicePort: 6443
 
 kubeProxyReplacement: strict
 
+bgpControlPlane:
+  enabled: false
+
+l2announcements:
+  enabled: true
+externalIPs:
+  enabled: true
+
 # -- Roll out cilium agent pods automatically when configmap is updated.
 rollOutCiliumPods: false
 
