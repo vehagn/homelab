@@ -1,20 +1,17 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: kube-system
 
 resources:
   - traefik-forward-auth
   - ingress-route.yaml
   - ip-pool.yaml
   - announce.yaml
-
-#patchesStrategicMerge:
-#  # peer-service: "hubble-peer.default.svc.cluster.local:443"
-#  - patches/hubble-relay-config-peer-service-patch.yaml
+  - pv-cilium-spire-config.yaml
 
 helmCharts:
   - name: cilium
     repo: https://helm.cilium.io
     version: 1.14.4
     releaseName: "cilium"
+    namespace: kube-system
     valuesFile: values.yaml

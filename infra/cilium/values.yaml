@@ -1,50 +1,37 @@
 cluster:
+  name: gauss
   id: 0
-  name: kubernetes
 
-debug:
-  enabled: true
+#debug:
+#  enabled: true
 
-encryption:
-  nodeEncryption: false
+k8sServiceHost: "192.168.1.12"
+k8sServicePort: "6443"
 
-k8sServiceHost: 192.168.1.12
-k8sServicePort: 6443
+# Roll out cilium agent pods automatically when ConfigMap is updated.
+rollOutCiliumPods: true
 
-kubeProxyReplacement: strict
+# Increase rate limit when doing L2 announcements
+k8sClientRateLimit:
+  qps: 50
+  burst: 100
 
-bgpControlPlane:
-  enabled: false
+kubeProxyReplacement: true
 
 l2announcements:
   enabled: true
+
 externalIPs:
   enabled: true
-
-# -- Roll out cilium agent pods automatically when configmap is updated.
-rollOutCiliumPods: false
-
-containerRuntime:
-  integration: containerd
 
 enableCiliumEndpointSlice: true
 
 operator:
+  # Can't have more replicas than nodes
   replicas: 1
-
-serviceAccounts:
-  cilium:
-    name: cilium
-  operator:
-    name: cilium-operator
-
-tunnel: vxlan
 
 hubble:
   enabled: true
-  peerService:
-    enabled: true
-    clusterDomain: cluster.local
   relay:
     enabled: true
     rollOutPods: true
@@ -60,3 +47,14 @@ hubble:
       enabled: true
       method: helm
       certValidityDuration: 1095
+
+# mTLS
+authentication:
+  enabled: true
+  mutual:
+    spire:
+      enabled: true
+      install:
+        server:
+          dataStorage:
+            storageClass: cilium-spire-sc

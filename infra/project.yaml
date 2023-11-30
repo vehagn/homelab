@@ -16,6 +16,8 @@ spec:
       server: '*'
     - namespace: 'cloudflared'
       server: '*'
+    - namespace: 'cilium-spire'
+      server: '*'
     - namespace: 'gpu-operator'
       server: '*'
     - namespace: 'kubernetes-dashboard'
