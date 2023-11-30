@@ -3,18 +3,20 @@ kind: Kustomization
 namespace: kube-system
 
 resources:
+#  - namespace.yaml
   - traefik-forward-auth
   - ingress-route.yaml
   - ip-pool.yaml
   - announce.yaml
 
-patchesStrategicMerge:
-  # peer-service: "hubble-peer.default.svc.cluster.local:443"
-  - patches/hubble-relay-config-peer-service-patch.yaml
+#patches:
+#  # peer-service: "hubble-peer.default.svc.cluster.local:443"
+#  - path: patches/hubble-relay-config-peer-service-patch.yaml
 
 helmCharts:
-  - name: cilium
+  - includeCRDs: true
+    name: cilium
+    releaseName: cilium
     repo: https://helm.cilium.io
-    version: 1.14.4
-    releaseName: "cilium"
     valuesFile: values.yaml
+    version: 1.14.4

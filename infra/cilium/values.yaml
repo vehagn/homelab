@@ -60,3 +60,16 @@ hubble:
       enabled: true
       method: helm
       certValidityDuration: 1095
+
+# mTLS
+authentication:
+  enabled: false
+  mutual:
+    spire:
+      enabled: true
+      install:
+        enabled: true
+        namespace: cilium-spire
+        server:
+          dataStorage:
+            enabled: false

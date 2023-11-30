@@ -14,6 +14,8 @@ spec:
       server: '*'
     - namespace: 'cert-manager'
       server: '*'
+    - namespace: 'cilium-spire'
+      server: '*'
     - namespace: 'cloudflared'
       server: '*'
     - namespace: 'gpu-operator'
