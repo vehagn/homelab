@@ -6,7 +6,7 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: applications
+  project: test
   source:
     repoURL: https://github.com/vehagn/homelab
     path: charts/application
@@ -15,9 +15,9 @@ spec:
         name: app1
         replicas: 3
       valueFiles:
-        - ../../apps/test/common-values.yaml
+        - ../../apps/test/test-apps/common-values.yaml
   destination:
-    namespace: test
+    namespace: test-apps
     name: in-cluster
   syncPolicy:
     automated:

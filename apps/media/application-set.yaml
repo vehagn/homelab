@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: applications
+  name: media
   namespace: argocd
   labels:
-    dev.stonegarden: application
+    dev.stonegarden: media
 spec:
   generators:
     - git:
         repoURL: https://github.com/vehagn/homelab
         revision: HEAD
         directories:
-          - path: apps/*
+          - path: apps/media/*
   template:
     metadata:
       name: '{{ path.basename }}'
@@ -20,15 +20,19 @@ spec:
       finalizers:
         - resources-finalizer.argocd.argoproj.io
     spec:
-      project: applications
+      project: media
       source:
+        plugin:
+          name: kustomize-build-with-helm
         repoURL: https://github.com/vehagn/homelab
         targetRevision: HEAD
         path: '{{ path }}'
       destination:
         name: in-cluster
-        namespace: argocd
+        namespace: '{{ path.basename }}'
       syncPolicy:
         automated:
           selfHeal: true
           prune: true
+        syncOptions:
+          - CreateNamespace=true

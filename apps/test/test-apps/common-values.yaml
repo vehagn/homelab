@@ -1,5 +1,5 @@
 name: app
-namespace: test
+namespace: test-apps
 image:
   name: containous/whoami
 service:

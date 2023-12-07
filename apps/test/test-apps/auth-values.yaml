@@ -1,5 +1,5 @@
 name: auth
-namespace: test
+namespace: test-apps
 authOnly: true
 auth:
   cookieDomain: stonegarden.dev

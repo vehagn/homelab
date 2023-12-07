@@ -1,10 +1,12 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: argocd
 commonLabels:
-  dev.stonegarden: app-management
   app.kubernetes.io/managed-by: argocd
+  app.kubernetes.io/part-of: test
 
 resources:
-  - project.yaml
-  - application-set.yaml
+  - auth-secret.yaml
+  - app1.yaml
+  - app2.yaml
+  - app3.yaml
+  - auth.yaml

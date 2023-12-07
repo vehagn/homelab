@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: applications
+  name: utility
   namespace: argocd
 spec:
   sourceNamespaces:
@@ -10,6 +10,8 @@ spec:
     - 'https://github.com/vehagn/*'
   destinations:
     - namespace: 'argocd'
+      server: '*'
+    - namespace: 'home-assistant'
       server: '*'
   clusterResourceWhitelist:
     - group: '*'

@@ -8,7 +8,7 @@ resources:
   - remark42
 
 helmGlobals:
-  chartHome: ../../charts
+  chartHome: ../../../charts
 
 helmCharts:
   - name: application

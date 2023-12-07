@@ -17,7 +17,7 @@ configMapGenerator:
       - TZ="Europe/Oslo"
 
 helmGlobals:
-  chartHome: ../../charts
+  chartHome: ../../../charts
 
 helmCharts:
   - name: application

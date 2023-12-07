@@ -1,25 +1,22 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: app2
+  name: auth
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: applications
+  project: test
   sources:
     - repoURL: https://github.com/vehagn/homelab
       path: charts/application
       helm:
-        parameters:
-          - name: name
-            value: app2
         valueFiles:
-          - $values/apps/test/common-values.yaml
+          - $values/apps/test/test-apps/auth-values.yaml
     - repoURL: https://github.com/vehagn/homelab
       ref: values
   destination:
-    namespace: test
+    namespace: test-apps
     name: in-cluster
   syncPolicy:
     automated:

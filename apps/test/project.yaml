@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: applications
+  name: test
   namespace: argocd
 spec:
   sourceNamespaces:
@@ -10,6 +10,12 @@ spec:
     - 'https://github.com/vehagn/*'
   destinations:
     - namespace: 'argocd'
+      server: '*'
+    - namespace: 'cuda-test'
+      server: '*'
+    - namespace: 'whoami'
+      server: '*'
+    - namespace: 'test-apps'
       server: '*'
   clusterResourceWhitelist:
     - group: '*'

@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: applications
+  name: public
   namespace: argocd
 spec:
   sourceNamespaces:
@@ -10,6 +10,10 @@ spec:
     - 'https://github.com/vehagn/*'
   destinations:
     - namespace: 'argocd'
+      server: '*'
+    - namespace: 'blog'
+      server: '*'
+    - namespace: 'stonegarden'
       server: '*'
   clusterResourceWhitelist:
     - group: '*'
