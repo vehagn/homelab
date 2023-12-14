@@ -3,11 +3,11 @@ kind: Kustomization
 namespace: traefik-system
 
 resources:
-  - namespace.yaml
-  - cloudflare.yaml
-  - tlsStore.yaml
-  - storageClass.yaml
-  - persistentVolume.yaml
+  - ns.yaml
+  - cloudflare-token-cert-manager.yaml
+  - cloudflare-issuer.yaml
+  - cloudflare-cert.yaml
+  - pv-certs.yaml
   - traefik-forward-auth
   - ingress-route.yaml
 
@@ -16,5 +16,6 @@ helmCharts:
     repo: https://helm.traefik.io/traefik
     version: 23.0.1
     releaseName: "traefik"
+    namespace: traefik-system
     includeCRDs: true
     valuesFile: values.yaml
