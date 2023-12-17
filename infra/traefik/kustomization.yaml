@@ -14,7 +14,7 @@ resources:
 helmCharts:
   - name: traefik
     repo: https://helm.traefik.io/traefik
-    version: 25.0.0
+    version: 26.0.0
     releaseName: "traefik"
     namespace: traefik-system
     includeCRDs: true

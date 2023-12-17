@@ -1,6 +1,3 @@
-#
-# Auth Ingress
-#
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
@@ -18,7 +15,7 @@ spec:
           port: 4181
       middlewares:
         - name: traefik-forward-auth
-    - match: Host(`dashboard.stonegarden.dev`)
+    - match: Host(`k8s-dashboard.stonegarden.dev`)
       kind: Rule
       services:
         - name: kubernetes-dashboard
