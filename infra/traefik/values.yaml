@@ -8,6 +8,10 @@ deployment:
       volumeMounts:
         - name: data
           mountPath: /data
+  dnsConfig:
+    nameservers:
+      - 192.168.1.153
+      - 192.168.1.154
 
 service:
   annotations:
