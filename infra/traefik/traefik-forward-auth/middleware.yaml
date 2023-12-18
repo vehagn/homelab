@@ -2,6 +2,7 @@ apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
   name: traefik-forward-auth
+  namespace: traefik-system
 spec:
   forwardAuth:
     address: http://traefik-forward-auth.traefik-system.svc.cluster.local:4181

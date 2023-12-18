@@ -50,10 +50,10 @@ hubble:
 
 # mTLS
 authentication:
-  enabled: true
+  enabled: false
   mutual:
     spire:
-      enabled: true
+      enabled: false
       install:
         server:
           dataStorage:
