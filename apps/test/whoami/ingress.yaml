@@ -1,17 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: whoami
+  name: whoami-ingress
   namespace: whoami
   annotations:
-    cert-manager.io/issuer: "le-whoami-http"
+    cert-manager.io/issuer: "cloudflare-issuer"
 spec:
-  tls:
-    - hosts:
-        - whoami-cert.stonegarden.dev
-      secretName: tls-whoami-ingress-http
+#  tls:
+#    - hosts:
+#        - issuer.stonegarden.dev
+#      secretName: tls-ingress-https
   rules:
-    - host: whoami-cert.stonegarden.dev
+    - host: issuer.stonegarden.dev
       http:
         paths:
           - path: /
