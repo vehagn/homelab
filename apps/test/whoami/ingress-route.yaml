@@ -1,7 +1,7 @@
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: whoami
+  name: whoami-ingress-route
   labels:
     app: traefik
 spec:
@@ -22,7 +22,7 @@ spec:
           port: 80
       middlewares:
         - name: traefik-forward-auth
-    - match: Host(`whoami-open.stonegarden.dev`)
+    - match: Host(`whoami-ingress-route.stonegarden.dev`)
       kind: Rule
       services:
         - name: whoami

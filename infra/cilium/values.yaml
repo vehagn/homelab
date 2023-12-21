@@ -10,6 +10,7 @@ kubeProxyReplacement: true
 operator:
   # Can't have more replicas than nodes
   replicas: 1
+  rollOutPods: true
 
 # Roll out cilium agent pods automatically when ConfigMap is updated.
 rollOutCiliumPods: true
@@ -19,8 +20,8 @@ rollOutCiliumPods: true
 
 # Increase rate limit when doing L2 announcements
 k8sClientRateLimit:
-  qps: 50
-  burst: 100
+  qps: 100
+  burst: 200
 
 l2announcements:
   enabled: true
@@ -29,6 +30,9 @@ externalIPs:
   enabled: true
 
 enableCiliumEndpointSlice: true
+
+gatewayAPI:
+  enabled: true
 
 hubble:
   enabled: true

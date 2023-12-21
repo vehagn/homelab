@@ -3,15 +3,9 @@ kind: Ingress
 metadata:
   name: whoami-ingress
   namespace: whoami
-  annotations:
-    cert-manager.io/issuer: "cloudflare-issuer"
 spec:
-#  tls:
-#    - hosts:
-#        - issuer.stonegarden.dev
-#      secretName: tls-ingress-https
   rules:
-    - host: issuer.stonegarden.dev
+    - host: whoami-ingress.stonegarden.dev
       http:
         paths:
           - path: /

@@ -6,5 +6,6 @@ resources:
 #  - issuer.yaml
   - ingress.yaml
   - ingress-route.yaml
+  - http-route.yaml
   - traefik-forward-auth
   - whoami
