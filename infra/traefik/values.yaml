@@ -1,13 +1,4 @@
 deployment:
-  initContainers:
-    # The "volume-permissions" init container is required if you run into permission issues.
-    # Related issue: https://github.com/traefik/traefik/issues/6972
-    - name: volume-permissions
-      image: busybox:1.31.1
-      command: [ "sh", "-c", "chmod -Rv 600 /data/*" ]
-      volumeMounts:
-        - name: data
-          mountPath: /data
   dnsConfig:
     nameservers:
       - 192.168.1.153
@@ -17,30 +8,13 @@ service:
   annotations:
     io.cilium/lb-ipam-ips: 192.168.1.142
 
-providers:
-  kubernetesCRD:
-    allowCrossNamespace: true
-  kubernetesIngress:
-    publishedService:
-      enabled: true
-      # Need to override path since otherwise the namespace is set as default
-      pathOverride: traefik-system/traefik
-
-additionalArguments:
-  - "--log.level=ERROR"
-  - "--api.insecure"
-
 ingressRoute:
   dashboard:
-    enabled: false
-
-persistence:
-  enabled: true
-  name: data
-  accessMode: ReadWriteOnce
-  size: 128Mi
-  storageClass: cert-storage
-  path: /data
+    entryPoints:
+      - websecure
+    matchRule: Host(`traefik.stonegarden.dev`)
+    middlewares:
+      - name: traefik-forward-auth
 
 tlsStore:
   default:

@@ -1,7 +1,7 @@
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: traefik-dashboard
+  name: traefik-dashboard-auth
   namespace: traefik-system
 spec:
   entryPoints:
@@ -12,12 +12,5 @@ spec:
       services:
         - name: traefik-forward-auth
           port: 4181
-      middlewares:
-        - name: traefik-forward-auth
-    - match: Host(`traefik.stonegarden.dev`)
-      kind: Rule
-      services:
-        - name: api@internal
-          kind: TraefikService
       middlewares:
         - name: traefik-forward-auth

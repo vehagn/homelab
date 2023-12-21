@@ -6,9 +6,7 @@ resources:
   - cloudflare-token-cert-manager.yaml
   - cloudflare-issuer.yaml
   - cloudflare-cert.yaml
-  - pv-certs.yaml
   - traefik-forward-auth
-  - ingress-route.yaml
 
 helmCharts:
   - name: traefik

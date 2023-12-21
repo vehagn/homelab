@@ -9,6 +9,7 @@ resources:
   - service.yaml
   - deployment.yaml
   - middleware.yaml
+  - ingress.yaml
 
 configMapGenerator:
   - name: configs
