@@ -12,6 +12,5 @@ helmCharts:
     namespace: cert-manager
     valuesInline:
       installCRDs: true
-#      config:
-#         featureGates:
-#           experimentalGatewayAPISupport: true
+      extraArgs:
+        - "--feature-gates=ExperimentalGatewayAPISupport=true"

@@ -3,20 +3,22 @@ kind: Gateway
 metadata:
   name: cilium-gateway
   namespace: gateway
+  annotations:
+    cert-manager.io/issuer: cloudflare-issuer
+    io.cilium/lb-ipam-ips: 192.168.1.172
 spec:
   gatewayClassName: cilium
+  addresses:
+    - value: 192.168.1.172
   listeners:
-    - protocol: HTTP
-      port: 80
-      name: web-gw
+    - protocol: HTTPS
+      port: 443
+      name: https-gateway
+      hostname: "*.stonegarden.dev"
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: cloudflare-cert
       allowedRoutes:
         namespaces:
           from: All
-    #- name: https-1
-    #  protocol: HTTPS
-    #  port: 443
-    #  hostname: "bookinfo.cilium.rocks"
-    #  tls:
-    #    certificateRefs:
-    #      - kind: Secret
-    #        name: demo-cert
