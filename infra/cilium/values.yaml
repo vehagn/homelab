@@ -2,21 +2,29 @@ cluster:
   name: gauss
   id: 0
 
-#debug:
-#  enabled: true
-
 k8sServiceHost: "192.168.1.12"
 k8sServicePort: "6443"
+
+kubeProxyReplacement: true
+
+operator:
+  # Can't have more replicas than nodes
+  replicas: 1
+  rollOutPods: true
 
 # Roll out cilium agent pods automatically when ConfigMap is updated.
 rollOutCiliumPods: true
 
+#debug:
+#  enabled: true
+
+image:
+  tag: "v1.15.0-rc.0"
+
 # Increase rate limit when doing L2 announcements
 k8sClientRateLimit:
-  qps: 50
-  burst: 100
-
-kubeProxyReplacement: true
+  qps: 100
+  burst: 200
 
 l2announcements:
   enabled: true
@@ -26,9 +34,8 @@ externalIPs:
 
 enableCiliumEndpointSlice: true
 
-operator:
-  # Can't have more replicas than nodes
-  replicas: 1
+gatewayAPI:
+  enabled: true
 
 hubble:
   enabled: true
@@ -38,15 +45,6 @@ hubble:
   ui:
     enabled: true
     rollOutPods: true
-    frontend:
-      server:
-        ipv6:
-          enabled: false
-  tls:
-    auto:
-      enabled: true
-      method: helm
-      certValidityDuration: 1095
 
 # mTLS
 authentication:
