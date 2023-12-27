@@ -20,7 +20,7 @@ spec:
       labels:
         app: net-aux
     spec:
-      dnsPolicy: None
+      dnsPolicy: ClusterFirst
       dnsConfig:
         nameservers:
           - 127.0.0.1
