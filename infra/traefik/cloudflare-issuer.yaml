@@ -2,7 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: cloudflare-issuer
-  namespace: traefik-system
+  namespace: traefik
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory

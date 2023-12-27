@@ -34,6 +34,8 @@ spec:
       server: '*'
     - namespace: 'traefik-system'
       server: '*'
+    - namespace: 'traefik'
+      server: '*'
     - namespace: 'kube-system'
       server: '*'
   clusterResourceWhitelist:
