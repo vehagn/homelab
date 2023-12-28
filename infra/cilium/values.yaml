@@ -18,9 +18,6 @@ rollOutCiliumPods: true
 #debug:
 #  enabled: true
 
-image:
-  tag: "v1.15.0-rc.0"
-
 # Increase rate limit when doing L2 announcements
 k8sClientRateLimit:
   qps: 100

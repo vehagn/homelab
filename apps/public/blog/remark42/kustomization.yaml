@@ -11,7 +11,8 @@ configMapGenerator:
 
 resources:
   - deployment.yaml
-  - ingress-route.yaml
+#  - ingress-route.yaml
+  - http-route.yaml
   - pv.yaml
   - pvc.yaml
   - secret-github.yaml

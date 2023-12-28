@@ -6,6 +6,7 @@ commonLabels:
 
 resources:
   - remark42
+  - http-route.yaml
 
 helmGlobals:
   chartHome: ../../../charts

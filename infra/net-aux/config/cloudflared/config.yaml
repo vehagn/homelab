@@ -19,16 +19,25 @@ ingress:
           - aud1 d34ec64c62e56195ac6158dbfbeae62155d110f5c3a3b7e949572916dc57a6f3
   - hostname: ssh.stonegarden.dev
     service: ssh://192.168.1.12:22
+  - hostname: blog.stonegarden.dev
+    service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
+    originRequest:
+      originServerName: blog.stonegarden.dev
+  - hostname: remark42.stonegarden.dev
+    service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
+    originRequest:
+      originServerName: remark42.stonegarden.dev
   - hostname: gateway.stonegarden.dev
     service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
     originRequest:
-      originServerName: "*.stonegarden.dev"
+      originServerName: gateway.stonegarden.dev
   - hostname: stonegarden.dev
-    service: https://traefik.traefik.svc.cluster.local:443
+    service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
+    #service: https://traefik.traefik.svc.cluster.local:443
     originRequest:
-      originServerName: "*.stonegarden.dev"
+      originServerName: stonegarden.dev
   - hostname: "*.stonegarden.dev"
     service: https://traefik.traefik.svc.cluster.local:443
     originRequest:
-      originServerName: stonegarden.dev
+      originServerName: "*.stonegarden.dev"
   - service: http_status:404

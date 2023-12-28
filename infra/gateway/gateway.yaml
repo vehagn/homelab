@@ -5,16 +5,11 @@ metadata:
   namespace: gateway
   annotations:
     cert-manager.io/issuer: cloudflare-issuer
-    io.cilium/lb-ipam-ips: 192.168.1.172
 spec:
   gatewayClassName: cilium
   infrastructure:
-    labels:
-      test-label: test-label
     annotations:
       io.cilium/lb-ipam-ips: 192.168.1.172
-  addresses:
-    - value: 192.168.1.172
   listeners:
     - protocol: HTTPS
       port: 443
@@ -27,3 +22,20 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
+    - protocol: HTTPS
+      port: 443
+      name: https-domain-gateway
+      hostname: stonegarden.dev
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: cloudflare-domain-cert
+      allowedRoutes:
+        namespaces:
+          from: All
+#      allowedRoutes:
+#        namespaces:
+#          from: Selector
+#          selector:
+#            matchLabels:
+#              dev.stonegarden.app: homepage
