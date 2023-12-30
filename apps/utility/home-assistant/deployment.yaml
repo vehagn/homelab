@@ -10,7 +10,7 @@ spec:
   template:
     spec:
       containers:
-        - image: homeassistant/home-assistant
+        - image: ghcr.io/home-assistant/home-assistant:2023.12.4
           imagePullPolicy: Always
           name: home-assistant
           ports:
