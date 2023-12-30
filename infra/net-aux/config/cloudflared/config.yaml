@@ -23,10 +23,6 @@ ingress:
     service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
     originRequest:
       originServerName: blog.stonegarden.dev
-  - hostname: remark42.stonegarden.dev
-    service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
-    originRequest:
-      originServerName: remark42.stonegarden.dev
   - hostname: gateway.stonegarden.dev
     service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
     originRequest:
@@ -35,6 +31,10 @@ ingress:
     service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
     originRequest:
       originServerName: hass.stonegarden.dev
+  - hostname: remark42.stonegarden.dev
+    service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
+    originRequest:
+      originServerName: remark42.stonegarden.dev
   - hostname: stonegarden.dev
     service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
     originRequest:

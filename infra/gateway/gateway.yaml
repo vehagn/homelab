@@ -29,7 +29,7 @@ spec:
       tls:
         certificateRefs:
           - kind: Secret
-            name: cloudflare-domain-cert
+            name: cloudflare-cert
       allowedRoutes:
         namespaces:
           from: All
