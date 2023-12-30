@@ -31,9 +31,12 @@ ingress:
     service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
     originRequest:
       originServerName: gateway.stonegarden.dev
+  - hostname: hass.stonegarden.dev
+    service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
+    originRequest:
+      originServerName: hass.stonegarden.dev
   - hostname: stonegarden.dev
     service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
-    #service: https://traefik.traefik.svc.cluster.local:443
     originRequest:
       originServerName: stonegarden.dev
   - hostname: "*.stonegarden.dev"

@@ -19,5 +19,4 @@ resources:
   - pvc-jellyfin-media.yaml
   - service.yaml
   - deployment.yaml
-#  - ingress.yaml
   - http-route.yaml

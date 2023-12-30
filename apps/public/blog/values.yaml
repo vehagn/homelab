@@ -8,5 +8,7 @@ env:
     value: Europe/Oslo
 service:
   containerPort: 80
+ingressRoute:
+  create: false
 auth:
   enabled: false

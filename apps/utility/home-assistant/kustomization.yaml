@@ -9,4 +9,4 @@ resources:
   - pvc-hass-config.yaml
   - service.yaml
   - deployment.yaml
-  - ingress.yaml
+  - http-route.yaml

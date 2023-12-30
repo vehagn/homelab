@@ -8,5 +8,4 @@ resources:
   - ns.yaml
   - service.yaml
   - deployment.yaml
-#  - ingress.yaml
   - http-route.yaml
