@@ -2,8 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - traefik-forward-auth
-  - ingress-route.yaml
   - ip-pool.yaml
   - announce.yaml
   - pv-cilium-spire-config.yaml
