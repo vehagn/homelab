@@ -1,10 +1,7 @@
-kubespray
-Argo autopilot
-
 CNI: Cilium
-LoadBalancer: MetalLB
+LoadBalancer: Cilium
 Ingress: Traefik
-Certs: cert-manager
+Certs: Cert-manager
 CD: ArgoCD
 Monitoring: Prometheus
 Observability: Grafana
