@@ -16,7 +16,6 @@ spec:
           port: http-web # 9090
       middlewares:
         - name: traefik-forward-auth
-          namespace: kube-system
     - match: Host(`grafana.stonegarden.dev`)
       kind: Rule
       services:
@@ -24,7 +23,6 @@ spec:
           port: http-web # 80
       middlewares:
         - name: traefik-forward-auth
-          namespace: kube-system
     - match: Host(`alertmanager.stonegarden.dev`)
       kind: Rule
       services:
@@ -32,4 +30,3 @@ spec:
           port: http-web # 9093
       middlewares:
         - name: traefik-forward-auth
-          namespace: kube-system

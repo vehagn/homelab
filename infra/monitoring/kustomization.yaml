@@ -3,5 +3,14 @@ kind: Kustomization
 
 resources:
   - namespace.yaml
+  - auth-secret.yaml
   - kube-prometheus-stack.yaml
   - ingress-route.yaml
+
+helmGlobals:
+  chartHome: ../../charts
+
+helmCharts:
+  - name: application
+    releaseName: auth
+    valuesFile: auth-values.yaml

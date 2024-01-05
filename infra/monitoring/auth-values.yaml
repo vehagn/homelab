@@ -1,0 +1,7 @@
+name: auth
+namespace: monitoring
+authOnly: true
+auth:
+  cookieDomain: stonegarden.dev
+  whitelist:
+    - veghag@gmail.com
