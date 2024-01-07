@@ -1,0 +1,13 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: test-db
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`test-db.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: test
+          port: 5432

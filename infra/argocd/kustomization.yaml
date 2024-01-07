@@ -22,7 +22,10 @@ patches:
   - path: patches/argocd-repo-copyutil-patch.yaml
   # Plugin to enable Kustomize with Helm
   - path: patches/argocd-repo-server-plugin-sidecar-patch.yaml
-  # Ignore CiliumIdentity CRDs
-  - path: patches/argocd-cm-resource-exclusion-cilium-identity-patch.yaml
+#  # Ignore CiliumIdentity CRDs
+#  - path: patches/argocd-cm-resource-exclusion-cilium-identity-patch.yaml
+  # Configure tracking method to annotation
+  # https://argo-cd.readthedocs.io/en/stable/user-guide/resource_tracking/#additional-tracking-methods-via-an-annotation
+  - path: patches/argocd-cm-tracking-method-annotation.yaml
   # Traefik handles TLS
   - path: patches/argocd-cmd-params-cm-server-insecure-patch.yaml

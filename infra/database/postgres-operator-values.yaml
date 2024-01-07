@@ -1,0 +1,14 @@
+
+# https://github.com/zalando/postgres-operator/issues/1766#issuecomment-1551612097
+configKubernetes:
+  custom_pod_annotations:
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
+  downscaler_annotations:
+    - argocd.argoproj.io/compare-options
+  inherited_annotations:
+    - argocd.argoproj.io/tracking-id
+    - argocd.argoproj.io/compare-options
+
+configLoadBalancer:
+  custom_service_annotations:
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
