@@ -1,12 +1,14 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: time-slicing
+  name: cm-time-slicing
+  namespace: nvidia-device-plugin
 data:
-  default: |-
+  time-slicing: |-
     version: v1
     sharing:
       timeSlicing:
+        failRequestsGreaterThanOne: true
         resources:
           - name: nvidia.com/gpu
             replicas: 10

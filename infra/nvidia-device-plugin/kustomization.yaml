@@ -1,6 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: nvidia-device-plugin
+commonAnnotations:
+    argocd.argoproj.io/sync-wave: "-1"
 
 resources:
   - namespace.yaml
@@ -9,7 +10,7 @@ resources:
 helmCharts:
   - name: nvidia-device-plugin
     repo: https://nvidia.github.io/k8s-device-plugin
-    version: 0.14.2
+    version: 0.14.3
     releaseName: "nvidia-device-plugin"
     namespace: nvidia-device-plugin
     includeCRDs: true
