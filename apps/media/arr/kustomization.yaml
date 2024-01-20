@@ -90,7 +90,8 @@ helmCharts:
     valuesInline:
       name: torrent
       image:
-        name: cr.hotio.dev/hotio/qbittorrent
+        name: ghcr.io/hotio/qbittorrent
+        tag: release-4.6.2
       hostVolumes:
         - name: torrent-config
           hostPath: /disk/etc/qbittorrent
