@@ -4,7 +4,5 @@ metadata:
   name: default-l2-announcement-policy
   namespace: kube-system
 spec:
-  interfaces:
-    - enp0s25
   externalIPs: true
   loadBalancerIPs: true

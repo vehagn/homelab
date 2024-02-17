@@ -5,13 +5,13 @@ commonAnnotations:
 
 resources:
   - namespace.yaml
-  - cm-time-slicing.yaml
+#  - cm-time-slicing.yaml
 
-helmCharts:
-  - name: nvidia-device-plugin
-    repo: https://nvidia.github.io/k8s-device-plugin
-    version: 0.14.3
-    releaseName: "nvidia-device-plugin"
-    namespace: nvidia-device-plugin
-    includeCRDs: true
-    valuesFile: values.yaml
+#helmCharts:
+#  - name: nvidia-device-plugin
+#    repo: https://nvidia.github.io/k8s-device-plugin
+#    version: 0.14.3
+#    releaseName: "nvidia-device-plugin"
+#    namespace: nvidia-device-plugin
+#    includeCRDs: true
+#    valuesFile: values.yaml

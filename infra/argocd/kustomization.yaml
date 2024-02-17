@@ -13,7 +13,7 @@ helmCharts:
 resources:
   - namespace.yaml
   - traefik-forward-auth-secrets.yaml
-  - https://raw.githubusercontent.com/argoproj/argo-cd/v2.9.2/manifests/install.yaml
+  - https://raw.githubusercontent.com/argoproj/argo-cd/v2.10.0/manifests/install.yaml
   - ingress.yaml
   - argocd-cm-cmp-kustomize-build-with-helm.yaml
 

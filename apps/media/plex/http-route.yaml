@@ -15,4 +15,4 @@ spec:
             value: /
       backendRefs:
         - name: plex
-          port: 32400
+          port: 80

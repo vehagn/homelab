@@ -25,7 +25,7 @@ spec:
             - configMapRef:
                 name: plex-env
           ports:
-            - name: web
+            - name: http
               containerPort: 32400
           volumeMounts:
             - name: config

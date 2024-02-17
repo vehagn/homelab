@@ -15,12 +15,12 @@ operator:
 # Roll out cilium agent pods automatically when ConfigMap is updated.
 rollOutCiliumPods: true
 
-#debug:
-#  enabled: true
+debug:
+  enabled: true
 
 # Increase rate limit when doing L2 announcements
 k8sClientRateLimit:
-  qps: 100
+  qps: 50
   burst: 200
 
 l2announcements:

@@ -9,14 +9,6 @@ warp-routing:
 ingress:
   - hostname: hello.stonegarden.dev
     service: hello_world
-  - hostname: hallo.stonegarden.dev
-    service: hello_world
-    originRequest:
-      access:
-        required: true
-        teamName: stonegarden
-        audTag:
-          - aud1 d34ec64c62e56195ac6158dbfbeae62155d110f5c3a3b7e949572916dc57a6f3
   - hostname: ssh.stonegarden.dev
     service: ssh://192.168.1.12:22
   - hostname: blog.stonegarden.dev

@@ -4,5 +4,6 @@ metadata:
   name: default-pool
   namespace: kube-system
 spec:
-  cidrs:
-    - cidr: 192.168.1.128/25
+  blocks:
+    - start: 192.168.1.128
+      stop: 192.168.1.199
