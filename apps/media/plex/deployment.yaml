@@ -20,7 +20,7 @@ spec:
             limits:
               cpu: 10000m
               memory: 12Gi
-              nvidia.com/gpu: "1"
+#              nvidia.com/gpu: "1"
           envFrom:
             - configMapRef:
                 name: plex-env

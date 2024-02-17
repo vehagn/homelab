@@ -1,9 +1,3 @@
-deployment:
-  dnsConfig:
-    nameservers:
-      - 192.168.1.153
-      - 192.168.1.154
-
 service:
   annotations:
     io.cilium/lb-ipam-ips: 192.168.1.142

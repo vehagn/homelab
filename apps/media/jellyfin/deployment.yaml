@@ -23,9 +23,8 @@ spec:
             - configMapRef:
                 name: jellyfin-env
           ports:
-            - name: dns-tcp
-              containerPort: 53
-              protocol: TCP
+            - name: http
+              containerPort: 8096
           resources:
             requests:
               cpu: 2000m
@@ -33,7 +32,7 @@ spec:
             limits:
               cpu: 10000m
               memory: 12Gi
-              nvidia.com/gpu: "1"
+#              nvidia.com/gpu: "1"
           volumeMounts:
             - name: config
               mountPath: /config
