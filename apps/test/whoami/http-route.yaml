@@ -8,7 +8,6 @@ spec:
       namespace: gateway
   hostnames:
     - "gateway.stonegarden.dev"
-    - "gateway-direct.stonegarden.dev"
   rules:
     - matches:
         - path:

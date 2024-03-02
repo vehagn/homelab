@@ -15,18 +15,18 @@ ingress:
     service: https://cilium-gateway-proxmox-euclid.gateway.svc.cluster.local:443
     originRequest:
       originServerName: proxmox.euclid.stonegarden.dev
-#  - hostname: haos.stonegarden.dev
-#    service: https://cilium-gateway-stonegarden.gateway.svc.cluster.local:443
-#    originRequest:
-#      originServerName: haos.stonegarden.dev
-#  - hostname: blog.stonegarden.dev
-#    service: https://cilium-gateway-stonegarden.gateway.svc.cluster.local:443
-#    originRequest:
-#      originServerName: blog.stonegarden.dev
-#  - hostname: remark42.stonegarden.dev
-#    service: https://cilium-gateway-stonegarden.gateway.svc.cluster.local:443
-#    originRequest:
-#      originServerName: remark42.stonegarden.dev
+  - hostname: haos.stonegarden.dev
+    service: https://cilium-gateway-stonegarden.gateway.svc.cluster.local:443
+    originRequest:
+      originServerName: haos.stonegarden.dev
+  - hostname: blog.stonegarden.dev
+    service: https://cilium-gateway-stonegarden.gateway.svc.cluster.local:443
+    originRequest:
+      originServerName: blog.stonegarden.dev
+  - hostname: remark42.stonegarden.dev
+    service: https://cilium-gateway-stonegarden.gateway.svc.cluster.local:443
+    originRequest:
+      originServerName: remark42.stonegarden.dev
   - hostname: gateway.stonegarden.dev
     service: https://cilium-gateway-stonegarden.gateway.svc.cluster.local:443
     originRequest:

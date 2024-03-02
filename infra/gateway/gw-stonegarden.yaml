@@ -13,8 +13,63 @@ spec:
   listeners:
     - protocol: HTTPS
       port: 443
+      name: https-blog
+      hostname: blog.stonegarden.dev
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: cloudflare-cert
+      allowedRoutes:
+        namespaces:
+          from: All
+    - protocol: HTTPS
+      port: 443
+      name: https-remark42
+      hostname: remark42.stonegarden.dev
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: cloudflare-cert
+      allowedRoutes:
+        namespaces:
+          from: All
+    - protocol: HTTPS
+      port: 443
+      name: https-haos
+      hostname: haos.stonegarden.dev
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: cloudflare-cert
+      allowedRoutes:
+        namespaces:
+          from: All
+    - protocol: HTTPS
+      port: 443
+      name: https-jellyfin
+      hostname: jellyfin.stonegarden.dev
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: cloudflare-cert
+      allowedRoutes:
+        namespaces:
+          from: All
+    - protocol: HTTPS
+      port: 443
+      name: https-postgres
+      hostname: postgres.stonegarden.dev
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: cloudflare-cert
+      allowedRoutes:
+        namespaces:
+          from: All
+    - protocol: HTTPS
+      port: 443
       name: https-gateway
-      hostname: "*.stonegarden.dev"
+      hostname: gateway.stonegarden.dev
       tls:
         certificateRefs:
           - kind: Secret
@@ -33,3 +88,14 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
+#    - protocol: HTTPS
+#      port: 443
+#      name: https-wildcard
+#      hostname: "*.stonegarden.dev"
+#      tls:
+#        certificateRefs:
+#          - kind: Secret
+#            name: cloudflare-cert
+#      allowedRoutes:
+#        namespaces:
+#          from: All

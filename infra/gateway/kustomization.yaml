@@ -3,7 +3,7 @@ kind: Kustomization
 
 resources:
   - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.0.0/experimental-install.yaml
-  - gateway-class.yaml
+  - gw-class.yaml
   - ns.yaml
   - cloudflare-api-token.yaml
   - cloudflare-issuer.yaml
