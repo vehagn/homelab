@@ -24,6 +24,17 @@ spec:
           from: All
     - protocol: HTTPS
       port: 443
+      name: https-gateway-euclid
+      hostname: "*.euclid.stonegarden.dev"
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: cloudflare-cert
+      allowedRoutes:
+        namespaces:
+          from: All
+    - protocol: HTTPS
+      port: 443
       name: https-domain-gateway
       hostname: stonegarden.dev
       tls:

@@ -8,7 +8,7 @@ spec:
     - name: cilium-gateway
       namespace: gateway
   hostnames:
-    - "haos.stonegarden.dev"
+    - "haos.euclid.stonegarden.dev"
   rules:
     - matches:
         - path:

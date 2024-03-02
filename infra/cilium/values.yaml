@@ -16,7 +16,7 @@ operator:
 rollOutCiliumPods: true
 
 debug:
-  enabled: true
+  enabled: false
 
 # Increase rate limit when doing L2 announcements
 k8sClientRateLimit:

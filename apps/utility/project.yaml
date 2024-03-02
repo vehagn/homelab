@@ -13,6 +13,8 @@ spec:
       server: '*'
     - namespace: 'haos'
       server: '*'
+    - namespace: 'proxmox'
+      server: '*'
   clusterResourceWhitelist:
     - group: '*'
       kind: '*'

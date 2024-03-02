@@ -10,11 +10,15 @@ ingress:
   - hostname: hello.stonegarden.dev
     service: hello_world
   - hostname: ssh.stonegarden.dev
-    service: ssh://192.168.1.12:22
-  - hostname: haos.stonegarden.dev
+    service: ssh://192.168.1.50:22
+  - hostname: proxmox.euclid.stonegarden.dev
     service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
     originRequest:
-      originServerName: "*.stonegarden.dev"
+      originServerName: proxmox.euclid.stonegarden.dev
+  - hostname: haos.euclid.stonegarden.dev
+    service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
+    originRequest:
+      originServerName: haos.euclid.stonegarden.dev
   - hostname: blog.stonegarden.dev
     service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
     originRequest:
