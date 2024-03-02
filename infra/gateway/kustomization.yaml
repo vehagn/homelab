@@ -7,4 +7,5 @@ resources:
   - ns.yaml
   - cloudflare-api-token.yaml
   - cloudflare-issuer.yaml
-  - gateway.yaml
+  - gw-stonegarden.yaml
+  - gw-euclid.yaml

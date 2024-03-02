@@ -12,31 +12,31 @@ ingress:
   - hostname: ssh.stonegarden.dev
     service: ssh://192.168.1.50:22
   - hostname: proxmox.euclid.stonegarden.dev
-    service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
+    service: https://cilium-gateway-euclid.gateway.svc.cluster.local:443
     originRequest:
       originServerName: proxmox.euclid.stonegarden.dev
-  - hostname: haos.euclid.stonegarden.dev
-    service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
+  - hostname: haos.stonegarden.dev
+    service: https://cilium-gateway-stonegarden.gateway.svc.cluster.local:443
     originRequest:
-      originServerName: haos.euclid.stonegarden.dev
+      originServerName: haos.stonegarden.dev
   - hostname: blog.stonegarden.dev
-    service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
+    service: https://cilium-gateway-stonegarden.gateway.svc.cluster.local:443
     originRequest:
       originServerName: blog.stonegarden.dev
   - hostname: gateway.stonegarden.dev
-    service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
+    service: https://cilium-gateway-stonegarden.gateway.svc.cluster.local:443
     originRequest:
       originServerName: gateway.stonegarden.dev
   - hostname: hass.stonegarden.dev
-    service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
+    service: https://cilium-gateway-stonegarden.gateway.svc.cluster.local:443
     originRequest:
       originServerName: hass.stonegarden.dev
   - hostname: remark42.stonegarden.dev
-    service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
+    service: https://cilium-gateway-stonegarden.gateway.svc.cluster.local:443
     originRequest:
       originServerName: remark42.stonegarden.dev
   - hostname: stonegarden.dev
-    service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
+    service: https://cilium-gateway-stonegarden.gateway.svc.cluster.local:443
     originRequest:
       originServerName: stonegarden.dev
   - hostname: "*.stonegarden.dev"

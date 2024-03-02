@@ -5,10 +5,10 @@ metadata:
   namespace: haos
 spec:
   parentRefs:
-    - name: cilium-gateway
+    - name: stonegarden
       namespace: gateway
   hostnames:
-    - "haos.euclid.stonegarden.dev"
+    - "haos.stonegarden.dev"
   rules:
     - matches:
         - path:

@@ -4,7 +4,7 @@ metadata:
   name: remark42-http-route
 spec:
   parentRefs:
-    - name: cilium-gateway
+    - name: stonegarden
       namespace: gateway
   hostnames:
     - "remark42.stonegarden.dev"

@@ -5,7 +5,7 @@ metadata:
   namespace: postgres
 spec:
   parentRefs:
-    - name: cilium-gateway
+    - name: stonegarden
       namespace: gateway
   hostnames:
     - "postgres.stonegarden.dev"

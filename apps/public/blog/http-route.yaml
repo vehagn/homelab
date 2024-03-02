@@ -4,7 +4,7 @@ metadata:
   name: blog-http-route
 spec:
   parentRefs:
-    - name: cilium-gateway
+    - name: stonegarden
       namespace: gateway
   hostnames:
     - "blog.stonegarden.dev"

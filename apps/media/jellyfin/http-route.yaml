@@ -4,7 +4,7 @@ metadata:
   name: jellyfin
 spec:
   parentRefs:
-    - name: cilium-gateway
+    - name: stonegarden
       namespace: gateway
   hostnames:
     - "jellyfin.stonegarden.dev"

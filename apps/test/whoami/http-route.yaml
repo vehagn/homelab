@@ -4,7 +4,7 @@ metadata:
   name: whoami-http-route
 spec:
   parentRefs:
-    - name: cilium-gateway
+    - name: stonegarden
       namespace: gateway
   hostnames:
     - "gateway.stonegarden.dev"
