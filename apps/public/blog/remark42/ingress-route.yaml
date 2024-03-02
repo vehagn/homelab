@@ -1,0 +1,14 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: remark42
+  namespace: blog
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`remark42.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: remark42
+          port: 80

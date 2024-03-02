@@ -1,6 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: blog
+
 commonLabels:
   app.kubernetes.io/managed-by: argocd
 
@@ -18,3 +18,4 @@ resources:
   - secret-google.yaml
   - secret-remark42.yaml
   - service.yaml
+  - ingress-route.yaml

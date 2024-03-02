@@ -16,3 +16,20 @@ endpoints:
       - 192.168.1.27
     conditions:  # https://github.com/argoproj/argo-cd/issues/15554
       ready: true
+---
+# Traefik uses Endpoints instead of EndpointSlice
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: home-assistant
+  namespace: haos
+  labels:
+    kubernetes.io/service-name: home-assistant
+    endpoints.kubernetes.io/managed-by: cluster-admins
+subsets:
+  - addresses:
+      - ip: 192.168.1.27
+    ports:
+      - name: http
+        port: 8123
+        protocol: TCP

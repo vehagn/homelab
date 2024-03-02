@@ -6,3 +6,4 @@ resources:
   - svc.yaml
   - endpoint-slice.yaml
   - http-route.yaml
+  - ingress-route.yaml

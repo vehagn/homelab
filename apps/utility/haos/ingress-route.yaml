@@ -1,0 +1,14 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: home-assistant
+  namespace: haos
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`haos.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: home-assistant
+          port: 8123

@@ -14,5 +14,5 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: jellyfin-svc
+        - name: jellyfin
           port: 8096
