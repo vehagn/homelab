@@ -12,7 +12,7 @@ ingress:
   - hostname: ssh.stonegarden.dev
     service: ssh://192.168.1.50:22
   - hostname: proxmox.euclid.stonegarden.dev
-    service: https://euclid.proxmox.svc.cluster.local:443
+    service: https://cilium-gateway-proxmox-euclid.gateway.svc.cluster.local:443
     originRequest:
       originServerName: proxmox.euclid.stonegarden.dev
   - hostname: haos.stonegarden.dev

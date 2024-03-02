@@ -5,3 +5,4 @@ resources:
   - ns.yaml
   - svc.yaml
   - endpoint-slice.yaml
+  - tls-route.yaml
