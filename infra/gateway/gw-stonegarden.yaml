@@ -13,15 +13,6 @@ spec:
   listeners:
     - protocol: HTTPS
       port: 443
-      name: proxmox-tls-passthrough
-      hostname: proxmox.euclid.stonegarden.dev
-      tls:
-        mode: Passthrough
-      allowedRoutes:
-        namespaces:
-          from: All
-    - protocol: HTTPS
-      port: 443
       name: https-gateway
       hostname: "*.stonegarden.dev"
       tls:

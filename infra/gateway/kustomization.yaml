@@ -8,4 +8,3 @@ resources:
   - cloudflare-api-token.yaml
   - cloudflare-issuer.yaml
   - gw-stonegarden.yaml
-  - gw-proxmox-euclid.yaml
