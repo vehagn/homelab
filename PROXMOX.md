@@ -1,5 +1,15 @@
 # Proxmox config
 
+
+```shell
+bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/misc/post-pve-install.sh)"
+```
+
+```shell
+
+```
+
+
 ## Updates
 
 https://pve.proxmox.com/wiki/Package_Repositories

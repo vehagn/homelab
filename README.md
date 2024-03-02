@@ -160,7 +160,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 For remote kubectl copy the config file to local machine
 
 ```shell
-scp veh@192.168.1.12:/home/veh/.kube/config ~/.kube/config
+scp veh@192.168.1.50:/home/veh/.kube/config ~/.kube/config
 ```
 
 ## (Optional) Remove taint for single node use

@@ -1,17 +1,3 @@
-variable "haos_ova" {
-  description = "Cloud init image for Home Assistant OS 11.5"
-  type        = object({
-    path      = string
-    file_name = string
-    checksum  = string
-  })
-  default = {
-    path      = "images/haos_ova-11.5.qcow2"
-    file_name = "haos_ova-11.5.img"
-    checksum  = "1844150e53de638c9561a556ba18a7fb12ef082beed7a2da9be534f7075b65c6"
-  }
-}
-
 resource "proxmox_virtual_environment_file" "haos_generic_image" {
   provider     = proxmox.euclid
   node_name    = var.euclid.node_name
@@ -19,9 +5,8 @@ resource "proxmox_virtual_environment_file" "haos_generic_image" {
   datastore_id = "local"
 
   source_file {
-    path               = var.haos_ova.path
-    file_name          = var.haos_ova.file_name
-    checksum           = var.haos_ova.checksum
+    path      = "images/haos_ova-12.0.qcow2"
+    file_name = "haos_ova-12.0.img"
   }
 }
 
@@ -58,13 +43,13 @@ resource "proxmox_virtual_environment_vm" "home_assistant" {
   }
 
   efi_disk {
-    datastore_id = "local-lvm"
+    datastore_id = "local-zfs"
     file_format = "raw" // To support qcow2 format
     type = "4m"
   }
 
   disk {
-    datastore_id = "local-lvm"
+    datastore_id = "local-zfs"
     file_id      = proxmox_virtual_environment_file.haos_generic_image.id
     interface    = "scsi0"
     cache        = "writethrough"
