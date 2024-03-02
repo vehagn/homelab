@@ -11,6 +11,10 @@ ingress:
     service: hello_world
   - hostname: ssh.stonegarden.dev
     service: ssh://192.168.1.12:22
+  - hostname: haos.stonegarden.dev
+    service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
+    originRequest:
+      originServerName: "*.stonegarden.dev"
   - hostname: blog.stonegarden.dev
     service: https://cilium-gateway-cilium-gateway.gateway.svc.cluster.local:443
     originRequest:

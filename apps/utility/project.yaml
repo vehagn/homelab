@@ -11,7 +11,7 @@ spec:
   destinations:
     - namespace: 'argocd'
       server: '*'
-    - namespace: 'home-assistant'
+    - namespace: 'haos'
       server: '*'
   clusterResourceWhitelist:
     - group: '*'

@@ -33,9 +33,3 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
-#      allowedRoutes:
-#        namespaces:
-#          from: Selector
-#          selector:
-#            matchLabels:
-#              dev.stonegarden.app: homepage
