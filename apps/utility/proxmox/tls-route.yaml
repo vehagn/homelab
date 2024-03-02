@@ -5,7 +5,7 @@ metadata:
   namespace: proxmox
 spec:
   parentRefs:
-    - name: stonegarden
+    - name: proxmox-euclid
       namespace: gateway
   hostnames:
     - "proxmox.euclid.stonegarden.dev"
