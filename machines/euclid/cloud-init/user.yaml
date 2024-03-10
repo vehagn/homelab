@@ -1,6 +1,5 @@
 #cloud-config
 users:
-  - default
   - name: ${username}
     groups:
       - sudo
@@ -56,5 +55,3 @@ runcmd:
   - modprobe br_netfilter
   - sysctl --system
   - systemctl restart containerd
-  - kubeadm init --skip-phases=addon/kube-proxy
-  - echo "done" > /tmp/cloud-config.done

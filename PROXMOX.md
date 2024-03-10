@@ -1,32 +1,60 @@
 # Proxmox config
-
+https://github.com/tteck/Proxmox
 
 ```shell
 bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/misc/post-pve-install.sh)"
 ```
 
 ```shell
+bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/misc/microcode.sh)"
+```
 
+https://pve.proxmox.com/wiki/PCI_Passthrough#Verifying_IOMMU_parameters
+https://pve.proxmox.com/pve-docs/pve-admin-guide.html#sysboot_edit_kernel_cmdline
+https://www.reddit.com/r/homelab/comments/18jx15t/trouble_with_enabling_iommu_pcie_passthrough_81/kdnlyhd/
+
+
+```shell
+root@gauss:~# update-grub
+Generating grub configuration file ...
+W: This system is booted via proxmox-boot-tool:
+W: Executing 'update-grub' directly does not update the correct configs!
+W: Running: 'proxmox-boot-tool refresh'
+```
+
+This means edit /etc/kernel/cmdline
+
+add
+```shell
+intel_iommu=on
+```
+
+```shell
+dmesg | grep -e DMAR -e IOMMU
+...
+DMAR: IOMMU enabled
 ```
 
 
-## Updates
 
-https://pve.proxmox.com/wiki/Package_Repositories
+Nvidia
 ```shell
-vim /etc/apt/sources.list
+echo "blacklist nouveau" >> /etc/modprobe.d/blacklist.conf 
+echo "blacklist nvidia*" >> /etc/modprobe.d/blacklist.conf 
+```
+Intel
+```shell
+echo "blacklist i915" >> /etc/modprobe.d/blacklist.conf
 ```
 
-Add no-subscription repositories for `pve` and `ceph-reef`
 ```shell
-echo "deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription" | tee /etc/apt/sources.list.d/pve-no-subscription.list
-echo "deb http://download.proxmox.com/debian/ceph-reef bookworm no-subscription" | tee /etc/apt/sources.list.d/ceph-no-subscription.list
+pvesh get /nodes/<NODE_NAME>/hardware/pci --pci-class-blacklist ""
 ```
 
-Remove subscription (`sources.list` or `pve-enterprise.list`??)
+https://3os.org/infrastructure/proxmox/gpu-passthrough/igpu-passthrough-to-vm/#linux-virtual-machine-igpu-passthrough-configuration
+
 ```shell
-sudo sed -e '/enterprise.proxmox.com/ s/^#*/#/' -i /etc/apt/sources.list.d/sources.list
-sudo sed -e '/enterprise.proxmox.com/ s/^#*/#/' -i /etc/apt/sources.list.d/ceph.list
+ sudo lspci -nnv | grep VGA
 ```
 
 ## Pass through Disk
@@ -126,9 +154,6 @@ veh@gauss:~$ sudo blkid
     --machine q35 
 ```
 
-## PCI Passthrough
-https://pve.proxmox.com/wiki/PCI_Passthrough
-
 ## OpenTofu/Terraform
 
 https://opentofu.org/
@@ -136,139 +161,9 @@ https://opentofu.org/
 https://registry.terraform.io/providers/bpg/proxmox/latest/docs
 
 
-## Debian 12 – Bookworm
-
-Enable `sudo` for the user
-
-```shell
-~$ su -
-~# usermod -aG sudo <user>
-~# apt install sudo
-~# exit
-~$ exit
-```
-
-Enable `ssh` on server
-
-```shell
-sudo apt install openssh-server
-```
-
-On client
-
-```shell
-ssh-copy-id <user>@<ip>
-```
-
-Harden `ssh` server
-
-```shell
-echo "PermitRootLogin no" | sudo tee /etc/ssh/sshd_config.d/01-disable-root-login.conf
-echo "PasswordAuthentication no" | sudo tee /etc/ssh/sshd_config.d/02-disable-password-auth.conf
-echo "ChallengeResponseAuthentication no" | sudo tee /etc/ssh/sshd_config.d/03-disable-challenge-response-auth.conf
-echo "UsePAM no" | sudo tee /etc/ssh/sshd_config.d/04-disable-pam.conf
-sudo systemctl reload ssh
-```
-
-#####
-
 ## PN42 - k8s
 
 ```shell
-kubeadm join 192.168.1.25:6443 --token mghcuo.m335pk1kuj7t55sd \
-        --discovery-token-ca-cert-hash sha256:43e1ac8af318690a7c28c0ac8e6353af31c058a5915161251c3fbeb079229759 
+sudo kubeadm init --skip-phases=addon/kube-proxy
 ```
 
-## PN42 - k3s
-
-
-####
-https://github.com/larivierec/home-cluster
-
-```shell
-sudo apt install \
-  nftables \
-  nfs-common \
-  curl \
-  containerd \
-  open-iscsi \
-  vim \
-  gnupg \
-  net-tools \
-  dnsutils
-```
-
-```shell
-curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-```
-
-```shell
-curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644" INSTALL_K3S_EXEC="server" sh -s - --flannel-backend none \
-        --disable traefik \
-        --disable servicelb \
-        --disable-network-policy \
-        --disable-kube-proxy \
-        --kube-controller-manager-arg bind-address=0.0.0.0 \
-        --kube-scheduler-arg bind-address=0.0.0.0 \
-        --etcd-expose-metrics \
-        --cluster-init
-```
-
-
-### My own try
-
-```shell
-sudo apt install -y curl
-```
-
-```shell
-curl -sfL https://get.k3s.io | sh -s - \
-  --flannel-backend=none \
-  --disable-kube-proxy \
-  --disable traefik \
-  --disable servicelb \
-  --disable-network-policy \
-  --etcd-expose-metrics \
-  --cluster-init
-```
-
-```shell
-mkdir -p $HOME/.kube
-sudo cp -i /etc/rancher/k3s/k3s.yaml $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
-```
-
-```shell
-export KUBECONFIG=$HOME/.kube/config
-```
-
-```shell
-kubectl config set-context --current --namespace kube-system
-```
-
-```shell
-API_SERVER_IP=<IP>
-API_SERVER_PORT=<PORT>
-cilium install --set k8sServiceHost=${API_SERVER_IP} --set k8sServicePort=${API_SERVER_PORT} --version 1.15
-```
-
-###
-
-
-```shell
-/usr/local/bin/k3s-uninstall.sh
-/usr/local/bin/k3s-agent-uninstall.sh
-```
-
-```shell
-sudo cat /var/lib/rancher/k3s/server/token
-```
-
-```shell
-curl -sfL https://get.k3s.io | K3S_TOKEN="<token-from-server>" K3S_URL=https://<ip:port> sh -
-```
-
-cilium install needs the config file in the regular location
-```shell
-sudo cat /etc/rancher/k3s/k3s.yaml > ~/.kube/config
-```

@@ -2,7 +2,7 @@ terraform {
   required_providers {
     proxmox = {
       source  = "bpg/proxmox"
-      version = "0.46.3"
+      version = "0.48.2"
     }
   }
 }
@@ -13,7 +13,11 @@ provider "proxmox" {
   insecure = var.euclid.insecure
 
   username = var.euclid_auth.username
-  password = var.euclid_auth.password
+  api_token = var.euclid_auth.api_token
+  ssh {
+    agent    = var.euclid_auth.agent
+    username = var.euclid_auth.username
+  }
 
   tmp_dir  = "/var/tmp"
 }

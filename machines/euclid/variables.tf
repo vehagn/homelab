@@ -5,18 +5,24 @@ variable "euclid" {
     endpoint  = string
     insecure  = bool
   })
-  default = {
-    node_name = "euclid"
-    endpoint  = "https://192.168.1.42:8006/"
-    insecure  = true
-  }
 }
 
 variable "euclid_auth" {
   description = "Auth for euclid proxmox server"
   type        = object({
-    username = string
-    password = string
+    agent     = bool
+    username  = string
+    api_token = string
   })
   sensitive = true
+}
+
+variable "vm_user" {
+  description = "vm username"
+  type        = string
+}
+
+variable "vm_pub-key" {
+  description = "vm username"
+  type        = string
 }
