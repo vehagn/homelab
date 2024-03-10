@@ -7,7 +7,7 @@ spec:
   selector:
     matchLabels:
       app: cloudflared
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -20,7 +20,7 @@ spec:
           - 192.168.1.154
       containers:
         - name: cloudflared
-          image: cloudflare/cloudflared:2023.10.0
+          image: cloudflare/cloudflared:2024.2.1
           args:
             - tunnel
             - --config

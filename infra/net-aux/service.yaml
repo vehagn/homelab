@@ -14,18 +14,18 @@ spec:
       port: 5335
       protocol: TCP
       targetPort: unbound-dns-tcp
-    - name: unbound-dns-udp
-      port: 5335
-      protocol: UDP
-      targetPort: unbound-dns-udp
+#    - name: unbound-dns-udp
+#      port: 5335
+#      protocol: UDP
+#      targetPort: unbound-dns-udp
     - name: dns-tcp
       port: 53
       protocol: TCP
       targetPort: dns-tcp
-    - name: dns-udp
-      port: 53
-      protocol: UDP
-      targetPort: dns-udp
+#    - name: dns-udp
+#      port: 53
+#      protocol: UDP
+#      targetPort: dns-udp
     - name: http
       port: 80
       targetPort: http
