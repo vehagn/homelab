@@ -4,6 +4,7 @@ charts/example
 *secret*.yaml
 
 **/.terraform/*
+**/output
 
 *.tfstate
 *.tfstate.*

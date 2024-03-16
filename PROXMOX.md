@@ -35,8 +35,6 @@ dmesg | grep -e DMAR -e IOMMU
 DMAR: IOMMU enabled
 ```
 
-
-
 Nvidia
 ```shell
 echo "blacklist nouveau" >> /etc/modprobe.d/blacklist.conf 
@@ -53,9 +51,15 @@ pvesh get /nodes/<NODE_NAME>/hardware/pci --pci-class-blacklist ""
 
 https://3os.org/infrastructure/proxmox/gpu-passthrough/igpu-passthrough-to-vm/#linux-virtual-machine-igpu-passthrough-configuration
 
+In Guest VM
+
 ```shell
- sudo lspci -nnv | grep VGA
+sudo lspci -nnv | grep VGA
 ```
+
+Mapped device
+https://pve.proxmox.com/pve-docs/pve-admin-guide.html#resource_mapping
+
 
 ## Pass through Disk
 https://pve.proxmox.com/wiki/Passthrough_Physical_Disk_to_Virtual_Machine_(VM)

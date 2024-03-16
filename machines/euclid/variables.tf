@@ -26,3 +26,13 @@ variable "vm_pub-key" {
   description = "vm username"
   type        = string
 }
+
+variable "k8s-version" {
+  description = "Kubernetes version"
+  type = string
+}
+
+variable "cilium-cli-version" {
+  description = "Cilium CLI version"
+  type = string
+}

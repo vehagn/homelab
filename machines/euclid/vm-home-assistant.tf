@@ -5,8 +5,8 @@ resource "proxmox_virtual_environment_file" "haos_generic_image" {
   datastore_id = "local"
 
   source_file {
-    path      = "images/haos_ova-12.0.qcow2"
-    file_name = "haos_ova-12.0.img"
+    path      = "images/haos_ova-12.1.qcow2"
+    file_name = "haos_ova-12.1.img"
   }
 }
 
