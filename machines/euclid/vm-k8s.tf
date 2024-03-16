@@ -19,28 +19,16 @@ resource "proxmox_virtual_environment_file" "cloud-init-ctrl-01" {
   datastore_id = "local"
 
   source_raw {
-    data = templatefile("./cloud-init/user.yaml", {
-      username = var.vm_user
-      pub_key  = var.vm_pub-key
-      hostname = "k8s-ctrl-01"
+    data = templatefile("./cloud-init/control-plane.yaml", {
+      hostname           = "k8s-ctrl-01"
+      username           = var.vm_user
+      pub-key            = var.vm_pub-key
+      k8s-version        = var.k8s-version
+      kubeadm-cmd        = "kubeadm init --skip-phases=addon/kube-proxy"
+      cilium-cli-version = var.cilium-cli-version
+      cilium-cli-cmd     = "KUBECONFIG=/etc/kubernetes/admin.conf cilium install --set kubeProxyReplacement=true"
     })
     file_name = "cloud-init-k8s-ctrl-01.yaml"
-  }
-}
-
-resource "proxmox_virtual_environment_file" "cloud-init-work-01" {
-  provider     = proxmox.euclid
-  node_name    = var.euclid.node_name
-  content_type = "snippets"
-  datastore_id = "local"
-
-  source_raw {
-    data = templatefile("./cloud-init/user.yaml", {
-      username = var.vm_user
-      pub_key  = var.vm_pub-key
-      hostname = "k8s-work-01"
-    })
-    file_name = "cloud-init-k8s-work-01.yaml"
   }
 }
 
@@ -113,6 +101,63 @@ resource "proxmox_virtual_environment_vm" "k8s-ctrl-01" {
   }
 }
 
+output "ctrl_01_ipv4_address" {
+  depends_on = [proxmox_virtual_environment_vm.k8s-ctrl-01]
+  value      = proxmox_virtual_environment_vm.k8s-ctrl-01.ipv4_addresses[1][0]
+}
+
+resource "local_file" "ctrl-01-ip" {
+  content         = proxmox_virtual_environment_vm.k8s-ctrl-01.ipv4_addresses[1][0]
+  filename        = "output/ctrl-01-ip.txt"
+  file_permission = "0644"
+}
+
+module "sleep" {
+  depends_on   = [local_file.ctrl-01-ip]
+  source       = "Invicton-Labs/shell-data/external"
+  version      = "0.4.2"
+  command_unix = "sleep 120"
+}
+
+module "kube-config" {
+  depends_on   = [module.sleep]
+  source       = "Invicton-Labs/shell-resource/external"
+  version      = "0.4.1"
+  command_unix = "ssh -o StrictHostKeyChecking=no ${var.vm_user}@${local_file.ctrl-01-ip.content} cat /home/${var.vm_user}/.kube/config"
+}
+
+resource "local_file" "kube-config" {
+  content         = module.kube-config.stdout
+  filename        = "output/config"
+  file_permission = "0600"
+}
+
+module "kubeadm-join" {
+  depends_on   = [local_file.kube-config]
+  source       = "Invicton-Labs/shell-resource/external"
+  version      = "0.4.1"
+  # https://stackoverflow.com/questions/21383806/how-can-i-force-ssh-to-accept-a-new-host-fingerprint-from-the-command-line
+  command_unix = "ssh -o StrictHostKeyChecking=no ${var.vm_user}@${local_file.ctrl-01-ip.content} /usr/bin/kubeadm token create --print-join-command"
+}
+
+resource "proxmox_virtual_environment_file" "cloud-init-work-01" {
+  provider     = proxmox.euclid
+  node_name    = var.euclid.node_name
+  content_type = "snippets"
+  datastore_id = "local"
+
+  source_raw {
+    data = templatefile("./cloud-init/worker.yaml", {
+      hostname    = "k8s-work-01"
+      username    = var.vm_user
+      pub-key     = var.vm_pub-key
+      k8s-version = var.k8s-version
+      kubeadm-cmd = module.kubeadm-join.stdout
+    })
+    file_name = "cloud-init-k8s-work-01.yaml"
+  }
+}
+
 resource "proxmox_virtual_environment_vm" "k8s-work-01" {
   provider  = proxmox.euclid
   node_name = var.euclid.node_name
@@ -182,18 +227,13 @@ resource "proxmox_virtual_environment_vm" "k8s-work-01" {
 
   hostpci {
     # Passthrough iGPU
-    device = "hostpci0"
-    id     = "0000:00:02"
-    pcie   = true
-    rombar = true
-    xvga   = false
+    device  = "hostpci0"
+    #id     = "0000:00:02"
+    mapping = "iGPU"
+    pcie    = true
+    rombar  = true
+    xvga    = false
   }
-
-}
-
-output "ctrl_01_ipv4_address" {
-  depends_on = [proxmox_virtual_environment_vm.k8s-ctrl-01]
-  value      = proxmox_virtual_environment_vm.k8s-ctrl-01.ipv4_addresses[1][0]
 }
 
 output "work_01_ipv4_address" {
@@ -201,13 +241,7 @@ output "work_01_ipv4_address" {
   value      = proxmox_virtual_environment_vm.k8s-work-01.ipv4_addresses[1][0]
 }
 
-resource "local_file" "ctrl_01_ip" {
-  content         = proxmox_virtual_environment_vm.k8s-ctrl-01.ipv4_addresses[1][0]
-  filename        = "output/ctrl-01-ip.txt"
-  file_permission = "0644"
-}
-
-resource "local_file" "work_01_ip" {
+resource "local_file" "work-01-ip" {
   content         = proxmox_virtual_environment_vm.k8s-work-01.ipv4_addresses[1][0]
   filename        = "output/work-01-ip.txt"
   file_permission = "0644"
