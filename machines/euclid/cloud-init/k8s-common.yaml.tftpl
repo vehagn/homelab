@@ -1,29 +1,26 @@
-#cloud-config
 users:
   - name: ${username}
-    groups:
-      - sudo
+    passwd: ${password}
+    lock_passwd: false
+    groups: [ adm, cdrom, dip, plugdev, lxd, sudo ]
     shell: /bin/bash
     ssh_authorized_keys:
       - ${pub-key}
-    sudo: ALL=(ALL) NOPASSWD:ALL
-
-network:
-  version: 1
-  config:
-    - type: nameserver
-      address:
-        - 1.1.1.1
-        - 8.8.8.8
+    #sudo: ALL=(ALL) NOPASSWD:ALL
 
 hostname: ${hostname}
-create_hostname_file: true
 package_update: true
 package_upgrade: true
-locale: en_US.UTF-8
 timezone: Europe/Oslo
 
 write_files:
+  - path: /etc/ssh/sshd_config.d/01-harden-ssh.conf
+    content: |
+      PermitRootLogin no
+      PasswordAuthentication no
+      ChallengeResponseAuthentication no
+      UsePAM no
+
   - path: /etc/modules-load.d/k8s.conf
     content: |
       overlay
@@ -34,13 +31,6 @@ write_files:
       net.bridge.bridge-nf-call-ip6tables = 1
       net.bridge.bridge-nf-call-iptables  = 1
       net.ipv4.ip_forward                 = 1
-  # https://serverfault.com/questions/1148659/overwriting-provider-dns-via-cloud-init
-  - path: /etc/systemd/resolved.conf.d/dns_servers.conf
-    content: |
-      [Resolve]
-      DNS=1.1.1.1 8.8.8.8
-      Domains=~.
-    permissions: '0644'
 
 packages:
   - qemu-guest-agent
@@ -69,18 +59,4 @@ runcmd:
   - modprobe br_netfilter
   - sysctl --system
   - systemctl restart containerd
-  - systemctl restart systemd-resolved
   - ${kubeadm-cmd}
-  - mkdir -p /home/${username}/.kube
-  - cp /etc/kubernetes/admin.conf /home/${username}/.kube/config
-  - chown -R ${username}:${username} /home/${username}/.kube
-  - curl -sfLO --fail https://github.com/cilium/cilium-cli/releases/download/v${cilium-cli-version}/cilium-linux-amd64.tar.gz
-  - tar xzvfC cilium-linux-amd64.tar.gz /usr/local/bin
-  - rm cilium-linux-amd64.tar.gz
-  - ${cilium-cli-cmd}
-
-power_state:
-  delay: now
-  mode: reboot
-  message: Rebooting after cloud-init completion
-  condition: true
