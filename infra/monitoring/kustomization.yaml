@@ -2,15 +2,22 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - namespace.yaml
-  - auth-secret.yaml
-  - kube-prometheus-stack.yaml
+  - ns.yaml
   - ingress-route.yaml
-
-helmGlobals:
-  chartHome: ../../charts
+  - auth
 
 helmCharts:
-  - name: application
-    releaseName: auth
-    valuesFile: auth-values.yaml
+  - name: kube-prometheus-stack
+    repo: https://prometheus-community.github.io/helm-charts
+    version: 44.3.0
+    releaseName: kube-prometheus-stack
+    namespace: monitoring
+    valuesInline:
+      prometheus-node-exporter:
+        hostRootFsMount:
+          enabled: false
+      prometheusOperator:
+        admissionWebhooks:
+          failurePolicy: Ignore
+
+
