@@ -112,7 +112,7 @@ spec:
               mountPath: /etc/pihole/whitelist.txt
               subPath: whitelist.txt
         - name: cloudflared
-          image: cloudflare/cloudflared:2024.2.1
+          image: cloudflare/cloudflared:2024.3.0
           imagePullPolicy: IfNotPresent
           args:
             - tunnel
