@@ -18,7 +18,7 @@ resource "proxmox_virtual_environment_vm" "k8s-work-01" {
   }
 
   memory {
-    dedicated = 8192
+    dedicated = 16384
   }
 
   network_device {
@@ -28,18 +28,41 @@ resource "proxmox_virtual_environment_vm" "k8s-work-01" {
 
   efi_disk {
     datastore_id = "local-zfs"
-    file_format  = "raw" // To support qcow2 format
+    file_format = "raw" // To support qcow2 format
     type         = "4m"
   }
 
   disk {
     datastore_id = "local-zfs"
     file_id      = proxmox_virtual_environment_download_file.debian_12_generic_image.id
+    iothread     = true
     interface    = "scsi0"
     cache        = "writethrough"
     discard      = "on"
     ssd          = true
     size         = 32
+  }
+
+  disk {
+    datastore_id = "local-zfs"
+    iothread     = true
+    file_format  = "raw"
+    interface    = "scsi1"
+    cache        = "writethrough"
+    discard      = "on"
+    ssd          = true
+    size         = 64
+  }
+
+  disk {
+    datastore_id = "local-zfs"
+    iothread     = true
+    file_format  = "raw"
+    interface    = "scsi2"
+    cache        = "writethrough"
+    discard      = "on"
+    ssd          = true
+    size         = 512
   }
 
   boot_order = ["scsi0"]
@@ -70,7 +93,7 @@ resource "proxmox_virtual_environment_vm" "k8s-work-01" {
 
   hostpci {
     # Passthrough iGPU
-    device  = "hostpci0"
+    device = "hostpci0"
     #id     = "0000:00:02"
     mapping = "iGPU"
     pcie    = true

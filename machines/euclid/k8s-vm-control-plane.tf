@@ -28,7 +28,7 @@ resource "proxmox_virtual_environment_vm" "k8s-ctrl-01" {
 
   efi_disk {
     datastore_id = "local-zfs"
-    file_format  = "raw" // To support qcow2 format
+    file_format = "raw" // To support qcow2 format
     type         = "4m"
   }
 
@@ -80,15 +80,8 @@ resource "local_file" "ctrl-01-ip" {
   file_permission = "0644"
 }
 
-module "sleep" {
-  depends_on   = [local_file.ctrl-01-ip]
-  source       = "Invicton-Labs/shell-data/external"
-  version      = "0.4.2"
-  command_unix = "sleep 150"
-}
-
 module "kube-config" {
-  depends_on   = [module.sleep]
+  depends_on   = [local_file.ctrl-01-ip]
   source       = "Invicton-Labs/shell-resource/external"
   version      = "0.4.1"
   command_unix = "ssh -o StrictHostKeyChecking=no ${var.vm_user}@${local_file.ctrl-01-ip.content} cat /home/${var.vm_user}/.kube/config"
