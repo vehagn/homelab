@@ -1,0 +1,45 @@
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: euclid-plex
+  namespace: plex
+  labels:
+    kubernetes.io/service-name: euclid-plex
+    endpointslice.kubernetes.io/managed-by: cluster-admins
+addressType: IPv4
+ports:
+  - name: http
+    protocol: TCP
+    port: 32400
+endpoints:
+  - addresses:
+      - 192.168.1.228
+    conditions:  # https://github.com/argoproj/argo-cd/issues/15554
+      ready: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: euclid-plex
+  namespace: plex
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 32400
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: euclid-plex
+  namespace: plex
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`euclid-plex.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: euclid-plex
+          port: 80
