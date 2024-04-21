@@ -12,3 +12,6 @@ spec:
     - name: http
       port: 80
       targetPort: 32400
+    - name: direct
+      port: 32400
+      targetPort: 32400

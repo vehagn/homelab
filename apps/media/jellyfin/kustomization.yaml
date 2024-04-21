@@ -20,4 +20,5 @@ resources:
   - service.yaml
   - deployment.yaml
   - http-route.yaml
+  - euclid-jellyfin.yaml
 #  - ingress-route.yaml

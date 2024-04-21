@@ -20,5 +20,4 @@ resources:
   - service.yaml
   - deployment.yaml
   - ingress.yaml
-  - euclid-plex.yaml
 #  - http-route.yaml
