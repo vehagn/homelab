@@ -10,10 +10,6 @@ spec:
   hostnames:
     - "haos.stonegarden.dev"
   rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /
-      backendRefs:
+    - backendRefs:
         - name: home-assistant
           port: 8123
