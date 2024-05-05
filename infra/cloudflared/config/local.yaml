@@ -1,5 +1,5 @@
 tunnel: gauss-k8s
-credentials-file: /etc/cloudflared/creds/credentials.json
+credentials-file: /etc/cloudflared/config/credentials.json
 metrics: 0.0.0.0:2000
 no-autoupdate: true
 

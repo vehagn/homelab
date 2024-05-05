@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: local
+  namespace: cloudflared
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: local
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: local
+    spec:
+      containers:
+        - name: cloudflared
+          image: cloudflare/cloudflared:2024.4.1
+          imagePullPolicy: IfNotPresent
+          args: [ tunnel, --config, /etc/cloudflared/config/config.yaml, run ]
+          livenessProbe:
+            httpGet:
+              path: /ready
+              port: 2000
+            initialDelaySeconds: 10
+            failureThreshold: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: config
+              mountPath: /etc/cloudflared/config/config.yaml
+              subPath: config.yaml
+            - name: credentials
+              mountPath: /etc/cloudflared/config/credentials.json
+              subPath: credentials.json
+      volumes:
+        - name: config
+          configMap:
+            name: cloudflared-local-config
+            items:
+              - key: local.yaml
+                path: config.yaml
+        - name: credentials
+          secret:
+            secretName: local-token

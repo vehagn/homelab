@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: remote
+  namespace: cloudflared
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: remote
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: remote
+    spec:
+      containers:
+        - name: cloudflared
+          image: cloudflare/cloudflared:2024.4.1
+          imagePullPolicy: IfNotPresent
+          args: [ tunnel, --no-autoupdate, run ]
+          livenessProbe:
+            httpGet:
+              path: /ready
+              port: 2000
+            initialDelaySeconds: 10
+            failureThreshold: 5
+            periodSeconds: 10
+          env:
+            - name: TUNNEL_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: tunnel-token
+                  name: remote-token
