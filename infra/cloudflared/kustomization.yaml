@@ -9,7 +9,7 @@ configMapGenerator:
 
 resources:
   - ns.yaml
-  - deployment-local.yaml
-  - deployment-remote.yaml
+  - local.yaml
   - local-token.yaml
+  - remote.yaml
   - remote-token.yaml
