@@ -17,7 +17,7 @@ resources:
   - pvc-plex-config.yaml
   - pv-plex-media.yaml
   - pvc-plex-media.yaml
-  - service.yaml
-  - deployment.yaml
+#  - service.yaml
+#  - deployment.yaml
   - ingress.yaml
 #  - http-route.yaml
