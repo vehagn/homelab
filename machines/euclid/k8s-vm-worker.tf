@@ -34,7 +34,7 @@ resource "proxmox_virtual_environment_vm" "k8s-work-01" {
 
   disk {
     datastore_id = "local-zfs"
-    file_id      = proxmox_virtual_environment_download_file.debian_12_generic_image.id
+    file_id      = proxmox_virtual_environment_download_file.debian_12_bpo.id
     iothread     = true
     interface    = "scsi0"
     cache        = "writethrough"
@@ -54,16 +54,16 @@ resource "proxmox_virtual_environment_vm" "k8s-work-01" {
     size         = 64
   }
 
-  disk {
-    datastore_id = "local-zfs"
-    iothread     = true
-    file_format  = "raw"
-    interface    = "scsi2"
-    cache        = "writethrough"
-    discard      = "on"
-    ssd          = true
-    size         = 512
-  }
+#  disk {
+#    datastore_id = "local-zfs"
+#    iothread     = true
+#    file_format  = "raw"
+#    interface    = "scsi2"
+#    cache        = "writethrough"
+#    discard      = "on"
+#    ssd          = true
+#    size         = 512
+#  }
 
   boot_order = ["scsi0"]
 

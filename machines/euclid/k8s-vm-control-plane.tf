@@ -34,7 +34,7 @@ resource "proxmox_virtual_environment_vm" "k8s-ctrl-01" {
 
   disk {
     datastore_id = "local-zfs"
-    file_id      = proxmox_virtual_environment_download_file.debian_12_generic_image.id
+    file_id      = proxmox_virtual_environment_download_file.debian_12_bpo.id
     interface    = "scsi0"
     cache        = "writethrough"
     discard      = "on"
