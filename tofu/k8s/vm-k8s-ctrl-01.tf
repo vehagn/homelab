@@ -1,6 +1,6 @@
 resource "proxmox_virtual_environment_vm" "k8s-ctrl-01" {
-  provider  = proxmox.euclid
-  node_name = var.euclid.node_name
+  provider  = proxmox.abel
+  node_name = var.abel.node_name
 
   name        = "k8s-ctrl-01"
   description = "Kubernetes Control Plane 01"
@@ -10,15 +10,15 @@ resource "proxmox_virtual_environment_vm" "k8s-ctrl-01" {
 
   machine       = "q35"
   scsi_hardware = "virtio-scsi-single"
-  bios          = "ovmf"
+  #  bios          = "ovmf"
 
   cpu {
-    cores = 4
+    cores = 8
     type  = "host"
   }
 
   memory {
-    dedicated = 4096
+    dedicated = 24576
   }
 
   network_device {
@@ -26,11 +26,11 @@ resource "proxmox_virtual_environment_vm" "k8s-ctrl-01" {
     mac_address = "BC:24:11:2E:C0:01"
   }
 
-  efi_disk {
-    datastore_id = "local-zfs"
-    file_format = "raw" // To support qcow2 format
-    type         = "4m"
-  }
+#  efi_disk {
+#    datastore_id = "local-zfs"
+#    file_format = "raw" // To support qcow2 format
+#    type         = "4m"
+#  }
 
   disk {
     datastore_id = "local-zfs"
@@ -40,6 +40,17 @@ resource "proxmox_virtual_environment_vm" "k8s-ctrl-01" {
     discard      = "on"
     ssd          = true
     size         = 32
+  }
+
+  disk {
+    datastore_id = "local-zfs"
+    iothread     = true
+    file_format  = "raw"
+    interface    = "scsi1"
+    cache        = "writethrough"
+    discard      = "on"
+    ssd          = true
+    size         = 256
   }
 
   boot_order = ["scsi0"]
@@ -67,6 +78,16 @@ resource "proxmox_virtual_environment_vm" "k8s-ctrl-01" {
     datastore_id      = "local-zfs"
     user_data_file_id = proxmox_virtual_environment_file.cloud-init-ctrl-01.id
   }
+
+  #  hostpci {
+  #    # Passthrough iGPU
+  #    device = "hostpci0"
+  #    #id     = "0000:00:02"
+  #    mapping = "iGPU"
+  #    pcie    = true
+  #    rombar  = true
+  #    xvga    = false
+  #  }
 }
 
 output "ctrl_01_ipv4_address" {

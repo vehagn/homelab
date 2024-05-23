@@ -1,0 +1,9 @@
+#cloud-config
+${common-config}
+  - mkdir -p /home/${username}/.kube
+  - cp /etc/kubernetes/admin.conf /home/${username}/.kube/config
+  - chown -R ${username}:${username} /home/${username}/.kube
+  - curl -sfLO https://github.com/cilium/cilium-cli/releases/download/v${cilium-cli-version}/cilium-linux-amd64.tar.gz
+  - tar xzvfC cilium-linux-amd64.tar.gz /usr/local/bin
+  - rm cilium-linux-amd64.tar.gz
+  - ${cilium-cli-cmd}
