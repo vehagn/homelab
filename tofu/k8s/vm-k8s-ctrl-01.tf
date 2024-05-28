@@ -10,7 +10,7 @@ resource "proxmox_virtual_environment_vm" "k8s-ctrl-01" {
 
   machine       = "q35"
   scsi_hardware = "virtio-scsi-single"
-  #  bios          = "ovmf"
+  bios          = "seabios"
 
   cpu {
     cores = 8
@@ -26,15 +26,10 @@ resource "proxmox_virtual_environment_vm" "k8s-ctrl-01" {
     mac_address = "BC:24:11:2E:C0:01"
   }
 
-#  efi_disk {
-#    datastore_id = "local-zfs"
-#    file_format = "raw" // To support qcow2 format
-#    type         = "4m"
-#  }
-
   disk {
     datastore_id = "local-zfs"
-    file_id      = proxmox_virtual_environment_download_file.debian_12_bpo.id
+    iothread     = true
+    file_id      = proxmox_virtual_environment_download_file.debian_12_bookworm.id
     interface    = "scsi0"
     cache        = "writethrough"
     discard      = "on"
@@ -79,15 +74,15 @@ resource "proxmox_virtual_environment_vm" "k8s-ctrl-01" {
     user_data_file_id = proxmox_virtual_environment_file.cloud-init-ctrl-01.id
   }
 
-  #  hostpci {
-  #    # Passthrough iGPU
-  #    device = "hostpci0"
-  #    #id     = "0000:00:02"
-  #    mapping = "iGPU"
-  #    pcie    = true
-  #    rombar  = true
-  #    xvga    = false
-  #  }
+  hostpci {
+    # Passthrough iGPU
+    device = "hostpci0"
+    #id     = "0000:00:02"
+    mapping = "iGPU"
+    pcie    = true
+    rombar  = true
+    xvga    = false
+  }
 }
 
 output "ctrl_01_ipv4_address" {

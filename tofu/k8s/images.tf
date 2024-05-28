@@ -1,12 +1,12 @@
 resource "proxmox_virtual_environment_download_file" "debian_12_bookworm" {
-  provider     = proxmox.euclid
-  node_name    = var.euclid.node_name
+  provider     = proxmox.abel
+  node_name    = var.abel.node_name
   content_type = "iso"
   datastore_id = "local"
 
-  file_name          = "debian-12-generic-amd64-20240201-1644.img"
-  url                = "https://cloud.debian.org/images/cloud/bookworm/20240211-1654/debian-12-generic-amd64-20240211-1654.qcow2"
-  checksum           = "b679398972ba45a60574d9202c4f97ea647dd3577e857407138b73b71a3c3c039804e40aac2f877f3969676b6c8a1ebdb4f2d67a4efa6301c21e349e37d43ef5"
+  file_name          = "debian-12-generic-amd64-20240507-1740.img"
+  url                = "https://cloud.debian.org/images/cloud/bookworm/20240507-1740/debian-12-generic-amd64-20240507-1740.qcow2"
+  checksum           = "f7ac3fb9d45cdee99b25ce41c3a0322c0555d4f82d967b57b3167fce878bde09590515052c5193a1c6d69978c9fe1683338b4d93e070b5b3d04e99be00018f25"
   checksum_algorithm = "sha512"
 }
 

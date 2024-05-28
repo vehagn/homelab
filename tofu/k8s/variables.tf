@@ -1,23 +1,3 @@
-variable "cantor" {
-  description = "Cantor Proxmox server auth"
-  type        = object({
-    node_name = string
-    username  = string
-    api_token = string
-  })
-  sensitive = true
-}
-
-variable "euclid" {
-  description = "Euclid Proxmox server auth"
-  type        = object({
-    node_name = string
-    username  = string
-    api_token = string
-  })
-  sensitive = true
-}
-
 variable "vm_dns" {
   description = "DNS config for VMs"
   type = object({
