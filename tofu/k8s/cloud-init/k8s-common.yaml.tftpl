@@ -52,9 +52,12 @@ power_state:
 runcmd:
   - systemctl enable qemu-guest-agent
   - localectl set-locale LANG=en_US.UTF-8
+  - sed -i '/Components/s/$/ non-free non-free-firmware/' /etc/apt/sources.list.d/debian.sources
   - curl -fsSL https://pkgs.k8s.io/core:/stable:/v${k8s-version}/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
   - echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v${k8s-version}/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list
   - apt update
+  - apt install -y nfs-common
+  - apt install -y firmware-misc-nonfree intel-media-va-driver-non-free intel-gpu-tools
   - apt install -y kubelet kubeadm kubectl
   - apt-mark hold kubelet kubeadm kubectl
   - apt install -y runc containerd

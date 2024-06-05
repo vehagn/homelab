@@ -2,7 +2,7 @@ resource "proxmox_virtual_environment_vm" "k8s-ctrl-01" {
   provider  = proxmox.abel
   node_name = var.abel.node_name
 
-  name        = "k8s-ctrl-01"
+  name        = var.k8s-ctrl-01.hostname
   description = "Kubernetes Control Plane 01"
   tags        = ["k8s", "control-plane"]
   on_boot     = true
@@ -23,29 +23,18 @@ resource "proxmox_virtual_environment_vm" "k8s-ctrl-01" {
 
   network_device {
     bridge      = "vmbr0"
-    mac_address = "BC:24:11:2E:C0:01"
+    mac_address = var.k8s-ctrl-01.mac_address
   }
 
   disk {
     datastore_id = "local-zfs"
     iothread     = true
-    file_id      = proxmox_virtual_environment_download_file.debian_12_bookworm.id
+    file_id      = proxmox_virtual_environment_download_file.debian_12_bpo.id
     interface    = "scsi0"
     cache        = "writethrough"
     discard      = "on"
     ssd          = true
     size         = 32
-  }
-
-  disk {
-    datastore_id = "local-zfs"
-    iothread     = true
-    file_format  = "raw"
-    interface    = "scsi1"
-    cache        = "writethrough"
-    discard      = "on"
-    ssd          = true
-    size         = 256
   }
 
   boot_order = ["scsi0"]
@@ -65,7 +54,7 @@ resource "proxmox_virtual_environment_vm" "k8s-ctrl-01" {
     }
     ip_config {
       ipv4 {
-        address = "192.168.1.100/24"
+        address = var.k8s-ctrl-01.ip
         gateway = "192.168.1.1"
       }
     }
