@@ -7,10 +7,10 @@ resources:
 helmCharts:
   - name: cert-manager
     repo: https://charts.jetstack.io
-    version: 1.14.4
+    version: 1.15.0
     releaseName: cert-manager
     namespace: cert-manager
     valuesInline:
       installCRDs: true
       extraArgs:
-        - "--feature-gates=ExperimentalGatewayAPISupport=true"
+        - "--enable-gateway-api"

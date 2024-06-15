@@ -1,36 +1,34 @@
 variable "cluster" {
   type = object({
-    name = string
-  })
-  default = {
-    name = "talos"
-  }
-}
-
-variable "k8s-ctrl-00" {
-  description = "Node Settings"
-  type        = object({
-    hostname    = string
-    ip          = string
-    mac_address = string
+    name          = string
+    endpoint      = string
+    talos_version = string
   })
 }
 
-#variable "k8s-ctrl-01" {
-#  description = "Node Settings"
-#  type        = object({
-#    hostname    = string
-#    ip          = string
-#    mac_address = string
-#  })
-#}
+variable "host_machines" {
+  type = list(string)
+}
 
-#variable "k8s-version" {
-#  description = "Kubernetes version"
-#  type        = string
-#}
-#
-#variable "cilium-cli-version" {
-#  description = "Cilium CLI version"
-#  type        = string
-#}
+variable "node_data" {
+  description = "A map of node data"
+  type = object({
+    controlplanes = map(object({
+      ip            = string
+      mac_address   = string
+      host_node     = string
+      vm_id         = number
+      cpu           = number
+      ram_dedicated = number
+      igpu          = optional(bool, false)
+    }))
+    workers = map(object({
+      ip            = string
+      mac_address   = string
+      host_node     = string
+      vm_id         = number
+      cpu           = number
+      ram_dedicated = number
+    }))
+  })
+}

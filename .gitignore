@@ -20,3 +20,4 @@ override.tf.json
 *_override.tf.json
 
 *.qcow2
+*.raw
