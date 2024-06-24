@@ -3,8 +3,8 @@ charts/example
 **/infra/*/charts
 *secret*.yaml
 
-**/.terraform/*
-**/output
+.terraform
+output
 
 *.tfstate
 *.tfstate.*
