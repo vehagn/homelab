@@ -1,0 +1,11 @@
+machine:
+  network:
+    hostname: ${hostname}
+cluster:
+  allowSchedulingOnControlPlanes: true
+  network:
+    cni:
+      name: none
+  proxy:
+    disabled: true
+  ${inlineManifests}
