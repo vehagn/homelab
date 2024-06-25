@@ -1,11 +1,11 @@
 resource "proxmox_virtual_environment_vm" "controlplane" {
-  for_each = var.node_data.controlplanes
+  for_each = var.talos_nodes.nodes
 
   node_name = each.value.host_node
 
   name        = each.key
-  description = "Talos Kubernetes Control Plane"
-  tags        = ["k8s", "control-plane"]
+  description = each.value.machine_type == "controlplane" ? "Talos Control Plane" : "Talos Worker"
+  tags        = each.value.machine_type == "controlplane" ? ["k8s", "control-plane"] : ["k8s", "worker"]
   on_boot     = true
   vm_id       = each.value.vm_id
 

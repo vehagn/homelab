@@ -29,25 +29,18 @@ variable "cluster" {
   })
 }
 
-variable "node_data" {
-  description = "A map of node data"
+variable "talos_nodes" {
+  description = "Talos node configuration"
   type = object({
-    controlplanes = map(object({
+    nodes = map(object({
+      host_node     = string
+      machine_type  = string
       ip            = string
       mac_address   = string
-      host_node     = string
       vm_id         = number
       cpu           = number
       ram_dedicated = number
       igpu = optional(bool, false)
-    }))
-    workers = map(object({
-      ip            = string
-      mac_address   = string
-      host_node     = string
-      vm_id         = number
-      cpu           = number
-      ram_dedicated = number
     }))
   })
 }

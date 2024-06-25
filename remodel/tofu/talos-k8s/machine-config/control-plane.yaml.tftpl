@@ -8,4 +8,18 @@ cluster:
       name: none
   proxy:
     disabled: true
-  ${inlineManifests}
+  inlineManifests:
+  - name: cilium-values
+    contents: |
+      ---
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: cilium-values
+        namespace: kube-system
+      data:
+        values.yaml: |-
+          ${indent(10, ciliumValues)}
+  - name: cilium-bootstrap
+    contents: |
+      ${indent(6, ciliumInstall)}

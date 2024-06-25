@@ -68,16 +68,19 @@ spec:
               fieldPath: status.podIP
         - name: KUBERNETES_SERVICE_PORT
           value: "6443"
+        volumeMounts:
+          - name: values
+            mountPath: /root/app/values.yaml
+            subPath: values.yaml
         command:
           - cilium
           - install
           - --version=v1.15.5 # renovate: github-releases=cilium/cilium
-          - --helm-set=ipam.mode=kubernetes
           - --set
           - kubeProxyReplacement=true
-          - --helm-set=securityContext.capabilities.ciliumAgent={CHOWN,KILL,NET_ADMIN,NET_RAW,IPC_LOCK,SYS_ADMIN,SYS_RESOURCE,DAC_OVERRIDE,FOWNER,SETGID,SETUID}
-          - --helm-set=securityContext.capabilities.cleanCiliumState={NET_ADMIN,SYS_ADMIN,SYS_RESOURCE}
-          - --helm-set=cgroup.autoMount.enabled=false
-          - --helm-set=cgroup.hostRoot=/sys/fs/cgroup
-          - --helm-set=k8sServiceHost=localhost
-          - --helm-set=k8sServicePort=7445
+          - --values
+          - values.yaml
+      volumes:
+        - name: values
+          configMap:
+            name: cilium-values

@@ -23,7 +23,7 @@ provider "proxmox" {
 }
 
 output "talosconfig" {
-  value     = data.talos_client_configuration.talosconfig.talos_config
+  value     = data.talos_client_configuration.talos_config.talos_config
   sensitive = true
 }
 
@@ -32,13 +32,19 @@ output "kubeconfig" {
   sensitive = true
 }
 
-resource "local_file" "talos-config" {
-  content         = data.talos_client_configuration.talosconfig.talos_config
+resource "local_file" "machine_config_ctrl-00" {
+  content         = data.talos_machine_configuration.machine_configuration["ctrl-00"].machine_configuration
+  filename        = "output/talos-machine-config-ctrl-00.yaml"
+  file_permission = "0600"
+}
+
+resource "local_file" "talos_config" {
+  content         = data.talos_client_configuration.talos_config.talos_config
   filename        = "output/talos-config.yaml"
   file_permission = "0600"
 }
 
-resource "local_file" "kube-config" {
+resource "local_file" "kube_config" {
   content         = data.talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
   filename        = "output/kube-config.yaml"
   file_permission = "0600"
