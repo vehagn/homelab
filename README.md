@@ -64,16 +64,16 @@ over at GitLab.
 
 - [ ] Clean up DNS config
 - [ ] Renovate for automatic updates
-- [ ] Build a NAS for storage
+- [x] Build a NAS for storage
 - [ ] Template Gauss
 - [ ] Replace Pi Hole with AdGuard Home
-- [ ] Use iGPU on Euclid for video transcoding
-- [ ] Replace Traefik with Cilium Ingress Controller
+- [x] Use iGPU on Euclid for video transcoding
+- [x] Replace Traefik with Cilium Ingress Controller
 - [ ] Cilium mTLS & SPIFFE/SPIRE
 
 ## 👷‍ Future Projects
 
-- [ ] Use Talos instead of Debian for Kubernetes
+- [x] Use Talos instead of Debian for Kubernetes
 - [ ] Keycloak for auth
 - [ ] Dynamic Resource Allocation for GPU
 - [ ] Local LLM

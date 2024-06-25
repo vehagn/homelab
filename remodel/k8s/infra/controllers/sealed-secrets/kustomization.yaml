@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+helmCharts:
+  - name: sealed-secrets
+#    repo: https://bitnami-labs.github.io/sealed-secrets
+#    version: 2.16.0
+    repo: oci://registry-1.docker.io/bitnamicharts/sealed-secrets
+    version: 2.3.6
+    releaseName: sealed-secrets-controller
+    namespace: sealed-secrets
+    includeCRDs: true
+    valuesFile: values.yaml

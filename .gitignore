@@ -1,6 +1,6 @@
 .idea
 charts/example
-**/infra/*/charts
+**/infra/**/charts
 *secret*.yaml
 
 .terraform
@@ -21,3 +21,6 @@ override.tf.json
 
 *.qcow2
 *.raw
+
+*.cert
+*.key
