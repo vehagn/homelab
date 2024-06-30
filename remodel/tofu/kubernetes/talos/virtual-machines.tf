@@ -1,5 +1,5 @@
-resource "proxmox_virtual_environment_vm" "controlplane" {
-  for_each = var.talos_nodes.nodes
+resource "proxmox_virtual_environment_vm" "talos_vm" {
+  for_each = var.cluster_config.nodes
 
   node_name = each.value.host_node
 
@@ -51,7 +51,6 @@ resource "proxmox_virtual_environment_vm" "controlplane" {
 
   initialization {
     datastore_id      = "local-zfs"
-#    meta_data_file_id = proxmox_virtual_environment_file.controlplane-config[each.key].id
     ip_config {
       ipv4 {
         address = "${each.value.ip}/24"

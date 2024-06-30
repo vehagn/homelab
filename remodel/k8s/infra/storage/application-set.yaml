@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: storage
+  namespace: argocd
+  labels:
+    dev.stonegarden: storage
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/vehagn/homelab
+        #revision: HEAD
+        revision: remodel
+        directories:
+          - path: remodel/k8s/infra/storage/*
+  template:
+    metadata:
+      name: '{{ path.basename }}'
+      labels:
+        dev.stonegarden: storage
+    spec:
+      project: storage
+      source:
+        plugin:
+          name: kustomize-build-with-helm
+        repoURL: https://github.com/vehagn/homelab
+        #targetRevision: HEAD
+        targetRevision: remodel
+        path: '{{ path }}'
+      destination:
+        name: in-cluster
+        namespace: argocd
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true

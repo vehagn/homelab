@@ -1,6 +1,10 @@
 machine:
   network:
     hostname: ${hostname}
+  nodeLabels:
+    topology.kubernetes.io/region: ${cluster_name}
+    topology.kubernetes.io/zone: ${node_name}
+
 cluster:
   allowSchedulingOnControlPlanes: true
   network:
@@ -19,7 +23,7 @@ cluster:
         namespace: kube-system
       data:
         values.yaml: |-
-          ${indent(10, ciliumValues)}
+          ${indent(10, cilium_values)}
   - name: cilium-bootstrap
     contents: |
-      ${indent(6, ciliumInstall)}
+      ${indent(6, cilium_install)}
