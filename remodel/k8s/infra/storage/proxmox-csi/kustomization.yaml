@@ -1,9 +1,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-resources:
-#  - https://raw.githubusercontent.com/sergelogvinov/proxmox-csi-plugin/v0.7.0/docs/deploy/proxmox-csi-plugin-release.yml
-  - storage-class.yaml
+#resources:
+#  - ns.yaml
+##  - https://raw.githubusercontent.com/sergelogvinov/proxmox-csi-plugin/v0.7.0/docs/deploy/proxmox-csi-plugin-release.yml
+#  - storage-class.yaml
 
 #images:
 #  - name: ghcr.io/sergelogvinov/proxmox-csi-node
@@ -13,8 +14,18 @@ resources:
 
 helmCharts:
   - name: proxmox-csi-plugin
-    repo: oci://ghcr.io/sergelogvinov/charts/proxmox-csi-plugin
-    version: 0.7.0
+    repo: oci://ghcr.io/sergelogvinov/charts
+    version: 0.2.5
     releaseName: proxmox-csi-plugin
     includeCRDs: true
     namespace: csi-proxmox
+    valuesFile: values.yaml
+
+#helmCharts:
+#  - name: proxmox-csi-plugin
+#    releaseName: proxmox-csi-plugin
+#    namespace: csi-proxmox
+#    repo: oci://ghcr.io/sergelogvinov/charts
+#    version: 0.2.5
+#    includeCRDs: true
+#    valuesFile: values.yaml

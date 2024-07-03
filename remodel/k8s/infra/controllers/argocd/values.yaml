@@ -17,7 +17,58 @@ crds:
   # -- Keep CRDs on chart uninstall
   keep: false
 
+controller:
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+    requests:
+      cpu: 100m
+      memory: 700Mi
+
+dex:
+  resources:
+    limits:
+      cpu: 50m
+      memory: 64Mi
+    requests:
+      cpu: 10m
+      memory: 32Mi
+
+redis:
+  resources:
+    limits:
+      cpu: 200m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+
+server:
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+
 repoServer:
+  containerSecurityContext:
+    readOnlyRootFilesystem: true
+  volumes:
+    - name: cmp-kustomize-build-with-helm
+      configMap:
+        name: argocd-cmp-cm
+    - name: cmp-tmp
+      emptyDir: { }
+  resources:
+    limits:
+      cpu: 50m
+      memory: 512Mi
+    requests:
+      cpu: 10m
+      memory: 256Mi
   extraContainers:
     - name: kustomize-build-with-helm
       command:
@@ -40,10 +91,22 @@ repoServer:
           subPath: kustomize-build-with-helm.yaml
         - mountPath: /tmp
           name: cmp-tmp
-  volumes:
-    - name: cmp-kustomize-build-with-helm
-      configMap:
-        name: argocd-cmp-cm
-    - name: cmp-tmp
-      emptyDir: { }
 
+applicationSet:
+  resources:
+     limits:
+       cpu: 50m
+       memory: 256Mi
+     requests:
+       cpu: 10m
+       memory: 64Mi
+
+notifications:
+  enabled: false
+  resources:
+    limits:
+      cpu: 50m
+      memory: 128Mi
+    requests:
+      cpu: 10m
+      memory: 64Mi

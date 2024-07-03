@@ -3,12 +3,14 @@ kind: Kustomization
 
 resources:
   - ns.yaml
+#  - ghcr-helm-credentials.yaml
+#  - docker-helm-credentials.yaml
 #  - http-route.yaml
 
 helmCharts:
   - name: argo-cd
     repo: https://argoproj.github.io/argo-helm
-    version: 7.3.3
+    version: 7.3.4
     releaseName: "argocd"
     namespace: argocd
     valuesFile: values.yaml

@@ -9,7 +9,7 @@ kubectl kustomize --enable-helm infra/network/cilium | kubectl apply -f -
 ## Sealed-secrets
 
 ```shell
-kubectl kustomize --enable-helm infra/controllers/sealed-secrets | kubectl apply -f -
+kustomize build --enable-helm infra/controllers/sealed-secrets | kubectl apply -f -
 ```
 
 ## Proxmox CSI Plugin
@@ -25,7 +25,15 @@ kubectl get csistoragecapacities -ocustom-columns=CLASS:.storageClassName,AVAIL:
 ## Argo CD
 
 ```shell
-kubectl kustomize --enable-helm infra/controllers/argocd | kubectl apply -f -
+kubeseal -oyaml --controller-namespace=sealed-secrets < argocd-docker-secret.yaml > infra/argocd/docker-helm-credentials.yaml
+```
+
+```shell
+kubeseal -oyaml --controller-namespace=sealed-secrets < argocd-ghcr-secret.yaml > infra/argocd/ghcr-helm-credentials.yaml
+```
+
+```shell
+kustomize build --enable-helm infra/argocd | kubectl apply -f -
 ```
 
 ```shell
@@ -34,4 +42,8 @@ kubectl -n argocd get secret argocd-initial-admin-secret -ojson | jq -r ' .data.
 
 ```shell
 kubectl kustomize --enable-helm infra/storage | kubectl apply -f -
+```
+
+```shell
+kubectl kustomize --enable-helm infra/controllers | kubectl apply -f -
 ```
