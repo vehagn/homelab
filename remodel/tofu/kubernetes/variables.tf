@@ -27,15 +27,29 @@ variable "cluster_config" {
     endpoint        = string
     talos_version   = string
 
-    nodes = map(object({
-      host_node     = string
-      machine_type  = string
-      ip            = string
-      mac_address   = string
-      vm_id         = number
-      cpu           = number
-      ram_dedicated = number
-      igpu = optional(bool, false)
-    }))
+    nodes = map(
+      object({
+        host_node     = string
+        machine_type  = string
+        ip            = string
+        mac_address   = string
+        vm_id         = number
+        cpu           = number
+        ram_dedicated = number
+        igpu = optional(bool, false)
+      })
+    )
   })
+}
+
+variable "volumes" {
+  type = map(
+    object({
+      node = string
+      size = string
+      storage = optional(string, "local-zfs")
+      vmid = optional(number, 9999)
+      format = optional(string, "raw")
+    })
+  )
 }

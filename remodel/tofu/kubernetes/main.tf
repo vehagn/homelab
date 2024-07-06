@@ -31,28 +31,20 @@ module "sealed_secrets" {
     kubernetes = kubernetes
   }
 
-  // openssl req -x509 -days 365 -nodes -newkey rsa:4096 -keyout tls.key -out tls.cert -subj "/CN=sealed-secret/O=sealed-secret"
+  // openssl req -x509 -days 365 -nodes -newkey rsa:4096 -keyout sealed-secrets.key -out sealed-secrets.cert -subj "/CN=sealed-secret/O=sealed-secret"
   sealed_secrets_cert = {
-    cert = file("${path.module}/tls.cert")
-    key = file("${path.module}/tls.key")
+    cert = file("${path.module}/bootstrap/sealed-secrets/sealed-secrets.cert")
+    key = file("${path.module}/bootstrap/sealed-secrets/sealed-secrets.key")
   }
 }
 
-resource "local_file" "machine_configs" {
-  for_each        = module.talos.talos_machine_config
-  content         = each.value.machine_configuration
-  filename        = "output/talos-machine-config-${each.key}.yaml"
-  file_permission = "0600"
-}
+module "volumes" {
+  source = "./bootstrap/volumes"
 
-resource "local_file" "talos_config" {
-  content         = module.talos.talos_client_configuration.talos_config
-  filename        = "output/talos-config.yaml"
-  file_permission = "0600"
-}
-
-resource "local_file" "kube_config" {
-  content         = module.talos.talos_kube_config.kubeconfig_raw
-  filename        = "output/kube-config.yaml"
-  file_permission = "0600"
+  providers = {
+    restapi    = restapi
+    kubernetes = kubernetes
+  }
+  proxmox_api = var.proxmox
+  volumes     = var.volumes
 }

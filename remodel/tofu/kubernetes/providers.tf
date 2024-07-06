@@ -12,6 +12,10 @@ terraform {
       source  = "siderolabs/talos"
       version = "0.5.0"
     }
+    restapi = {
+      source  = "Mastercard/restapi"
+      version = "1.19.1"
+    }
   }
 }
 
@@ -23,6 +27,17 @@ provider "proxmox" {
   ssh {
     agent    = true
     username = var.proxmox.username
+  }
+}
+
+provider "restapi" {
+  uri                  = var.proxmox.endpoint
+  insecure             = var.proxmox.insecure
+  write_returns_object = true
+
+  headers = {
+    "Content-Type"  = "application/json"
+    "Authorization" = "PVEAPIToken=${var.proxmox.api_token}"
   }
 }
 

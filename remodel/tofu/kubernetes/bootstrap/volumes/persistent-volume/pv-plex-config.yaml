@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: plex-config
+spec:
+  storageClassName: proxmox-csi
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 12Gi
+  csi:
+    driver: csi.proxmox.sinextra.dev
+    fsType: ext4
+    volumeAttributes:
+      cache: writethrough
+      ssd: "true"
+      storage: local-zfs
+    volumeHandle: homelab/abel/local-zfs/vm-9999-plex-config
+  mountOptions:
+    - noatime
+  volumeMode: Filesystem
