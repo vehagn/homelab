@@ -47,3 +47,15 @@ kubectl kustomize --enable-helm infra/storage | kubectl apply -f -
 ```shell
 kubectl kustomize --enable-helm infra/controllers | kubectl apply -f -
 ```
+
+
+# SBOM
+
+* [x] Cilium
+* [] Hubble
+* [x] Argo CD
+* [x] Proxmox CSI Plugin
+* [x] Cert-manager
+* [] Gateway
+* [] CNPG
+* [] Authentication (Keycloak, Authentik, ...)
