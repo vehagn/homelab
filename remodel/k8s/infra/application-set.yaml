@@ -9,9 +9,9 @@ spec:
   generators:
     - git:
         repoURL: https://github.com/vehagn/homelab
-        revision: HEAD
+        revision: remodel
         directories:
-          - path: remodel/infra/*
+          - path: remodel/k8s/infra/*
   template:
     metadata:
       name: '{{ path.basename }}'
@@ -21,7 +21,7 @@ spec:
       project: infrastructure
       source:
         repoURL: https://github.com/vehagn/homelab
-        targetRevision: HEAD
+        targetRevision: remodel
         path: '{{ path }}'
       destination:
         name: in-cluster

@@ -1,0 +1,24 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: stonegarden
+  namespace: gateway
+  annotations:
+    cert-manager.io/issuer: cloudflare-issuer
+spec:
+  gatewayClassName: cilium
+  infrastructure:
+    annotations:
+      io.cilium/lb-ipam-ips: 192.168.1.222
+  listeners:
+    - protocol: HTTPS
+      port: 443
+      name: https-gateway
+      hostname: "*.stonegarden.dev"
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: cert-stonegarden
+      allowedRoutes:
+        namespaces:
+          from: All

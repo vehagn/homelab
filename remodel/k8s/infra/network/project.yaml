@@ -5,13 +5,15 @@ metadata:
   namespace: argocd
 spec:
   sourceRepos:
-    - 'https://gitlab.com/vehagn/mini-homelab.git'
+    - 'https://github.com/vehagn/homelab'
     - 'https://prometheus-community.github.io/helm-charts'
     - 'https://argoproj.github.io/argo-helm'
   destinations:
     - namespace: 'adguard'
       server: '*'
     - namespace: 'argocd'
+      server: '*'
+    - namespace: 'cilium-secrets'
       server: '*'
     - namespace: 'cloudflared'
       server: '*'

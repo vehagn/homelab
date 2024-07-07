@@ -9,9 +9,9 @@ spec:
   generators:
     - git:
         repoURL: https://github.com/vehagn/homelab
-        revision: HEAD
+        revision: remodel
         directories:
-          - path: remodel/infra/network/*
+          - path: remodel/k8s/infra/network/*
   template:
     metadata:
       name: '{{ path.basename }}'
@@ -23,7 +23,7 @@ spec:
         plugin:
           name: kustomize-build-with-helm
         repoURL: https://github.com/vehagn/homelab
-        targetRevision: HEAD
+        targetRevision: remodel
         path: '{{ path }}'
       destination:
         name: in-cluster
