@@ -3,8 +3,6 @@ kind: Kustomization
 
 resources:
   - ns.yaml
-#  - ghcr-helm-credentials.yaml
-#  - docker-helm-credentials.yaml
 #  - http-route.yaml
 
 helmCharts:

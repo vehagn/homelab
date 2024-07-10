@@ -10,14 +10,6 @@ variable "proxmox" {
   sensitive = true
 }
 
-variable "talos_image" {
-  type = object({
-    base_url  = string
-    version   = string
-    datastore = string
-  })
-}
-
 variable "cluster_config" {
   description = "Talos node configuration"
   type = object({
@@ -36,6 +28,7 @@ variable "cluster_config" {
         vm_id         = number
         cpu           = number
         ram_dedicated = number
+        update = optional(bool, false)
         igpu = optional(bool, false)
       })
     )

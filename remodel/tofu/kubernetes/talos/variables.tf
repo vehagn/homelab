@@ -1,8 +1,13 @@
 variable "talos_image" {
   type = object({
-    base_url = string
-    version  = string
-    datastore = string
+    factory_url = optional(string, "https://factory.talos.dev")
+    schematic = string
+    version   = string
+    update_schematic = optional(string)
+    update_version = optional(string)
+    arch = optional(string, "amd64")
+    platform = optional(string, "nocloud")
+    proxmox_datastore = optional(string, "local")
   })
 }
 
@@ -23,6 +28,7 @@ variable "cluster_config" {
       vm_id         = number
       cpu           = number
       ram_dedicated = number
+      update = optional(bool, false)
       igpu = optional(bool, false)
     }))
   })
@@ -30,7 +36,7 @@ variable "cluster_config" {
 
 variable "cilium" {
   type = object({
-    values = string
+    values  = string
     install = string
   })
 }

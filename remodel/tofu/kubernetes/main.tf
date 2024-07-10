@@ -5,7 +5,11 @@ module "talos" {
     proxmox = proxmox
   }
 
-  talos_image    = var.talos_image
+  talos_image = {
+    version = "v1.7.5"
+    update_version = "v1.8.0-alpha.1"
+    schematic = file("${path.module}/config/talos-image-schematic.yaml")
+  }
   cluster_config = var.cluster_config
   cilium = {
     values = file("${path.module}/../../k8s/infra/network/cilium/values.yaml")
@@ -33,8 +37,8 @@ module "sealed_secrets" {
 
   // openssl req -x509 -days 365 -nodes -newkey rsa:4096 -keyout sealed-secrets.key -out sealed-secrets.cert -subj "/CN=sealed-secret/O=sealed-secret"
   sealed_secrets_cert = {
-    cert = file("${path.module}/bootstrap/sealed-secrets/sealed-secrets.cert")
-    key = file("${path.module}/bootstrap/sealed-secrets/sealed-secrets.key")
+    cert = file("${path.module}/config/sealed-secrets.cert")
+    key = file("${path.module}/config/sealed-secrets.key")
   }
 }
 

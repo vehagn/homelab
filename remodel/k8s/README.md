@@ -1,5 +1,13 @@
 # Manual bootstrap
 
+## CRDs
+
+Gateway API
+
+```shell
+kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.0.0/experimental-install.yaml
+```
+
 ## Cilium
 
 ```shell
@@ -15,7 +23,7 @@ kustomize build --enable-helm infra/controllers/sealed-secrets | kubectl apply -
 ## Proxmox CSI Plugin
 
 ```shell
-kubectl kustomize --enable-helm infra/storage/proxmox-csi | kubectl apply -f -
+kustomize build --enable-helm infra/storage/proxmox-csi | kubectl apply -f -
 ```
 
 ```shell
@@ -25,15 +33,7 @@ kubectl get csistoragecapacities -ocustom-columns=CLASS:.storageClassName,AVAIL:
 ## Argo CD
 
 ```shell
-kubeseal -oyaml --controller-namespace=sealed-secrets < argocd-docker-secret.yaml > infra/argocd/docker-helm-credentials.yaml
-```
-
-```shell
-kubeseal -oyaml --controller-namespace=sealed-secrets < argocd-ghcr-secret.yaml > infra/argocd/ghcr-helm-credentials.yaml
-```
-
-```shell
-kustomize build --enable-helm infra/argocd | kubectl apply -f -
+kustomize build --enable-helm infra/controllers/argocd | kubectl apply -f -
 ```
 
 ```shell
@@ -41,17 +41,8 @@ kubectl -n argocd get secret argocd-initial-admin-secret -ojson | jq -r ' .data.
 ```
 
 ```shell
-kubectl kustomize --enable-helm infra/storage | kubectl apply -f -
+kubectl kustomize infra | kubectl apply -f -
 ```
-
-```shell
-kubectl kustomize --enable-helm infra/controllers | kubectl apply -f -
-```
-
-```shell
-kubectl kustomize --enable-helm infra | kubectl apply -f -
-```
-
 
 # SBOM
 

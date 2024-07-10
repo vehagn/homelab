@@ -17,17 +17,17 @@ data "talos_machine_configuration" "machine_configuration" {
   talos_version    = var.cluster_config.talos_version
   config_patches   = each.value.machine_type == "controlplane" ? [
     templatefile("${path.module}/machine-config/control-plane.yaml.tftpl", {
-      hostname = each.key
-      cluster_name = var.cluster_config.proxmox_cluster
-      node_name = each.value.host_node
-      cilium_values = var.cilium.values
+      hostname       = each.key
+      cluster_name   = var.cluster_config.proxmox_cluster
+      node_name      = each.value.host_node
+      cilium_values  = var.cilium.values
       cilium_install = var.cilium.install
     })
   ] : [
     templatefile("${path.module}/machine-config/worker.yaml.tftpl", {
-      hostname = each.key
+      hostname     = each.key
       cluster_name = var.cluster_config.proxmox_cluster
-      node_name = each.value.host_node
+      node_name    = each.value.host_node
     })
   ]
 }
@@ -38,12 +38,16 @@ resource "talos_machine_configuration_apply" "talos_config_apply" {
   node                        = each.value.ip
   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
   machine_configuration_input = data.talos_machine_configuration.machine_configuration[each.key].machine_configuration
+  lifecycle {
+    # re-run config apply if vm changes
+    replace_triggered_by = [proxmox_virtual_environment_vm.talos_vm[each.key]]
+  }
 }
 
 resource "talos_machine_bootstrap" "talos_bootstrap" {
   depends_on = [talos_machine_configuration_apply.talos_config_apply]
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  node                 = [for k, v in var.cluster_config.nodes : v.ip if v.machine_type == "controlplane"][0]
+  node                 = [for k, v in var.cluster_config.nodes : v.ip if v.machine_type == "controlplane" && !v.update][0]
 }
 
 data "talos_cluster_health" "health" {
@@ -58,8 +62,11 @@ data "talos_cluster_health" "health" {
 }
 
 data "talos_cluster_kubeconfig" "kubeconfig" {
-  #depends_on = [talos_machine_bootstrap.talos_bootstrap]
+  #  depends_on = [talos_machine_bootstrap.talos_bootstrap]
   depends_on = [talos_machine_bootstrap.talos_bootstrap, data.talos_cluster_health.health]
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  node                 = [for k, v in var.cluster_config.nodes : v.ip if v.machine_type == "controlplane"][0]
+  node                 = [for k, v in var.cluster_config.nodes : v.ip if v.machine_type == "controlplane" && !v.update][0]
+  timeouts = {
+    read = "1m"
+  }
 }

@@ -37,10 +37,10 @@ resource "proxmox_virtual_environment_vm" "talos_vm" {
     iothread     = true
     cache        = "writethrough"
     discard      = "on"
-    ssd = true
-    file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image[each.value.host_node].id
+    ssd          = true
     file_format  = "raw"
     size         = 20
+    file_id      = each.value.update ? proxmox_virtual_environment_download_file.updated_talos_image[each.value.host_node].id : proxmox_virtual_environment_download_file.talos_image[each.value.host_node].id
   }
 
   boot_order = ["scsi0"]
@@ -50,7 +50,7 @@ resource "proxmox_virtual_environment_vm" "talos_vm" {
   }
 
   initialization {
-    datastore_id      = "local-zfs"
+    datastore_id = "local-zfs"
     ip_config {
       ipv4 {
         address = "${each.value.ip}/24"
@@ -66,7 +66,7 @@ resource "proxmox_virtual_environment_vm" "talos_vm" {
     for_each = each.value.igpu ? [1] : []
     content {
       # Passthrough iGPU
-      device = "hostpci0"
+      device  = "hostpci0"
       mapping = "iGPU"
       pcie    = true
       rombar  = true
