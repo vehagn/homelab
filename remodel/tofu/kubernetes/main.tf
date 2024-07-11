@@ -6,8 +6,7 @@ module "talos" {
   }
 
   talos_image = {
-    version = "v1.7.5"
-    update_version = "v1.8.0-alpha.1"
+    version        = "v1.7.5"
     schematic = file("${path.module}/config/talos-image-schematic.yaml")
   }
   cluster_config = var.cluster_config
@@ -18,6 +17,7 @@ module "talos" {
 }
 
 module "proxmox_csi_plugin" {
+  depends_on = [module.talos]
   source = "./bootstrap/proxmox-csi-plugin"
 
   providers = {
@@ -29,6 +29,7 @@ module "proxmox_csi_plugin" {
 }
 
 module "sealed_secrets" {
+  depends_on = [module.talos]
   source = "./bootstrap/sealed-secrets"
 
   providers = {
@@ -43,6 +44,7 @@ module "sealed_secrets" {
 }
 
 module "volumes" {
+  depends_on = [module.proxmox_csi_plugin]
   source = "./bootstrap/volumes"
 
   providers = {

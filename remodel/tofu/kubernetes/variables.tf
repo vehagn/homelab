@@ -33,6 +33,12 @@ variable "cluster_config" {
       })
     )
   })
+
+  validation {
+    condition     = length([
+      for n in var.cluster_config.nodes : n if contains(["controlplane", "worker"], n.machine_type)]) == length(var.cluster_config.nodes)
+    error_message = "Node machine_type must be either 'controlplane' or 'worker'."
+  }
 }
 
 variable "volumes" {

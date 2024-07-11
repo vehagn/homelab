@@ -40,7 +40,7 @@ resource "proxmox_virtual_environment_vm" "talos_vm" {
     ssd          = true
     file_format  = "raw"
     size         = 20
-    file_id      = each.value.update ? proxmox_virtual_environment_download_file.updated_talos_image[each.value.host_node].id : proxmox_virtual_environment_download_file.talos_image[each.value.host_node].id
+    file_id      = proxmox_virtual_environment_download_file.talos_image["${each.value.host_node}_${each.value.update == true ? local.update_image_id : local.image_id}"].id
   }
 
   boot_order = ["scsi0"]

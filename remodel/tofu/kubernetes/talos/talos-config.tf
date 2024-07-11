@@ -47,11 +47,14 @@ resource "talos_machine_configuration_apply" "talos_config_apply" {
 resource "talos_machine_bootstrap" "talos_bootstrap" {
   depends_on = [talos_machine_configuration_apply.talos_config_apply]
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  node                 = [for k, v in var.cluster_config.nodes : v.ip if v.machine_type == "controlplane" && !v.update][0]
+  node                 = [for k, v in var.cluster_config.nodes : v.ip if v.machine_type == "controlplane"][0]
 }
 
 data "talos_cluster_health" "health" {
-  depends_on = [talos_machine_bootstrap.talos_bootstrap]
+  depends_on = [
+    talos_machine_configuration_apply.talos_config_apply,
+    talos_machine_bootstrap.talos_bootstrap
+  ]
   client_configuration = data.talos_client_configuration.talos_config.client_configuration
   control_plane_nodes  = [for k, v in var.cluster_config.nodes : v.ip if v.machine_type == "controlplane"]
   worker_nodes         = [for k, v in var.cluster_config.nodes : v.ip if v.machine_type == "worker"]
@@ -62,10 +65,12 @@ data "talos_cluster_health" "health" {
 }
 
 data "talos_cluster_kubeconfig" "kubeconfig" {
-  #  depends_on = [talos_machine_bootstrap.talos_bootstrap]
-  depends_on = [talos_machine_bootstrap.talos_bootstrap, data.talos_cluster_health.health]
+  depends_on = [
+    talos_machine_bootstrap.talos_bootstrap,
+    data.talos_cluster_health.health
+  ]
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
-  node                 = [for k, v in var.cluster_config.nodes : v.ip if v.machine_type == "controlplane" && !v.update][0]
+  node                 = [for k, v in var.cluster_config.nodes : v.ip if v.machine_type == "controlplane"][0]
   timeouts = {
     read = "1m"
   }
