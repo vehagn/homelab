@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: cloudflared
+  name: cloudflared
+  namespace: cloudflared
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudflared
+  template:
+    metadata:
+      labels:
+        app: cloudflared
+    spec:
+      containers:
+        - name: cloudflared
+          image: cloudflare/cloudflared:2024.2.1
+          imagePullPolicy: Always
+          args:
+            - tunnel
+            - --config
+            - /etc/cloudflared/config/config.yaml
+            - run
+          livenessProbe:
+            httpGet:
+              path: /ready
+              port: 2000
+            initialDelaySeconds: 60
+            failureThreshold: 5
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+            requests:
+              cpu: 20m
+              memory: 32Mi
+          volumeMounts:
+            - name: cloudflared-config
+              mountPath: /etc/cloudflared/config/config.yaml
+              subPath: cloudflared-config.yaml
+            - name: tunnel-credentials
+              mountPath: /etc/cloudflared/creds
+              readOnly: true
+      restartPolicy: Always
+      volumes:
+        - name: cloudflared-config
+          configMap:
+            name: cloudflared-config
+        - name: tunnel-credentials
+          secret:
+            secretName: tunnel-credentials

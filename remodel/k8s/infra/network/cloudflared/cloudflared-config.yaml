@@ -1,0 +1,24 @@
+tunnel: gauss-k8s
+credentials-file: /etc/cloudflared/creds/credentials.json
+metrics: 0.0.0.0:2000
+no-autoupdate: true
+
+warp-routing:
+  enabled: true
+
+ingress:
+  - hostname: hello.euclid.stonegarden.dev
+    service: hello_world
+  - hostname: haos.stonegarden.dev
+    service: https://cilium-gateway-stonegarden.gateway.svc.cluster.local:443
+    originRequest:
+      originServerName: "*.stonegarden.dev"
+  - hostname: "*.euclid.stonegarden.dev"
+    service: https://cilium-gateway-euclid.gateway.svc.cluster.local:443
+    originRequest:
+      originServerName: "*.euclid.stonegarden.dev"
+  - hostname: "*.stonegarden.dev"
+    service: https://cilium-gateway-stonegarden.gateway.svc.cluster.local:443
+    originRequest:
+      originServerName: "*.stonegarden.dev"
+  - service: http_status:404

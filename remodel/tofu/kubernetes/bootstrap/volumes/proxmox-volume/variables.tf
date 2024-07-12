@@ -9,8 +9,8 @@ variable "proxmox_api" {
 
 variable "volume" {
   type = object({
-    node = string
     name = string
+    node = string
     size = string
     storage = optional(string, "local-zfs")
     vmid = optional(number, 9999)

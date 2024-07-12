@@ -12,10 +12,14 @@ resource "kubernetes_persistent_volume" "pv" {
     volume_mode        = var.volume.volume_mode
     persistent_volume_source {
       csi {
-        driver            = var.volume.driver
-        fs_type           = var.volume.fs_type
-        volume_handle     = var.volume.volume_handle
-        volume_attributes = var.volume.volume_attributes
+        driver        = var.volume.driver
+        fs_type       = var.volume.fs_type
+        volume_handle = var.volume.volume_handle
+        volume_attributes = {
+          cache   = var.volume.cache
+          ssd     = var.volume.ssd == true ? "true" : "false"
+          storage = var.volume.storage
+        }
       }
     }
   }
