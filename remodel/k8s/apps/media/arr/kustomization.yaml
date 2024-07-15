@@ -8,5 +8,5 @@ configMapGenerator:
       - TZ="Europe/Oslo"
 
 resources:
-  - pvc.yaml
-  - deployment.yaml
+  - sonarr/pvc.yaml
+  - sonarr/deployment.yaml

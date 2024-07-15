@@ -1,12 +1,11 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
   labels:
     app: cloudflared
   name: cloudflared
   namespace: cloudflared
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: cloudflared
@@ -17,8 +16,8 @@ spec:
     spec:
       containers:
         - name: cloudflared
-          image: cloudflare/cloudflared:2024.2.1
-          imagePullPolicy: Always
+          image: cloudflare/cloudflared:2024.6.1
+          imagePullPolicy: IfNotPresent
           args:
             - tunnel
             - --config

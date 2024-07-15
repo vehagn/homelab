@@ -10,4 +10,4 @@ configMapGenerator:
 resources:
   - ns.yaml
   - tunnel-credentials.yaml
-  - deployment.yaml
+  - daemon-set.yaml
