@@ -9,4 +9,6 @@ configMapGenerator:
 
 resources:
   - sonarr/pvc.yaml
+  - sonarr/svc.yaml
+  - sonarr/http-route.yaml
   - sonarr/deployment.yaml
