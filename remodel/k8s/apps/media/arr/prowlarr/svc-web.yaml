@@ -1,12 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: sonarr
+  name: prowlarr-web
   namespace: arr
 spec:
   type: ClusterIP
   selector:
-    app: sonarr
+    app: prowlarr
   ports:
-    - port: 80
+    - name: web
+      port: 80
       targetPort: http

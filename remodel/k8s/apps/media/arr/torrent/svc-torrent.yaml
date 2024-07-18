@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: torrent
+  namespace: arr
+  annotations:
+    io.cilium/lb-ipam-ips: 192.168.1.225
+spec:
+  type: LoadBalancer
+  selector:
+    app: torrent
+  ports:
+    - name: tcp
+      port: 11011
+      protocol: TCP
+      targetPort: tcp
+    - name: udp
+      port: 11011
+      protocol: UDP
+      targetPort: udp

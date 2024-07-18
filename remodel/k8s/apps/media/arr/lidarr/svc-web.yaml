@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: lidarr-web
+  namespace: arr
+spec:
+  type: ClusterIP
+  selector:
+    app: lidarr
+  ports:
+    - name: web
+      port: 80
+      targetPort: http

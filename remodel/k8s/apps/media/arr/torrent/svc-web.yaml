@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: torrent-web
+  namespace: arr
+spec:
+  type: ClusterIP
+  selector:
+    app: torrent
+  ports:
+    - name: web
+      port: 80
+      targetPort: http

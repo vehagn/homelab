@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sonarr
+  name: lidarr
   namespace: arr
   labels:
-    app: sonarr
+    app: lidarr
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sonarr
+      app: lidarr
   strategy:
     type: Recreate
   template:
     metadata:
-      namespace: sonarr
+      namespace: lidarr
       labels:
-        app: sonarr
+        app: lidarr
     spec:
       nodeSelector:
         topology.kubernetes.io/zone: cantor
@@ -29,8 +29,8 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - name: sonarr
-          image: ghcr.io/onedr0p/sonarr:4.0.7
+        - name: lidarr
+          image: ghcr.io/onedr0p/lidarr:2.4.3
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
@@ -38,12 +38,12 @@ spec:
               drop: [ "ALL" ]
           ports:
             - name: http
-              containerPort: 8989
+              containerPort: 8686
           envFrom:
             - configMapRef:
                 name: common-env
           volumeMounts:
-            - name: sonarr-config
+            - name: lidarr-config
               mountPath: /config
             - name: tmp
               mountPath: /tmp
@@ -52,14 +52,14 @@ spec:
           resources:
             requests:
               cpu: 50m
-              memory: 384Mi
+              memory: 192Mi
             limits:
               cpu: 1000m
-              memory: 512Mi
+              memory: 256Mi
       volumes:
-        - name: sonarr-config
+        - name: lidarr-config
           persistentVolumeClaim:
-            claimName: sonarr-config
+            claimName: lidarr-config
         - name: tmp
           emptyDir: { }
         - name: data

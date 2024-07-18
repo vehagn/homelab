@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarr-web
+  namespace: arr
+spec:
+  type: ClusterIP
+  selector:
+    app: sonarr
+  ports:
+    - name: web
+      port: 80
+      targetPort: http

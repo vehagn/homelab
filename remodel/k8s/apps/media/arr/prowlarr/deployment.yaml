@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sonarr
+  name: prowlarr
   namespace: arr
   labels:
-    app: sonarr
+    app: prowlarr
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sonarr
+      app: prowlarr
   strategy:
     type: Recreate
   template:
     metadata:
-      namespace: sonarr
+      namespace: prowlarr
       labels:
-        app: sonarr
+        app: prowlarr
     spec:
       nodeSelector:
-        topology.kubernetes.io/zone: cantor
+        topology.kubernetes.io/zone: euclid
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534
@@ -29,8 +29,8 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - name: sonarr
-          image: ghcr.io/onedr0p/sonarr:4.0.7
+        - name: prowlarr
+          image: ghcr.io/onedr0p/prowlarr:1.20.1
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
@@ -38,31 +38,25 @@ spec:
               drop: [ "ALL" ]
           ports:
             - name: http
-              containerPort: 8989
+              containerPort: 9696
           envFrom:
             - configMapRef:
                 name: common-env
           volumeMounts:
-            - name: sonarr-config
+            - name: prowlarr-config
               mountPath: /config
             - name: tmp
               mountPath: /tmp
-            - name: data
-              mountPath: /app/data
           resources:
             requests:
               cpu: 50m
-              memory: 384Mi
+              memory: 192Mi
             limits:
               cpu: 1000m
-              memory: 512Mi
+              memory: 256Mi
       volumes:
-        - name: sonarr-config
+        - name: prowlarr-config
           persistentVolumeClaim:
-            claimName: sonarr-config
+            claimName: prowlarr-config
         - name: tmp
           emptyDir: { }
-        - name: data
-          nfs:
-            server: 192.168.1.55
-            path: /mnt/pool-0/data

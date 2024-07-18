@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sonarr
+  name: radarr
   namespace: arr
   labels:
-    app: sonarr
+    app: radarr
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sonarr
+      app: radarr
   strategy:
     type: Recreate
   template:
     metadata:
-      namespace: sonarr
+      namespace: radarr
       labels:
-        app: sonarr
+        app: radarr
     spec:
       nodeSelector:
         topology.kubernetes.io/zone: cantor
@@ -29,8 +29,8 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - name: sonarr
-          image: ghcr.io/onedr0p/sonarr:4.0.7
+        - name: radarr
+          image: ghcr.io/onedr0p/radarr:5.7.0
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
@@ -38,12 +38,12 @@ spec:
               drop: [ "ALL" ]
           ports:
             - name: http
-              containerPort: 8989
+              containerPort: 7878
           envFrom:
             - configMapRef:
                 name: common-env
           volumeMounts:
-            - name: sonarr-config
+            - name: radarr-config
               mountPath: /config
             - name: tmp
               mountPath: /tmp
@@ -52,14 +52,14 @@ spec:
           resources:
             requests:
               cpu: 50m
-              memory: 384Mi
+              memory: 128Mi
             limits:
               cpu: 1000m
-              memory: 512Mi
+              memory: 256Mi
       volumes:
-        - name: sonarr-config
+        - name: radarr-config
           persistentVolumeClaim:
-            claimName: sonarr-config
+            claimName: radarr-config
         - name: tmp
           emptyDir: { }
         - name: data
