@@ -5,106 +5,104 @@ commonLabels:
   app.kubernetes.io/part-of: arr
   app.kubernetes.io/managed-by: argocd
 
-resources:
-  - auth-secret.yaml
-
-configMapGenerator:
-  - name: common-env
-    literals:
-      - PUID="1000"
-      - PGID="1000"
-      - UMASK="002"
-      - TZ="Europe/Oslo"
-
-helmGlobals:
-  chartHome: ../../../charts
-
-helmCharts:
-  - name: application
-    releaseName: auth
-    valuesFile: common-values.yaml
-    valuesInline:
-      name: auth
-      namespace: arr
-      authOnly: true
-      auth:
-        cookieDomain: stonegarden.dev
-        whitelist:
-          - veghag@gmail.com
-  - name: application
-    releaseName: lidarr
-    valuesFile: common-values.yaml
-    valuesInline:
-      name: lidarr
-      image:
-        name: lscr.io/linuxserver/lidarr
-      hostVolumes:
-        - name: lidarr-config
-          hostPath: /disk/etc/lidarr
-          mountPath: /config
-      service:
-        containerPort: 8686
-  - name: application
-    releaseName: prowlarr
-    valuesFile: common-values.yaml
-    valuesInline:
-      name: prowlarr
-      image:
-        name: lscr.io/linuxserver/prowlarr
-      hostVolumes:
-        - name: prowlarr-config
-          hostPath: /disk/etc/prowlarr
-          mountPath: /config
-      additionalVolumes: []
-      service:
-        containerPort: 9696
-  - name: application
-    releaseName: radarr
-    valuesFile: common-values.yaml
-    valuesInline:
-      name: radarr
-      image:
-        name: lscr.io/linuxserver/radarr
-      hostVolumes:
-        - name: radarr-config
-          hostPath: /disk/etc/radarr
-          mountPath: /config
-      service:
-        containerPort: 7878
-  - name: application
-    releaseName: sonarr
-    valuesFile: common-values.yaml
-    valuesInline:
-      name: sonarr
-      image:
-        name: lscr.io/linuxserver/sonarr
-      hostVolumes:
-        - name: sonarr-config
-          hostPath: /disk/etc/sonarr
-          mountPath: /config
-      service:
-        containerPort: 8989
-  - name: application
-    releaseName: torrent
-    valuesFile: common-values.yaml
-    valuesInline:
-      name: torrent
-      image:
-        name: ghcr.io/hotio/qbittorrent
-        tag: release-4.6.2
-      hostVolumes:
-        - name: torrent-config
-          hostPath: /disk/etc/qbittorrent
-          mountPath: /config
-      service:
-        type: LoadBalancer
-        containerPort: 8080
-        additionalPorts:
-          - name: tcp
-            protocol: TCP
-            containerPort: 11011
-          - name: udp
-            protocol: UDP
-            containerPort: 11011
-
-
+#resources:
+#  - auth-secret.yaml
+#
+#configMapGenerator:
+#  - name: common-env
+#    literals:
+#      - PUID="1000"
+#      - PGID="1000"
+#      - UMASK="002"
+#      - TZ="Europe/Oslo"
+#
+#helmGlobals:
+#  chartHome: ../../../charts
+#
+#helmCharts:
+#  - name: application
+#    releaseName: auth
+#    valuesFile: common-values.yaml
+#    valuesInline:
+#      name: auth
+#      namespace: arr
+#      authOnly: true
+#      auth:
+#        cookieDomain: stonegarden.dev
+#        whitelist:
+#          - veghag@gmail.com
+#  - name: application
+#    releaseName: lidarr
+#    valuesFile: common-values.yaml
+#    valuesInline:
+#      name: lidarr
+#      image:
+#        name: lscr.io/linuxserver/lidarr
+#      hostVolumes:
+#        - name: lidarr-config
+#          hostPath: /disk/etc/lidarr
+#          mountPath: /config
+#      service:
+#        containerPort: 8686
+#  - name: application
+#    releaseName: prowlarr
+#    valuesFile: common-values.yaml
+#    valuesInline:
+#      name: prowlarr
+#      image:
+#        name: lscr.io/linuxserver/prowlarr
+#      hostVolumes:
+#        - name: prowlarr-config
+#          hostPath: /disk/etc/prowlarr
+#          mountPath: /config
+#      additionalVolumes: []
+#      service:
+#        containerPort: 9696
+#  - name: application
+#    releaseName: radarr
+#    valuesFile: common-values.yaml
+#    valuesInline:
+#      name: radarr
+#      image:
+#        name: lscr.io/linuxserver/radarr
+#      hostVolumes:
+#        - name: radarr-config
+#          hostPath: /disk/etc/radarr
+#          mountPath: /config
+#      service:
+#        containerPort: 7878
+#  - name: application
+#    releaseName: sonarr
+#    valuesFile: common-values.yaml
+#    valuesInline:
+#      name: sonarr
+#      image:
+#        name: lscr.io/linuxserver/sonarr
+#      hostVolumes:
+#        - name: sonarr-config
+#          hostPath: /disk/etc/sonarr
+#          mountPath: /config
+#      service:
+#        containerPort: 8989
+#  - name: application
+#    releaseName: torrent
+#    valuesFile: common-values.yaml
+#    valuesInline:
+#      name: torrent
+#      image:
+#        name: ghcr.io/hotio/qbittorrent
+#        tag: release-4.6.2
+#      hostVolumes:
+#        - name: torrent-config
+#          hostPath: /disk/etc/qbittorrent
+#          mountPath: /config
+#      service:
+#        type: LoadBalancer
+#        containerPort: 8080
+#        additionalPorts:
+#          - name: tcp
+#            protocol: TCP
+#            containerPort: 11011
+#          - name: udp
+#            protocol: UDP
+#            containerPort: 11011
