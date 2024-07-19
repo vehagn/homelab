@@ -7,18 +7,12 @@ metadata:
     cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
 spec:
   ingressClassName: cilium
+  defaultBackend:
+    service:
+      name: plex
+      port:
+        name: web
   tls:
-    - hosts:
+    - secretName: plex-ingress-tls
+      hosts:
         - plex.stonegarden.dev
-      secretName: plex-ingress-tls
-  rules:
-    - host: plex.stonegarden.dev
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: plex
-                port:
-                  number: 32400

@@ -8,6 +8,7 @@ configMapGenerator:
     namespace: plex
     literals:
       - TZ="Europe/Oslo"
+      - PLEX_ADVERTISE_URL=https://plex.stonegarden.dev:443,http://192.168.1.228:32400
 
 resources:
   - ns.yaml

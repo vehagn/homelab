@@ -4,11 +4,11 @@ metadata:
   name: plex
   namespace: plex
   annotations:
-    io.cilium/lb-ipam-ips: 192.168.1.229
+    io.cilium/lb-ipam-ips: 192.168.1.228
 spec:
+  type: LoadBalancer
   selector:
     app: plex
-  type: LoadBalancer
   ports:
-    - name: http
+    - name: web
       port: 32400

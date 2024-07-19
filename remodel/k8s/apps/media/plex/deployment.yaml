@@ -11,6 +11,9 @@ spec:
     matchLabels:
       app: plex
   template:
+    metadata:
+      labels:
+        app: plex
     spec:
       nodeSelector:
         topology.kubernetes.io/zone: abel
