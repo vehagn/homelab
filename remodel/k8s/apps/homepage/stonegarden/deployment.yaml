@@ -3,8 +3,10 @@ kind: Deployment
 metadata:
   name: stonegarden
   namespace: stonegarden
+  labels:
+    app: stonegarden
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: stonegarden
@@ -24,7 +26,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: stonegarden
-          image: registry.gitlab.com/vehagn/stonegarden:latest
+          image: registry.gitlab.com/vehagn/stonegarden
           imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false

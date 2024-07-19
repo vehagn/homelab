@@ -5,8 +5,8 @@ metadata:
   namespace: stonegarden
 spec:
   type: ClusterIP
+  selector:
+    app: stonegarden
   ports:
     - name: web
       port: 3000
-  selector:
-    app: stonegarden
