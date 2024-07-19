@@ -5,10 +5,10 @@ metadata:
   namespace: blog
 spec:
   parentRefs:
-    - name: euclid
+    - name: stonegarden
       namespace: gateway
   hostnames:
-    - "blog.euclid.stonegarden.dev"
+    - "blog.stonegarden.dev"
   rules:
     - matches:
         - path:

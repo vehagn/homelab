@@ -5,10 +5,10 @@ metadata:
   namespace: arr
 spec:
   parentRefs:
-    - name: euclid
+    - name: stonegarden
       namespace: gateway
   hostnames:
-    - "torrent.euclid.stonegarden.dev"
+    - "torrent.stonegarden.dev"
   rules:
     - matches:
         - path:

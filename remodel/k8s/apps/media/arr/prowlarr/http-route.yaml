@@ -5,10 +5,10 @@ metadata:
   namespace: arr
 spec:
   parentRefs:
-    - name: euclid
+    - name: stonegarden
       namespace: gateway
   hostnames:
-    - "prowlarr.euclid.stonegarden.dev"
+    - "prowlarr.stonegarden.dev"
   rules:
     - matches:
         - path:
