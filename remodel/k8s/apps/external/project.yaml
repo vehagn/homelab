@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: external
+  namespace: argocd
+spec:
+  sourceRepos:
+    - 'https://github.com/vehagn/homelab'
+  destinations:
+    - namespace: 'argocd'
+      server: '*'
+    - namespace: 'haos'
+      server: '*'
+    - namespace: 'proxmox'
+      server: '*'
+    - namespace: 'truenas'
+      server: '*'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'

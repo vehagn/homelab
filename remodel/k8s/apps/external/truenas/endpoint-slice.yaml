@@ -1,0 +1,17 @@
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: truenas
+  namespace: truenas
+  labels:
+    kubernetes.io/service-name: truenas
+    endpointslice.kubernetes.io/managed-by: cluster-admins
+addressType: IPv4
+ports:
+  - name: https
+    protocol: TCP
+    port: 443
+endpoints:
+  - addresses:
+      - 192.168.1.55
+    conditions: { } # https://github.com/argoproj/argo-cd/issues/15554

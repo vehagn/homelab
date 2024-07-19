@@ -1,0 +1,17 @@
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: home-assistant
+  namespace: haos
+  labels:
+    kubernetes.io/service-name: home-assistant
+    endpointslice.kubernetes.io/managed-by: cluster-admins
+addressType: IPv4
+ports:
+  - name: http
+    protocol: TCP
+    port: 8123
+endpoints:
+  - addresses:
+      - 192.168.1.27
+    conditions: { } # https://github.com/argoproj/argo-cd/issues/15554

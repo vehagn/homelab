@@ -1,0 +1,15 @@
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TLSRoute
+metadata:
+  name: truenas
+  namespace: truenas
+spec:
+  parentRefs:
+    - name: tls-passthrough
+      namespace: gateway
+  hostnames:
+    - "truenas.stonegarden.dev"
+  rules:
+    - backendRefs:
+        - name: truenas
+          port: 443

@@ -1,0 +1,19 @@
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: proxmox
+  namespace: proxmox
+  labels:
+    kubernetes.io/service-name: proxmox
+    endpointslice.kubernetes.io/managed-by: cluster-admins
+addressType: IPv4
+ports:
+  - name: https
+    protocol: TCP
+    port: 8006
+endpoints:
+  - addresses:
+      - 192.168.1.42
+      - 192.168.1.52
+      - 192.168.1.62
+    conditions: { } # https://github.com/argoproj/argo-cd/issues/15554

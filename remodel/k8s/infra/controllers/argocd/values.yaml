@@ -19,39 +19,39 @@ crds:
 
 controller:
   resources:
-    limits:
-      cpu: 1000m
-      memory: 2Gi
     requests:
       cpu: 100m
       memory: 700Mi
+    limits:
+      cpu: 4000m
+      memory: 2Gi
 
 dex:
   resources:
-    limits:
-      cpu: 50m
-      memory: 64Mi
     requests:
       cpu: 10m
       memory: 32Mi
+    limits:
+      cpu: 1000m
+      memory: 64Mi
 
 redis:
   resources:
-    limits:
-      cpu: 200m
-      memory: 128Mi
     requests:
       cpu: 100m
       memory: 64Mi
+    limits:
+      cpu: 2000m
+      memory: 128Mi
 
 server:
   resources:
-    limits:
-      cpu: 100m
-      memory: 128Mi
     requests:
       cpu: 50m
       memory: 64Mi
+    limits:
+      cpu: 4000m
+      memory: 128Mi
 
 repoServer:
   containerSecurityContext:
@@ -63,12 +63,12 @@ repoServer:
     - name: cmp-tmp
       emptyDir: { }
   resources:
-    limits:
-      cpu: 50m
-      memory: 512Mi
     requests:
-      cpu: 10m
+      cpu: 100m
       memory: 256Mi
+    limits:
+      cpu: 4000m
+      memory: 512Mi
   extraContainers:
     - name: kustomize-build-with-helm
       command:
@@ -94,19 +94,19 @@ repoServer:
 
 applicationSet:
   resources:
-     limits:
-       cpu: 50m
-       memory: 256Mi
-     requests:
-       cpu: 10m
-       memory: 64Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 1000m
+      memory: 256Mi
 
 notifications:
   enabled: false
   resources:
-    limits:
-      cpu: 50m
-      memory: 128Mi
     requests:
-      cpu: 10m
+      cpu: 100m
       memory: 64Mi
+    limits:
+      cpu: 1000m
+      memory: 128Mi
