@@ -21,4 +21,8 @@ ingress:
     service: https://cilium-gateway-stonegarden.gateway.svc.cluster.local:443
     originRequest:
       originServerName: "*.stonegarden.dev"
+  - hostname: stonegarden.dev
+    service: https://cilium-gateway-stonegarden.gateway.svc.cluster.local:443
+    originRequest:
+      originServerName: stonegarden.dev
   - service: http_status:404
