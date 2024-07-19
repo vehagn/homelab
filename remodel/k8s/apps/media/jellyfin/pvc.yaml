@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jellyfin-config
+  namespace: jellyfin
+spec:
+  storageClassName: proxmox-csi
+  volumeName: pv-jellyfin-config
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 12G

@@ -122,7 +122,7 @@ module "volumes" {
       size = "1G"
     }
     pv-jellyfin-config = {
-      node = "abel"
+      node = "euclid"
       size = "12G"
     }
     pv-plex-config = {

@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jellyfin
+  namespace: jellyfin
+  annotations:
+    cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+spec:
+  ingressClassName: cilium
+  tls:
+    - hosts:
+        - jellyfin.stonegarden.dev
+      secretName: jellyfin-ingress-tls
+  rules:
+    - host: jellyfin.stonegarden.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: jellyfin
+                port:
+                  number: 8096
