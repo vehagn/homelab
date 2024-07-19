@@ -18,6 +18,8 @@ spec:
       labels:
         app: remark42
     spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: euclid
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534
@@ -29,6 +31,11 @@ spec:
       containers:
         - name: remark42
           image: umputun/remark42:v1.12.1
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ "ALL" ]
           ports:
             - name: http
               containerPort: 8080
@@ -44,11 +51,6 @@ spec:
           volumeMounts:
             - name: remark42
               mountPath: /srv/var
-          securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
-            capabilities:
-              drop: [ "ALL" ]
           resources:
             requests:
               cpu: 50m
@@ -60,4 +62,3 @@ spec:
         - name: remark42
           persistentVolumeClaim:
             claimName: remark42
-      
