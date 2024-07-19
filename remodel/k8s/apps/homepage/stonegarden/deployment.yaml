@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stonegarden
+  namespace: stonegarden
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stonegarden
+  template:
+    metadata:
+      namespace: stonegarden
+      labels:
+        app: stonegarden
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: stonegarden
+          image: registry.gitlab.com/vehagn/stonegarden:latest
+          imagePullPolicy: Always
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ "ALL" ]
+          ports:
+            - name: web
+              containerPort: 3000

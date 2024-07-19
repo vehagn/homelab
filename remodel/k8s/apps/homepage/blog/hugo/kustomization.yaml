@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configMapGenerator:
+  - name: hugo-env
+    namespace: blog
+    literals:
+      - TZ=Europe/Oslo
+      - SERVER_LOG_LEVEL=warn
+      - SERVER_PORT=8080
+
+resources:
+  - svc.yaml
+  - deployment.yaml
+  - http-route.yaml

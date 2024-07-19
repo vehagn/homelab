@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: remark42
+  namespace: blog
+  labels:
+    app: remark42
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: remark42
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      namespace: remark42
+      labels:
+        app: remark42
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: remark42
+          image: umputun/remark42:v1.12.1
+          ports:
+            - name: http
+              containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: remark42-env
+            - secretRef:
+                name: remark42-secret
+            - secretRef:
+                name: remark42-github
+            - secretRef:
+                name: remark42-google
+          volumeMounts:
+            - name: remark42
+              mountPath: /srv/var
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ "ALL" ]
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 1000m
+              memory: 128Mi
+      volumes:
+        - name: remark42
+          persistentVolumeClaim:
+            claimName: remark42
+      

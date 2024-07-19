@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hugo
+  namespace: blog
+  labels:
+    app: hugo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hugo
+  template:
+    metadata:
+      namespace: blog
+      labels:
+        app: hugo
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: hugo
+          image: registry.gitlab.com/vehagn/blog
+          imagePullPolicy: Always
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ "ALL" ]
+          envFrom:
+            - configMapRef:
+                name: hugo-env
+          ports:
+            - name: http
+              containerPort: 8080
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 1000m
+              memory: 128Mi

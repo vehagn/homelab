@@ -121,6 +121,10 @@ module "volumes" {
       node = "euclid"
       size = "1G"
     }
+    pv-remark42 = {
+      node = "euclid"
+      size = "1G"
+    }
     pv-jellyfin-config = {
       node = "euclid"
       size = "12G"

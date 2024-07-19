@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configMapGenerator:
+  - name: remark42-env
+    namespace: blog
+    literals:
+      - TIME_ZONE=Europe/Oslo
+      - REMARK_URL=https://remark42.euclid.stonegarden.dev
+      - SITE=stonegarden.dev
+
+resources:
+  - svc.yaml
+  - pvc.yaml
+  - secret-github.yaml
+  - secret-google.yaml
+  - secret-remark42.yaml
+  - deployment.yaml
+  - http-route.yaml

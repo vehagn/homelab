@@ -1,0 +1,19 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: remark42-http-route
+  namespace: blog
+spec:
+  parentRefs:
+    - name: euclid
+      namespace: gateway
+  hostnames:
+    - "remark42.euclid.stonegarden.dev"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: remark42
+          port: 80
