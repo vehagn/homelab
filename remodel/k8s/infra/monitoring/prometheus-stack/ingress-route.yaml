@@ -1,0 +1,32 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: monitoring
+  namespace: monitoring
+  labels:
+    app: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`prometheus.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: kube-prometheus-stack-prometheus
+          port: http-web # 9090
+      middlewares:
+        - name: traefik-forward-auth
+    - match: Host(`grafana.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: kube-prometheus-stack-grafana
+          port: http-web # 80
+      middlewares:
+        - name: traefik-forward-auth
+    - match: Host(`alertmanager.stonegarden.dev`)
+      kind: Rule
+      services:
+        - name: kube-prometheus-stack-alertmanager
+          port: http-web # 9093
+      middlewares:
+        - name: traefik-forward-auth
