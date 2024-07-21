@@ -5,10 +5,10 @@ metadata:
   namespace: argocd
 spec:
   parentRefs:
-    - name: euclid
+    - name: stonegarden
       namespace: gateway
   hostnames:
-    - "argocd.euclid.stonegarden.dev"
+    - "argocd.stonegarden.dev"
   rules:
     - matches:
         - path:
