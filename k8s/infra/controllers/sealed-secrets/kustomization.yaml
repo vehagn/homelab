@@ -6,7 +6,7 @@ helmCharts:
 #    repo: https://bitnami-labs.github.io/sealed-secrets
 #    version: 2.16.0
     repo: oci://registry-1.docker.io/bitnamicharts
-    version: 2.3.6
+    version: 2.4.2
     releaseName: sealed-secrets-controller
     namespace: sealed-secrets
     includeCRDs: true
