@@ -75,7 +75,7 @@ spec:
         command:
           - cilium
           - install
-          - --version=v1.15.5 # renovate: github-releases=cilium/cilium
+          - --version=v1.15.7 # renovate: github-releases=cilium/cilium
           - --set
           - kubeProxyReplacement=true
           - --values
