@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: radarr
+  namespace: arr
+  labels:
+    app: radarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: radarr
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      namespace: radarr
+      labels:
+        app: radarr
+    spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: cantor
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 2501
+        runAsGroup: 2501
+        fsGroup: 2501
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: radarr
+          image: ghcr.io/onedr0p/radarr:5.7.0
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ "ALL" ]
+          ports:
+            - name: http
+              containerPort: 7878
+          envFrom:
+            - configMapRef:
+                name: common-env
+          volumeMounts:
+            - name: radarr-config
+              mountPath: /config
+            - name: tmp
+              mountPath: /tmp
+            - name: data
+              mountPath: /app/data
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 1000m
+              memory: 256Mi
+      volumes:
+        - name: radarr-config
+          persistentVolumeClaim:
+            claimName: radarr-config
+        - name: tmp
+          emptyDir: { }
+        - name: data
+          nfs:
+            server: 192.168.1.55
+            path: /mnt/pool-0/data

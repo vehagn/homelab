@@ -1,0 +1,64 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: jellyfin
+  namespace: jellyfin
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: jellyfin
+  template:
+    spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: euclid
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 2501
+        runAsGroup: 2501
+        fsGroup: 2501
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups: [ 44, 104 ]
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: jellyfin
+          image: ghcr.io/jellyfin/jellyfin:10.9.7
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ "ALL" ]
+          resources:
+            requests:
+              cpu: 500m
+              memory: 2Gi
+            limits:
+              cpu: 6000m
+              memory: 6Gi
+              gpu.intel.com/i915: 1000m
+          envFrom:
+            - configMapRef:
+                name: jellyfin-env
+          ports:
+            - name: http
+              containerPort: 8096
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: media
+              mountPath: /mnt/media
+            - name: cache
+              mountPath: /cache
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: jellyfin-config
+        - name: media
+          nfs:
+            server: 192.168.1.55
+            path: /mnt/pool-0/data/media
+        - name: cache
+          emptyDir: { }

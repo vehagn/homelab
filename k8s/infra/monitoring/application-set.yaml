@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: monitoring
+  namespace: argocd
+  labels:
+    dev.stonegarden: monitoring
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/vehagn/homelab
+        revision: remodel
+        directories:
+          - path: k8s/infra/monitoring/*
+  template:
+    metadata:
+      name: '{{ path.basename }}'
+      labels:
+        dev.stonegarden: controllers
+    spec:
+      project: monitoring
+      source:
+        plugin:
+          name: kustomize-build-with-helm
+        repoURL: https://github.com/vehagn/homelab
+        targetRevision: remodel
+        path: '{{ path }}'
+      destination:
+        name: in-cluster
+        namespace: argocd
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true

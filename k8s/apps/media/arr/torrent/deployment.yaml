@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: torrent
+  namespace: arr
+  labels:
+    app: torrent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: torrent
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      namespace: torrent
+      labels:
+        app: torrent
+    spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: euclid
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 2501
+        runAsGroup: 2501
+        fsGroup: 2501
+        fsGroupChangePolicy: Always
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        - name: vuetorrent
+          image: busybox
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ "ALL" ]
+          command:
+            - sh
+            - -c
+            - wget -O /themes/vuetorrent.zip https://github.com/VueTorrent/VueTorrent/releases/download/v2.10.2/vuetorrent.zip && unzip /themes/vuetorrent.zip -d /themes/ && rm /themes/vuetorrent.zip
+          volumeMounts:
+            - name: themes
+              mountPath: /themes
+      containers:
+        - name: torrent
+          image: ghcr.io/onedr0p/qbittorrent:4.6.5
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ "ALL" ]
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: tcp
+              containerPort: 11012
+              protocol: TCP
+            - name: udp
+              containerPort: 11012
+              protocol: UDP
+          envFrom:
+            - configMapRef:
+                name: common-env
+          volumeMounts:
+            - name: torrent-config
+              mountPath: /config
+            - name: tmp
+              mountPath: /tmp
+            - name: themes
+              mountPath: /themes
+            - name: data
+              mountPath: /app/data
+          resources:
+            requests:
+              cpu: 100m
+              memory: 1.5Gi
+            limits:
+              cpu: 2000m
+              memory: 8Gi
+      volumes:
+        - name: torrent-config
+          persistentVolumeClaim:
+            claimName: torrent-config
+        - name: tmp
+          emptyDir: { }
+        - name: themes
+          emptyDir: { }
+        - name: data
+          nfs:
+            server: 192.168.1.55
+            path: /mnt/pool-0/data

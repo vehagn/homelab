@@ -1,8 +1,0 @@
-name: auth
-namespace: argocd
-authOnly: true
-auth:
-  cookieDomain: stonegarden.dev
-  whitelist:
-    - veghag@gmail.com
-    - nina.m.smorsgard@gmail.com

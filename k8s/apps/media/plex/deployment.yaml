@@ -1,0 +1,71 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: plex
+  namespace: plex
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: plex
+  template:
+    metadata:
+      labels:
+        app: plex
+    spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: abel
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 2501
+        runAsGroup: 2501
+        fsGroup: 2501
+        fsGroupChangePolicy: OnRootMismatch
+        supplementalGroups: [ 44, 104 ]
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: plex
+          image: ghcr.io/onedr0p/plex:1.40.4.8679-424562606
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ "ALL" ]
+          resources:
+            requests:
+              cpu: 500m
+              memory: 2Gi
+            limits:
+              cpu: 6000m
+              memory: 6Gi
+              gpu.intel.com/i915: 1000m
+          envFrom:
+            - configMapRef:
+                name: plex-env
+          ports:
+            - name: http
+              containerPort: 32400
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: media
+              mountPath: /mnt/media
+            - name: transcode
+              mountPath: /transcode
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: plex-config
+        - name: media
+          nfs:
+            server: 192.168.1.55
+            path: /mnt/pool-0/data/media
+        - name: transcode
+          emptyDir: { }
+        - name: tmp
+          emptyDir: { }

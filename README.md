@@ -1,22 +1,34 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/vehagn/homelab/main/docs/assets/kubernetes.svg" width="144px" alt="Kubernetes logo"/>
+# 🪨 Homelab 🏡
 
-# 🪨 Kubernetes Homelab 🏡
+Repository for home infrastructure and [Kubernetes](https://kubernetes.io/) cluster
+using [GitOps](https://en.wikipedia.org/wiki/DevOps) practices.
+Held together using [Proxmox VE](https://www.proxmox.com/en/proxmox-virtual-environment),
+[OpenTofu](https://opentofu.org/), [Talos](https://talos.dev), [Kubernetes](https://kubernetes.io/),
+[Argo CD](https://argoproj.github.io/cd/) and copious amounts of [YAML](https://yaml.org/).
 
 </div>
 
 ---
 
-## 📝 Overview
+## 📖 Overview
 
-This is the [IaC](https://en.wikipedia.org/wiki/Infrastructure_as_code) configuration for my homelab.
-It's mainly powered by [Kubernetes](https://kubernetes.io/) and I do my best to adhere to GitOps practices.
+This repository hosts the IaC ([Infrastructure as Code](https://en.wikipedia.org/wiki/Infrastructure_as_code))
+configuration for my homelab.
 
-To organise all the configuration I've opted for an approach using Kustomized Helm with Argo CD which I've explained in
-more detail [here](https://blog.stonegarden.dev/articles/2023/09/argocd-kustomize-with-helm/).
+The Homelab is backed by [Proxmox VE](https://www.proxmox.com/en/proxmox-virtual-environment) hypervisor nodes with VMs
+bootstrapped using [OpenTofu](https://opentofu.org/)/[Terraform](https://www.terraform.io/).
 
-I try to journal my adventures and exploits on my [blog](https://blog.stonegarden.dev) which is hosted by this repo.
+Most of the services run on [Talos](https://www.talos.dev/) flavoured [Kubernetes](https://kubernetes.io/),
+though I'm also running a [TrueNAS](https://www.truenas.com/) VM for storage
+and [Home Assistant](https://www.home-assistant.io/) VM for home automation.
+
+To organise all the configuration I've opted for an approach using Kustomized Helm
+with [Argo CD](https://argoproj.github.io/cd/) which I've explained in more
+detail [in this article](https://blog.stonegarden.dev/articles/2023/09/argocd-kustomize-with-helm/).
+
+I journal my homelab journey over at my self-hosted [blog](https://blog.stonegarden.dev).
 
 ## 🧑‍💻 Getting Started
 
@@ -30,53 +42,68 @@ I've also written an article on how to get started
 with [Kubernetes on Proxmox](https://blog.stonegarden.dev/articles/2024/03/proxmox-k8s-with-cilium/) if virtualisation
 is more your thing.
 
-A third option is the [Quickstart](docs/QUICKSTART.md) in the docs-folder.
-
-I also have a ["mini-cluster" repo](https://gitlab.com/vehagn/mini-homelab) which might be easier to start understanding
-over at GitLab.
+I'm currently working on an article on how to bootstrap your own Talos-cluster using this repo.
 
 ## ⚙️ Core Components
 
+* [Proxmox VE](https://www.proxmox.com/en/proxmox-virtual-environment): Server management and KVM hypervisor.
+* [OpenTofu](https://opentofu.org/): Open source infrastructure as code tool.
+* [Cilium](https://cilium.io/): eBPF-based Networking, Observability, Security.
 * [Argo CD](https://argo-cd.readthedocs.io/en/stable/): Declarative, GitOps continuous delivery tool for Kubernetes.
 * [Cert-manager](https://cert-manager.io/): Cloud native certificate management.
-* [Cilium](https://cilium.io/): eBPF-based Networking, Observability, Security.
-* [OpenTofu](https://opentofu.org/): The open source infrastructure as code tool.
 * [Sealed-secrets](https://github.com/bitnami-labs/sealed-secrets): Encrypt your Secret into a SealedSecret, which is
   safe to store - even inside a public repository.
 
-## 📂 Folder Structure
+## 🗃️ Folder Structure
 
-* `apps`: Different applications that I run in the cluster.
-* `charts`: Tailor made Helm charts for this cluster.
-* `docs`: Supplementary documentation.
-* `infra`: Configuration for core infrastructure components
-* `machines`: OpenTofu/Terraform configuration. Each sub folder is a physical machine.
-* `sets`: Holds Argo CD Applications that points to the `apps` and `infra` folders for automatic Git-syncing.
+```shell
+.
+├── 📂 docs                # Documentation
+├── 📂 k8s                 # Kubernetes manifests
+│   ├── 📂 apps            # Applications on
+│   ├── 📂 infra           # Infrastructure components
+│   └── 📂 sets            # Bootstrapping ApplicationSets
+└── 📂 tofu                # Tofu configuration
+    ├── 📂 home-assistant  # Home Assistant VM
+    └── 📂 kubernetes      # Kubernetes VM configuration
+        ├── 📂 bootstrap   # Kubernetes bootstrap config
+        └── 📂 talos       # Talos configuration 
+```
 
 ## 🖥️ Hardware
 
-| Name   | Device                    | CPU             | RAM            | Storage    | Purpose |
-|--------|---------------------------|-----------------|----------------|------------|---------|
-| Gauss  | Dell Precision Tower 5810 | Xeon E5-1650 v3 | 64 GB DDR4 ECC | 14 TiB HDD | -       |
-| Euclid | ASUS ExpertCenter PN42    | Intel N100      | 32 GB DDR4     | -          | -       |
+| Name   | Device                    | CPU             | RAM            | Storage          | Purpose           |
+|--------|---------------------------|-----------------|----------------|------------------|-------------------|
+| Abel   | CWWK 6 LAN Port           | Intel i3-N305   | 32 GB DDR5     | -                | Control-plane     |
+| Euclid | ASUS ExpertCenter PN42    | Intel N100      | 32 GB DDR4     | -                | Control-plane     |
+| Cantor | ASUS PRIME N100I-D D4     | Intel N100      | 32 GB DDR4     | 5x8TB HDD RaidZ2 | NAS/Control-plane |
+| Gauss  | Dell Precision Tower 5810 | Xeon E5-1650 v3 | 64 GB DDR4 ECC | 14 TB HDD        | Compute           |
 
 ## 🏗️ Work in Progress
 
+- [ ] Set up AdGuard Home
 - [ ] Clean up DNS config
 - [ ] Renovate for automatic updates
-- [x] Build a NAS for storage
-- [ ] Template Gauss
-- [ ] Replace Pi Hole with AdGuard Home
-- [x] Use iGPU on Euclid for video transcoding
-- [x] Replace Traefik with Cilium Ingress Controller
-- [ ] Cilium mTLS & SPIFFE/SPIRE
 
 ## 👷‍ Future Projects
 
-- [x] Use Talos instead of Debian for Kubernetes
+- [ ] External DNS
 - [ ] Keycloak for auth
+- [ ] Implement NetBird
+- [ ] OPNSense/pfSense
+- [ ] Use BGP instead of ARP
 - [ ] Dynamic Resource Allocation for GPU
 - [ ] Local LLM
-- [ ] pfSense
-- [ ] Use NetBird or Tailscale
-- [ ] Use BGP instead of ARP
+- [ ] Cilium mTLS & SPIFFE/SPIRE
+
+##
+
+<img src="https://raw.githubusercontent.com/vehagn/homelab/remodel/docs/assets/proxmox-logo-stacked-inverted-color.svg#gh-dark-mode-only" width="80px" alt="Proxmox logo"/>
+<img src="https://raw.githubusercontent.com/vehagn/homelab/remodel/docs/assets/proxmox-logo-stacked-color.svg#gh-light-mode-only" width="80px" alt="Proxmox logo"/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="https://raw.githubusercontent.com/vehagn/homelab/remodel/docs/assets/tofu-on-dark.svg#gh-dark-mode-only" width="68px" alt="OpenTofu logo"/>
+<img src="https://raw.githubusercontent.com/vehagn/homelab/remodel/docs/assets/tofu-on-light.svg#gh-light-mode-only" width="68px" alt="OpenTofu logo"/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="https://raw.githubusercontent.com/vehagn/homelab/remodel/docs/assets/talos-logo.svg" width="64px" alt="Kubernetes logo"/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="https://raw.githubusercontent.com/vehagn/homelab/remodel/docs/assets/kubernetes-logo.svg" width="68px" alt="Kubernetes logo"/>

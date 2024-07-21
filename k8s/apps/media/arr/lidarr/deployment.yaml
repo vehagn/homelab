@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lidarr
+  namespace: arr
+  labels:
+    app: lidarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lidarr
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      namespace: lidarr
+      labels:
+        app: lidarr
+    spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: cantor
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 2501
+        runAsGroup: 2501
+        fsGroup: 2501
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: lidarr
+          image: ghcr.io/onedr0p/lidarr:2.4.3
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ "ALL" ]
+          ports:
+            - name: http
+              containerPort: 8686
+          envFrom:
+            - configMapRef:
+                name: common-env
+          volumeMounts:
+            - name: lidarr-config
+              mountPath: /config
+            - name: tmp
+              mountPath: /tmp
+            - name: data
+              mountPath: /app/data
+          resources:
+            requests:
+              cpu: 50m
+              memory: 192Mi
+            limits:
+              cpu: 1000m
+              memory: 256Mi
+      volumes:
+        - name: lidarr-config
+          persistentVolumeClaim:
+            claimName: lidarr-config
+        - name: tmp
+          emptyDir: { }
+        - name: data
+          nfs:
+            server: 192.168.1.55
+            path: /mnt/pool-0/data
