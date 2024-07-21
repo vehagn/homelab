@@ -4,9 +4,11 @@
 
 Repository for home infrastructure and [Kubernetes](https://kubernetes.io/) cluster
 using [GitOps](https://en.wikipedia.org/wiki/DevOps) practices.
+
 Held together using [Proxmox VE](https://www.proxmox.com/en/proxmox-virtual-environment),
 [OpenTofu](https://opentofu.org/), [Talos](https://talos.dev), [Kubernetes](https://kubernetes.io/),
-[Argo CD](https://argoproj.github.io/cd/) and copious amounts of [YAML](https://yaml.org/).
+[Argo CD](https://argoproj.github.io/cd/) and copious amounts of [YAML](https://yaml.org/) with some help
+from [Renovate](https://www.mend.io/renovate/).
 
 </div>
 
@@ -81,29 +83,17 @@ I'm currently working on an article on how to bootstrap your own Talos-cluster u
 
 ## 🏗️ Work in Progress
 
-- [ ] Set up AdGuard Home
+- [x] Renovate for automatic updates
+- [ ] Keycloak for auth
+- [ ] Implement NetBird
+- [ ] AdGuard Home
+- [ ] External DNS
 - [ ] Clean up DNS config
-- [ ] Renovate for automatic updates
 
 ## 👷‍ Future Projects
 
-- [ ] External DNS
-- [ ] Keycloak for auth
-- [ ] Implement NetBird
 - [ ] OPNSense/pfSense
 - [ ] Use BGP instead of ARP
 - [ ] Dynamic Resource Allocation for GPU
 - [ ] Local LLM
 - [ ] Cilium mTLS & SPIFFE/SPIRE
-
-##
-
-<img src="https://raw.githubusercontent.com/vehagn/homelab/remodel/docs/assets/proxmox-logo-stacked-inverted-color.svg#gh-dark-mode-only" width="80px" alt="Proxmox logo"/>
-<img src="https://raw.githubusercontent.com/vehagn/homelab/remodel/docs/assets/proxmox-logo-stacked-color.svg#gh-light-mode-only" width="80px" alt="Proxmox logo"/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="https://raw.githubusercontent.com/vehagn/homelab/remodel/docs/assets/tofu-on-dark.svg#gh-dark-mode-only" width="68px" alt="OpenTofu logo"/>
-<img src="https://raw.githubusercontent.com/vehagn/homelab/remodel/docs/assets/tofu-on-light.svg#gh-light-mode-only" width="68px" alt="OpenTofu logo"/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="https://raw.githubusercontent.com/vehagn/homelab/remodel/docs/assets/talos-logo.svg" width="64px" alt="Kubernetes logo"/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="https://raw.githubusercontent.com/vehagn/homelab/remodel/docs/assets/kubernetes-logo.svg" width="68px" alt="Kubernetes logo"/>
