@@ -15,7 +15,7 @@ spec:
         valueFiles:
           - $values/k8s/infra/monitoring/prometheus-stack/values.yaml
     - repoURL: https://github.com/vehagn/homelab
-      targetRevision: remodel
+      targetRevision: HEAD
       ref: values
   destination:
     name: in-cluster

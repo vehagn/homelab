@@ -10,7 +10,7 @@ spec:
   source:
     path: k8s/apps
     repoURL: https://github.com/vehagn/homelab
-    targetRevision: remodel
+    targetRevision: HEAD
   destination:
     namespace: argocd
     name: in-cluster
