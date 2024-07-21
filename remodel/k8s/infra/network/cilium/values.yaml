@@ -61,12 +61,12 @@ gatewayAPI:
   enabled: true
 
 hubble:
-  enabled: false
+  enabled: true
   relay:
-    enabled: false
+    enabled: true
     rollOutPods: true
   ui:
-    enabled: false
+    enabled: true
     rollOutPods: true
 
 ingressController:

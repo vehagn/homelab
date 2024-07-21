@@ -1,19 +1,19 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: argocd
-  namespace: argocd
+  name: hubble
+  namespace: kube-system
 spec:
   parentRefs:
     - name: stonegarden
       namespace: gateway
   hostnames:
-    - "argocd.stonegarden.dev"
+    - "hubble.stonegarden.dev"
   rules:
     - matches:
         - path:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: argocd-server
+        - name: hubble-ui
           port: 80
