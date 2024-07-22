@@ -3,8 +3,6 @@ kind: Kustomization
 
 helmCharts:
   - name: sealed-secrets
-#    repo: https://bitnami-labs.github.io/sealed-secrets
-#    version: 2.16.0
     repo: oci://registry-1.docker.io/bitnamicharts
     version: 2.4.2
     releaseName: sealed-secrets-controller

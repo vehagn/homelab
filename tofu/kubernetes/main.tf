@@ -125,6 +125,10 @@ module "volumes" {
       node = "euclid"
       size = "1G"
     }
+    pv-keycloak-db = {
+      node = "euclid"
+      size = "2G"
+    }
     pv-jellyfin-config = {
       node = "euclid"
       size = "12G"
