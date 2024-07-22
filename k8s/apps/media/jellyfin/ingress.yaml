@@ -7,11 +7,17 @@ metadata:
     cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
 spec:
   ingressClassName: cilium
-  defaultBackend:
-    service:
-      name: jellyfin
-      port:
-        name: web
+  rules:
+    - host: plex.stonegarden.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: jellyfin
+                port:
+                  name: web
   tls:
     - secretName: jellyfin-ingress-tls
       hosts:

@@ -31,12 +31,12 @@ spec:
             failureThreshold: 5
             periodSeconds: 10
           resources:
-            limits:
-              cpu: 100m
-              memory: 64Mi
             requests:
-              cpu: 20m
+              cpu: 50m
               memory: 32Mi
+            limits:
+              cpu: 1000m
+              memory: 128Mi
           volumeMounts:
             - name: cloudflared-config
               mountPath: /etc/cloudflared/config/config.yaml
