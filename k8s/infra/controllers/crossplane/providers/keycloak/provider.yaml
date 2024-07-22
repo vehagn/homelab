@@ -1,6 +1,6 @@
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
-  name: keycloak
+  name: provider-keycloak
 spec:
   package: xpkg.upbound.io/crossplane-contrib/provider-keycloak:v1.0.0

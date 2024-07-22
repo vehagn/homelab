@@ -11,6 +11,8 @@ spec:
       server: '*'
     - namespace: 'cert-manager'
       server: '*'
+    - namespace: 'crossplane'
+      server: '*'
     - namespace: 'node-feature-discovery'
       server: '*'
     - namespace: 'intel-device-plugins'

@@ -3,8 +3,6 @@ kind: Application
 metadata:
   name: applications
   namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
 spec:
   project: app-of-apps
   source:
