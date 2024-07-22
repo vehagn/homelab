@@ -11,7 +11,7 @@ resources:
 helmCharts:
   - name: keycloak
     repo: oci://registry-1.docker.io/bitnamicharts
-    version: 21.5.0
     releaseName: keycloak
     namespace: keycloak
+    version: 21.5.0
     valuesFile: values.yaml
