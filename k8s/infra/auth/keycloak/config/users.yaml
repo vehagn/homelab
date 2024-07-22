@@ -1,0 +1,13 @@
+apiVersion: user.keycloak.crossplane.io/v1alpha1
+kind: User
+metadata:
+  name: veh
+spec:
+  forProvider:
+    enabled: true
+    email: vegard@stonegarden.dev
+    firstName: Vegard
+    lastName: Hagen
+    username: veh
+    realmIdRef:
+      name: homelab
