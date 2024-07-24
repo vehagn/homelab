@@ -32,11 +32,10 @@ spec:
             periodSeconds: 10
           resources:
             requests:
-              cpu: 50m
-              memory: 32Mi
+              cpu: 100m
+              memory: 64Mi
             limits:
-              cpu: 1000m
-              memory: 128Mi
+              memory: 512Mi
           volumeMounts:
             - name: cloudflared-config
               mountPath: /etc/cloudflared/config/config.yaml
