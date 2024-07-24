@@ -1,0 +1,58 @@
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: keycloak-builtin-objects
+spec:
+  compositeTypeRef:
+    apiVersion: keycloak.crossplane.io/v1alpha1
+    kind: XBuiltinObjects
+  mode: Pipeline
+  pipeline:
+    - step: pull-provider-configs
+      functionRef:
+        name: function-extra-resources
+      input:
+        apiVersion: extra-resources.fn.crossplane.io/v1beta1
+        kind: Input
+        spec:
+          extraResources:
+            - kind: Secret
+              into: secrets
+              apiVersion: v1
+              type: Selector
+              selector:
+                minMatch: 1
+                maxMatch: 100
+                matchLabels:
+                  - key: type
+                    type: Value
+                    value: provider-credentials
+    - step: keycloak-builtin-objects
+      functionRef:
+        name: function-keycloak-builtin-objects
+    - step: automatically-detect-ready-composed-resources
+      functionRef:
+        name: function-auto-ready
+---
+apiVersion: pkg.crossplane.io/v1beta1
+kind: Function
+metadata:
+  name: function-extra-resources
+spec:
+  package: xpkg.upbound.io/crossplane-contrib/function-extra-resources:v0.0.3
+---
+apiVersion: pkg.crossplane.io/v1beta1
+kind: Function
+metadata:
+  name: function-auto-ready
+spec:
+  package: xpkg.upbound.io/crossplane-contrib/function-auto-ready:v0.2.1
+---
+apiVersion: pkg.crossplane.io/v1beta1
+kind: Function
+metadata:
+  name: function-keycloak-builtin-objects
+spec:
+  package: registry.gitlab.com/corewire/images/crossplane/function-keycloak-builtin-objects:v1.0.0
+  packagePullPolicy: Always
