@@ -15,7 +15,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: jellyfin
+                name: plex
                 port:
                   name: web
   tls:
