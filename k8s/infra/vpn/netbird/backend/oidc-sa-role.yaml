@@ -1,0 +1,13 @@
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientServiceAccountRole
+metadata:
+  name: netbird-backend-view-users
+spec:
+  forProvider:
+    clientIdRef:
+      name: builtin-homelab-realm-management
+    realmIdRef:
+      name: homelab
+    role: view-users
+    serviceAccountUserClientIdRef:
+      name: netbird-backend

@@ -3,9 +3,6 @@ kind: Kustomization
 
 resources:
   - ns.yaml
-  - providers/keycloak
-#  - https://doc.crds.dev/raw/github.com/crossplane/crossplane@v1.16.0 # renovate: helm=crossplane registry=https://charts.crossplane.io/stable
-#  - https://doc.crds.dev/raw/github.com/crossplane-contrib/provider-keycloak@v1.1.0 # renovate: github-releases=crossplane-contrib/provider-keycloak
 
 helmCharts:
   - name: crossplane

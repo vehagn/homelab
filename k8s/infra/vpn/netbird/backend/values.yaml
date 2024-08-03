@@ -1,0 +1,72 @@
+auth:
+  authority: https://keycloak.stonegarden.dev/realms/homelab
+  audience: netbird
+  device:
+    provider: hosted
+    audience: netbird
+    authority: https://keycloak.stonegarden.dev/realms/homelab
+    clientID: netbird
+    deviceAuthorizationEndpoint: https://keycloak.stonegarden.dev/realms/homelab/protocol/openid-connect/auth
+    tokenEndpoint: https://keycloak.stonegarden.dev/realms/homelab/protocol/openid-connect/token
+    scope: openid
+    useIDToken: false
+
+idp:
+  managerType: keycloak
+  clientID: netbird-backend
+  secretKeyRef:
+    name: netbird-backend-oidc-credentials
+    key: clientSecret
+  grantType: client_credentials
+  adminEndpoint: https://keycloak.stonegarden.dev/admin/realms/homelab
+  tokenEndpoint: https://keycloak.stonegarden.dev/realms/homelab/protocol/openid-connect/token
+
+management:
+  image:
+    tag: 0.28.4
+  nodeSelector:
+    topology.kubernetes.io/zone: abel
+  ingress:
+    enabled: false
+#    annotations:
+#      cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+#    hosts:
+#      - host: netbird.stonegarden.dev
+#        paths:
+#          - path: /api
+#            pathType: Prefix
+#          - path: /management.ManagementService/
+#            pathType: Prefix
+#    tls:
+#      - hosts:
+#          - netbird.stonegarden.dev
+
+signal:
+  image:
+    tag: 0.28.4
+  nodeSelector:
+    topology.kubernetes.io/zone: abel
+  uri: netbird.stonegarden.dev:443
+  protocol: https
+  ingress:
+    enabled: false
+#    annotations:
+#      cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+#    hosts:
+#      - host: netbird.stonegarden.dev
+#        paths:
+#          - path: /signalexchange.SignalExchange/
+#            pathType: Prefix
+#    tls:
+#      - hosts:
+#          - netbird.stonegarden.dev
+
+stun:
+  uri: stun:coturn.stonegarden.dev:3478
+
+turn:
+  uri: turn:coturn.stonegarden.dev:3478
+  user: netbird
+  secretKeyRef:
+    name: netbird-turn-credentials
+    key: password

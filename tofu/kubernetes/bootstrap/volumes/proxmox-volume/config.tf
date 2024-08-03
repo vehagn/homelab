@@ -15,6 +15,10 @@ resource "restapi_object" "proxmox-volume" {
     size     = var.volume.size
     format   = var.volume.format
   })
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 output "node" {

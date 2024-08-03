@@ -5,7 +5,7 @@
 Gateway API
 
 ```shell
-kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.0.0/experimental-install.yaml
+kubectl apply -k infra/crds
 ```
 
 ## Cilium
@@ -38,6 +38,10 @@ kustomize build --enable-helm infra/controllers/argocd | kubectl apply -f -
 
 ```shell
 kubectl -n argocd get secret argocd-initial-admin-secret -ojson | jq -r ' .data.password | @base64d'
+```
+
+```shell
+kubectl apply -k infra
 ```
 
 ```shell
