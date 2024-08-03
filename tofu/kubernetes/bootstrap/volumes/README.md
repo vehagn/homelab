@@ -28,10 +28,10 @@ tofu state rm "module.volumes.module.proxmox-volume[\"pv-jellyfin-config\"].rest
 tofu state rm "module.volumes.module.proxmox-volume[\"pv-qbittorrent-config\"].restapi_object.proxmox-volume" 
 ```
 
-## import
+## import proxmox volume
 
 ```shell
-tofu import "module.volumes.module.proxmox-volume[\"pv-lidarr-config\"].restapi_object.proxmox-volume" /api2/json/nodes/cantor/storage/local-zfs/content/local-zfs:vm-9999-pv-lidarr-config
+tofu import 'module.volumes.module.proxmox-volume["pv-lidarr-config"].restapi_object.proxmox-volume' /api2/json/nodes/cantor/storage/local-zfs/content/local-zfs:vm-9999-pv-lidarr-config
 tofu import "module.volumes.module.proxmox-volume[\"pv-radarr-config\"].restapi_object.proxmox-volume" /api2/json/nodes/cantor/storage/local-zfs/content/local-zfs:vm-9999-pv-radarr-config
 tofu import "module.volumes.module.proxmox-volume[\"pv-sonarr-config\"].restapi_object.proxmox-volume" /api2/json/nodes/cantor/storage/local-zfs/content/local-zfs:vm-9999-pv-sonarr-config
 
@@ -39,4 +39,11 @@ tofu import "module.volumes.module.proxmox-volume[\"pv-qbittorrent-config\"].res
  
 tofu import "module.volumes.module.proxmox-volume[\"pv-plex-config\"].restapi_object.proxmox-volume" /api2/json/nodes/abel/storage/local-zfs/content/local-zfs:vm-9999-pv-plex-config
 tofu import "module.volumes.module.proxmox-volume[\"pv-jellyfin-config\"].restapi_object.proxmox-volume" /api2/json/nodes/abel/storage/local-zfs/content/local-zfs:vm-9999-pv-jellyfin-config
+```
+
+## import persistent volume
+
+```shell
+tofu import 'module.volumes.module.persistent-volume["pv-torrent-config"].kubernetes_persistent_volume.pv' pv-torrent-config
+
 ```

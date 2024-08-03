@@ -41,19 +41,19 @@ kubectl -n argocd get secret argocd-initial-admin-secret -ojson | jq -r ' .data.
 ```
 
 ```shell
-kubectl kustomize infra | kubectl apply -f -
+kubectl apply -k sets
 ```
 
 # SBOM
 
 * [x] Cilium
-* [] Hubble
+* [X] Hubble
 * [x] Argo CD
 * [x] Proxmox CSI Plugin
 * [x] Cert-manager
 * [X] Gateway
-* [] CNPG
-* [] Authentication (Keycloak, Authentik, ...)
+* [X] Authentication (Keycloak, Authentik, ...)
+* [] CNPG - Cloud Native PostGresSQL
 
 # CRDs
 
@@ -63,13 +63,11 @@ kubectl kustomize infra | kubectl apply -f -
 
 # TODO
 
-* [] Remotely managed cloudflared tunnel
-* [] Keycloak
+* [X] Remotely managed cloudflared tunnel
+* [X] Keycloak
 * [] Argo CD sync-wave
 
 ```shell
 commonAnnotations:
     argocd.argoproj.io/sync-wave: "-1"
 ```
-
-CNPG - Cloud Native PostGresSQL
