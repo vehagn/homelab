@@ -1,0 +1,24 @@
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: Client
+metadata:
+  name: netbird
+spec:
+  forProvider:
+    name: Netbird
+    accessType: PUBLIC
+    clientId: netbird
+    description: Netbird Client
+    standardFlowEnabled: true
+    directAccessGrantsEnabled: true
+    oauth2DeviceAuthorizationGrantEnabled: true
+    baseUrl: "https://netbird.stonegarden.dev"
+    validRedirectUris:
+      - "http://localhost:53000"
+      - "http://localhost:8080/*"
+      - "https://netbird.stonegarden.dev/*"
+    validPostLogoutRedirectUris:
+      - "https://netbird.stonegarden.dev/*"
+    webOrigins:
+      - "+"
+    realmIdRef:
+      name: homelab

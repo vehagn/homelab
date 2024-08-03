@@ -33,7 +33,6 @@ module "talos" {
       cpu           = 8
       ram_dedicated = 20480
       igpu          = true
-      update        = true
     }
     "ctrl-01" = {
       host_node     = "euclid"
@@ -126,6 +125,14 @@ module "volumes" {
     pv-jellyfin-config = {
       node = "euclid"
       size = "12G"
+    }
+    pv-netbird-signal = {
+      node = "abel"
+      size = "1G"
+    }
+    pv-netbird-management = {
+      node = "abel"
+      size = "1G"
     }
     pv-plex-config = {
       node = "abel"

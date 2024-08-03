@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: netbird
+
+resources:
+  - oidc-client.yaml
+  - oidc-sa-role.yaml
+  - secret-coturn-credentials.yaml
+  - secret-oidc-credentials.yaml
+
+helmCharts:
+  - name: netbird
+    repo: https://charts.jaconi.io
+    releaseName: netbird-backend
+    namespace: netbird
+    version: 0.14.2
+    valuesFile: values.yaml
+
+patches:
+  - path: patches/deployment-strategy-management.yaml
+  - path: patches/deployment-strategy-signal.yaml
+  - path: patches/pvc-backend-management.yaml
+  - path: patches/pvc-backend-signal.yaml

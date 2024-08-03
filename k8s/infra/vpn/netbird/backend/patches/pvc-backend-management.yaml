@@ -1,0 +1,7 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: netbird-backend-management
+spec:
+  storageClassName: proxmox-csi
+  volumeName: pv-netbird-management
