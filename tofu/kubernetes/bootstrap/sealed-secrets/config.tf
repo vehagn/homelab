@@ -17,7 +17,7 @@ resource "kubernetes_secret" "sealed-secrets-key" {
   }
 
   data = {
-    "tls.crt" = var.sealed_secrets_cert.cert
-    "tls.key" = var.sealed_secrets_cert.key
+    "tls.crt" = var.cert.cert
+    "tls.key" = var.cert.key
   }
 }

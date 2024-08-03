@@ -1,4 +1,5 @@
-variable "talos_image" {
+variable "image" {
+  description = "Talos image configuration"
   type = object({
     factory_url = optional(string, "https://factory.talos.dev")
     schematic = string
@@ -11,30 +12,35 @@ variable "talos_image" {
   })
 }
 
-variable "cluster_config" {
-  description = "Talos node configuration"
+variable "cluster" {
+  description = "Cluster configuration"
   type = object({
-
-    cluster_name    = string
-    proxmox_cluster = string
+    name            = string
     endpoint        = string
+    gateway         = string
     talos_version   = string
-
-    nodes = map(object({
-      host_node     = string
-      machine_type  = string
-      ip            = string
-      mac_address   = string
-      vm_id         = number
-      cpu           = number
-      ram_dedicated = number
-      update = optional(bool, false)
-      igpu = optional(bool, false)
-    }))
+    proxmox_cluster = string
   })
 }
 
+variable "nodes" {
+  description = "Configuration for cluster nodes"
+  type = map(object({
+    host_node     = string
+    machine_type  = string
+    datastore_id = optional(string, "local-zfs")
+    ip            = string
+    mac_address   = string
+    vm_id         = number
+    cpu           = number
+    ram_dedicated = number
+    update = optional(bool, false)
+    igpu = optional(bool, false)
+  }))
+}
+
 variable "cilium" {
+  description = "Cilium configuration"
   type = object({
     values  = string
     install = string

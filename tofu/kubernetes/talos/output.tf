@@ -1,13 +1,13 @@
-output "talos_machine_config" {
-  value = data.talos_machine_configuration.machine_configuration
+output "machine_config" {
+  value = data.talos_machine_configuration.this
 }
 
-output "talos_client_configuration" {
-  value     = data.talos_client_configuration.talos_config
+output "client_configuration" {
+  value     = data.talos_client_configuration.this
   sensitive = true
 }
 
-output "talos_kube_config" {
-  value     = data.talos_cluster_kubeconfig.kubeconfig
+output "kube_config" {
+  value     = data.talos_cluster_kubeconfig.this
   sensitive = true
 }

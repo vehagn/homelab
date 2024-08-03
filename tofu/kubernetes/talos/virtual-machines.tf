@@ -1,5 +1,5 @@
-resource "proxmox_virtual_environment_vm" "talos_vm" {
-  for_each = var.cluster_config.nodes
+resource "proxmox_virtual_environment_vm" "this" {
+  for_each = var.nodes
 
   node_name = each.value.host_node
 
@@ -32,7 +32,7 @@ resource "proxmox_virtual_environment_vm" "talos_vm" {
   }
 
   disk {
-    datastore_id = "local-zfs"
+    datastore_id = each.value.datastore_id
     interface    = "scsi0"
     iothread     = true
     cache        = "writethrough"
@@ -40,7 +40,7 @@ resource "proxmox_virtual_environment_vm" "talos_vm" {
     ssd          = true
     file_format  = "raw"
     size         = 20
-    file_id      = proxmox_virtual_environment_download_file.talos_image["${each.value.host_node}_${each.value.update == true ? local.update_image_id : local.image_id}"].id
+    file_id      = proxmox_virtual_environment_download_file.this["${each.value.host_node}_${each.value.update == true ? local.update_image_id : local.image_id}"].id
   }
 
   boot_order = ["scsi0"]
@@ -50,14 +50,11 @@ resource "proxmox_virtual_environment_vm" "talos_vm" {
   }
 
   initialization {
-    datastore_id = "local-zfs"
+    datastore_id = each.value.datastore_id
     ip_config {
       ipv4 {
         address = "${each.value.ip}/24"
-        gateway = "192.168.1.1"
-      }
-      ipv6 {
-        address = "dhcp"
+        gateway = var.cluster.gateway
       }
     }
   }

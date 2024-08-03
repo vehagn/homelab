@@ -1,4 +1,4 @@
-variable "sealed_secrets_cert" {
+variable "cert" {
   type = object({
     cert = string
     key = string

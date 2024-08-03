@@ -42,12 +42,8 @@ provider "restapi" {
 }
 
 provider "kubernetes" {
-  host = module.talos.talos_kube_config.kubernetes_client_configuration.host
-  client_certificate = base64decode(module.talos.talos_kube_config.kubernetes_client_configuration.client_certificate)
-  client_key = base64decode(module.talos.talos_kube_config.kubernetes_client_configuration.client_key)
-  cluster_ca_certificate = base64decode(module.talos.talos_kube_config.kubernetes_client_configuration.ca_certificate)
-  #  ignore_labels = [
-  #    "app.kubernetes.io/.*",
-  #    "kustomize.toolkit.fluxcd.io/.*",
-  #  ]
+  host = module.talos.kube_config.kubernetes_client_configuration.host
+  client_certificate = base64decode(module.talos.kube_config.kubernetes_client_configuration.client_certificate)
+  client_key = base64decode(module.talos.kube_config.kubernetes_client_configuration.client_key)
+  cluster_ca_certificate = base64decode(module.talos.kube_config.kubernetes_client_configuration.ca_certificate)
 }
