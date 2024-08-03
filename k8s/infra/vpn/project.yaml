@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: vpn
+  namespace: argocd
+spec:
+  sourceRepos:
+    - 'https://github.com/vehagn/homelab'
+  destinations:
+    - namespace: 'argocd'
+      server: '*'
+    - namespace: 'coturn'
+      server: '*'
+    - namespace: 'netbird'
+      server: '*'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
