@@ -1,3 +1,7 @@
+prometheusOperator:
+  nodeSelector:
+    topology.kubernetes.io/zone: abel
+
 prometheus:
   prometheusSpec:
     storageSpec:
