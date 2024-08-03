@@ -127,6 +127,14 @@ module "volumes" {
       node = "euclid"
       size = "12G"
     }
+    pv-netbird-signal = {
+      node = "abel"
+      size = "1G"
+    }
+    pv-netbird-management = {
+      node = "abel"
+      size = "1G"
+    }
     pv-plex-config = {
       node = "abel"
       size = "12G"
