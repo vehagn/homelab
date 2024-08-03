@@ -46,7 +46,9 @@ resource "talos_machine_configuration_apply" "this" {
 }
 
 resource "talos_machine_bootstrap" "this" {
-  node                 = [for k, v in var.nodes : v.ip if v.machine_type == "controlplane"][0]
+  depends_on = [talos_machine_configuration_apply.this]
+  for_each             = var.nodes
+  node                 = each.value.ip
   endpoint             = var.cluster.endpoint
   client_configuration = talos_machine_secrets.this.client_configuration
 }
@@ -70,7 +72,7 @@ data "talos_cluster_kubeconfig" "this" {
     talos_machine_bootstrap.this,
     data.talos_cluster_health.this
   ]
-  node                 = [for k, v in var.nodes : v.ip if v.machine_type == "controlplane"][0]
+  node                 = [for k, v in var.nodes : v.ip if v.machine_type == "controlplane"][1]
   endpoint             = var.cluster.endpoint
   client_configuration = talos_machine_secrets.this.client_configuration
   timeouts = {

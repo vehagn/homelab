@@ -1,0 +1,25 @@
+image:
+  tag: v2.4.1
+
+auth:
+  authority: https://keycloak.stonegarden.dev/realms/homelab
+  audience: netbird
+  clientID: netbird
+  supportedScopes: openid profile email offline_access netbird-api
+
+netbird:
+  managementApiEndpoint: https://netbird.stonegarden.dev
+  managementGrpcApiEndpoint: https://netbird.stonegarden.dev
+
+ingress:
+  enabled: false
+#  annotations:
+#    cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+#  hosts:
+#    - host: netbird.stonegarden.dev
+#      paths:
+#        - path: /
+#          pathType: Prefix
+#  tls:
+#    - hosts:
+#        - netbird.stonegarden.dev

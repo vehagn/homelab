@@ -6,3 +6,4 @@ resources:
   - users.yaml
   - client-cloudflare.yaml
   - cloudflare-oidc-credentials.yaml
+  - builtin-objects.yaml

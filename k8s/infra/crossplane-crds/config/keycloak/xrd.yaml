@@ -1,0 +1,50 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xbuiltinobjects.keycloak.crossplane.io
+spec:
+  group: keycloak.crossplane.io
+  names:
+    kind: XBuiltinObjects
+    plural: xbuiltinobjects
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                realm:
+                  type: string
+                  description: Realm to import the builtin clients/roles from
+                builtinClients:
+                  type: array
+                  items:
+                    type: string
+                  description: List of clients to import from the realm
+                builtinRealmRoles:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                      - offline_access
+                      - uma_authorization
+                      - admin
+                      - create-realm
+                  description: List of realm roles to import from the realm
+                providerConfigName:
+                  type: string
+                  description: Name of the provider config to attach to the imported clients/roles
+                providerSecretName:
+                  type: string
+                  description: Name of the secret containing the provider credentials (Secret must have a label with key=type and value=provider-credentials to be found)
+              required:
+                - providerConfigName
+                - providerSecretName
+                - realm
+          required:
+            - spec

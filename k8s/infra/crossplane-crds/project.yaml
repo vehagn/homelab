@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: crossplane-crds
+  namespace: argocd
+spec:
+  sourceRepos:
+    - 'https://github.com/vehagn/homelab'
+  destinations:
+    - namespace: 'argocd'
+      server: '*'
+    - namespace: 'crossplane'
+      server: '*'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'

@@ -6,7 +6,7 @@ module "talos" {
   }
 
   image = {
-    version        = "v1.7.5"
+    version        = "v1.7.6"
     schematic = file("${path.module}/talos/image/schematic.yaml")
   }
 
@@ -17,7 +17,7 @@ module "talos" {
 
   cluster = {
     name            = "talos"
-    endpoint        = "192.168.1.100"
+    endpoint        = "192.168.1.101"
     gateway         = "192.168.1.1"
     talos_version   = "v1.7"
     proxmox_cluster = "homelab"
@@ -29,18 +29,17 @@ module "talos" {
       machine_type  = "controlplane"
       ip            = "192.168.1.100"
       mac_address   = "BC:24:11:2E:C8:00"
-      vm_id         = 8000
+      vm_id         = 800
       cpu           = 8
       ram_dedicated = 20480
       igpu          = true
-      update        = true
     }
     "ctrl-01" = {
       host_node     = "euclid"
       machine_type  = "controlplane"
       ip            = "192.168.1.101"
       mac_address   = "BC:24:11:2E:C8:01"
-      vm_id         = 8001
+      vm_id         = 801
       cpu           = 4
       ram_dedicated = 20480
       igpu          = true
@@ -50,8 +49,17 @@ module "talos" {
       machine_type  = "controlplane"
       ip            = "192.168.1.102"
       mac_address   = "BC:24:11:2E:C8:02"
-      vm_id         = 8002
+      vm_id         = 802
       cpu           = 4
+      ram_dedicated = 4096
+    }
+    "work-00" = {
+      host_node     = "abel"
+      machine_type  = "controlplane"
+      ip            = "192.168.1.110"
+      mac_address   = "BC:24:11:2E:A8:00"
+      vm_id         = 810
+      cpu           = 8
       ram_dedicated = 4096
     }
   }
@@ -126,6 +134,14 @@ module "volumes" {
     pv-jellyfin-config = {
       node = "euclid"
       size = "12G"
+    }
+    pv-netbird-signal = {
+      node = "abel"
+      size = "1G"
+    }
+    pv-netbird-management = {
+      node = "abel"
+      size = "1G"
     }
     pv-plex-config = {
       node = "abel"
