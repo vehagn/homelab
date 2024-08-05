@@ -6,7 +6,7 @@ configMapGenerator:
     namespace: blog
     literals:
       - TIME_ZONE=Europe/Oslo
-      - REMARK_URL=https://remark42.euclid.stonegarden.dev
+      - REMARK_URL=https://remark42.stonegarden.dev
       - SITE=stonegarden.dev
 
 resources:
