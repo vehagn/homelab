@@ -5,7 +5,7 @@ metadata:
   namespace: arr
 spec:
   storageClassName: proxmox-csi
-  volumeName: pv-lidarr-config
+  volumeName: pv-lidarr
   accessModes:
     - ReadWriteOnce
   resources:

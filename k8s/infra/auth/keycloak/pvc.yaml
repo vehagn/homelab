@@ -5,7 +5,7 @@ metadata:
   namespace: keycloak
 spec:
   storageClassName: proxmox-csi
-  volumeName: pv-keycloak-db
+  volumeName: pv-keycloak
   accessModes:
     - ReadWriteOnce
   resources:

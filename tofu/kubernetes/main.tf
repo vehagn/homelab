@@ -103,23 +103,23 @@ module "volumes" {
   }
   proxmox_api = var.proxmox
   volumes = {
-    pv-sonarr-config = {
+    pv-sonarr = {
       node = "cantor"
       size = "4G"
     }
-    pv-radarr-config = {
+    pv-radarr = {
       node = "cantor"
       size = "4G"
     }
-    pv-lidarr-config = {
+    pv-lidarr = {
       node = "cantor"
       size = "4G"
     }
-    pv-prowlarr-config = {
+    pv-prowlarr = {
       node = "euclid"
       size = "1G"
     }
-    pv-torrent-config = {
+    pv-torrent = {
       node = "euclid"
       size = "1G"
     }
@@ -127,11 +127,11 @@ module "volumes" {
       node = "euclid"
       size = "1G"
     }
-    pv-keycloak-db = {
+    pv-keycloak = {
       node = "euclid"
       size = "2G"
     }
-    pv-jellyfin-config = {
+    pv-jellyfin = {
       node = "euclid"
       size = "12G"
     }
@@ -143,7 +143,7 @@ module "volumes" {
       node = "abel"
       size = "1G"
     }
-    pv-plex-config = {
+    pv-plex = {
       node = "abel"
       size = "12G"
     }
