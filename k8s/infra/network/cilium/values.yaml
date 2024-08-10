@@ -59,6 +59,16 @@ enableCiliumEndpointSlice: true
 
 gatewayAPI:
   enabled: true
+envoy:
+  enabled: true
+  securityContext:
+    capabilities:
+      keepCapNetBindService: true
+      envoy:
+        - NET_BIND_SERVICE
+        - NET_ADMIN
+        - PERMON
+        - BPF
 
 hubble:
   enabled: true

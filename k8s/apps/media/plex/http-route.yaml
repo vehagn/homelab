@@ -1,0 +1,19 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: plex
+  namespace: plex
+spec:
+  parentRefs:
+    - name: stonegarden
+      namespace: gateway
+  hostnames:
+    - "plex.stonegarden.dev"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: plex
+          port: 32400
