@@ -6,6 +6,5 @@ resources:
   - ns.yaml
   - cloudflare-api-token.yaml
   - cloudflare-issuer.yaml
-  - gw-euclid.yaml
   - gw-stonegarden.yaml
   - gw-tls-passthrough.yaml

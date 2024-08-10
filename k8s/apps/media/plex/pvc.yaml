@@ -5,7 +5,7 @@ metadata:
   namespace: plex
 spec:
   storageClassName: proxmox-csi
-  volumeName: pv-plex-config
+  volumeName: pv-plex
   accessModes:
     - ReadWriteOnce
   resources:

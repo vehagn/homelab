@@ -42,6 +42,7 @@ spec:
           envFrom:
             - configMapRef:
                 name: common-env
+                optional: true
           volumeMounts:
             - name: lidarr-config
               mountPath: /config
