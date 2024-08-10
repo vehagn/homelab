@@ -5,7 +5,7 @@ metadata:
   namespace: arr
 spec:
   storageClassName: proxmox-csi
-  volumeName: pv-sonarr-config
+  volumeName: pv-sonarr
   accessModes:
     - ReadWriteOnce
   resources:

@@ -5,7 +5,7 @@ metadata:
   namespace: arr
 spec:
   storageClassName: proxmox-csi
-  volumeName: pv-torrent-config
+  volumeName: pv-torrent
   accessModes:
     - ReadWriteOnce
   resources:

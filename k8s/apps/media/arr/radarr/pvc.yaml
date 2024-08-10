@@ -5,7 +5,7 @@ metadata:
   namespace: arr
 spec:
   storageClassName: proxmox-csi
-  volumeName: pv-radarr-config
+  volumeName: pv-radarr
   accessModes:
     - ReadWriteOnce
   resources:
