@@ -3,8 +3,6 @@ kind: Gateway
 metadata:
   name: stonegarden
   namespace: gateway
-#  annotations:
-#    cert-manager.io/issuer: cloudflare-issuer
 spec:
   gatewayClassName: cilium
   infrastructure:
@@ -30,7 +28,6 @@ spec:
         certificateRefs:
           - kind: Secret
             name: cert-stonegarden
-            #name: cloudflare-cert
       allowedRoutes:
         namespaces:
           from: All

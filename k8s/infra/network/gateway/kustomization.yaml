@@ -5,7 +5,5 @@ resources:
   - cert-stonegarden.yaml
   - gateway-class.yaml
   - ns.yaml
-  - cloudflare-api-token.yaml
-  - cloudflare-issuer.yaml
   - gw-stonegarden.yaml
   - gw-tls-passthrough.yaml
