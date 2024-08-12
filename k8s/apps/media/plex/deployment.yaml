@@ -40,7 +40,7 @@ spec:
               memory: 2Gi
             limits:
               cpu: 6000m
-              memory: 6Gi
+              memory: 8Gi
               gpu.intel.com/i915: 1000m
           envFrom:
             - configMapRef:
@@ -66,6 +66,8 @@ spec:
             server: 192.168.1.55
             path: /mnt/pool-0/data/media
         - name: transcode
-          emptyDir: { }
+          emptyDir:
+            medium: Memory
         - name: tmp
-          emptyDir: { }
+          emptyDir:
+            medium: Memory
