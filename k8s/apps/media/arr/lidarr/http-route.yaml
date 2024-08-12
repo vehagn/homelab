@@ -15,5 +15,5 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: lidarr-web
+        - name: lidarr
           port: 80

@@ -15,5 +15,5 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: prowlarr-web
+        - name: prowlarr
           port: 80

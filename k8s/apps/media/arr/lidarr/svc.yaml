@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: radarr-web
+  name: lidarr
   namespace: arr
 spec:
   type: ClusterIP
   selector:
-    app: radarr
+    app: lidarr
   ports:
     - name: web
       port: 80

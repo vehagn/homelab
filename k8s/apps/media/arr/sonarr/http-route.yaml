@@ -15,5 +15,5 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: sonarr-web
+        - name: sonarr
           port: 80

@@ -3,7 +3,7 @@ kind: Kustomization
 
 resources:
   - pvc.yaml
-  - svc-web.yaml
+  - svc.yaml
   - svc-torrent.yaml
   - http-route.yaml
   - deployment.yaml
