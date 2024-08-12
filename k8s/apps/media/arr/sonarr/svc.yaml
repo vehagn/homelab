@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: sonarr-web
+  name: sonarr
   namespace: arr
 spec:
   type: ClusterIP

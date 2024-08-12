@@ -15,5 +15,5 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: torrent-web
+        - name: torrent
           port: 80

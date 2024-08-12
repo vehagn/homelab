@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: lidarr-web
+  name: torrent
   namespace: arr
 spec:
   type: ClusterIP
   selector:
-    app: lidarr
+    app: torrent
   ports:
     - name: web
       port: 80
