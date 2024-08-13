@@ -51,8 +51,6 @@ spec:
           volumeMounts:
             - name: remark42
               mountPath: /srv/var
-            - name: backup
-              mountPath: /backup
           resources:
             requests:
               cpu: 50m
@@ -64,7 +62,3 @@ spec:
         - name: remark42
           persistentVolumeClaim:
             claimName: remark42
-        - name: backup
-          nfs:
-            server: 192.168.1.55
-            path: /mnt/pool-0/backup
