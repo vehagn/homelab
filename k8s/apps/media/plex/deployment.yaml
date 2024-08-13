@@ -63,7 +63,7 @@ spec:
             claimName: plex-config
         - name: media
           nfs:
-            server: 192.168.1.55
+            server: 192.168.1.117
             path: /mnt/pool-0/data/media
         - name: transcode
           emptyDir:

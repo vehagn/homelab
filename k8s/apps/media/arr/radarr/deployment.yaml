@@ -65,5 +65,5 @@ spec:
           emptyDir: { }
         - name: data
           nfs:
-            server: 192.168.1.55
+            server: 192.168.1.117
             path: /mnt/pool-0/data
