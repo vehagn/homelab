@@ -45,7 +45,7 @@ spec:
               mountPath: /themes
       containers:
         - name: torrent
-          image: ghcr.io/onedr0p/qbittorrent:4.6.5
+          image: ghcr.io/onedr0p/qbittorrent:4.6.5 # renovate: docker=ghcr.io/onedr0p/qbittorrent
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true

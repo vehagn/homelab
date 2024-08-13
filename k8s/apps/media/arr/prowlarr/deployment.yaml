@@ -30,7 +30,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: prowlarr
-          image: ghcr.io/onedr0p/prowlarr:1.20.1
+          image: ghcr.io/onedr0p/prowlarr:1.20.1 # renovate: docker=ghcr.io/onedr0p/prowlarr
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true

@@ -30,7 +30,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: remark42
-          image: umputun/remark42:v1.12.1
+          image: ghcr.io/umputun/remark42:v1.12.1 # renovate: github-releases=umputun/remark42
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
