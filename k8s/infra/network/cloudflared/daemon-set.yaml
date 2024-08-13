@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: cloudflared
-          image: cloudflare/cloudflared:2024.6.1
+          image: cloudflare/cloudflared:2024.6.1 # renovate: docker=cloudflare/cloudflared
           imagePullPolicy: IfNotPresent
           args:
             - tunnel
@@ -37,17 +37,17 @@ spec:
             limits:
               memory: 512Mi
           volumeMounts:
-            - name: cloudflared-config
+            - name: config
               mountPath: /etc/cloudflared/config/config.yaml
-              subPath: cloudflared-config.yaml
-            - name: tunnel-credentials
-              mountPath: /etc/cloudflared/creds
+              subPath: config.yaml
+            - name: credentials
+              mountPath: /etc/cloudflared/credentials
               readOnly: true
       restartPolicy: Always
       volumes:
-        - name: cloudflared-config
+        - name: config
           configMap:
-            name: cloudflared-config
-        - name: tunnel-credentials
+            name: config
+        - name: credentials
           secret:
             secretName: tunnel-credentials
