@@ -28,22 +28,34 @@ spec:
         fsGroupChangePolicy: Always
         seccompProfile:
           type: RuntimeDefault
-      initContainers:
-        - name: vuetorrent
-          image: busybox
+      containers:
+        - name: git-sync-vuetorrent
+          image: registry.k8s.io/git-sync/git-sync:v4.2.3 # renovate: docker=registry.k8s.io/git-sync/git-sync
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
             capabilities:
               drop: [ "ALL" ]
-          command:
-            - sh
-            - -c
-            - wget -O /themes/vuetorrent.zip https://github.com/VueTorrent/VueTorrent/releases/download/v2.10.2/vuetorrent.zip && unzip /themes/vuetorrent.zip -d /themes/ && rm /themes/vuetorrent.zip
+          args:
+            - --repo=https://github.com/VueTorrent/VueTorrent
+            - --root=/tmp/git-sync
+            - --ref=latest-release
+            - --period=12h
+            - --link=/themes/vuetorrent
+            - --max-failures=10
+            - -v=2
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              cpu: 2000m
+              memory: 256Mi
           volumeMounts:
             - name: themes
               mountPath: /themes
-      containers:
+            - name: tmp
+              mountPath: /tmp
         - name: torrent
           image: ghcr.io/onedr0p/qbittorrent:4.6.5 # renovate: docker=ghcr.io/onedr0p/qbittorrent
           securityContext:
@@ -64,6 +76,13 @@ spec:
             - configMapRef:
                 name: common-env
                 optional: true
+          resources:
+            requests:
+              cpu: 100m
+              memory: 1.5Gi
+            limits:
+              cpu: 2000m
+              memory: 8Gi
           volumeMounts:
             - name: torrent-config
               mountPath: /config
@@ -73,13 +92,6 @@ spec:
               mountPath: /themes
             - name: data
               mountPath: /app/data
-          resources:
-            requests:
-              cpu: 100m
-              memory: 1.5Gi
-            limits:
-              cpu: 2000m
-              memory: 8Gi
       volumes:
         - name: torrent-config
           persistentVolumeClaim:
