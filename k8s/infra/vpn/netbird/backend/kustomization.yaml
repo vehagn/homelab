@@ -3,10 +3,7 @@ kind: Kustomization
 namespace: netbird
 
 resources:
-  - oidc-client.yaml
-  - oidc-sa-role.yaml
   - secret-coturn-credentials.yaml
-  - secret-oidc-credentials.yaml
 
 helmCharts:
   - name: netbird

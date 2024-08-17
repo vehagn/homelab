@@ -14,7 +14,6 @@ spec:
     baseUrl: "https://netbird.stonegarden.dev"
     validRedirectUris:
       - "http://localhost:53000"
-      - "http://localhost:8080/*"
       - "https://netbird.stonegarden.dev/*"
     validPostLogoutRedirectUris:
       - "https://netbird.stonegarden.dev/*"
