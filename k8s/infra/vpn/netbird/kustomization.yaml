@@ -7,3 +7,4 @@ resources:
   - http-route.yaml
   - backend
   - dashboard
+  - agent

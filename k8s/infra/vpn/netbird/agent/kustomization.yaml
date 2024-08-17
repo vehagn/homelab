@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configMapGenerator:
+  - name: agent-config
+    namespace: netbird
+    literals:
+      - NB_HOSTNAME="talos-router"
+      - NB_LOG_LEVEL="warn"
+      - NB_MANAGEMENT_URL="https://netbird.stonegarden.dev"
+      - NB_ADMIN_URL="https://netbird.stonegarden.dev"
+      - NB_CONFIG="/config/config.json"
+
+resources:
+  - agent-setup-key.yaml
+  - daemon-set.yaml
