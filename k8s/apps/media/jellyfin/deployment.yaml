@@ -61,4 +61,5 @@ spec:
             server: 192.168.1.117
             path: /mnt/pool-0/data/media
         - name: cache
-          emptyDir: { }
+          emptyDir:
+            medium: Memory
