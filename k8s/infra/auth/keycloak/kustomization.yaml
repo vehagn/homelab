@@ -7,12 +7,12 @@ resources:
   - secret-keycloak-admin.yaml
   - secret-keycloak-db-credentials.yaml
   - http-route.yaml
-  - config
 
 helmCharts:
   - name: keycloak
     repo: oci://registry-1.docker.io/bitnamicharts
     releaseName: keycloak
     namespace: keycloak
-    version: 22.1.1
+#    version: 22.1.1
+    version: 21.5.0
     valuesFile: values.yaml
