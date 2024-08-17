@@ -17,5 +17,5 @@ kind: Function
 metadata:
   name: function-keycloak-builtin-objects
 spec:
-  package: registry.gitlab.com/corewire/images/crossplane/function-keycloak-builtin-objects:v1.0.0 # renovate: gitlab-releases=corewire/images/crossplane/function-keycloak-builtin-objects
+  package: registry.gitlab.com/corewire/images/crossplane/function-keycloak-builtin-objects:v2.0.0 # renovate: gitlab-releases=corewire/images/crossplane/function-keycloak-builtin-objects
   packagePullPolicy: Always
