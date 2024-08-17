@@ -11,6 +11,8 @@ spec:
       server: '*'
     - namespace: 'keycloak'
       server: '*'
+    - namespace: 'netbird'
+      server: '*'
   clusterResourceWhitelist:
     - group: '*'
       kind: '*'
