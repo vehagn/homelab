@@ -13,6 +13,5 @@ resources:
   - ns.yaml
   - svc.yaml
   - pvc.yaml
-  - ingress.yaml
   - http-route.yaml
   - deployment.yaml

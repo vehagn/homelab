@@ -12,13 +12,7 @@ nodeSelector:
 proxy: edge
 
 ingress:
-  enabled: true
-  annotations:
-    cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
-  hostname: keycloak.stonegarden.dev
-  pathType: Prefix
-  path: /
-  tls: true
+  enabled: false
 
 postgresql:
   enabled: true

@@ -78,15 +78,7 @@ hubble:
     rollOutPods: true
 
 ingressController:
-  enabled: true
-  default: true
-  loadbalancerMode: shared
-  service:
-    annotations:
-      io.cilium/lb-ipam-ips: 192.168.1.223
-    # Random values so Argo CD doesn't complain about the service being out of sync
-    insecureNodePort: 32434
-    secureNodePort: 31247
+  enabled: false
 
 # mTLS
 authentication:

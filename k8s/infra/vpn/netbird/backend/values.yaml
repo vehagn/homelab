@@ -28,18 +28,6 @@ management:
     topology.kubernetes.io/zone: abel
   ingress:
     enabled: false
-#    annotations:
-#      cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
-#    hosts:
-#      - host: netbird.stonegarden.dev
-#        paths:
-#          - path: /api
-#            pathType: Prefix
-#          - path: /management.ManagementService/
-#            pathType: Prefix
-#    tls:
-#      - hosts:
-#          - netbird.stonegarden.dev
 
 signal:
   image:
@@ -50,16 +38,6 @@ signal:
   protocol: https
   ingress:
     enabled: false
-#    annotations:
-#      cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
-#    hosts:
-#      - host: netbird.stonegarden.dev
-#        paths:
-#          - path: /signalexchange.SignalExchange/
-#            pathType: Prefix
-#    tls:
-#      - hosts:
-#          - netbird.stonegarden.dev
 
 stun:
   uri: stun:coturn.stonegarden.dev:3478
