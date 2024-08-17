@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: dev
+  namespace: argocd
+spec:
+  sourceRepos:
+    - 'https://github.com/vehagn/homelab'
+  destinations:
+    - namespace: 'argocd'
+      server: '*'
+    - namespace: 'whoami'
+      server: '*'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'

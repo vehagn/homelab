@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: whoami
+  namespace: whoami
+  annotations:
+    io.cilium/lb-ipam-ips: 192.168.1.223
+spec:
+  type: LoadBalancer
+  selector:
+    app: whoami
+  ports:
+    - name: web
+      port: 80
+      targetPort: http
