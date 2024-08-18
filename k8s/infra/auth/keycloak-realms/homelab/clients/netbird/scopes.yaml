@@ -6,6 +6,7 @@ spec:
   forProvider:
     defaultScopes:
       - acr
+      - basic
       - email
       - profile
       - roles
