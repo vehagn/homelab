@@ -18,14 +18,43 @@ spec:
       securityContext:
         seccompProfile:
           type: RuntimeDefault
+      initContainers:
+        - name: copy-base-config
+          image: busybox
+          command: [ "cp", "/tmp/AdGuardHome.yaml", "/opt/adguardhome/conf/AdGuardHome.yaml" ]
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ "ALL" ]
+          volumeMounts:
+            - name: config
+              mountPath: /tmp/AdGuardHome.yaml
+              subPath: AdGuardHome.yaml
+            - name: config-folder
+              mountPath: /opt/adguardhome/conf
+        - name: append-users
+          image: busybox
+          command: [ "sh", "-c", "cat /tmp/users.yaml >> /opt/adguardhome/conf/AdGuardHome.yaml" ]
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ "ALL" ]
+          volumeMounts:
+            - name: users
+              mountPath: /tmp/users.yaml
+              subPath: users.yaml
+            - name: config-folder
+              mountPath: /opt/adguardhome/conf
       containers:
         - name: adguard
           image: docker.io/adguard/adguardhome:v0.107.48 # renovate: docker=docker.io/adguard/adguardhome
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
-#            capabilities:
-#              drop: [ "ALL" ]
+          # capabilities:
+          #   drop: [ "ALL" ]
           ports:
             - name: dns-tcp
               containerPort: 53
@@ -47,12 +76,18 @@ spec:
               cpu: 500m
               memory: 256Mi
           volumeMounts:
-            - name: adguard-conf
+            - name: config-folder
               mountPath: /opt/adguardhome/conf
-            - name: adguard-work
+            - name: work-folder
               mountPath: /opt/adguardhome/work
       volumes:
-        - name: adguard-conf
-          emptyDir: {}
-        - name: adguard-work
-          emptyDir: {}
+        - name: config
+          configMap:
+            name: adguard-config
+        - name: users
+          secret:
+            secretName: users
+        - name: config-folder
+          emptyDir: { }
+        - name: work-folder
+          emptyDir: { }

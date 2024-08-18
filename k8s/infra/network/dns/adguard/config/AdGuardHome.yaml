@@ -4,9 +4,6 @@ http:
     enabled: false
   address: 0.0.0.0:3000
   session_ttl: 720h
-users:
-  - name: veh
-    password: $2a$10$/84M9f9064xOSmb3MGXBmuApKPhvXnRxMGjISmvAmkp85ViiMd5l.
 auth_attempts: 5
 block_auth_min: 15
 http_proxy: ""
@@ -20,21 +17,22 @@ dns:
   ratelimit: 20
   ratelimit_subnet_len_ipv4: 24
   ratelimit_subnet_len_ipv6: 56
-  ratelimit_whitelist: []
+  ratelimit_whitelist: [ ]
   refuse_any: true
   upstream_dns:
-    - https://dns10.quad9.net/dns-query
+    - 10.96.0.11
+    - udp://unbound.dns.svc.cluster.local:53
+    - tcp://unbound.dns.svc.cluster.local:53
   upstream_dns_file: ""
   bootstrap_dns:
-    - 9.9.9.10
-    - 149.112.112.10
-    - 2620:fe::10
-    - 2620:fe::fe:10
-  fallback_dns: []
-  upstream_mode: load_balance
+    - 10.96.0.10
+  fallback_dns:
+    - 1.1.1.1
+    - 9.9.9.9
+  upstream_mode: fastest_addr
   fastest_timeout: 1s
-  allowed_clients: []
-  disallowed_clients: []
+  allowed_clients: [ ]
+  disallowed_clients: [ ]
   blocked_hosts:
     - version.bind
     - id.server
@@ -46,7 +44,7 @@ dns:
   cache_ttl_min: 0
   cache_ttl_max: 0
   cache_optimistic: false
-  bogus_nxdomain: []
+  bogus_nxdomain: [ ]
   aaaa_disabled: false
   enable_dnssec: false
   edns_client_subnet:
@@ -55,15 +53,15 @@ dns:
     use_custom: false
   max_goroutines: 300
   handle_ddr: true
-  ipset: []
+  ipset: [ ]
   ipset_file: ""
   bootstrap_prefer_ipv6: false
   upstream_timeout: 10s
-  private_networks: []
+  private_networks: [ ]
   use_private_ptr_resolvers: true
-  local_ptr_upstreams: []
+  local_ptr_upstreams: [ ]
   use_dns64: false
-  dns64_prefixes: []
+  dns64_prefixes: [ ]
   serve_http3: false
   use_http3_upstreams: false
   serve_plain_dns: true
@@ -85,14 +83,14 @@ tls:
   strict_sni_check: false
 querylog:
   dir_path: ""
-  ignored: []
+  ignored: [ ]
   interval: 2160h
   size_memory: 1000
   enabled: true
   file_enabled: true
 statistics:
   dir_path: ""
-  ignored: []
+  ignored: [ ]
   interval: 24h
   enabled: true
 filters:
@@ -104,8 +102,8 @@ filters:
     url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_2.txt
     name: AdAway Default Blocklist
     id: 2
-whitelist_filters: []
-user_rules: []
+whitelist_filters: [ ]
+user_rules: [ ]
 dhcp:
   enabled: false
   interface_name: ""
@@ -117,7 +115,7 @@ dhcp:
     range_end: ""
     lease_duration: 86400
     icmp_timeout_msec: 1000
-    options: []
+    options: [ ]
   dhcpv6:
     range_start: ""
     lease_duration: 86400
@@ -129,7 +127,7 @@ filtering:
   blocked_services:
     schedule:
       time_zone: UTC
-    ids: []
+    ids: [ ]
   protection_disabled_until: null
   safe_search:
     enabled: false
@@ -142,7 +140,17 @@ filtering:
   blocking_mode: default
   parental_block_host: family-block.dns.adguard.com
   safebrowsing_block_host: standard-block.dns.adguard.com
-  rewrites: []
+  rewrites:
+    - domain: '*.stonegarden.dev'
+      answer: 192.168.1.222
+    - domain: stonegarden.dev
+      answer: 192.168.1.222
+    - domain: plex.stonegarden.dev
+      answer: 192.168.1.228
+    - domain: jellyfin.stonegarden.dev
+      answer: 192.168.1.229
+    - domain: whoami.stonegarden.dev
+      answer: 192.168.1.223
   safebrowsing_cache_size: 1048576
   safesearch_cache_size: 1048576
   parental_cache_size: 1048576
@@ -160,7 +168,7 @@ clients:
     rdns: true
     dhcp: true
     hosts: true
-  persistent: []
+  persistent: [ ]
 log:
   file: ""
   max_backups: 0
