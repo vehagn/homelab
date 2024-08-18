@@ -20,7 +20,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: adguard
-          image: docker.io/adguard/adguardhome:v0.107.48 # renovate: docker=docker.io/adguard/adguardhome
+          image: docker.io/adguard/adguardhome:v0.107.52 # renovate: docker=docker.io/adguard/adguardhome
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
