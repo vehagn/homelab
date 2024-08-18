@@ -5,6 +5,7 @@ metadata:
   namespace: dns
 spec:
   type: ClusterIP
+  # https://kubernetes.io/docs/concepts/services-networking/cluster-ip-allocation/
   clusterIP: 10.96.0.11
   ports:
     - name: dns
