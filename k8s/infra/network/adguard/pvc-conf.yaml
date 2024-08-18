@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: adguard-conf
+  namespace: adguard
+spec:
+  storageClassName: proxmox-data
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 32Mi

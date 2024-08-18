@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configMapGenerator:
+  - name: unbound-config
+    namespace: adguard
+    files:
+      - config/unbound.conf
+
+resources:
+  - ns.yaml
+  - svc.yaml
+#  - pvc-conf.yaml
+#  - pvc-work.yaml
+  - deployment.yaml
+  - http-route.yaml

@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adguard
+  namespace: adguard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adguard
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: adguard
+    spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: euclid
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: unbound
+          image: docker.io/mvance/unbound:1.19.0  # renovate: docker=docker.io/mvance/unbound
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+#            capabilities:
+#              drop: [ "ALL" ]
+          ports:
+            - name: unbound-dns-tcp
+              containerPort: 5335
+              protocol: TCP
+            - name: unbound-dns-udp
+              containerPort: 5335
+              protocol: UDP
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 128Mi
+          startupProbe:
+            exec:
+              command: ['drill', '@127.0.0.1', '-p', '5335', 'cnn.com']
+            initialDelaySeconds: 10
+            failureThreshold: 3
+            timeoutSeconds: 5
+          volumeMounts:
+            - name: unbound-config
+              mountPath: /opt/unbound/etc/unbound/unbound.conf
+              subPath: unbound.conf
+        - name: adguard
+          image: docker.io/adguard/adguardhome:v0.107.48 # renovate: docker=docker.io/adguard/adguardhome
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+#            capabilities:
+#              drop: [ "ALL" ]
+          ports:
+            - name: dns-tcp
+              containerPort: 53
+              protocol: TCP
+            - name: dns-udp
+              containerPort: 53
+              protocol: UDP
+            - name: dchp
+              containerPort: 67
+              protocol: UDP
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          volumeMounts:
+            - name: adguard-conf
+              mountPath: /opt/adguardhome/conf
+            - name: adguard-work
+              mountPath: /opt/adguardhome/work
+      volumes:
+        - name: unbound-config
+          configMap:
+            name: unbound-config
+        - name: adguard-conf
+          emptyDir: {}
+#          persistentVolumeClaim:
+#            claimName: adguard-conf
+        - name: adguard-work
+          emptyDir: {}
+#          persistentVolumeClaim:
+#            claimName: adguard-work
