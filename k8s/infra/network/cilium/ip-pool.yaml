@@ -5,4 +5,4 @@ metadata:
 spec:
   blocks:
     - start: 192.168.1.220
-      stop: 192.168.1.229
+      stop: 192.168.1.255

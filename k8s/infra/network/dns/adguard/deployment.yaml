@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adguard
+  namespace: dns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adguard
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: adguard
+    spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: adguard
+          image: docker.io/adguard/adguardhome:v0.107.48 # renovate: docker=docker.io/adguard/adguardhome
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+#            capabilities:
+#              drop: [ "ALL" ]
+          ports:
+            - name: dns-tcp
+              containerPort: 53
+              protocol: TCP
+            - name: dns-udp
+              containerPort: 53
+              protocol: UDP
+            - name: dchp
+              containerPort: 67
+              protocol: UDP
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          volumeMounts:
+            - name: adguard-conf
+              mountPath: /opt/adguardhome/conf
+            - name: adguard-work
+              mountPath: /opt/adguardhome/work
+      volumes:
+        - name: adguard-conf
+          emptyDir: {}
+        - name: adguard-work
+          emptyDir: {}

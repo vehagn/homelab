@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unbound
+  namespace: dns
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: unbound
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: unbound
+    spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: euclid
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: unbound
+          image: docker.io/mvance/unbound:1.20.0  # renovate: docker=docker.io/mvance/unbound
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+#            capabilities:
+#              drop: [ "ALL" ]
+          ports:
+            - name: unbound-dns-tcp
+              containerPort: 5335
+              protocol: TCP
+            - name: unbound-dns-udp
+              containerPort: 5335
+              protocol: UDP
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 128Mi
+          startupProbe:
+            exec:
+              command: ['drill', '@127.0.0.1', '-p', '53', 'nrk.no']
+            initialDelaySeconds: 10
+            failureThreshold: 3
+            timeoutSeconds: 5
+          volumeMounts:
+            - name: config
+              mountPath: /opt/unbound/etc/unbound/unbound.conf
+              subPath: unbound.conf
+      volumes:
+        - name: config
+          configMap:
+            name: unbound-config
