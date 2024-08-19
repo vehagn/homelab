@@ -4,19 +4,14 @@ metadata:
   name: unbound
   namespace: dns
 spec:
-#  replicas: 2
   selector:
     matchLabels:
       app: unbound
-#  strategy:
-#    type: Recreate
   template:
     metadata:
       labels:
         app: unbound
     spec:
-      nodeSelector:
-        topology.kubernetes.io/zone: euclid
       securityContext:
         seccompProfile:
           type: RuntimeDefault
@@ -26,8 +21,6 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: false
-#            capabilities:
-#              drop: [ "ALL" ]
           ports:
             - name: unbound-dns-tcp
               containerPort: 5335
