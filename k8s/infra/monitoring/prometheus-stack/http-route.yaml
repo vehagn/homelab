@@ -5,7 +5,7 @@ metadata:
   namespace: monitoring
 spec:
   parentRefs:
-    - name: stonegarden
+    - name: internal
       namespace: gateway
   hostnames:
     - "grafana.stonegarden.dev"

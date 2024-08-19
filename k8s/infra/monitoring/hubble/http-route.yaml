@@ -5,7 +5,7 @@ metadata:
   namespace: kube-system
 spec:
   parentRefs:
-    - name: stonegarden
+    - name: internal
       namespace: gateway
   hostnames:
     - "hubble.stonegarden.dev"

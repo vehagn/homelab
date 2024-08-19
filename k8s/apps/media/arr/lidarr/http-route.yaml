@@ -5,7 +5,7 @@ metadata:
   namespace: arr
 spec:
   parentRefs:
-    - name: stonegarden
+    - name: internal
       namespace: gateway
   hostnames:
     - "lidarr.stonegarden.dev"

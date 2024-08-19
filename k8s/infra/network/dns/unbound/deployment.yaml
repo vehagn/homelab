@@ -1,15 +1,15 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
   name: unbound
   namespace: dns
 spec:
-  replicas: 2
+#  replicas: 2
   selector:
     matchLabels:
       app: unbound
-  strategy:
-    type: Recreate
+#  strategy:
+#    type: Recreate
   template:
     metadata:
       labels:
@@ -37,7 +37,7 @@ spec:
               protocol: UDP
           resources:
             requests:
-              cpu: 50m
+              cpu: 10m
               memory: 64Mi
             limits:
               cpu: 500m

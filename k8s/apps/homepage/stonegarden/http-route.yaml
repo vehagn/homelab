@@ -5,7 +5,9 @@ metadata:
   namespace: stonegarden
 spec:
   parentRefs:
-    - name: stonegarden
+    - name: external
+      namespace: gateway
+    - name: internal
       namespace: gateway
   hostnames:
     - "stonegarden.dev"
