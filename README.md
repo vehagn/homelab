@@ -44,17 +44,23 @@ I've also written an article on how to get started
 with [Kubernetes on Proxmox](https://blog.stonegarden.dev/articles/2024/03/proxmox-k8s-with-cilium/) if virtualisation
 is more your thing.
 
-I'm currently working on an article on how to bootstrap your own Talos-cluster using this repo.
+The current iteration of my homelab runs on [Talos](https://talos.dev) Kubernetes and is set up according 
+to [this article](https://blog.stonegarden.dev/articles/2024/08/talos-proxmox-tofu/).
 
 ## ⚙️ Core Components
 
 * [Proxmox VE](https://www.proxmox.com/en/proxmox-virtual-environment): Server management and KVM hypervisor.
 * [OpenTofu](https://opentofu.org/): Open source infrastructure as code tool.
 * [Cilium](https://cilium.io/): eBPF-based Networking, Observability, Security.
+* [Proxmox CSI Plugin](https://github.com/sergelogvinov/proxmox-csi-plugin): CSI driver for storage
 * [Argo CD](https://argo-cd.readthedocs.io/en/stable/): Declarative, GitOps continuous delivery tool for Kubernetes.
 * [Cert-manager](https://cert-manager.io/): Cloud native certificate management.
 * [Sealed-secrets](https://github.com/bitnami-labs/sealed-secrets): Encrypt your Secret into a SealedSecret, which is
   safe to store - even inside a public repository.
+* [Keycloak](https://www.keycloak.org/): Open source identity and access management
+* [Gateway API](https://gateway-api.sigs.k8s.io/): Next generation of Kubernetes Ingress
+* [AdGuardHome](https://github.com/AdguardTeam/AdGuardHome): Domain name server backed by Unbound
+* [Netbird](https://netbird.io/): Completely self hosted VPN solution
 
 ## 🗃️ Folder Structure
 
@@ -62,7 +68,7 @@ I'm currently working on an article on how to bootstrap your own Talos-cluster u
 .
 ├── 📂 docs                # Documentation
 ├── 📂 k8s                 # Kubernetes manifests
-│   ├── 📂 apps            # Applications on
+│   ├── 📂 apps            # Applications
 │   ├── 📂 infra           # Infrastructure components
 │   └── 📂 sets            # Bootstrapping ApplicationSets
 └── 📂 tofu                # Tofu configuration
@@ -83,17 +89,16 @@ I'm currently working on an article on how to bootstrap your own Talos-cluster u
 
 ## 🏗️ Work in Progress
 
-- [x] Renovate for automatic updates
-- [ ] Keycloak for auth
-- [ ] Implement NetBird
-- [ ] AdGuard Home
+- [ ] More lightweight auth (Authelia, Authentik, Zitadel, kanidm)
+- [ ] CNPG for databases
 - [ ] External DNS
-- [ ] Clean up DNS config
 
 ## 👷‍ Future Projects
 
-- [ ] OPNSense/pfSense
-- [ ] Use BGP instead of ARP
-- [ ] Dynamic Resource Allocation for GPU
+- [ ] OPNSense/pfSense/OpenWRT
+- [ ] Implement LGTM-stack for monitoring
+- [ ] Use BGP instead of ARP in Cilium
 - [ ] Local LLM
 - [ ] Cilium mTLS & SPIFFE/SPIRE
+- [ ] Ceph for distributed storage
+- [ ] Dynamic Resource Allocation for GPU
