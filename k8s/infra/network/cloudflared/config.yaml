@@ -9,20 +9,20 @@ warp-routing:
 ingress:
   - hostname: hello.stonegarden.dev
     service: hello_world
-  - hostname: proxmox.stonegarden.dev
-    service: https://proxmox.proxmox.svc.cluster.local:443
-    originRequest:
-      originServerName: proxmox.stonegarden.dev
-  - hostname: truenas.stonegarden.dev
-    service: https://truenas.truenas.svc.cluster.local:443
-    originRequest:
-      originServerName: truenas.stonegarden.dev
+#  - hostname: proxmox.stonegarden.dev
+#    service: https://proxmox.proxmox.svc.cluster.local:443
+#    originRequest:
+#      originServerName: proxmox.stonegarden.dev
+#  - hostname: truenas.stonegarden.dev
+#    service: https://truenas.truenas.svc.cluster.local:443
+#    originRequest:
+#      originServerName: truenas.stonegarden.dev
   - hostname: "*.stonegarden.dev"
-    service: https://cilium-gateway-stonegarden.gateway.svc.cluster.local:443
+    service: https://cilium-gateway-external.gateway.svc.cluster.local:443
     originRequest:
       originServerName: "*.stonegarden.dev"
   - hostname: stonegarden.dev
-    service: https://cilium-gateway-stonegarden.gateway.svc.cluster.local:443
+    service: https://cilium-gateway-external.gateway.svc.cluster.local:443
     originRequest:
       originServerName: stonegarden.dev
   - service: http_status:404

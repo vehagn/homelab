@@ -5,7 +5,9 @@ metadata:
   namespace: jellyfin
 spec:
   parentRefs:
-    - name: stonegarden
+    - name: external
+      namespace: gateway
+    - name: internal
       namespace: gateway
   hostnames:
     - "jellyfin.stonegarden.dev"

@@ -5,7 +5,7 @@ metadata:
   namespace: dns
 spec:
   parentRefs:
-    - name: stonegarden
+    - name: internal
       namespace: gateway
   hostnames:
     - "adguard.stonegarden.dev"

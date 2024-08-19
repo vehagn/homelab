@@ -141,16 +141,18 @@ filtering:
   parental_block_host: family-block.dns.adguard.com
   safebrowsing_block_host: standard-block.dns.adguard.com
   rewrites:
-    - domain: '*.stonegarden.dev'
-      answer: 192.168.1.222
-    - domain: stonegarden.dev
-      answer: 192.168.1.222
     - domain: plex.stonegarden.dev
       answer: 192.168.1.228
     - domain: jellyfin.stonegarden.dev
       answer: 192.168.1.229
-    - domain: whoami.stonegarden.dev
-      answer: 192.168.1.223
+    - domain: proxmox.stonegarden.dev
+      answer: 192.168.1.221
+    - domain: truenas.stonegarden.dev
+      answer: 192.168.1.221
+    - domain: '*.stonegarden.dev'
+      answer: 192.168.1.220
+    - domain: stonegarden.dev
+      answer: 192.168.1.220
   safebrowsing_cache_size: 1048576
   safesearch_cache_size: 1048576
   parental_cache_size: 1048576
