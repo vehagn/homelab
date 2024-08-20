@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netbird-backend-management
+spec:
+  template:
+    spec:
+      dnsConfig:
+        nameservers:
+          - 192.168.1.253 # AdGuardHome
+      dnsPolicy: None
