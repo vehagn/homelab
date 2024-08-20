@@ -17,9 +17,6 @@ spec:
         - path:
             type: PathPrefix
             value: /resources
-        - path:
-            type: PathPrefix
-            value: /admin/realms/homelab/users/count
       backendRefs:
         - name: keycloak
           port: 80
