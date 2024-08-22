@@ -11,5 +11,5 @@ helmCharts:
     releaseName: cnpg
     namespace: cnpg-system
     includeCRDs: true
-    version: 0.21.6
+    version: 0.22.0
     valuesFile: values.yaml
