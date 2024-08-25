@@ -1,0 +1,10 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: cluster-example
+  namespace: cnpg-database
+spec:
+  instances: 3
+  storage:
+    storageClass: proxmox-csi
+    size: 4G

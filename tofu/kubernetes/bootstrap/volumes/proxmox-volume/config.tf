@@ -17,7 +17,7 @@ resource "restapi_object" "proxmox-volume" {
   })
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
 }
 
