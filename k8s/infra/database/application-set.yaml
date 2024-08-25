@@ -1,24 +1,24 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: monitoring
+  name: database
   namespace: argocd
   labels:
-    dev.stonegarden: monitoring
+    dev.stonegarden: database
 spec:
   generators:
     - git:
         repoURL: https://github.com/vehagn/homelab
         revision: HEAD
         directories:
-          - path: k8s/infra/monitoring/*
+          - path: k8s/infra/database/*
   template:
     metadata:
       name: '{{ path.basename }}'
       labels:
         dev.stonegarden: controllers
     spec:
-      project: monitoring
+      project: database
       source:
         plugin:
           name: kustomize-build-with-helm

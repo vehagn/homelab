@@ -29,6 +29,7 @@ tofu state rm "module.volumes.module.proxmox-volume[\"pv-qbittorrent-config\"].r
 tofu state rm 'module.volumes.module.proxmox-volume["pv-keycloak"].restapi_object.proxmox-volume'
 tofu state rm 'module.volumes.module.proxmox-volume["pv-netbird-management"].restapi_object.proxmox-volume'
 tofu state rm 'module.volumes.module.proxmox-volume["pv-netbird-signal"].restapi_object.proxmox-volume'
+tofu state rm 'module.volumes.module.proxmox-volume["pv-database"].restapi_object.proxmox-volume'
 ```
 
 ## import proxmox volume
@@ -46,6 +47,7 @@ tofu import 'module.volumes.module.proxmox-volume["pv-radarr-config"].restapi_ob
 tofu import 'module.volumes.module.proxmox-volume["pv-remark42"].restapi_object.proxmox-volume' /api2/json/nodes/euclid/storage/local-zfs/content/local-zfs:vm-9999-pv-remark42
 tofu import 'module.volumes.module.proxmox-volume["pv-sonarr-config"].restapi_object.proxmox-volume' /api2/json/nodes/cantor/storage/local-zfs/content/local-zfs:vm-9999-pv-sonarr-config
 tofu import 'module.volumes.module.proxmox-volume["pv-torrent-config"].restapi_object.proxmox-volume' /api2/json/nodes/euclid/storage/local-zfs/content/local-zfs:vm-9999-pv-torrent-config
+tofu import 'module.volumes.module.proxmox-volume["pv-database"].restapi_object.proxmox-volume' /api2/json/nodes/euclid/storage/local-zfs/content/local-zfs:vm-9999-pv-database
 ```
 
 ## import persistent volume

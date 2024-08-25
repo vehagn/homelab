@@ -152,5 +152,9 @@ module "volumes" {
       node = "abel"
       size = "10G"
     }
+    pv-single-database = {
+      node = "euclid"
+      size = "4G"
+    }
   }
 }

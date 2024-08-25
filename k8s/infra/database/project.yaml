@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: database
+  namespace: argocd
+spec:
+  sourceRepos:
+    - 'https://github.com/vehagn/homelab'
+  destinations:
+    - namespace: 'argocd'
+      server: '*'
+    - namespace: 'cnpg-database'
+      server: '*'
+    - namespace: 'cnpg-system'
+      server: '*'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'

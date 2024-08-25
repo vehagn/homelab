@@ -1,0 +1,17 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: single-example
+  namespace: cnpg-database
+spec:
+  instances: 1
+  affinity:
+    nodeSelector:
+      topology.kubernetes.io/zone: euclid
+  storage:
+    size: 4G
+    pvcTemplate:
+      storageClassName: proxmox-csi
+      volumeName: pv-single-database
+      accessModes:
+        - ReadWriteOnce
