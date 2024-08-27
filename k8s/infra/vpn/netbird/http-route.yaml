@@ -12,7 +12,7 @@ spec:
   hostnames:
     - "netbird.stonegarden.dev"
   rules:
-      - backendRefs:
+    - backendRefs:
         - name: netbird-dashboard
           port: 80
       matches:
