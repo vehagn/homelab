@@ -103,7 +103,8 @@ filters:
     name: AdAway Default Blocklist
     id: 2
 whitelist_filters: [ ]
-user_rules: [ ]
+user_rules:
+  - '@@||sdk.iad-01.braze.com^$important' # Payments?
 dhcp:
   enabled: false
   interface_name: ""
@@ -141,10 +142,6 @@ filtering:
   parental_block_host: family-block.dns.adguard.com
   safebrowsing_block_host: standard-block.dns.adguard.com
   rewrites:
-    - domain: plex.stonegarden.dev
-      answer: 192.168.1.228
-    - domain: jellyfin.stonegarden.dev
-      answer: 192.168.1.229
     - domain: proxmox.stonegarden.dev
       answer: 192.168.1.221
     - domain: truenas.stonegarden.dev
