@@ -7,6 +7,8 @@ spec:
   parentRefs:
     - name: internal
       namespace: gateway
+    - name: external
+      namespace: gateway
   hostnames:
     - "sonarr.stonegarden.dev"
   rules:
