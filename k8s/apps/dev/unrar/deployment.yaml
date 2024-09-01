@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unrar
+  namespace: unrar
+  labels:
+    app: unrar
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: unrar
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      namespace: unrar
+      labels:
+        app: unrar
+    spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: cantor
+      securityContext:
+        runAsUser: 2501
+        runAsGroup: 2501
+        fsGroup: 2501
+        fsGroupChangePolicy: OnRootMismatch
+      containers:
+        - name: unrar
+          image: ghcr.io/nzrsky/unrar:main
+          command: [ "sleep", "1d" ]
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: data
+              mountPath: /mnt/data
+      volumes:
+        - name: tmp
+          emptyDir: { }
+        - name: data
+          nfs:
+            server: 192.168.1.117
+            path: /mnt/pool-0/data
