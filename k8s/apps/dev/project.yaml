@@ -9,6 +9,8 @@ spec:
   destinations:
     - namespace: 'argocd'
       server: '*'
+    - namespace: 'unrar'
+      server: '*'
     - namespace: 'whoami'
       server: '*'
   clusterResourceWhitelist:
