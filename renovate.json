@@ -24,6 +24,19 @@
   ],
   "packageRules": [
     {
+      "groupName": "Media containers",
+      "matchPackagePrefixes": [
+        "ghcr.io/onedr0p",
+        "ghcr.io/jellyfin"
+      ]
+    },
+    {
+      "groupName": "Netbird",
+      "matchPackagePrefixes": [
+        "docker.io/netbirdio"
+      ]
+    },
+    {
       "matchManagers": [
         "terraform"
       ],
