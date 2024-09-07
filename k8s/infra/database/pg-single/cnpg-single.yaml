@@ -8,6 +8,19 @@ spec:
   affinity:
     nodeSelector:
       topology.kubernetes.io/zone: euclid
+  managed:
+    services:
+      disabledDefaultServices: [ "ro", "r" ]
+      additional:
+        - selectorType: rw
+          updateStrategy: patch
+          serviceTemplate:
+            metadata:
+              name: single-example-ext
+              annotations:
+                io.cilium/lb-ipam-ips: 192.168.1.230
+            spec:
+              type: LoadBalancer
   storage:
     size: 4G
     pvcTemplate:
