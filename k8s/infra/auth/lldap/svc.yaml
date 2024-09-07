@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: lldap
+  namespace: lldap
+spec:
+  type: ClusterIP
+  selector:
+    app: lldap
+  ports:
+    - name: web
+      port: 80
+      targetPort: web

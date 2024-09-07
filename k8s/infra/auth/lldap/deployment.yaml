@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lldap
+  namespace: lldap
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lldap
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      namespace: lldap
+      labels:
+        app: lldap
+    spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: abel
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: lldap
+          image: ghcr.io/lldap/lldap:2024-09-02-debian-rootless # renovate: docker=ghcr.io/lldap/lldap
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ "ALL" ]
+          envFrom:
+            - configMapRef:
+                name: common-env
+            - secretRef:
+                name: lldap-credentials
+          ports:
+            - name: ldap
+              containerPort: 3890
+            - name: ldaps
+              containerPort: 6360
+            - name: web
+              containerPort: 17170
+          volumeMounts:
+            - name: lldap-data
+              mountPath: /data
+      volumes:
+        - name: lldap-data
+          emptyDir: { }
+        #  persistentVolumeClaim:
+        #    claimName: lldap-data
