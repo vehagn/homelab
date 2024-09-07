@@ -9,6 +9,8 @@ spec:
   destinations:
     - namespace: 'argocd'
       server: '*'
+    - namespace: 'authelia'
+      server: '*'
     - namespace: 'keycloak'
       server: '*'
     - namespace: 'lldap'

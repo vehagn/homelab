@@ -1,0 +1,60 @@
+image:
+  registry: ghcr.io
+  repository: authelia/authelia
+  tag: 4.38.10 # renovate: docker=ghcr.io/authelia/authelia
+  pullPolicy: IfNotPresent
+
+configMap:
+  theme: 'dark'
+
+  access_control:
+    # upgrade to 'two_factor' later
+    default_policy: 'one_factor'
+    rules:
+     - domain_regex: '^.*\.stonegarden.dev$'
+       policy: 'one_factor'
+
+  authentication_backend:
+    ldap:
+      enabled: true
+      implementation: 'lldap'
+      address: 'ldap://lldap.lldap.svc.cluster.local'
+      base_dn: 'DC=stonegarden,DC=dev'
+      additional_users_dn: 'OU=people'
+      # To allow sign in both with username and email, one can use a filter like
+      # (&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))
+      users_filter: '(&({username_attribute}={input})(objectClass=person))'
+      additional_groups_dn: 'OU=groups'
+      groups_filter: '(member={dn})'
+      user: 'UID=admin,OU=people,DC=stonegarden,DC=dev'
+      password:
+        secret_name: 'lldap-auth'
+        value: 'password'
+
+#    file:
+#      enabled: true
+
+  session:
+    cookies:
+      - subdomain: auth
+        domain: stonegarden.dev
+
+  storage:
+    postgres:
+      enabled: false
+      address: 'tcp://postgres.databases.svc.cluster.local:5432'
+    # Switch to Postgres later
+    local:
+      enabled: true
+
+  notifier:
+    filesystem:
+      enabled: true
+
+secret:
+  additionalSecrets:
+    lldap-auth:
+      items:
+        - key: 'password'
+          path: 'authentication.ldap.password.txt'
+
