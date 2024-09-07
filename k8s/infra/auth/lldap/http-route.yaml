@@ -1,0 +1,15 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: lldap
+  namespace: lldap
+spec:
+  parentRefs:
+    - name: internal
+      namespace: gateway
+  hostnames:
+    - "lldap.stonegarden.dev"
+  rules:
+    - backendRefs:
+        - name: lldap
+          port: 80

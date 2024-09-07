@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configMapGenerator:
+  - name: common-env
+    namespace: lldap
+    literals:
+      - TZ="Europe/Oslo"
+      - GID="1001"
+      - UID="1001"
+
+resources:
+  - ns.yaml
+  - svc.yaml
+  - lldap-credentials.yaml
+  - deployment.yaml
+  - http-route.yaml
