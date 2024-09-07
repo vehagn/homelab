@@ -8,10 +8,18 @@ configMapGenerator:
       - TZ="Europe/Oslo"
       - GID="1001"
       - UID="1001"
+  - name: bootstrap-env
+    namespace: lldap
+    literals:
+      - LLDAP_URL="http://lldap:80"
+      - LLDAP_ADMIN_USERNAME="admin"
+      - DO_CLEANUP="true"
 
 resources:
   - ns.yaml
   - svc.yaml
   - lldap-credentials.yaml
+  - lldap-config.yaml
   - deployment.yaml
   - http-route.yaml
+  - bootstrap.yaml

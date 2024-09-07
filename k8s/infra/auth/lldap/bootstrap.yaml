@@ -1,0 +1,51 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: lldap-bootstrap
+  namespace: lldap
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: lldap-bootstrap
+          image: ghcr.io/lldap/lldap:2024-09-02-debian # renovate: docker=ghcr.io/lldap/lldap versioning=loose
+          command: [ /app/bootstrap.sh ]
+          envFrom:
+            - configMapRef:
+                name: common-env
+            - configMapRef:
+                name: bootstrap-env
+          env:
+            - name: LLDAP_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lldap-credentials
+                  key: LLDAP_LDAP_USER_PASS
+          volumeMounts:
+            - name: user-configs
+              mountPath: /user-configs
+              readOnly: true
+            - name: group-configs
+              mountPath: /group-configs
+              readOnly: true
+      volumes:
+        - name: user-configs
+          projected:
+            sources:
+              - secret:
+                  name: lldap-config
+                  items:
+                    - key: users.json
+                      path: user-configs.json
+        - name: group-configs
+          projected:
+            sources:
+              - secret:
+                  name: lldap-config
+                  items:
+                    - key: groups.json
+                      path: group-configs.json
