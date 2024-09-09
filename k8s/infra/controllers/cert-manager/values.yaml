@@ -4,9 +4,6 @@ crds:
 extraArgs:
   - "--enable-gateway-api"
 
-extraArgs:
-  - "--enable-gateway-api"
-
 resources:
   limits:
     cpu: 100m
