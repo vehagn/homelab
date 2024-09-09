@@ -20,13 +20,11 @@ configMap:
       implementation: 'lldap'
       address: 'ldap://lldap.lldap.svc.cluster.local'
       base_dn: 'DC=stonegarden,DC=dev'
-      additional_users_dn: 'OU=people'
-      # To allow sign in both with username and email, one can use a filter like
-      # (&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))
-      users_filter: '(&({username_attribute}={input})(objectClass=person))'
+      #users_filter: '(&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))'
+      #additional_users_dn: 'OU=people'
+      #groups_filter: '(member={dn})'
       additional_groups_dn: 'OU=groups'
-      groups_filter: '(member={dn})'
-      user: 'UID=admin,OU=people,DC=stonegarden,DC=dev'
+      user: 'UID=authelia,OU=people,DC=stonegarden,DC=dev'
       password:
         secret_name: 'lldap-auth'
         value: 'password'
