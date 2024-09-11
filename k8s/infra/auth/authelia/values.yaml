@@ -1,3 +1,4 @@
+# https://github.com/authelia/chartrepo/blob/master/charts/authelia/values.yaml
 image:
   registry: ghcr.io
   repository: authelia/authelia
@@ -11,30 +12,30 @@ configMap:
     # upgrade to 'two_factor' later
     default_policy: 'one_factor'
     rules:
-     - domain_regex: '^.*\.stonegarden.dev$'
-       policy: 'one_factor'
+      - domain_regex: '^.*\.stonegarden.dev$'
+        policy: 'one_factor'
 
   authentication_backend:
     ldap:
       enabled: true
       implementation: 'lldap'
       address: 'ldap://lldap.lldap.svc.cluster.local'
-      base_dn: 'DC=stonegarden,DC=dev'
-      #users_filter: '(&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))'
-      #additional_users_dn: 'OU=people'
-      #groups_filter: '(member={dn})'
-      additional_groups_dn: 'OU=groups'
+      base_dn: 'dc=stonegarden,dc=dev'
+      users_filter: '(&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))'
+      additional_users_dn: 'ou=people'
+      groups_filter: '(member={dn})'
+      additional_groups_dn: 'ou=groups'
       user: 'UID=authelia,OU=people,DC=stonegarden,DC=dev'
       password:
         secret_name: 'lldap-auth'
         value: 'password'
 
-#    file:
-#      enabled: true
+  #    file:
+  #      enabled: true
 
   session:
     cookies:
-      - subdomain: auth
+      - subdomain: authelia
         domain: stonegarden.dev
 
   storage:
@@ -48,6 +49,49 @@ configMap:
   notifier:
     filesystem:
       enabled: true
+
+#  identity_providers:
+#    oidc:
+#      ## Enables this in the config map. Currently in beta stage.
+#      ## See https://www.authelia.com/r/openid-connect/
+#      enabled: true
+#      jwks:
+#        - key_id: ''
+#          algorithm: 'RS256'
+#          use: 'sig'
+#          key:
+#            path: '/secrets/oidc.jwk.RS256.pem'
+#          certificate_chain:
+#            path: '/secrets.oidc.jwk.RS256.crt'
+#      clients:
+#        - client_id: 'argocd'
+#          client_secret: '$pbkdf2-sha512$310000$ms/OlHdUjXSdHDW7xdgVhQ$6HN.cN9/MlttyYmXHMRU4JB0Ngqjs5ErSi1UIkH5k9qmMq2qHnueRrLwUjXTdMmOj6lCOAd1l2pA08VUTScPNw'
+#          #  value: '$pbkdf2-sha512$310000$ms/OlHdUjXSdHDW7xdgVhQ$6HN.cN9/MlttyYmXHMRU4JB0Ngqjs5ErSi1UIkH5k9qmMq2qHnueRrLwUjXTdMmOj6lCOAd1l2pA08VUTScPNw'
+#          #  path: '/secrets/oidc.client.argocd.value'
+#          client_name: 'Argo CD'
+#          public: false
+#          authorization_policy: 'one_factor'
+#          redirect_uris:
+#            - 'https://argocd.stonegarden.dev/auth/callback'
+#          scopes:
+#            - 'openid'
+#            - 'groups'
+#            - 'email'
+#            - 'profile'
+#          userinfo_signed_response_alg: 'none'
+#        - client_id: 'argocd-cli'
+#          client_name: 'Argo CD (CLI)'
+#          public: true
+#          authorization_policy: 'one_factor'
+#          redirect_uris:
+#            - 'http://localhost:8085/auth/callback'
+#          scopes:
+#            - 'openid'
+#            - 'groups'
+#            - 'email'
+#            - 'profile'
+#            - 'offline_access'
+#          userinfo_signed_response_alg: 'none'
 
 secret:
   additionalSecrets:
