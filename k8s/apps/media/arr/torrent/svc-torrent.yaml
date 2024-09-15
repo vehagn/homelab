@@ -10,11 +10,21 @@ spec:
   selector:
     app: torrent
   ports:
-    - name: tcp
-      port: 11011
+    - name: tcp-10
+      port: 10010
       protocol: TCP
-      targetPort: tcp
-    - name: udp
-      port: 11011
+    - name: udp-10
+      port: 10010
       protocol: UDP
-      targetPort: udp
+    - name: tcp-11
+      port: 10011
+      protocol: TCP
+    - name: udp-11
+      port: 10011
+      protocol: UDP
+    - name: tcp-12
+      port: 10012
+      protocol: TCP
+    - name: udp-12
+      port: 10012
+      protocol: UDP
