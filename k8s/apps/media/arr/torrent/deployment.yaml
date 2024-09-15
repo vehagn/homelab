@@ -67,10 +67,10 @@ spec:
             - name: http
               containerPort: 8080
             - name: tcp
-              containerPort: 11012
+              containerPort: 10011
               protocol: TCP
             - name: udp
-              containerPort: 11012
+              containerPort: 10011
               protocol: UDP
           envFrom:
             - configMapRef:
