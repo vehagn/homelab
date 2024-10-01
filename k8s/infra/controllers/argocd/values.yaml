@@ -1,7 +1,21 @@
+# https://github.com/argoproj/argo-helm/blob/main/charts/argo-cd/values.yaml
 configs:
   cm:
     create: true
     application.resourceTrackingMethod: "annotation+label"
+    # TODO: CHANGE THIS COMPROMISED TEST CLIENT SECRET
+    url: 'https://argocd.stonegarden.dev'
+    oidc.config: |
+      name: 'Authelia'
+      issuer: 'https://authelia.stonegarden.dev'
+      clientID: 'argocd'
+      clientSecret: 'kW2GrLDNZwpschHCU496oFKSE-mjRc8yOYbXpafRB6kJp-cF_wcfGaVF55.~rF_qSSEYUcth'
+      cliClientID: 'argocd-cli'
+      requestedScopes:
+        - 'openid'
+        - 'profile'
+        - 'email'
+        - 'groups'
   cmp:
     create: true
     plugins:
@@ -12,6 +26,10 @@ configs:
   params:
     controller.diff.server.side: true
     server.insecure: true
+  rbac:
+    policy.csv: |
+      g, argocd:admin, role:admin
+      g, argocd:read_all, role:readonly
 
 crds:
   install: true
