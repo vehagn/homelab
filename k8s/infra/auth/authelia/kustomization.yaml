@@ -5,6 +5,7 @@ namespace: authelia
 resources:
   - ns.yaml
   - lldap-credentials.yaml
+  - http-route.yaml
 
 helmCharts:
   - name: authelia
