@@ -2,7 +2,7 @@
 image:
   registry: ghcr.io
   repository: authelia/authelia
-  tag: 4.38.10 # renovate: docker=ghcr.io/authelia/authelia
+  tag: 4.38.16 # renovate: docker=ghcr.io/authelia/authelia
   pullPolicy: IfNotPresent
 
 pod:
