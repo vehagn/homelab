@@ -1,0 +1,12 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: oidc-argocd
+  namespace: authelia
+spec:
+  encryptedData:
+    clientSecret: AgA+S8MZ6s6BiCwjhrvwH25lsYE5LO1JBtHBz2CRWeL2wZnsInGi+UB5hcaZtVkK1tBrNv0I+Zl2T7IT5V4d/vcFDaW0daAt8gKZBE+QXuY+jWRaFK0Gp+3wkAyW4SezehdAsLoVCiRL6qJ3O+VKyqjg+7pXafkKFRJ42DMuJekOEF2XokSSZnUyPaCXiQ+a/15h2oS4NUF1J0gc1b09S/SKQ8oH6OPVTHbkDqNYghlAcXHjvcumnijWB5NqsV8bFLkoWiypG1re2j0ioSPRCjIivCuZhOB2AEQZcLdtQyaguiUXLjt8hAK2zFfgc10GOIWkYt4RuPuZ3bBnpJashN+9GX+YAvIV67zNkfDflDo62iI/Gbs04KjnZIq5Z26V7qt1fTfEPx5ZD+8ST1bshHL3X59dP63T8XixEEtcfYyfBMBMMXwhYQ6Pa30N5tYGB4laqDZV0aeEP9Bk8E7JE4YRhhLebtcTghv0fwFFBuPfaE6fJKkA94uI9oCddNCOHWSQM5nRVd5/gI2LN2Q+0u9JAo3WqQ3YfM2NZ+mJFSnUJoQmXQeVUGnQNdre78D0eTuKTbWfyeY5eaBoa0pVobkjh1x7k7NwqNkXk4T69pL1s1A0PQvoOYG3TUG7fMaEqaZzcAlLdk6e/pB1cOVCvyOT+MQP3vpPm9CPD1vj2ga+OdlxdrQ5twa3TyDahDlxLmLeEPGE/o2w+4TxqKvDe/UbysByFG9worQkHvb2RnJBcigZoQOgo+QM4AHKiy0sGb4UJe7/9xMJCv5E1rIXo2lUopI48B/Yp/2uZHCu91dOSaYxEd7Xd76Za+Fs6mcpsxJkWnP8N+nwFCe/bmoe5fZjQ+lR5xd4K7spkS1C5NwO0URJZg==
+  template:
+    metadata:
+      name: oidc-argocd
+      namespace: authelia

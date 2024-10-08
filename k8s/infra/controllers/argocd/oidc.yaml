@@ -1,0 +1,15 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: oidc
+  namespace: argocd
+spec:
+  encryptedData:
+    authelia.clientSecret: AgAHAPZBVVE8seuSJQeWKSDzUI9NjGrMWvwGt0M3IbyuyXR/Fjmg6x+wCTPvhcWU2ww/BELSgarkI8/URltUqsvsZmvGn12aZw5lRUUoVz2j003lu1ZSEOTfhmCT9N+C1fK/RwEwgUVhdnTjhH4SinIARDWEyMnRkGJfG0ryNaQQMX+VyO6UWTkzeihbrBIvpDHWJm1wMfnW7FRnbBVyE/E+eiPdeNdaC/vmNZJqYG6Ofvum5vOfhfSisaTSpLczvApslv9eFQGweuPhWfVacccC3/pRB/BX/vIpVFb4J8WlNGoLZy3S9UhbAY7C36DiHWJtvMeNigLYNgp+jH10ZJdQNlUDvZmvPY2e3TTVvXoKyyY8LJJdROTiqKVi8sKkaqkdavrnCTU4UQgrZOo3NhGPMbrt3PZuFwRg4ZmbD4l0sN4umH17zKB0eYVhwh6DgaRtAmuOwoAPzbrNcUR0W2PWOR+tyhFjOwihpObhmNndHO/llOsCFG5B7oxV0srI6s2dGJ45HLPau6PCJOwM9B1ZmIpNWqKQeGGRKW76HEU6kYubqaCTA9cxQIZrU9JchFrwdP4SQFDLWCqFL2+DXkwOzGQ0eB5QXRZQDFrdVkoDagR7XbaN8DAx1q953vQzgZvJDd5KL5xilQib53ulDs0iqg2lYjdp5psn9XiSDHfv8sipRw06fQxqSpekjwZImoeKlNCIGnlERrScu5uvddyI8ILbX7dLcKkLRGEJPrd/nN7rAgnVNpcqcRIhJK1YOUeusK0npVw//NwZabGx97BqEHLwIyu2nLk=
+  template:
+    metadata:
+      labels:
+        # https://github.com/argoproj/argo-cd/issues/13928#issuecomment-2146020186
+        app.kubernetes.io/part-of: argocd
+      name: oidc
+      namespace: argocd
