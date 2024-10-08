@@ -5,6 +5,7 @@ namespace: authelia
 resources:
   - ns.yaml
   - lldap-credentials.yaml
+  - oidc-argocd.yaml
   - http-route.yaml
 
 helmCharts:

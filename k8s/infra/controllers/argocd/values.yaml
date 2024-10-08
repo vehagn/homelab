@@ -3,19 +3,16 @@ configs:
   cm:
     create: true
     application.resourceTrackingMethod: "annotation+label"
-    # TODO: CHANGE THIS COMPROMISED TEST CLIENT SECRET
+    admin.enabled: false
     url: 'https://argocd.stonegarden.dev'
+    # https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/#sensitive-data-and-sso-client-secrets
     oidc.config: |
       name: 'Authelia'
       issuer: 'https://authelia.stonegarden.dev'
       clientID: 'argocd'
-      clientSecret: 'kW2GrLDNZwpschHCU496oFKSE-mjRc8yOYbXpafRB6kJp-cF_wcfGaVF55.~rF_qSSEYUcth'
+      clientSecret: $oidc:authelia.clientSecret
       cliClientID: 'argocd-cli'
-      requestedScopes:
-        - 'openid'
-        - 'profile'
-        - 'email'
-        - 'groups'
+      requestedScopes: [ 'openid', 'profile', 'email', 'groups' ]
   cmp:
     create: true
     plugins:
