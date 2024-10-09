@@ -60,48 +60,9 @@ configMap:
           use: 'sig'
           # TODO: CHANGE THIS COMPROMISED TEST KEY!
           key:
-            value: |
-              -----BEGIN PRIVATE KEY-----
-              MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCsOCrc4yP2ziCO
-              MUJoEMA6hIlLgwDNrKviBKHBNjAjQ0EStW3148ZxSHtLZH+xls4HyjenDp79bUDd
-              hm3kh0N8Z+loSRky6JMx+NUyA4XoWzR35MxGbt6ojx3pHdFCJRUu5/DmU2w8RgVy
-              FaC/XWQPg03w80yEsXfT6CFT7avKwn/D8KCbjGVaYlLseWUAMPPyGU/pG/31CLR/
-              VDUaT5rnRHchlM8wsHfAR9rzhWLAn7xefIgK94hkD0l/BrY93g72TkNtkQsS+bgv
-              5404F0o+sILswoAZNvLWhy2AejwIw8HN+/ssaTbvRzfkXWiyvcBWA5kCK7ltpHMN
-              Cg5hcnwzAgMBAAECggEAVRrEg7dzVEl0aRAKouZ0N/a66ifow7qqjdyAGryueR6J
-              D7e8iSBwNhb9ZrpZJ+dAFTVm3xUomE/fGBmQQLhfLyEihLhqzW+FHdK7eCWpjLNV
-              cFIOaFftjBp9S2/Csw8kMrPHpepfuEFZ+5CYiTibc9cNMx7oF0Kj1oIFxjXTCTTX
-              /5G2WN9VsduA6SC5xnZNqyd8sKboQzXmGxgop98BRdiPTE5adZZ+oOozVmayYKMD
-              Y51SAHq+lpAmVW8poAfm59fmyll0gRBsHi3Xrbhpk+1nrWFhWiqS63G6rJ1Y3SQF
-              S1aztbP45z2T96g7OehNZT+98nrPHDzi4lpeiZ6XgQKBgQDmwLEIk/MWMCgv+BUy
-              bOuIyGSP0vLRSsNZpKc2NMCln0huKjpfLcfjre41aqISV6mGkAOfk/Y0NBPCPwQP
-              hO0OXnK/3sORzCyQCTfPW6nCAafjVaMvjCBlsKA/Hjx74Gw9JkrHJiGudrNrDYtQ
-              dQN5paCtauv/vknXVrDDapExkwKBgQC/D/oo+wRlntvP61HaBJt/zF/nLo7KF9wW
-              D2HC3lohVcF35KtgB1PbzZrTjQOPFVXbMs7t88g3nBSoc+6czPGkoevvS9UeYoH9
-              dhTDooiSVn6kmH1HgwSliqpZWMVyKpyFuCZTd014++7aKBg/16KJO+DxS9Uka80C
-              48pmvcyu4QKBgHguQcX68G9M85FQPxH9QosB+8YgkxDIRIgqxl/oB7H7DIk7+xzZ
-              RjNhwiAWAoVVHNkVpp11PZSgzu2rTl0a2TBTpqYhym/kDA2Uj3my/u4pWJyBXLWF
-              4NW1sTBOeif2kckjaWzhgkdQUU/fRQDJgN7ZkZ7ggju3itPZtcSBe097AoGAVzxR
-              SRLLgCaXUIiuN7Aw25oSE7kDQyy/tWbSiSoC1wOTsU08Hj1aQZrP3VWeUV85czrw
-              ll7fhNyD5iIAyaEdl8DCu+DQ7u2lUnfupSB54O8TJc3mLZeZsIfunZrVk/n2u2tI
-              PIXVXq8Q8JSr9cJcGPK5ExM/v0BlO7OL/3sbkKECgYBTj5hTKZvBkLQwyfMLMAoY
-              rytwq9T4sOQElWpvwi/6NmT8iYSWlXEjRktBnnGOyNjNXvyoLNr2CmtV/TJ2uG0J
-              fKWga5swZ/Aq4h5kX64+q710r+xGS2s4up6XY8gyT3+WxaF8RpxiQilDFVYCzvee
-              uzpHa9dV3xVGQQK5fEtWQg==
-              -----END PRIVATE KEY-----
-          #  path: '/secrets/oidc.jwk.RS256.pem'
-#          certificate_chain:
-#            value: |
-#              -----BEGIN PUBLIC KEY-----
-#              MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArDgq3OMj9s4gjjFCaBDA
-#              OoSJS4MAzayr4gShwTYwI0NBErVt9ePGcUh7S2R/sZbOB8o3pw6e/W1A3YZt5IdD
-#              fGfpaEkZMuiTMfjVMgOF6Fs0d+TMRm7eqI8d6R3RQiUVLufw5lNsPEYFchWgv11k
-#              D4NN8PNMhLF30+ghU+2rysJ/w/Cgm4xlWmJS7HllADDz8hlP6Rv99Qi0f1Q1Gk+a
-#              50R3IZTPMLB3wEfa84ViwJ+8XnyICveIZA9Jfwa2Pd4O9k5DbZELEvm4L+eNOBdK
-#              PrCC7MKAGTby1octgHo8CMPBzfv7LGk270c35F1osr3AVgOZAiu5baRzDQoOYXJ8
-#              MwIDAQAB
-#              -----END PUBLIC KEY-----
-#          #  path: '/secrets.oidc.jwk.RS256.crt'
+            path: /secrets/oidc-jwks/default.RS256.private.pem
+          certificate_chain:
+            path: /secrets/oidc-jwks/default.RS256.public.crt
       clients:
         - client_id: 'argocd'
           # TODO: CHANGE THIS COMPROMISED TEST KEY!
@@ -128,10 +89,17 @@ secret:
   additionalSecrets:
     lldap-auth:
       items:
-        - key: 'password'
-          path: 'authentication.ldap.password.txt'
+        - key: password
+          path: authentication.ldap.password.txt
     oidc-argocd:
       items:
-        - key: 'clientSecret'
-          path: 'clientSecret'
+        - key: clientSecret
+          path: clientSecret
+    oidc-jwks:
+      items:
+        - key: default.RS256.private.pem
+          path: default.RS256.private.pem
+        - key: default.RS256.public.crt
+          path: default.RS256.public.crt
+
 
