@@ -6,7 +6,7 @@ module "talos" {
   }
 
   image = {
-    version = "v1.8.0-alpha.1"
+    version = "v1.8.1"
     update_version = "v1.8.1" # renovate: github-releases=siderolabs/talos
     schematic = file("${path.module}/talos/image/schematic.yaml")
   }
@@ -44,7 +44,6 @@ module "talos" {
       cpu           = 4
       ram_dedicated = 20480
       igpu          = true
-      update        = true
     }
     "ctrl-02" = {
       host_node     = "cantor"
@@ -54,7 +53,6 @@ module "talos" {
       vm_id         = 802
       cpu           = 4
       ram_dedicated = 4096
-      update        = true
     }
     #    "work-00" = {
     #      host_node     = "abel"
