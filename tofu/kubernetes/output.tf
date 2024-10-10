@@ -26,8 +26,3 @@ output "talos_config" {
   value     = module.talos.client_configuration.talos_config
   sensitive = true
 }
-
-output "image_schematic" {
-  // "dcac6b92c17d1d8947a0cee5e0e6b6904089aa878c70d66196bb1138dbd05d1a"
-  value = module.talos.schematic_id
-}
