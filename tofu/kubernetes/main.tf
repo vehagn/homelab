@@ -54,6 +54,7 @@ module "talos" {
       vm_id         = 802
       cpu           = 4
       ram_dedicated = 4096
+      update        = true
     }
     #    "work-00" = {
     #      host_node     = "abel"
