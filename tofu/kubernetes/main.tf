@@ -44,6 +44,7 @@ module "talos" {
       cpu           = 4
       ram_dedicated = 20480
       igpu          = true
+      update        = true
     }
     "ctrl-02" = {
       host_node     = "cantor"
