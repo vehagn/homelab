@@ -78,6 +78,7 @@ configMap:
             - 'https://argocd.stonegarden.dev/applications'
           scopes: [ 'openid', 'groups', 'email', 'profile' ]
           userinfo_signed_response_alg: 'none'
+          id_token_signed_response_alg: 'ES256'
         - client_id: 'argocd-cli'
           client_name: 'Argo CD (CLI)'
           public: true
