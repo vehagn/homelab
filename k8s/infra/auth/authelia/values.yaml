@@ -9,14 +9,11 @@ pod:
   kind: 'Deployment'
 
 configMap:
+  default_2fa_method: totp
   theme: 'dark'
 
   access_control:
-    # TODO: upgrade to 'two_factor'
-    default_policy: 'one_factor'
-    rules:
-      - domain_regex: '^.*\.stonegarden.dev$'
-        policy: 'one_factor'
+    default_policy: 'two_factor'
 
   authentication_backend:
     ldap:
@@ -75,8 +72,7 @@ configMap:
             path: '/secrets/oidc-argocd/clientSecret'
           client_name: 'Argo CD'
           public: false
-          # TODO: upgrade to 'two_factor'
-          authorization_policy: 'one_factor'
+          authorization_policy: 'two_factor'
           redirect_uris:
             - 'https://argocd.stonegarden.dev/auth/callback'
             - 'https://argocd.stonegarden.dev/applications'
@@ -85,7 +81,7 @@ configMap:
         - client_id: 'argocd-cli'
           client_name: 'Argo CD (CLI)'
           public: true
-          authorization_policy: 'one_factor'
+          authorization_policy: 'two_factor'
           redirect_uris: [ 'http://localhost:8085/auth/callback' ]
           scopes: [ 'openid', 'groups', 'email', 'profile', 'offline_access' ]
           userinfo_signed_response_alg: 'none'
