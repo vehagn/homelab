@@ -58,14 +58,19 @@ configMap:
         - key_id: 'default'
           algorithm: 'RS256'
           use: 'sig'
-          # TODO: CHANGE THIS COMPROMISED TEST KEY!
           key:
             path: /secrets/oidc-jwks/default.RS256.private.pem
           certificate_chain:
             path: /secrets/oidc-jwks/default.RS256.public.crt
+        - key_id: 'ecdsa'
+          algorithm: 'ES256'
+          use: 'sig'
+          key:
+            path: /secrets/oidc-jwks/ecdsa.P256.private.pem
+      cors:
+        allowed_origins_from_client_redirect_uris: true
       clients:
         - client_id: 'argocd'
-          # TODO: CHANGE THIS COMPROMISED TEST KEY!
           client_secret:
             path: '/secrets/oidc-argocd/clientSecret'
           client_name: 'Argo CD'
@@ -101,5 +106,5 @@ secret:
           path: default.RS256.private.pem
         - key: default.RS256.public.crt
           path: default.RS256.public.crt
-
-
+        - key: ecdsa.P256.private.pem
+          path: ecdsa.P256.private.pem

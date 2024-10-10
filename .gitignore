@@ -24,3 +24,6 @@ override.tf.json
 
 *.cert
 *.key
+
+*.pem
+*.crt
