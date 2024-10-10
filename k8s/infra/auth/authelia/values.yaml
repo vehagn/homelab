@@ -14,6 +14,9 @@ configMap:
 
   access_control:
     default_policy: 'two_factor'
+    rules:
+      - domain_regex: '^.*\.stonegarden.dev$'
+        policy: 'two_factor'
 
   authentication_backend:
     ldap:
