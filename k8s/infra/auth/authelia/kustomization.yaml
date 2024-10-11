@@ -7,6 +7,8 @@ resources:
   - lldap-credentials.yaml
   - oidc-argocd.yaml
   - oidc-jwks.yaml
+  - cert-rsa-jwk.yaml
+  - cert-ecdsa-jwk.yaml
   - http-route.yaml
 
 helmCharts:

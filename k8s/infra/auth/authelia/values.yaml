@@ -51,22 +51,23 @@ configMap:
 
   identity_providers:
     oidc:
-      ## Enables this in the config map. Currently in beta stage.
-      ## See https://www.authelia.com/r/openid-connect/
+      ## Currently in beta stage. See https://www.authelia.com/r/openid-connect/
       enabled: true
       jwks:
         - key_id: 'default'
           algorithm: 'RS256'
           use: 'sig'
           key:
-            path: /secrets/oidc-jwks/default.RS256.private.pem
+            path: /secrets/rsa-jwk/tls.key
           certificate_chain:
-            path: /secrets/oidc-jwks/default.RS256.public.crt
-        - key_id: 'ecdsa'
+            path: /secrets/rsa-jwk/tls.crt
+        - key_id: 'ecdsa256'
           algorithm: 'ES256'
           use: 'sig'
           key:
-            path: /secrets/oidc-jwks/ecdsa.P256.private.pem
+            path: /secrets/ecdsa-jwk/tls.key
+          certificate_chain:
+            path: /secrets/ecdsa-jwk/tls.crt
       cors:
         allowed_origins_from_client_redirect_uris: true
       clients:
@@ -100,11 +101,15 @@ secret:
       items:
         - key: clientSecret
           path: clientSecret
-    oidc-jwks:
+    rsa-jwk:
       items:
-        - key: default.RS256.private.pem
-          path: default.RS256.private.pem
-        - key: default.RS256.public.crt
-          path: default.RS256.public.crt
-        - key: ecdsa.P256.private.pem
-          path: ecdsa.P256.private.pem
+        - key: tls.key
+          path: tls.key
+        - key: tls.crt
+          path: tls.crt
+    ecdsa-jwk:
+      items:
+        - key: tls.key
+          path: tls.key
+        - key: tls.crt
+          path: tls.crt

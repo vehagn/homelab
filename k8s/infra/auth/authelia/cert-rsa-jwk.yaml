@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: rsa-jwk
+  namespace: gateway
+spec:
+  dnsNames:
+    - authelia.stonegarden.dev
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: cloudflare-cluster-issuer
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS8
+    size: 2048
+  secretName: rsa-jwk
+  usages:
+    - digital signature
+    - key encipherment
