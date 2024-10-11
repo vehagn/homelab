@@ -12,11 +12,34 @@ configMap:
   default_2fa_method: totp
   theme: 'dark'
 
+  identity_validation:
+    reset_password:
+      secret: { secret_name: crypto }
+
   access_control:
     default_policy: 'two_factor'
     rules:
       - domain_regex: '^.*\.stonegarden.dev$'
         policy: 'two_factor'
+
+  session:
+    encryption_key: { secret_name: crypto }
+    cookies:
+      - subdomain: authelia
+        domain: stonegarden.dev
+
+  storage:
+    encryption_key: { secret_name: crypto }
+    postgres:
+      enabled: false
+      address: 'tcp://postgres.databases.svc.cluster.local:5432'
+    # Switch to Postgres later
+    local:
+      enabled: true
+
+  notifier:
+    filesystem:
+      enabled: true
 
   authentication_backend:
     ldap:
@@ -29,45 +52,24 @@ configMap:
       groups_filter: '(member={dn})'
       additional_groups_dn: 'ou=groups'
       user: 'UID=authelia,OU=people,DC=stonegarden,DC=dev'
-      password:
-        secret_name: 'lldap-auth'
-
-  session:
-    cookies:
-      - subdomain: authelia
-        domain: stonegarden.dev
-
-  storage:
-    postgres:
-      enabled: false
-      address: 'tcp://postgres.databases.svc.cluster.local:5432'
-    # Switch to Postgres later
-    local:
-      enabled: true
-
-  notifier:
-    filesystem:
-      enabled: true
+      password: { secret_name: 'lldap-auth' }
 
   identity_providers:
     oidc:
       ## Currently in beta stage. See https://www.authelia.com/r/openid-connect/
       enabled: true
+      hmac_secret: { secret_name: crypto }
       jwks:
         - key_id: 'default'
           algorithm: 'RS256'
           use: 'sig'
-          key:
-            path: /secrets/rsa-jwk/tls.key
-          certificate_chain:
-            path: /secrets/rsa-jwk/tls.crt
+          key: { path: /secrets/rsa-jwk/tls.key }
+          certificate_chain: { path: /secrets/rsa-jwk/tls.crt }
         - key_id: 'ecdsa256'
           algorithm: 'ES256'
           use: 'sig'
-          key:
-            path: /secrets/ecdsa-jwk/tls.key
-          certificate_chain:
-            path: /secrets/ecdsa-jwk/tls.crt
+          key: { path: /secrets/ecdsa-jwk/tls.key }
+          certificate_chain: { path: /secrets/ecdsa-jwk/tls.crt }
       cors:
         allowed_origins_from_client_redirect_uris: true
       clients:
@@ -97,10 +99,16 @@ secret:
       items:
         - key: password
           path: authentication.ldap.password.txt
-    oidc-argocd:
+    crypto:
       items:
-        - key: clientSecret
-          path: clientSecret
+        - key: identity_providers.oidc.hmac.key
+          path: identity_providers.oidc.hmac.key
+        - key: identity_validation.reset_password.jwt.hmac.key
+          path: identity_validation.reset_password.jwt.hmac.key
+        - key: session.encryption.key
+          path: session.encryption.key
+        - key: storage.encryption.key
+          path: storage.encryption.key
     rsa-jwk:
       items:
         - key: tls.key
@@ -113,3 +121,7 @@ secret:
           path: tls.key
         - key: tls.crt
           path: tls.crt
+    oidc-argocd:
+      items:
+        - key: clientSecret
+          path: clientSecret
