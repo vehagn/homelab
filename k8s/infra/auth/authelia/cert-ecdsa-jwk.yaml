@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ecdsa-jwk
+  namespace: gateway
+spec:
+  dnsNames:
+    - authelia.stonegarden.dev
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: cloudflare-cluster-issuer
+  privateKey:
+    algorithm: ECDSA
+    encoding: PKCS8
+    size: 256
+  secretName: ecdsa-jwk
+  usages:
+    - digital signature
+    - key encipherment
