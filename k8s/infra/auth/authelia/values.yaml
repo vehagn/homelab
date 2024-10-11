@@ -31,11 +31,17 @@ configMap:
   storage:
     encryption_key: { secret_name: crypto }
     postgres:
-      enabled: false
-      address: 'tcp://postgres.databases.svc.cluster.local:5432'
-    # Switch to Postgres later
-    local:
       enabled: true
+      deploy: true
+      address: 'tcp://single-example-ext.cnpg-database.svc.cluster.local:5432'
+      schema: public
+      database: authelia
+      username: authelia
+      password:
+        value: 'authelia'
+#    # Switch to Postgres later
+#    local:
+#      enabled: true
 
   notifier:
     filesystem:
@@ -125,3 +131,11 @@ secret:
       items:
         - key: clientSecret
           path: clientSecret
+
+postgresql:
+  global:
+    defaultStorageClass: proxmox-csi
+  primary:
+    persistence:
+      enabled: true
+      # storageClass: ""

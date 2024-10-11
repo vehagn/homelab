@@ -4,3 +4,4 @@ namespace: cnpg-database
 
 resources:
   - cnpg-single.yaml
+  - cnpg-test.yaml

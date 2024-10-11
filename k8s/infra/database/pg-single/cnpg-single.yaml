@@ -4,13 +4,27 @@ metadata:
   name: single-example
   namespace: cnpg-database
 spec:
-  instances: 1
+  #instances: 1
+  # https://cloudnative-pg.io/documentation/1.24/quickstart/
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.4
+  # https://cloudnative-pg.io/documentation/1.24/monitoring/
+  monitoring:
+    enablePodMonitor: true
   affinity:
     nodeSelector:
       topology.kubernetes.io/zone: euclid
+  bootstrap:
+    initdb:
+      database: authelia
+      owner: authelia
+      secret:
+        name: authelia
+  postgresql:
+    parameters:
+      timezone: "Europe/Oslo"
   managed:
     services:
-      disabledDefaultServices: [ "ro", "r" ]
+      #disabledDefaultServices: [ "ro", "r" ]
       additional:
         - selectorType: rw
           updateStrategy: patch
@@ -28,3 +42,35 @@ spec:
       volumeName: pv-single-database
       accessModes:
         - ReadWriteOnce
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authelia
+type: kubernetes.io/basic-auth
+stringData:
+  username: 'authelia'
+  password: 'authelia'
+---
+## file: templates/cluster.yaml
+#---
+#spec:
+#  bootstrap:
+#    initdb:
+#      postInitApplicationSQL:
+#        # Create the owner role and schema to be able to reference it later
+#        - CREATE ROLE {{ .Values.database.owner }};
+#        - CREATE SCHEMA {{ .Values.database.owner }} AUTHORIZATION {{ .Values.database.owner }};
+#
+#        # Create the Teleport read user so we can reference it later in this script
+#        - CREATE ROLE teleport_user_read;
+#
+#        # Grant read privileges to the Teleport read user
+#        - GRANT USAGE ON SCHEMA {{ .Values.database.owner }} TO teleport_user_read;
+#        - GRANT SELECT ON ALL TABLES IN SCHEMA {{ .Values.database.owner }} TO teleport_user_read;
+#        - GRANT USAGE ON ALL SEQUENCES IN SCHEMA {{ .Values.database.owner }} TO teleport_user_read;
+#        - ALTER DEFAULT PRIVILEGES IN SCHEMA {{ .Values.database.owner }} GRANT SELECT ON TABLES TO teleport_user_read;
+#        - ALTER DEFAULT PRIVILEGES IN SCHEMA {{ .Values.database.owner }} GRANT SELECT ON SEQUENCES TO teleport_user_read;
+#
+#        # Transactions default read for the Teleport read user
+#        - ALTER USER teleport_user_read SET default_transaction_read_only = on;
