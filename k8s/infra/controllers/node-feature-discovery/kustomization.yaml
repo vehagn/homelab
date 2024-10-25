@@ -4,13 +4,13 @@ kind: Kustomization
 resources:
   - ns.yaml
   # NFD rules for Intel HW
-  - https://github.com/intel/intel-device-plugins-for-kubernetes/deployments/nfd/overlays/node-feature-rules?ref=v0.30.0
+  - https://github.com/intel/intel-device-plugins-for-kubernetes/deployments/nfd/overlays/node-feature-rules?ref=v0.31.1
 
 # https://kubernetes-sigs.github.io/node-feature-discovery/v0.16/deployment/helm.html
 helmCharts:
   - name: node-feature-discovery
     repo: https://kubernetes-sigs.github.io/node-feature-discovery/charts
-    version: 0.16.4
+    version: 0.16.6
     releaseName: nfd
     includeCRDs: true
     namespace: node-feature-discovery
