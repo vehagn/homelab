@@ -17,7 +17,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: unbound
-          image: docker.io/mvance/unbound:1.20.0  # renovate: docker=docker.io/mvance/unbound
+          image: docker.io/mvance/unbound:1.22.0  # renovate: docker=docker.io/mvance/unbound
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: false

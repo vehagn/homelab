@@ -30,7 +30,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: radarr
-          image: ghcr.io/onedr0p/radarr:5.11.0 # renovate: docker=ghcr.io/onedr0p/radarr
+          image: ghcr.io/onedr0p/radarr:5.14.0 # renovate: docker=ghcr.io/onedr0p/radarr
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true

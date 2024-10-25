@@ -12,7 +12,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: lldap-bootstrap
-          image: ghcr.io/lldap/lldap:2024-10-10-debian # renovate: docker=ghcr.io/lldap/lldap versioning=loose
+          image: ghcr.io/lldap/lldap:2024-11-04-debian-rootless # renovate: docker=ghcr.io/lldap/lldap versioning=loose
           command: [ /app/bootstrap.sh ]
           envFrom:
             - configMapRef:
