@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: extra-admin
+  namespace: kube-system
+
+# TOKEN=$(kubectl -n kube-system create token extra-admin)
+# kubectl config set-credentials admin --token=$TOKEN
+# kubectl config set-context admin@kubernetes --cluster talos --user extra-admin
