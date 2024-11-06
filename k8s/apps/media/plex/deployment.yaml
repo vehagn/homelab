@@ -28,7 +28,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: plex
-          image: ghcr.io/onedr0p/plex:1.41.0.8994-f2c27da23 # renovate: docker=ghcr.io/onedr0p/plex versioning=loose
+          image: ghcr.io/onedr0p/plex:1.41.1.9057-af5eaea7a # renovate: docker=ghcr.io/onedr0p/plex versioning=loose
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
