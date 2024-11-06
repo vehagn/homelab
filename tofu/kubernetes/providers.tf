@@ -10,7 +10,7 @@ terraform {
     }
     talos = {
       source  = "siderolabs/talos"
-      version = "0.6.0"
+      version = "0.6.1"
     }
     restapi = {
       source  = "Mastercard/restapi"
