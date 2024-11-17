@@ -1,5 +1,7 @@
-installCRDs: true
-
+#installCRDs: true
+crds:
+  enabled: true
+  keep: true
 extraArgs:
   - "--enable-gateway-api"
 
