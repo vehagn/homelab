@@ -7,7 +7,7 @@ module "talos" {
 
   image = {
     version = "v1.8.1"
-    update_version = "v1.8.2" # renovate: github-releases=siderolabs/talos
+    update_version = "v1.8.3" # renovate: github-releases=siderolabs/talos
     schematic = file("${path.module}/talos/image/schematic.yaml")
   }
 
