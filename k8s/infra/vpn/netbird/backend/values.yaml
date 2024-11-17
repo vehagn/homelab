@@ -23,7 +23,7 @@ idp:
 
 management:
   image:
-    tag: 0.31.0 # renovate: docker=docker.io/netbirdio/management
+    tag: 0.32.0 # renovate: docker=docker.io/netbirdio/management
   nodeSelector:
     topology.kubernetes.io/zone: abel
   ingress:
@@ -31,7 +31,7 @@ management:
 
 signal:
   image:
-    tag: 0.31.0 # renovate: docker=docker.io/netbirdio/signal
+    tag: 0.32.0 # renovate: docker=docker.io/netbirdio/signal
   nodeSelector:
     topology.kubernetes.io/zone: abel
   uri: netbird.stonegarden.dev:443
