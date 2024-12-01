@@ -92,6 +92,13 @@ configMap:
           redirect_uris: [ 'http://localhost:8085/auth/callback' ]
           scopes: [ 'openid', 'groups', 'email', 'profile', 'offline_access' ]
           userinfo_signed_response_alg: 'none'
+        - client_id: kubectl
+          client_name: kubectl
+          public: true
+          authorization_policy: one_factor
+          redirect_uris: [ 'http://localhost:8000', 'http://localhost:18000' ]
+          scopes: [ 'openid', 'groups', 'email', 'profile', 'offline_access' ]
+          userinfo_signed_response_alg: 'none'
 
 secret:
   additionalSecrets:

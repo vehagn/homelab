@@ -26,7 +26,7 @@ tofu state rm 'module.volumes.module.proxmox-volume["pv-sonarr-config"].restapi_
 tofu state rm 'module.volumes.module.proxmox-volume["pv-plex-config"].restapi_object.proxmox-volume'
 tofu state rm 'module.volumes.module.proxmox-volume["pv-jellyfin-config"].restapi_object.proxmox-volume'
 tofu state rm 'module.volumes.module.proxmox-volume["pv-qbittorrent-config"].restapi_object.proxmox-volume'
-tofu state rm 'module.volumes.module.proxmox-volume["pv-keycloak"].restapi_object.proxmox-volume'
+tofu state rm 'module.volumes.module.proxmox-volume["pv-keycloak-postgres"].restapi_object.proxmox-volume'
 tofu state rm 'module.volumes.module.proxmox-volume["pv-netbird-management"].restapi_object.proxmox-volume'
 tofu state rm 'module.volumes.module.proxmox-volume["pv-netbird-signal"].restapi_object.proxmox-volume'
 tofu state rm 'module.volumes.module.proxmox-volume["pv-database"].restapi_object.proxmox-volume'
