@@ -20,12 +20,12 @@ curl --request POST \
 ## rm state
 
 ```shell
-tofu state rm "module.volumes.module.proxmox-volume[\"pv-lidarr-config\"].restapi_object.proxmox-volume" 
-tofu state rm "module.volumes.module.proxmox-volume[\"pv-radarr-config\"].restapi_object.proxmox-volume" 
-tofu state rm "module.volumes.module.proxmox-volume[\"pv-sonarr-config\"].restapi_object.proxmox-volume" 
-tofu state rm "module.volumes.module.proxmox-volume[\"pv-plex-config\"].restapi_object.proxmox-volume" 
-tofu state rm "module.volumes.module.proxmox-volume[\"pv-jellyfin-config\"].restapi_object.proxmox-volume" 
-tofu state rm "module.volumes.module.proxmox-volume[\"pv-qbittorrent-config\"].restapi_object.proxmox-volume" 
+tofu state rm 'module.volumes.module.proxmox-volume["pv-lidarr-config"].restapi_object.proxmox-volume'
+tofu state rm 'module.volumes.module.proxmox-volume["pv-radarr-config"].restapi_object.proxmox-volume'
+tofu state rm 'module.volumes.module.proxmox-volume["pv-sonarr-config"].restapi_object.proxmox-volume'
+tofu state rm 'module.volumes.module.proxmox-volume["pv-plex-config"].restapi_object.proxmox-volume'
+tofu state rm 'module.volumes.module.proxmox-volume["pv-jellyfin-config"].restapi_object.proxmox-volume'
+tofu state rm 'module.volumes.module.proxmox-volume["pv-qbittorrent-config"].restapi_object.proxmox-volume'
 tofu state rm 'module.volumes.module.proxmox-volume["pv-keycloak"].restapi_object.proxmox-volume'
 tofu state rm 'module.volumes.module.proxmox-volume["pv-netbird-management"].restapi_object.proxmox-volume'
 tofu state rm 'module.volumes.module.proxmox-volume["pv-netbird-signal"].restapi_object.proxmox-volume'
@@ -58,7 +58,7 @@ tofu state rm module.volumes.module.persistent-volume
 
 ```shell
 tofu import 'module.volumes.module.persistent-volume["pv-jellyfin-config"].kubernetes_persistent_volume.pv' pv-jellyfin-config
-tofu import 'module.volumes.module.persistent-volume["pv-keycloak-db"].kubernetes_persistent_volume.pv' pv-keycloak-db
+tofu import 'module.volumes.module.persistent-volume["pv-keycloak"].kubernetes_persistent_volume.pv' pv-keycloak-db
 tofu import 'module.volumes.module.persistent-volume["pv-lidarr-config"].kubernetes_persistent_volume.pv' pv-lidarr-config
 tofu import 'module.volumes.module.persistent-volume["pv-netbird-management"].kubernetes_persistent_volume.pv' pv-netbird-management
 tofu import 'module.volumes.module.persistent-volume["pv-netbird-signal"].kubernetes_persistent_volume.pv' pv-netbird-signal

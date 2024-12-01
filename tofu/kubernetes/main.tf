@@ -128,7 +128,7 @@ module "volumes" {
       node = "euclid"
       size = "1G"
     }
-    pv-keycloak = {
+    pv-keycloak-postgres = {
       node = "euclid"
       size = "2G"
     }

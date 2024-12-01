@@ -33,5 +33,5 @@ postgresql:
       values: [ euclid ]
     persistence:
       enabled: true
-      existingClaim: keycloak-db
+      existingClaim: keycloak-postgres
 
