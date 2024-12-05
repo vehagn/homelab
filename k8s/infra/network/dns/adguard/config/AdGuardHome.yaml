@@ -14,22 +14,20 @@ dns:
     - 0.0.0.0
   port: 53
   anonymize_client_ip: false
-  ratelimit: 20
+  ratelimit: 500
   ratelimit_subnet_len_ipv4: 24
   ratelimit_subnet_len_ipv6: 56
   ratelimit_whitelist: [ ]
   refuse_any: true
   upstream_dns:
     - 10.96.0.11
-    - udp://unbound.dns.svc.cluster.local:53
-    - tcp://unbound.dns.svc.cluster.local:53
   upstream_dns_file: ""
   bootstrap_dns:
-    - 10.96.0.10
+    - 10.96.0.11
   fallback_dns:
     - 1.1.1.1
     - 9.9.9.9
-  upstream_mode: fastest_addr
+  upstream_mode: parallel
   fastest_timeout: 1s
   allowed_clients: [ ]
   disallowed_clients: [ ]
@@ -105,6 +103,7 @@ filters:
 whitelist_filters: [ ]
 user_rules:
   - '@@||sdk.iad-01.braze.com^$important' # Payments?
+  - '@@||www.merchant-center-analytics.goog^$important'
 dhcp:
   enabled: false
   interface_name: ""
