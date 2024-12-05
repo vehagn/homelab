@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: DaemonSet
+kind: Deployment
 metadata:
   name: unbound
   namespace: dns
@@ -12,15 +12,15 @@ spec:
       labels:
         app: unbound
     spec:
-      securityContext:
-        seccompProfile:
-          type: RuntimeDefault
+      #securityContext:
+      #  seccompProfile:
+      #    type: RuntimeDefault
       containers:
         - name: unbound
           image: docker.io/mvance/unbound:1.22.0  # renovate: docker=docker.io/mvance/unbound
-          securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: false
+          #securityContext:
+          #  allowPrivilegeEscalation: false
+          #  readOnlyRootFilesystem: false
           ports:
             - name: unbound-dns-tcp
               containerPort: 5335
