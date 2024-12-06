@@ -21,7 +21,7 @@ spec:
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
+#            readOnlyRootFilesystem: true
             capabilities:
               add: [ NET_ADMIN, PERFMON, BPF ]
           envFrom:
