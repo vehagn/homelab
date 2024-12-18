@@ -30,7 +30,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: sonarr
-          image: ghcr.io/onedr0p/sonarr:4.0.10 # renovate: docker=ghcr.io/onedr0p/sonarr
+          image: ghcr.io/onedr0p/sonarr:4.0.11 # renovate: docker=ghcr.io/onedr0p/sonarr
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
