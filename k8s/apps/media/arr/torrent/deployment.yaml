@@ -30,7 +30,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: git-sync-vuetorrent
-          image: registry.k8s.io/git-sync/git-sync:v4.3.0 # renovate: docker=registry.k8s.io/git-sync/git-sync
+          image: registry.k8s.io/git-sync/git-sync:v4.4.0 # renovate: docker=registry.k8s.io/git-sync/git-sync
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
@@ -57,7 +57,7 @@ spec:
             - name: tmp
               mountPath: /tmp
         - name: torrent
-          image: ghcr.io/onedr0p/qbittorrent:5.0.1 # renovate: docker=ghcr.io/onedr0p/qbittorrent
+          image: ghcr.io/onedr0p/qbittorrent:5.0.3 # renovate: docker=ghcr.io/onedr0p/qbittorrent
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
