@@ -19,8 +19,8 @@ dns:
   ratelimit_subnet_len_ipv6: 56
   ratelimit_whitelist: [ ]
   refuse_any: true
-  upstream_dns:
-    - 10.96.0.11
+  #upstream_dns:
+  #  - 10.96.0.11
   upstream_dns_file: ""
   bootstrap_dns:
     - 10.96.0.11
