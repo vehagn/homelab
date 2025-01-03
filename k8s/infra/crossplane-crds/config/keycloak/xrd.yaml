@@ -35,7 +35,13 @@ spec:
                       - uma_authorization
                       - admin
                       - create-realm
+                      - default-roles-master
                   description: List of realm roles to import from the realm
+                builtinAuthenticationFlows:
+                  type: array
+                  items:
+                    type: string
+                  description: List of authentication flows to import from the realm
                 providerConfigName:
                   type: string
                   description: Name of the provider config to attach to the imported clients/roles

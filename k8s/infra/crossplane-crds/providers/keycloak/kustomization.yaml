@@ -3,4 +3,4 @@ kind: Kustomization
 
 resources:
   - keycloak-credentials.yaml
-  - default-config.yaml
+  - config.yaml
