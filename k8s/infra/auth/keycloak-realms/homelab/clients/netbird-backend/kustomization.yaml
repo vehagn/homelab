@@ -4,4 +4,3 @@ kind: Kustomization
 resources:
   - client.yaml
   - credentials.yaml
-  - sa-role-view-users.yaml

@@ -1,0 +1,30 @@
+apiVersion: oidc.homelab.olav.ninja/v1alpha1
+kind: XOidcClient
+metadata:
+  name: netbird
+spec:
+  displayName: Netbird
+  type: PUBLIC
+  clientId: netbird
+  description: Netbird Client
+  defaultScopes:
+    - acr
+    - basic
+    - email
+    - profile
+    - roles
+    - web-origins
+    - netbird-api
+  grantTypes:
+    - code
+    - device_code
+    - password
+  baseUrl: "https://netbird.stonegarden.dev"
+  postLogoutRedirectUris:
+    - "https://netbird.stonegarden.dev/*"
+  redirectUris:
+    - "http://localhost:53000"
+    - "https://netbird.stonegarden.dev/*"
+  webOrigins:
+    - "+"
+  realm: homelab

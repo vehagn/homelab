@@ -1,0 +1,11 @@
+apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
+kind: ClientScope
+metadata:
+  name: netbird-api
+spec:
+  forProvider:
+    name: netbird-api
+    consentScreenText: Netbird Management API
+    includeInTokenScope: true
+    realmIdRef:
+      name: homelab

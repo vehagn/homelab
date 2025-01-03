@@ -1,25 +1,27 @@
-apiVersion: openidclient.keycloak.crossplane.io/v1alpha1
-kind: Client
+apiVersion: oidc.homelab.olav.ninja/v1alpha1
+kind: XOidcClient
 metadata:
   name: netbird-backend
 spec:
-  deletionPolicy: Delete
-  forProvider:
-    name: Netbird Backend
-    accessType: CONFIDENTIAL
-    clientId: netbird-backend
-    clientSecretSecretRef:
-      namespace: netbird
-      name: netbird-backend-oidc-credentials
-      key: clientSecret
-    description: Netbird Backend Client
-    standardFlowEnabled: true
-    directAccessGrantsEnabled: true
-    serviceAccountsEnabled: true
-    oauth2DeviceAuthorizationGrantEnabled: true
-    validRedirectUris:
-      - "/*"
-    webOrigins:
-      - "+"
-    realmIdRef:
-      name: homelab
+  clientId: netbird-backend
+  clientSecretSecretRef:
+    name: netbird-backend-oidc-credentials
+    namespace: netbird
+    key: clientSecret
+  description: Netbird Backend Client
+  displayName: Netbird Backend
+  type: CONFIDENTIAL
+  grantTypes:
+    - client_credentials
+    - code
+    - device_code
+    - password
+  redirectUris:
+    - "/*"
+  webOrigins:
+    - "+"
+  serviceAccountRoles:
+    - realm: homelab
+      client: builtin-homelab-realm-management
+      role: view-users
+  realm: homelab
