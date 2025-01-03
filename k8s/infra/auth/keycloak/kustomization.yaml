@@ -6,7 +6,9 @@ resources:
   - pvc.yaml
   - secret-keycloak-admin.yaml
   - secret-keycloak-db-credentials.yaml
+  - secret-crossplane-keycloak-credentials.yaml
   - http-route.yaml
+  - crossplane-provider-config.yaml
 
 helmCharts:
   - name: keycloak
