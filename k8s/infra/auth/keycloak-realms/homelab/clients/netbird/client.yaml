@@ -21,3 +21,23 @@ spec:
       - "+"
     realmIdRef:
       name: homelab
+---
+apiVersion: client.keycloak.crossplane.io/v1alpha1
+kind: ProtocolMapper
+metadata:
+  name: netbird-sub-mapper
+spec:
+  forProvider:
+    name: Username as sub claim
+    protocol: openid-connect
+    protocolMapper: oidc-usermodel-property-mapper
+    config:
+      user.attribute: username
+      claim.name: sub
+      id.token.claim: "true"
+      access.token.claim: "true"
+      userinfo.token.claim: "true"
+    clientIdRef:
+      name: netbird
+    realmIdRef:
+      name: homelab

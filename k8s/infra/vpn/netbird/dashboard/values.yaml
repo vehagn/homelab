@@ -13,13 +13,3 @@ netbird:
 
 ingress:
   enabled: false
-#  annotations:
-#    cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
-#  hosts:
-#    - host: netbird.stonegarden.dev
-#      paths:
-#        - path: /
-#          pathType: Prefix
-#  tls:
-#    - hosts:
-#        - netbird.stonegarden.dev
