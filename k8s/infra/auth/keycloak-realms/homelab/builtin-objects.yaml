@@ -6,6 +6,8 @@ spec:
   providerConfigName: default
   providerSecretName: keycloak-credentials
   realm: homelab
+  builtinAuthenticationFlows:
+    - browser
   builtinClients:
     - account
     - account-console
