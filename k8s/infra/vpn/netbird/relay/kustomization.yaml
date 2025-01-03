@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configMapGenerator:
+  - name: relay-config
+    namespace: netbird
+    literals:
+      - NB_LOG_LEVEL="info"
+      - NB_LISTEN_ADDRESS=":80"
+      - NB_EXPOSED_ADDRESS="rels://netbird.stonegarden.dev:443"
+
+resources:
+  - deployment.yaml
+  - relay-secret.yaml
+  - svc.yaml

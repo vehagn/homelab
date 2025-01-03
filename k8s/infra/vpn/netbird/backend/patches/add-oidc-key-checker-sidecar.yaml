@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netbird-backend-management
+spec:
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: netbird-management
+    spec:
+      containers:
+        - name: oidc-key-checker
+          image: registry.gitlab.com/gitlab-ci-utils/curl-jq:3.1.0 # renovate: docker=registry.gitlab.com/gitlab-ci-utils/curl-jq
+          command: ["/bin/bash"]
+          args:
+            - -c
+            - |
+              #!/bin/bash
+              OIDC_ENDPOINT=$(jq -r '.HttpConfig.OIDCConfigEndpoint' /etc/netbird/management.json)
+              CHECK_INTERVAL="${CHECK_INTERVAL:-3600}"
+              KEYS_FILE="/data/oidc_keys.json"
+
+              fetch_keys() {
+                config=$(curl -s "$OIDC_ENDPOINT")
+                jwks_uri=$(echo "$config" | jq -r '.jwks_uri')
+                curl -s "$jwks_uri"
+              }
+
+              keys_changed() {
+                local new_keys="$1"
+                if [ ! -f "$KEYS_FILE" ]; then
+                  return 0
+                fi
+                local old_keys=$(cat "$KEYS_FILE")
+                [ "$new_keys" != "$old_keys" ]
+              }
+
+              restart_pod() {
+                echo "Restarting pod..."
+                kill 1
+              }
+
+              while true; do
+                echo "Fetching OIDC keys..."
+                new_keys=$(fetch_keys)
+
+                if keys_changed "$new_keys"; then
+                  echo "Keys have changed. Updating stored keys..."
+                  echo "$new_keys" > "$KEYS_FILE"
+                  restart_pod
+                else
+                  echo "Keys have not changed. No action required."
+                fi
+
+                echo "Sleeping for $CHECK_INTERVAL seconds..."
+                sleep "$CHECK_INTERVAL"
+              done
+          env:
+            - name: CHECK_INTERVAL
+              value: "900"
+          volumeMounts:
+            - name: config
+              mountPath: /etc/netbird
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          emptyDir: {}

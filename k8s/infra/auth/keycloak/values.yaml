@@ -34,4 +34,3 @@ postgresql:
     persistence:
       enabled: true
       existingClaim: keycloak-postgres
-

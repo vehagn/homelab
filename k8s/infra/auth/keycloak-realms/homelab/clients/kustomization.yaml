@@ -3,5 +3,3 @@ kind: Kustomization
 
 resources:
   - cloudflare
-  - netbird-dashboard
-  - netbird-backend

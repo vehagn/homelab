@@ -20,6 +20,13 @@ spec:
             type: PathPrefix
             value: /
     - backendRefs:
+        - name: netbird-relay
+          port: 80
+      matches:
+          - path:
+              type: PathPrefix
+              value: /relay
+    - backendRefs:
         - name: netbird-backend-management
           port: 80
       matches:

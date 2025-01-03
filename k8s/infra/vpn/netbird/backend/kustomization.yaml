@@ -4,6 +4,8 @@ namespace: netbird
 
 resources:
   - secret-coturn-credentials.yaml
+  - oidc-client.yaml
+  - oidc-credentials.yaml
 
 helmCharts:
   - name: netbird
@@ -14,6 +16,8 @@ helmCharts:
     valuesFile: values.yaml
 
 patches:
+  - path: patches/add-oidc-key-checker-sidecar.yaml
+  - path: patches/add-relay-config.yaml
   - path: patches/dns-management.yaml # resolve auth admin-endpoint to internal gateway
   - path: patches/deployment-strategy-management.yaml
   - path: patches/deployment-strategy-signal.yaml
