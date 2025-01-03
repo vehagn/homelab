@@ -138,11 +138,11 @@ module "volumes" {
     }
     pv-netbird-signal = {
       node = "abel"
-      size = "1G"
+      size = "512M"
     }
     pv-netbird-management = {
       node = "abel"
-      size = "1G"
+      size = "512M"
     }
     pv-plex = {
       node = "abel"

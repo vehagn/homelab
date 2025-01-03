@@ -3,13 +3,14 @@ kind: XOidcClient
 metadata:
   name: netbird-backend
 spec:
+  realm: homelab
   clientId: netbird-backend
+  displayName: Netbird Backend
+  description: Netbird Backend Client
   clientSecretSecretRef:
     name: netbird-backend-oidc-credentials
     namespace: netbird
     key: clientSecret
-  description: Netbird Backend Client
-  displayName: Netbird Backend
   type: CONFIDENTIAL
   grantTypes:
     - client_credentials
@@ -24,4 +25,3 @@ spec:
     - realm: homelab
       client: builtin-homelab-realm-management
       role: view-users
-  realm: homelab

@@ -6,6 +6,6 @@ spec:
   credentials:
     source: Secret
     secretRef:
-      name: keycloak-credentials
-      namespace: crossplane
+      name: crossplane-keycloak-credentials
+      namespace: keycloak
       key: credentials

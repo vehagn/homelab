@@ -4,7 +4,7 @@ metadata:
   name: builtin-objects-homelab
 spec:
   providerConfigName: default
-  providerSecretName: keycloak-credentials
+  providerSecretName: crossplane-keycloak-credentials
   realm: homelab
   builtinAuthenticationFlows:
     - browser

@@ -1,11 +1,11 @@
 auth:
   authority: https://keycloak.stonegarden.dev/realms/homelab
-  audience: netbird
+  audience: netbird-dashboard
   device:
     provider: hosted
-    audience: netbird
+    audience: netbird-dashboard
     authority: https://keycloak.stonegarden.dev/realms/homelab
-    clientID: netbird
+    clientID: netbird-dashboard
     deviceAuthorizationEndpoint: https://keycloak.stonegarden.dev/realms/homelab/protocol/openid-connect/auth
     tokenEndpoint: https://keycloak.stonegarden.dev/realms/homelab/protocol/openid-connect/token
     scope: openid

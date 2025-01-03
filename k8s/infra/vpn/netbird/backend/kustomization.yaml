@@ -4,8 +4,8 @@ namespace: netbird
 
 resources:
   - secret-coturn-credentials.yaml
-  - oidc-client.yaml
   - oidc-credentials.yaml
+  - x-oidc-client.yaml
 
 helmCharts:
   - name: netbird
