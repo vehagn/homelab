@@ -13,14 +13,14 @@ spec:
     - "netbird.stonegarden.dev"
   rules:
     - backendRefs:
-        - name: netbird-dashboard
+        - name: dashboard
           port: 80
       matches:
         - path:
             type: PathPrefix
             value: /
     - backendRefs:
-        - name: netbird-relay
+        - name: relay
           port: 80
       matches:
           - path:

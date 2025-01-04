@@ -63,7 +63,7 @@ data:
                 "Domain": "${NETBIRD_AUTH_DEVICE_AUTH_AUTHORITY}",
                 "TokenEndpoint": "${NETBIRD_AUTH_DEVICE_AUTH_TOKEN_ENDPOINT}",
                 "Scope": "${NETBIRD_AUTH_DEVICE_AUTH_SCOPE}",
-                "UseIDToken": ${NETBIRD_AUTH_DEVICE_AUTH_USE_ID_TOKEN:-false}
+                "UseIDToken": "${NETBIRD_AUTH_DEVICE_AUTH_USE_ID_TOKEN:-false}"
             }
         },
         "Relay": {

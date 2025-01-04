@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: netbird-agent
+  name: agent
   namespace: netbird
 spec:
   selector:
     matchLabels:
-      app: netbird
+      app: agent
   template:
     metadata:
       labels:
-        app: netbird
+        app: agent
     spec:
       securityContext:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - name: netbird
+        - name: agent
           image: docker.io/netbirdio/netbird:0.35.2 # renovate: docker=docker.io/netbirdio/netbird
           imagePullPolicy: IfNotPresent
           securityContext:

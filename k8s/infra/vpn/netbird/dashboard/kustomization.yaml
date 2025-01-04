@@ -1,15 +1,21 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: netbird
+
+configMapGenerator:
+  - name: dashboard-config
+    namespace: netbird
+    literals:
+      # variables: https://github.com/netbirdio/dashboard/blob/main/config.json
+      - AUTH_AUDIENCE="netbird-dashboard"
+      - AUTH_AUTHORITY="https://keycloak.stonegarden.dev/realms/homelab"
+      - AUTH_CLIENT_ID="netbird-dashboard"
+      - AUTH_SUPPORTED_SCOPES="openid profile email offline_access netbird-api"
+      - USE_AUTH0="false"
+      - NETBIRD_MGMT_API_ENDPOINT="https://netbird.stonegarden.dev"
+      - NETBIRD_MGMT_GRPC_API_ENDPOINT="https://netbird.stonegarden.dev"
 
 resources:
+  - deployment.yaml
+  - svc.yaml
   - x-oidc-client.yaml
   - oidc-scopes.yaml
-
-helmCharts:
-  - name: netbird-dashboard
-    repo: https://charts.jaconi.io
-    releaseName: netbird-dashboard
-    namespace: netbird
-    version: 1.0.0
-    valuesFile: values.yaml
