@@ -12,18 +12,18 @@ spec:
       labels:
         app: netbird
     spec:
-#      securityContext:
-#        seccompProfile:
-#          type: RuntimeDefault
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: netbird
           image: docker.io/netbirdio/netbird:0.35.2 # renovate: docker=docker.io/netbirdio/netbird
           imagePullPolicy: IfNotPresent
-#          securityContext:
-#            allowPrivilegeEscalation: false
-#            readOnlyRootFilesystem: true
-#            capabilities:
-#              add: [ NET_ADMIN, PERFMON, BPF ]
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              add: [ NET_ADMIN, PERFMON, BPF ]
           envFrom:
             - configMapRef:
                 name: agent-config
