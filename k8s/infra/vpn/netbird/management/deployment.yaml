@@ -38,22 +38,12 @@ spec:
                 name: management-connection-config
             - configMapRef:
                 name: management-idp-config
-          env:
-            - name: NETBIRD_RELAY_SECRET
-              valueFrom:
-                secretKeyRef:
-                  key: authSecret
-                  name: netbird-relay-credentials
-            - name: NETBIRD_TURN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: password
-                  name: netbird-turn-credentials
-            - name: NETBIRD_IDP_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  key: clientSecret
-                  name: netbird-backend-oidc-credentials
+            - secretRef:
+                name: relay-secret
+            - secretRef:
+                name: coturn-credentials
+            - secretRef:
+                name: management-oidc-credentials
           volumeMounts:
             - name: config
               mountPath: /etc/netbird

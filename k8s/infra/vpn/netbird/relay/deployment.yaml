@@ -19,12 +19,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: relay-config
-          env:
-            - name: NB_AUTH_SECRET
-              valueFrom:
-                secretKeyRef:
-                  key: authSecret
-                  name: netbird-relay-credentials
+            - secretRef:
+                name: relay-secret
           ports:
             - containerPort: 80
               name: relay

@@ -34,7 +34,6 @@ configMapGenerator:
     namespace: netbird
     literals:
       - NETBIRD_IDP_MANAGER_TYPE="keycloak"
-      - NETBIRD_IDP_CLIENT_ID="netbird-backend"
       - NETBIRD_IDP_GRANT_TYPE="client_credentials"
       - NETBIRD_IDP_KEYCLOAK_ADMIN_ENDPOINT="https://keycloak.stonegarden.dev/admin/realms/homelab"
       - NETBIRD_IDP_KEYCLOAK_TOKEN_ENDPOINT="https://keycloak.stonegarden.dev/realms/homelab/protocol/openid-connect/token"
@@ -52,6 +51,6 @@ resources:
   - deployment.yaml
   - svc.yaml
   - pvc.yaml
-  - secret-coturn-credentials.yaml
+  - coturn-credentials.yaml
   - oidc-credentials.yaml
   - x-oidc-client.yaml

@@ -27,12 +27,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: agent-config
-          env:
-            - name: NB_SETUP_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: agent-setup-key
-                  key: setupKey
+            - secretRef:
+                name: agent-setup-key
           volumeMounts:
             - name: config
               mountPath: /config

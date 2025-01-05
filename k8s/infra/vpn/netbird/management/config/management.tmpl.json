@@ -12,8 +12,8 @@
       {
         "Proto": "udp",
         "URI": "${NETBIRD_TURN_URI}",
-        "Username": "${NETBIRD_TURN_USER}",
-        "Password": "${NETBIRD_TURN_PASSWORD}"
+        "Username": "${NETBIRD_COTURN_USER}",
+        "Password": "${NETBIRD_COTURN_PASSWORD}"
       }
     ],
     "CredentialsTTL": "12h",
@@ -62,6 +62,6 @@
   "Relay": {
     "Addresses": ["${NETBIRD_RELAY_URI}"],
     "CredentialsTTL": "24h",
-    "Secret": "${NETBIRD_RELAY_SECRET}"
+    "Secret": "${NB_AUTH_SECRET}"
   }
 }
