@@ -10,14 +10,6 @@ spec:
   selector:
     app.kubernetes.io/name: coturn
   ports:
-    - name: tcp
-      port: 3478
-      protocol: TCP
-      targetPort: tcp
-    - name: udp
-      port: 3478
-      protocol: UDP
-      targetPort: udp
     - name: tcp-tls
       port: 5349
       protocol: TCP
