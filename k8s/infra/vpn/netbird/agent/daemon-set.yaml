@@ -23,7 +23,6 @@ spec:
       containers:
         - name: agent
           image: docker.io/netbirdio/netbird:0.35.2 # renovate: docker=docker.io/netbirdio/netbird
-          imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: false

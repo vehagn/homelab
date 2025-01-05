@@ -23,6 +23,9 @@ spec:
         nameservers:
           - 192.168.1.253
       dnsPolicy: None
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       initContainers:
         - name: configure
           image: golang:latest
@@ -31,6 +34,12 @@ spec:
             - >
               go install github.com/drone/envsubst/cmd/envsubst@latest &&
               envsubst < /tmp/netbird/management.tmpl.json > /etc/netbird/management.json
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+            capabilities:
+              drop: [ ALL ]
           envFrom:
             - configMapRef:
                 name: management-auth-config
@@ -54,6 +63,12 @@ spec:
           image: registry.gitlab.com/gitlab-ci-utils/curl-jq:3.1.0 # renovate: docker=registry.gitlab.com/gitlab-ci-utils/curl-jq
           command: [ /bin/bash, -c ]
           args: [ /opt/bin/check-oidc-keys.sh ]
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: false
+            capabilities:
+              drop: [ ALL ]
           envFrom:
             - configMapRef:
                 name: management-oidc-key-check-config
@@ -76,6 +91,13 @@ spec:
         - name: management
           image: docker.io/netbirdio/management:0.35.2 # renovate: docker=docker.io/netbirdio/management
           args: [ --dns-domain, $(DNS_DOMAIN), --log-level, $(LOG_LEVEL), --log-file, console ]
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+            capabilities:
+              drop: [ ALL ]
+              add: [ NET_ADMIN, NET_RAW, PERFMON, BPF ]
           envFrom:
             - configMapRef:
                 name: management-runtime-config
