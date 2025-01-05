@@ -9,7 +9,7 @@ configMapGenerator:
       - NB_LOG_LEVEL="warn"
       - NB_MANAGEMENT_URL="https://netbird.stonegarden.dev"
       - NB_ADMIN_URL="https://netbird.stonegarden.dev"
-      - NB_CONFIG="/config/config.json"
+      - NB_CONFIG="/var/lib/netbird/config.json"
 
 resources:
   - agent-setup-key.yaml

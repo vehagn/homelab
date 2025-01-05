@@ -15,23 +15,30 @@ spec:
       securityContext:
         seccompProfile:
           type: RuntimeDefault
+        sysctls:
+          # Considered unsafe, need to enable with kubelet argument.
+          # see https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/#enabling-unsafe-sysctls
+          - name: net.ipv4.conf.all.src_valid_mark
+            value: "1"
       containers:
         - name: agent
           image: docker.io/netbirdio/netbird:0.35.2 # renovate: docker=docker.io/netbirdio/netbird
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
             capabilities:
-              add: [ NET_ADMIN, PERFMON, BPF ]
+              drop: [ ALL ]
+              add: [ NET_ADMIN, NET_RAW, PERFMON, BPF ]
           envFrom:
             - configMapRef:
                 name: agent-config
             - secretRef:
                 name: agent-setup-key
           volumeMounts:
-            - name: config
-              mountPath: /config
+            - name: netbird
+              mountPath: /var/lib/netbird
           resources:
             requests:
               memory: 192Mi
@@ -40,5 +47,5 @@ spec:
               memory: 256Mi
               cpu: 4000m
       volumes:
-        - name: config
+        - name: netbird
           emptyDir: { }
