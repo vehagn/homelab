@@ -36,6 +36,13 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
+          resources:
+            requests:
+              memory: 192Mi
+              cpu: 100m
+            limits:
+              memory: 256Mi
+              cpu: 4000m
       volumes:
         - name: config
           emptyDir: { }

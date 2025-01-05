@@ -1,0 +1,57 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configMapGenerator:
+  - name: check-oidc-keys
+    namespace: netbird
+    files:
+      - config/check-oidc-keys.sh
+  - name: management-config-template
+    namespace: netbird
+    files:
+      - config/management.tmpl.json
+  - name: management-auth-config
+    namespace: netbird
+    literals:
+      - NETBIRD_AUTH_OIDC_CONFIGURATION_ENDPOINT="https://keycloak.stonegarden.dev/realms/homelab/.well-known/openid-configuration"
+      - NETBIRD_AUTH_DEVICE_AUTH_PROVIDER="hosted"
+      - NETBIRD_AUTH_DEVICE_AUTH_AUDIENCE="netbird-dashboard"
+      - NETBIRD_AUTH_DEVICE_AUTH_AUTHORITY="https://keycloak.stonegarden.dev/realms/homelab"
+      - NETBIRD_AUTH_DEVICE_AUTH_CLIENT_ID="netbird-dashboard"
+      - NETBIRD_AUTH_DEVICE_AUTH_DEVICE_AUTHORIZATION_ENDPOINT="https://keycloak.stonegarden.dev/realms/homelab/protocol/openid-connect/auth"
+      - NETBIRD_AUTH_DEVICE_AUTH_TOKEN_ENDPOINT="https://keycloak.stonegarden.dev/realms/homelab/protocol/openid-connect/token"
+      - NETBIRD_AUTH_DEVICE_AUTH_SCOPE="openid"
+      - NETBIRD_AUTH_DEVICE_AUTH_USE_ID_TOKEN="false"
+  - name: management-connection-config
+    namespace: netbird
+    literals:
+      - NETBIRD_RELAY_URI="rels://netbird.stonegarden.dev:443"
+      - NETBIRD_SIGNAL_URI="netbird.stonegarden.dev:443"
+      - NETBIRD_SIGNAL_PROTOCOL="https"
+      - NETBIRD_STUN_URI="stun:coturn.stonegarden.dev:3478"
+      - NETBIRD_TURN_URI="turn:coturn.stonegarden.dev:3478"
+  - name: management-idp-config
+    namespace: netbird
+    literals:
+      - NETBIRD_IDP_MANAGER_TYPE="keycloak"
+      - NETBIRD_IDP_CLIENT_ID="netbird-backend"
+      - NETBIRD_IDP_GRANT_TYPE="client_credentials"
+      - NETBIRD_IDP_KEYCLOAK_ADMIN_ENDPOINT="https://keycloak.stonegarden.dev/admin/realms/homelab"
+      - NETBIRD_IDP_KEYCLOAK_TOKEN_ENDPOINT="https://keycloak.stonegarden.dev/realms/homelab/protocol/openid-connect/token"
+  - name: management-runtime-config
+    namespace: netbird
+    literals:
+      - LOG_LEVEL="info"
+      - DNS_DOMAIN="stonegarden.dev"
+  - name: management-oidc-key-check-config
+    namespace: netbird
+    literals:
+      - KEY_CHECK_INTERVAL_SECONDS="900"
+
+resources:
+  - deployment.yaml
+  - svc.yaml
+  - pvc.yaml
+  - secret-coturn-credentials.yaml
+  - oidc-credentials.yaml
+  - x-oidc-client.yaml

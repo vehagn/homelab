@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: management
+  namespace: netbird
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: management
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: management
+      annotations:
+        kubectl.kubernetes.io/default-container: management
+    spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: abel
+      dnsConfig:
+        # Internal AdGuard Home DNS
+        nameservers:
+          - 192.168.1.253
+      dnsPolicy: None
+      initContainers:
+        - name: configure
+          image: golang:latest
+          command: [ /bin/sh, -c ]
+          args:
+            - >
+              go install github.com/drone/envsubst/cmd/envsubst@latest &&
+              envsubst < /tmp/netbird/management.tmpl.json > /etc/netbird/management.json
+          envFrom:
+            - configMapRef:
+                name: management-auth-config
+            - configMapRef:
+                name: management-connection-config
+            - configMapRef:
+                name: management-idp-config
+          env:
+            - name: NETBIRD_RELAY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: authSecret
+                  name: netbird-relay-credentials
+            - name: NETBIRD_TURN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: netbird-turn-credentials
+            - name: NETBIRD_IDP_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: clientSecret
+                  name: netbird-backend-oidc-credentials
+          volumeMounts:
+            - name: config
+              mountPath: /etc/netbird
+            - name: config-template
+              mountPath: /tmp/netbird
+      containers:
+        - name: oidc-key-checker
+          image: registry.gitlab.com/gitlab-ci-utils/curl-jq:3.1.0 # renovate: docker=registry.gitlab.com/gitlab-ci-utils/curl-jq
+          command: [ /bin/bash, -c ]
+          args: [ /opt/bin/check-oidc-keys.sh ]
+          envFrom:
+            - configMapRef:
+                name: management-oidc-key-check-config
+                optional: true
+          volumeMounts:
+            - name: check-oidc-keys
+              mountPath: /opt/bin/check-oidc-keys.sh
+              subPath: check-oidc-keys.sh
+            - name: config
+              mountPath: /etc/netbird
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              memory: 16Mi
+              cpu: 10m
+            limits:
+              memory: 64Mi
+              cpu: 200m
+        - name: management
+          image: docker.io/netbirdio/management:0.35.2 # renovate: docker=docker.io/netbirdio/management
+          args: [ --dns-domain, $(DNS_DOMAIN), --log-level, $(LOG_LEVEL), --log-file, console ]
+          envFrom:
+            - configMapRef:
+                name: management-runtime-config
+          volumeMounts:
+            - name: config
+              mountPath: /etc/netbird
+            - name: management
+              mountPath: /var/lib/netbird
+          ports:
+            - name: http
+              containerPort: 80
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 200m
+            limits:
+              memory: 512Mi
+              cpu: 4000m
+      volumes:
+        - name: data
+          emptyDir: { }
+        - name: config
+          emptyDir:
+            medium: Memory
+        - name: config-template
+          configMap:
+            defaultMode: 0644
+            name: management-config-template
+        - name: check-oidc-keys
+          configMap:
+            defaultMode: 0744
+            name: check-oidc-keys
+        - name: management
+          persistentVolumeClaim:
+            claimName: management

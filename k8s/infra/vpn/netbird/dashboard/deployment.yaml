@@ -22,7 +22,6 @@ spec:
         - name: http
           containerPort: 80
         readinessProbe:
-          failureThreshold: 3
           httpGet:
             path: /
             port: http

@@ -27,7 +27,7 @@ spec:
               type: PathPrefix
               value: /relay
     - backendRefs:
-        - name: netbird-backend-management
+        - name: management
           port: 80
       matches:
         - path:
@@ -37,7 +37,7 @@ spec:
             type: PathPrefix
             value: /management.ManagementService/
     - backendRefs:
-        - name: netbird-backend-signal
+        - name: signal
           port: 80
       matches:
         - path:

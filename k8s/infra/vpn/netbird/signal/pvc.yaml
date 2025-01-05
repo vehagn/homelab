@@ -1,7 +1,13 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: netbird-backend-signal
+  name: signal
+  namespace: netbird
 spec:
   storageClassName: proxmox-csi
   volumeName: pv-netbird-signal
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 512M
