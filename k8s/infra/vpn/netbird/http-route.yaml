@@ -23,9 +23,9 @@ spec:
         - name: relay
           port: 80
       matches:
-          - path:
-              type: PathPrefix
-              value: /relay
+        - path:
+            type: PathPrefix
+            value: /relay
     - backendRefs:
         - name: management
           port: 80

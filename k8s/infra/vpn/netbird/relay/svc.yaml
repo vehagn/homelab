@@ -10,6 +10,6 @@ spec:
   selector:
     app.kubernetes.io/name: relay
   ports:
-  - name: relay
-    port: 80
-    targetPort: relay
+    - name: relay
+      port: 80
+      targetPort: relay

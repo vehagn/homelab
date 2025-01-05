@@ -8,6 +8,6 @@ spec:
   selector:
     app.kubernetes.io/name: signal
   ports:
-  - name: http
-    port: 80
-    targetPort: http
+    - name: http
+      port: 80
+      targetPort: http

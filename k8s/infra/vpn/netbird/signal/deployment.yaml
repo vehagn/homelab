@@ -20,38 +20,38 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-      - name: signal
-        image: docker.io/netbirdio/signal:0.35.2 # renovate: docker=docker.io/netbirdio/signal
-        args: [--port, $(PORT), --log-level, $(LOG_LEVEL), --log-file, console]
-        securityContext:
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
-          runAsNonRoot: false
-          capabilities:
-            drop: [ ALL ]
-            add: [ NET_ADMIN, NET_RAW, PERFMON, BPF ]
-        envFrom:
-          - configMapRef:
-              name: signal-config
-        volumeMounts:
-          - name: signal
-            mountPath: /var/lib/netbird
-        ports:
-        - name: http
-          containerPort: 80
-        livenessProbe:
-          tcpSocket:
-            port: http
-        readinessProbe:
-          tcpSocket:
-            port: http
-        resources:
-          requests:
-            memory: 16Mi
-            cpu: 10m
-          limits:
-            memory: 64Mi
-            cpu: 2000m
+        - name: signal
+          image: docker.io/netbirdio/signal:0.35.2 # renovate: docker=docker.io/netbirdio/signal
+          args: [ --port, $(PORT), --log-level, $(LOG_LEVEL), --log-file, console ]
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: false
+            capabilities:
+              drop: [ ALL ]
+              add: [ NET_ADMIN, NET_RAW, PERFMON, BPF ]
+          envFrom:
+            - configMapRef:
+                name: signal-config
+          volumeMounts:
+            - name: signal
+              mountPath: /var/lib/netbird
+          ports:
+            - name: http
+              containerPort: 80
+          livenessProbe:
+            tcpSocket:
+              port: http
+          readinessProbe:
+            tcpSocket:
+              port: http
+          resources:
+            requests:
+              memory: 16Mi
+              cpu: 10m
+            limits:
+              memory: 64Mi
+              cpu: 2000m
       volumes:
         - name: signal
           persistentVolumeClaim:
