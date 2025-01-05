@@ -16,10 +16,20 @@ spec:
     spec:
       nodeSelector:
         topology.kubernetes.io/zone: abel
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: signal
         image: docker.io/netbirdio/signal:0.35.2 # renovate: docker=docker.io/netbirdio/signal
         args: [--port, $(PORT), --log-level, $(LOG_LEVEL), --log-file, console]
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: false
+          capabilities:
+            drop: [ ALL ]
+            add: [ NET_ADMIN, NET_RAW, PERFMON, BPF ]
         envFrom:
           - configMapRef:
               name: signal-config
