@@ -12,10 +12,20 @@ spec:
       labels:
         app.kubernetes.io/name: relay
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - image: netbirdio/relay:0.35.2 # renovate: docker=netbirdio/relay
           imagePullPolicy: IfNotPresent
-          name: netbird-relay
+          name: relay
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: false
+            capabilities:
+              drop: [ ALL ]
+              add: [ NET_ADMIN, NET_RAW, PERFMON, BPF ]
           envFrom:
             - configMapRef:
                 name: relay-config
