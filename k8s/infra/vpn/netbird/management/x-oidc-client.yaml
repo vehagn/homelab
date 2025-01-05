@@ -8,9 +8,9 @@ spec:
   displayName: Netbird Backend
   description: Netbird Backend Client
   clientSecretSecretRef:
-    name: netbird-backend-oidc-credentials
+    name: management-oidc-credentials
     namespace: netbird
-    key: clientSecret
+    key: NETBIRD_IDP_CLIENT_SECRET
   type: CONFIDENTIAL
   grantTypes:
     - client_credentials

@@ -1,0 +1,39 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: authelia-postgres
+  namespace: authelia
+spec:
+  instances: 1
+  affinity:
+    nodeSelector:
+      topology.kubernetes.io/zone: euclid
+  monitoring:
+    enablePodMonitor: true
+  postgresql:
+    parameters:
+      timezone: Europe/Oslo
+  bootstrap:
+    initdb:
+      database: authelia
+      owner: authelia
+  managed:
+    services:
+      disabledDefaultServices: [ "ro", "r" ]
+#      additional:
+#        - selectorType: rw
+#          updateStrategy: patch
+#          serviceTemplate:
+#            metadata:
+#              name: authelia-postgres-db
+#              annotations:
+#                io.cilium/lb-ipam-ips: 192.168.1.240
+#            spec:
+#              type: LoadBalancer
+  storage:
+    size: 512M
+    pvcTemplate:
+      storageClassName: proxmox-csi
+      volumeName: pv-authelia-postgres
+      accessModes:
+        - ReadWriteOnce

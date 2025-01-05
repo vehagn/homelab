@@ -10,6 +10,7 @@ resources:
   - cert-ecdsa-jwk.yaml
   - oidc-argocd.yaml
   - http-route.yaml
+  - cnpg-db.yaml
 
 helmCharts:
   - name: authelia

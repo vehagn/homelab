@@ -128,6 +128,10 @@ module "volumes" {
       node = "euclid"
       size = "1G"
     }
+    pv-authelia-postgres = {
+      node = "euclid"
+      size = "512M"
+    }
     pv-keycloak-postgres = {
       node = "euclid"
       size = "2G"
@@ -151,10 +155,6 @@ module "volumes" {
     pv-prometheus = {
       node = "abel"
       size = "10G"
-    }
-    pv-single-database = {
-      node = "euclid"
-      size = "4G"
     }
   }
 }
