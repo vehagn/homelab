@@ -12,23 +12,38 @@ spec:
       labels:
         app.kubernetes.io/name: dashboard
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
-      - name: dashboard
-        image: docker.io/netbirdio/dashboard:v2.8.2 # renovate: docker=docker.io/netbirdio/dashboard
-        envFrom:
-          - configMapRef:
-              name: dashboard-config
-        ports:
-        - name: http
-          containerPort: 80
-        readinessProbe:
-          httpGet:
-            path: /
-            port: http
-        resources:
-          requests:
-            memory: 32Mi
-            cpu: 10m
-          limits:
-            memory: 128Mi
-            cpu: 2000m
+        - name: dashboard
+          image: docker.io/netbirdio/dashboard:v2.8.2 # renovate: docker=docker.io/netbirdio/dashboard
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop: [ ALL ]
+              add: [ NET_BIND_SERVICE, CHOWN, SETGID, SETUID, DAC_OVERRIDE ]
+          envFrom:
+            - configMapRef:
+                name: dashboard-config
+          ports:
+            - name: http
+              containerPort: 80
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            requests:
+              memory: 32Mi
+              cpu: 10m
+            limits:
+              memory: 128Mi
+              cpu: 2000m
+      volumes:
+        - name: tmp
+          emptyDir: { }
