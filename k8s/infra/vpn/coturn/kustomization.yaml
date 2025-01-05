@@ -1,15 +1,22 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: coturn
+
+configMapGenerator:
+  - name: turnserver-config
+    namespace: coturn
+    files:
+      - config/turnserver.conf
+  - name: coturn-config
+    namespace: coturn
+    literals:
+      - LISTENING_IP="0.0.0.0"
+      - LISTENING_PORT="3478"
+      - TLS_LISTENING_PORT="5349"
+      - REALM="coturn.stonegarden.dev"
 
 resources:
   - ns.yaml
-  - secret-netbird-credentials.yaml
-
-helmCharts:
-  - name: coturn
-    repo: https://charts.jaconi.io
-    releaseName: coturn
-    namespace: coturn
-    version: 1.0.0
-    valuesFile: values.yaml
+  - deployment.yaml
+  - cert.yaml
+  - svc.yaml
+  - netbird-credentials.yaml

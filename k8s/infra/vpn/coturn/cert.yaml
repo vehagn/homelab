@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: coturn
+  namespace: coturn
+spec:
+  dnsNames:
+    - coturn.stonegarden.dev
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: cloudflare-cluster-issuer
+  secretName: coturn-cert
+  usages:
+    - digital signature
+    - key encipherment

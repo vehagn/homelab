@@ -28,8 +28,8 @@ configMapGenerator:
       - NETBIRD_RELAY_URI="rels://netbird.stonegarden.dev:443"
       - NETBIRD_SIGNAL_URI="netbird.stonegarden.dev:443"
       - NETBIRD_SIGNAL_PROTOCOL="https"
-      - NETBIRD_STUN_URI="stun:coturn.stonegarden.dev:3478"
-      - NETBIRD_TURN_URI="turn:coturn.stonegarden.dev:3478"
+      - NETBIRD_STUN_URI="stun:coturn.stonegarden.dev:5349"
+      - NETBIRD_TURN_URI="turn:coturn.stonegarden.dev:5349"
   - name: management-idp-config
     namespace: netbird
     literals:

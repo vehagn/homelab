@@ -19,8 +19,8 @@ dns:
   ratelimit_subnet_len_ipv6: 56
   ratelimit_whitelist: [ ]
   refuse_any: true
-  #upstream_dns:
-  #  - 10.96.0.11
+  upstream_dns:
+    - 10.96.0.11
   upstream_dns_file: ""
   bootstrap_dns:
     - 10.96.0.11
@@ -141,6 +141,8 @@ filtering:
   parental_block_host: family-block.dns.adguard.com
   safebrowsing_block_host: standard-block.dns.adguard.com
   rewrites:
+    - domain: coturn.stonegarden.dev
+      answer: 192.168.1.226
     - domain: proxmox.stonegarden.dev
       answer: 192.168.1.221
     - domain: truenas.stonegarden.dev
