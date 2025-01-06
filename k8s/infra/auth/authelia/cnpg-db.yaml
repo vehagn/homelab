@@ -31,9 +31,9 @@ spec:
 #            spec:
 #              type: LoadBalancer
   storage:
-    size: 512M
+    size: 1G
     pvcTemplate:
       storageClassName: proxmox-csi
-      volumeName: pv-authelia-postgres
+      volumeName: pv-authelia-database
       accessModes:
         - ReadWriteOnce

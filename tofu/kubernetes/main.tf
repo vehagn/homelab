@@ -128,9 +128,9 @@ module "volumes" {
       node = "euclid"
       size = "1G"
     }
-    pv-authelia-postgres = {
+    pv-authelia-database = {
       node = "euclid"
-      size = "512M"
+      size = "1G"
     }
     pv-keycloak-postgres = {
       node = "euclid"
