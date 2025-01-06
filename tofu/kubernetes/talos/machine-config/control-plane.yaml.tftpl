@@ -11,6 +11,14 @@ machine:
 
 cluster:
   allowSchedulingOnControlPlanes: true
+  apiServer:
+    extraArgs:
+      oidc-issuer-url: https://authelia.stonegarden.dev
+      oidc-client-id: kubectl
+      oidc-username-claim: preferred_username
+      oidc-username-prefix: 'authelia:'
+      oidc-groups-claim: groups
+      oidc-groups-prefix: 'authelia:'
   network:
     cni:
       name: none
