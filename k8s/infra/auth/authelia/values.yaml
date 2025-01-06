@@ -6,21 +6,21 @@ image:
   pullPolicy: IfNotPresent
 
 pod:
-  kind: 'Deployment'
+  kind: Deployment
 
 configMap:
   default_2fa_method: totp
-  theme: 'dark'
+  theme: dark
 
   identity_validation:
     reset_password:
       secret: { secret_name: crypto }
 
   access_control:
-    default_policy: 'two_factor'
+    default_policy: two_factor
     rules:
-      - domain_regex: '^.*\.stonegarden.dev$'
-        policy: 'two_factor'
+      - domain_regex: ^.*\.stonegarden.dev$
+        policy: two_factor
 
   session:
     encryption_key: { secret_name: crypto }
@@ -45,14 +45,14 @@ configMap:
   authentication_backend:
     ldap:
       enabled: true
-      implementation: 'lldap'
-      address: 'ldap://lldap.lldap.svc.cluster.local'
-      base_dn: 'dc=stonegarden,dc=dev'
-      users_filter: '(&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))'
-      additional_users_dn: 'ou=people'
-      groups_filter: '(member={dn})'
-      additional_groups_dn: 'ou=groups'
-      user: 'UID=authelia,OU=people,DC=stonegarden,DC=dev'
+      implementation: lldap
+      address: ldap://lldap.lldap.svc.cluster.local
+      base_dn: dc=stonegarden,dc=dev
+      users_filter: (&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))
+      additional_users_dn: ou=people
+      groups_filter: (member={dn})
+      additional_groups_dn: ou=groups
+      user: UID=authelia,OU=people,DC=stonegarden,DC=dev
       password: { secret_name: lldap-auth }
 
   identity_providers:
@@ -61,45 +61,45 @@ configMap:
       enabled: true
       hmac_secret: { secret_name: crypto }
       jwks:
-        - key_id: 'default'
-          algorithm: 'RS256'
-          use: 'sig'
+        - key_id: default
+          algorithm: RS256
+          use: sig
           key: { path: /secrets/rsa-jwk/tls.key }
           certificate_chain: { path: /secrets/rsa-jwk/tls.crt }
-        - key_id: 'ecdsa256'
-          algorithm: 'ES256'
-          use: 'sig'
+        - key_id: ecdsa256
+          algorithm: ES256
+          use: sig
           key: { path: /secrets/ecdsa-jwk/tls.key }
           certificate_chain: { path: /secrets/ecdsa-jwk/tls.crt }
       cors:
         allowed_origins_from_client_redirect_uris: true
       clients:
-        - client_id: 'argocd'
+        - client_id: argocd
           client_secret:
-            path: '/secrets/oidc-argocd/clientSecret'
-          client_name: 'Argo CD'
+            path: /secrets/oidc-argocd/clientSecret
+          client_name: Argo CD
           public: false
-          authorization_policy: 'two_factor'
+          authorization_policy: two_factor
           redirect_uris:
-            - 'https://argocd.stonegarden.dev/auth/callback'
-            - 'https://argocd.stonegarden.dev/applications'
-          scopes: [ 'openid', 'groups', 'email', 'profile' ]
-          userinfo_signed_response_alg: 'none'
-          id_token_signed_response_alg: 'ES256'
-        - client_id: 'argocd-cli'
-          client_name: 'Argo CD (CLI)'
+            - https://argocd.stonegarden.dev/auth/callback
+            - https://argocd.stonegarden.dev/applications
+          scopes: [ openid, groups, email, profile, offline_access ]
+          userinfo_signed_response_alg: none
+          id_token_signed_response_alg: ES256
+        - client_id: argocd-cli
+          client_name: Argo CD (CLI)
           public: true
-          authorization_policy: 'two_factor'
-          redirect_uris: [ 'http://localhost:8085/auth/callback' ]
-          scopes: [ 'openid', 'groups', 'email', 'profile', 'offline_access' ]
-          userinfo_signed_response_alg: 'none'
+          authorization_policy: two_factor
+          redirect_uris: [ http://localhost:8085/auth/callback ]
+          scopes: [ openid, groups, email, profile, offline_access ]
+          userinfo_signed_response_alg: none
         - client_id: kubectl
           client_name: kubectl
           public: true
-          authorization_policy: one_factor
-          redirect_uris: [ 'http://localhost:8000', 'http://localhost:18000' ]
-          scopes: [ 'openid', 'groups', 'email', 'profile', 'offline_access' ]
-          userinfo_signed_response_alg: 'none'
+          authorization_policy: two_factor
+          redirect_uris: [ http://localhost:8000, http://localhost:18000 ]
+          scopes: [ openid, groups, email, profile, offline_access ]
+          userinfo_signed_response_alg: none
 
 secret:
   additionalSecrets:
