@@ -20,6 +20,11 @@
     "Secret": "secret",
     "TimeBasedCredentials": false
   },
+  "Relay": {
+    "Addresses": ["${NETBIRD_RELAY_URI}"],
+    "CredentialsTTL": "24h",
+    "Secret": "${NB_AUTH_SECRET}"
+  },
   "Signal": {
     "Proto": "${NETBIRD_SIGNAL_PROTOCOL}",
     "URI": "${NETBIRD_SIGNAL_URI}",
@@ -36,32 +41,40 @@
     "OIDCConfigEndpoint": "${NETBIRD_AUTH_OIDC_CONFIGURATION_ENDPOINT}"
   },
   "IdpManagerConfig": {
-    "ManagerType": "${NETBIRD_IDP_MANAGER_TYPE}",
-    "${NETBIRD_IDP_MANAGER_TYPE^}ClientCredentials": {
-      "ClientID": "${NETBIRD_IDP_CLIENT_ID}",
-      "ClientSecret": "${NETBIRD_IDP_CLIENT_SECRET}",
-      "GrantType": "${NETBIRD_IDP_GRANT_TYPE}",
-      "Audience": "${NETBIRD_IDP_AUTH0_AUDIENCE}",
-      "AuthIssuer": "${NETBIRD_IDP_AUTH0_AUTH_ISSUER}",
-      "AdminEndpoint": "${NETBIRD_IDP_KEYCLOAK_ADMIN_ENDPOINT}",
-      "TokenEndpoint": "${NETBIRD_IDP_KEYCLOAK_TOKEN_ENDPOINT}"
-    }
+    "ManagerType": "${NETBIRD_IDP_MANAGER_TYPE:-none}",
+    "ClientConfig": {
+      "Issuer": "${NETBIRD_AUTH_AUTHORITY}",
+      "TokenEndpoint": "${NETBIRD_AUTH_TOKEN_ENDPOINT}",
+      "ClientID": "${NETBIRD_IDP_MGMT_CLIENT_ID}",
+      "ClientSecret": "${NETBIRD_IDP_MGMT_CLIENT_SECRET}",
+      "GrantType": "client_credentials"
+    },
+    "ExtraConfig": ${NETBIRD_IDP_MGMT_EXTRA_CONFIG:-null}
   },
   "DeviceAuthorizationFlow": {
     "Provider": "${NETBIRD_AUTH_DEVICE_AUTH_PROVIDER}",
     "ProviderConfig": {
       "Audience": "${NETBIRD_AUTH_DEVICE_AUTH_AUDIENCE}",
+      "AuthorizationEndpoint": "",
+      "Domain": "${NETBIRD_AUTH_DEVICE_AUTH_AUTHORITY}",
       "ClientID": "${NETBIRD_AUTH_DEVICE_AUTH_CLIENT_ID}",
       "DeviceAuthEndpoint": "${NETBIRD_AUTH_DEVICE_AUTH_DEVICE_AUTHORIZATION_ENDPOINT}",
-      "Domain": "${NETBIRD_AUTH_DEVICE_AUTH_AUTHORITY}",
       "TokenEndpoint": "${NETBIRD_AUTH_DEVICE_AUTH_TOKEN_ENDPOINT}",
       "Scope": "${NETBIRD_AUTH_DEVICE_AUTH_SCOPE}",
       "UseIDToken": ${NETBIRD_AUTH_DEVICE_AUTH_USE_ID_TOKEN:-false}
     }
   },
-  "Relay": {
-    "Addresses": ["${NETBIRD_RELAY_URI}"],
-    "CredentialsTTL": "24h",
-    "Secret": "${NB_AUTH_SECRET}"
+  "PKCEAuthorizationFlow": {
+    "ProviderConfig": {
+      "Audience": "${NETBIRD_AUTH_PKCE_AUDIENCE}",
+      "ClientID": "${NETBIRD_AUTH_CLIENT_ID}",
+      "ClientSecret": "${NETBIRD_AUTH_CLIENT_SECRET}",
+      "Domain": "",
+      "AuthorizationEndpoint": "${NETBIRD_AUTH_PKCE_AUTHORIZATION_ENDPOINT}",
+      "TokenEndpoint": "${NETBIRD_AUTH_TOKEN_ENDPOINT}",
+      "Scope": "${NETBIRD_AUTH_SUPPORTED_SCOPES}",
+      "RedirectURLs": ${NETBIRD_AUTH_PKCE_REDIRECT_URLS},
+      "UseIDToken": ${NETBIRD_AUTH_PKCE_USE_ID_TOKEN:-false}
+    }
   }
 }

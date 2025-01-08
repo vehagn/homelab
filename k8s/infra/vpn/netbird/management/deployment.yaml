@@ -33,7 +33,7 @@ spec:
           args:
             - >
               go install github.com/drone/envsubst/cmd/envsubst@latest &&
-              envsubst < /tmp/netbird/management.tmpl.json > /etc/netbird/management.json
+              envsubst < /tmp/netbird/management.json.tmpl > /etc/netbird/management.json
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: false
@@ -45,14 +45,10 @@ spec:
                 name: management-auth-config
             - configMapRef:
                 name: management-connection-config
-            - configMapRef:
-                name: management-idp-config
             - secretRef:
                 name: relay-secret
             - secretRef:
                 name: coturn-credentials
-            - secretRef:
-                name: management-oidc-credentials
           volumeMounts:
             - name: config
               mountPath: /etc/netbird

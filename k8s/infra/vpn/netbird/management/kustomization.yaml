@@ -9,7 +9,8 @@ configMapGenerator:
   - name: management-config-template
     namespace: netbird
     files:
-      - config/management.tmpl.json
+      # https://github.com/netbirdio/netbird/blob/main/infrastructure_files/management.json.tmpl
+      - config/management.json.tmpl
   - name: management-auth-config
     namespace: netbird
     literals:
@@ -22,6 +23,11 @@ configMapGenerator:
       - NETBIRD_AUTH_DEVICE_AUTH_TOKEN_ENDPOINT="https://keycloak.stonegarden.dev/realms/homelab/protocol/openid-connect/token"
       - NETBIRD_AUTH_DEVICE_AUTH_SCOPE="openid"
       - NETBIRD_AUTH_DEVICE_AUTH_USE_ID_TOKEN="false"
+      - NETBIRD_AUTH_AUDIENCE="netbird-dashboard"
+      - NETBIRD_AUTH_PKCE_AUDIENCE="netbird-dashboard"
+      - NETBIRD_AUTH_CLIENT_ID="netbird-dashboard"
+      - NETBIRD_AUTH_PKCE_REDIRECT_URLS='[ "http://localhost:53000" ]'
+      - NETBIRD_AUTH_SUPPORTED_SCOPES="openid profile email offline_access netbird-api"
   - name: management-connection-config
     namespace: netbird
     literals:
@@ -30,13 +36,6 @@ configMapGenerator:
       - NETBIRD_SIGNAL_PROTOCOL="https"
       - NETBIRD_STUN_URI="stun:coturn.stonegarden.dev:5349"
       - NETBIRD_TURN_URI="turn:coturn.stonegarden.dev:5349"
-  - name: management-idp-config
-    namespace: netbird
-    literals:
-      - NETBIRD_IDP_MANAGER_TYPE="keycloak"
-      - NETBIRD_IDP_GRANT_TYPE="client_credentials"
-      - NETBIRD_IDP_KEYCLOAK_ADMIN_ENDPOINT="https://keycloak.stonegarden.dev/admin/realms/homelab"
-      - NETBIRD_IDP_KEYCLOAK_TOKEN_ENDPOINT="https://keycloak.stonegarden.dev/realms/homelab/protocol/openid-connect/token"
   - name: management-runtime-config
     namespace: netbird
     literals:
@@ -52,5 +51,3 @@ resources:
   - svc.yaml
   - pvc.yaml
   - coturn-credentials.yaml
-  - oidc-credentials.yaml
-  - x-oidc-client.yaml
