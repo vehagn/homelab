@@ -55,38 +55,9 @@ spec:
             - name: config-template
               mountPath: /tmp/netbird
       containers:
-        - name: oidc-key-checker
-          image: registry.gitlab.com/gitlab-ci-utils/curl-jq:3.1.0 # renovate: docker=registry.gitlab.com/gitlab-ci-utils/curl-jq
-          command: [ /bin/bash, -c ]
-          args: [ /opt/bin/check-oidc-keys.sh ]
-          securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
-            runAsNonRoot: false
-            capabilities:
-              drop: [ ALL ]
-          envFrom:
-            - configMapRef:
-                name: management-oidc-key-check-config
-                optional: true
-          volumeMounts:
-            - name: check-oidc-keys
-              mountPath: /opt/bin/check-oidc-keys.sh
-              subPath: check-oidc-keys.sh
-            - name: config
-              mountPath: /etc/netbird
-            - name: data
-              mountPath: /data
-          resources:
-            requests:
-              memory: 16Mi
-              cpu: 10m
-            limits:
-              memory: 64Mi
-              cpu: 200m
         - name: management
           image: docker.io/netbirdio/management:0.35.2 # renovate: docker=docker.io/netbirdio/management
-          args: [ --dns-domain, $(DNS_DOMAIN), --log-level, $(LOG_LEVEL), --log-file, console ]
+          args: [ --dns-domain, $(DNS_DOMAIN), --log-level, $(LOG_LEVEL), --log-file, console, --idp-sign-key-refresh-enabled ]
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: false
@@ -113,8 +84,6 @@ spec:
               memory: 512Mi
               cpu: 4000m
       volumes:
-        - name: data
-          emptyDir: { }
         - name: config
           emptyDir:
             medium: Memory
@@ -122,10 +91,6 @@ spec:
           configMap:
             defaultMode: 0644
             name: management-config-template
-        - name: check-oidc-keys
-          configMap:
-            defaultMode: 0744
-            name: check-oidc-keys
         - name: management
           persistentVolumeClaim:
             claimName: management
