@@ -8,6 +8,8 @@ configMapGenerator:
       # variables: https://github.com/netbirdio/dashboard/blob/main/config.json
       - AUTH_AUDIENCE="netbird-dashboard"
       - AUTH_AUTHORITY="https://keycloak.stonegarden.dev/realms/homelab"
+      - AUTH_REDIRECT_URI="/callback"
+      - AUTH_SILENT_REDIRECT_URI="/silent-callback"
       - AUTH_CLIENT_ID="netbird-dashboard"
       - AUTH_SUPPORTED_SCOPES="openid profile email offline_access netbird-api"
       - USE_AUTH0="false"
