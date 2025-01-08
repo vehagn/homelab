@@ -1,12 +1,12 @@
 apiVersion: oidc.homelab.olav.ninja/v1alpha1
 kind: XOidcClient
 metadata:
-  name: netbird-dashboard
+  name: netbird
 spec:
   realm: homelab
-  clientId: netbird-dashboard
-  displayName: Netbird Dashboard
-  description: Netbird Dashboard Client
+  clientId: netbird
+  displayName: Netbird
+  description: Netbird OIDC client
   type: PUBLIC
   defaultScopes:
     - acr
