@@ -11,19 +11,9 @@ configMapGenerator:
     namespace: netbird
     literals:
       - AUTH_AUTHORITY="https://authelia.stonegarden.dev"
-#      - AUTH_OIDC_CONFIGURATION_ENDPOINT="https://authelia.stonegarden.dev/.well-known/openid-configuration"
-#      - AUTH_DEVICE_AUTH_AUTHORITY="https://authelia.stonegarden.dev"
-#      - AUTH_DEVICE_AUTH_PROVIDER="hosted"
-#      - AUTH_DEVICE_AUTH_CLIENT_ID="netbird"
-#      - AUTH_DEVICE_AUTH_AUDIENCE="netbird"
-#      - AUTH_DEVICE_AUTH_DEVICE_AUTHORIZATION_ENDPOINT="https://authelia.stonegarden.dev/protocol/openid-connect/auth"
-#      - AUTH_DEVICE_AUTH_TOKEN_ENDPOINT="https://authelia.stonegarden.dev/protocol/openid-connect/token"
-#      - AUTH_DEVICE_AUTH_SCOPE="openid"
-#      - AUTH_DEVICE_AUTH_USE_ID_TOKEN="false"
       - AUTH_CLIENT_ID="netbird"
       - AUTH_AUDIENCE="netbird"
-#      - AUTH_PKCE_REDIRECT_URLS='[ "http://localhost:53000" ]'
-#      - AUTH_PKCE_USE_ID_TOKEN=true
+      - AUTH_USER_ID_CLAIM="preferred_username"
       - AUTH_SUPPORTED_SCOPES="openid profile email offline_access netbird-api"
   - name: management-connection-config
     namespace: netbird
@@ -38,10 +28,6 @@ configMapGenerator:
     literals:
       - LOG_LEVEL="info"
       - DNS_DOMAIN="stonegarden.dev"
-  - name: management-oidc-key-check-config
-    namespace: netbird
-    literals:
-      - KEY_CHECK_INTERVAL_SECONDS="900"
 
 resources:
   - deployment.yaml
