@@ -7,7 +7,7 @@ configMapGenerator:
     literals:
       # variables: https://github.com/netbirdio/dashboard/blob/main/config.json
       - AUTH_AUDIENCE="netbird"
-      - AUTH_AUTHORITY="https://keycloak.stonegarden.dev/realms/homelab"
+      - AUTH_AUTHORITY="https://authelia.stonegarden.dev"
       - AUTH_CLIENT_ID="netbird"
       - AUTH_REDIRECT_URI="/callback"
       - AUTH_SILENT_REDIRECT_URI="/silent-callback"
@@ -15,6 +15,7 @@ configMapGenerator:
       - USE_AUTH0="false"
       - NETBIRD_MGMT_API_ENDPOINT="https://netbird.stonegarden.dev"
       - NETBIRD_MGMT_GRPC_API_ENDPOINT="https://netbird.stonegarden.dev"
+      - NETBIRD_TOKEN_SOURCE="idToken"
 
 resources:
   - deployment.yaml

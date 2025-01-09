@@ -73,6 +73,7 @@ configMap:
           certificate_chain: { path: /secrets/ecdsa-jwk/tls.crt }
       cors:
         allowed_origins_from_client_redirect_uris: true
+        endpoints: [ userinfo, authorization, token, revocation, introspection ]
       clients:
         - client_id: argocd
           client_secret:
@@ -100,6 +101,16 @@ configMap:
           redirect_uris: [ http://localhost:8000, http://localhost:18000 ]
           scopes: [ openid, groups, email, profile, offline_access ]
           userinfo_signed_response_alg: none
+        - client_id: netbird
+          client_name: NetBird
+          public: true
+          authorization_policy: two_factor
+          audience: [ netbird ]
+          redirect_uris: 
+            - http://localhost:53000
+            - https://netbird.stonegarden.dev/callback
+            - https://netbird.stonegarden.dev/silent-callback
+          scopes: [ openid, profile, email, offline_access, netbird-api ]
 
 secret:
   additionalSecrets:

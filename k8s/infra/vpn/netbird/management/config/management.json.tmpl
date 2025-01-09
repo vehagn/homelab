@@ -2,7 +2,7 @@
   "Stuns": [
     {
       "Proto": "udp",
-      "URI": "${NETBIRD_STUN_URI}",
+      "URI": "${STUN_URI}",
       "Username": "",
       "Password": null
     }
@@ -11,9 +11,9 @@
     "Turns": [
       {
         "Proto": "udp",
-        "URI": "${NETBIRD_TURN_URI}",
-        "Username": "${NETBIRD_COTURN_USER}",
-        "Password": "${NETBIRD_COTURN_PASSWORD}"
+        "URI": "${TURN_URI}",
+        "Username": "${COTURN_USER}",
+        "Password": "${COTURN_PASSWORD}"
       }
     ],
     "CredentialsTTL": "12h",
@@ -21,60 +21,60 @@
     "TimeBasedCredentials": false
   },
   "Relay": {
-    "Addresses": ["${NETBIRD_RELAY_URI}"],
+    "Addresses": ["${RELAY_URI}"],
     "CredentialsTTL": "24h",
     "Secret": "${NB_AUTH_SECRET}"
   },
   "Signal": {
-    "Proto": "${NETBIRD_SIGNAL_PROTOCOL}",
-    "URI": "${NETBIRD_SIGNAL_URI}",
+    "Proto": "${SIGNAL_PROTOCOL}",
+    "URI": "${SIGNAL_URI}",
     "Username": "",
     "Password": null
   },
   "Datadir": "",
   "HttpConfig": {
     "Address": "0.0.0.0:80",
-    "AuthAudience": "${NETBIRD_AUTH_AUDIENCE}",
-    "AuthUserIDClaim": "${NETBIRD_AUTH_USER_ID_CLAIM:-sub}",
-    "CertFile": "${NETBIRD_MGMT_API_CERT_FILE}",
-    "CertKey": "${NETBIRD_MGMT_API_CERT_KEY_FILE}",
-    "OIDCConfigEndpoint": "${NETBIRD_AUTH_OIDC_CONFIGURATION_ENDPOINT}"
+    "AuthAudience": "${AUTH_AUDIENCE}",
+    "AuthUserIDClaim": "${AUTH_USER_ID_CLAIM:-sub}",
+    "CertFile": "${MGMT_API_CERT_FILE}",
+    "CertKey": "${MGMT_API_CERT_KEY_FILE}",
+    "OIDCConfigEndpoint": "${AUTH_OIDC_CONFIGURATION_ENDPOINT:-${AUTH_AUTHORITY}/.well-known/openid-configuration}"
   },
   "IdpManagerConfig": {
-    "ManagerType": "${NETBIRD_IDP_MANAGER_TYPE:-none}",
+    "ManagerType": "${IDP_MANAGER_TYPE:-none}",
     "ClientConfig": {
-      "Issuer": "${NETBIRD_AUTH_AUTHORITY}",
-      "TokenEndpoint": "${NETBIRD_AUTH_TOKEN_ENDPOINT}",
-      "ClientID": "${NETBIRD_IDP_MGMT_CLIENT_ID}",
-      "ClientSecret": "${NETBIRD_IDP_MGMT_CLIENT_SECRET}",
+      "Issuer": "${AUTH_AUTHORITY}",
+      "TokenEndpoint": "${AUTH_TOKEN_ENDPOINT}",
+      "ClientID": "${IDP_MGMT_CLIENT_ID}",
+      "ClientSecret": "${IDP_MGMT_CLIENT_SECRET}",
       "GrantType": "client_credentials"
     },
-    "ExtraConfig": ${NETBIRD_IDP_MGMT_EXTRA_CONFIG:-null}
+    "ExtraConfig": ${IDP_MGMT_EXTRA_CONFIG:-null}
   },
   "DeviceAuthorizationFlow": {
-    "Provider": "${NETBIRD_AUTH_DEVICE_AUTH_PROVIDER}",
+    "Provider": "${AUTH_DEVICE_AUTH_PROVIDER}",
     "ProviderConfig": {
-      "Audience": "${NETBIRD_AUTH_DEVICE_AUTH_AUDIENCE}",
+      "Audience": "${AUTH_DEVICE_AUTH_AUDIENCE:-${AUTH_AUDIENCE}}",
       "AuthorizationEndpoint": "",
-      "Domain": "${NETBIRD_AUTH_DEVICE_AUTH_AUTHORITY}",
-      "ClientID": "${NETBIRD_AUTH_DEVICE_AUTH_CLIENT_ID}",
-      "DeviceAuthEndpoint": "${NETBIRD_AUTH_DEVICE_AUTH_DEVICE_AUTHORIZATION_ENDPOINT}",
-      "TokenEndpoint": "${NETBIRD_AUTH_DEVICE_AUTH_TOKEN_ENDPOINT}",
-      "Scope": "${NETBIRD_AUTH_DEVICE_AUTH_SCOPE}",
-      "UseIDToken": ${NETBIRD_AUTH_DEVICE_AUTH_USE_ID_TOKEN:-false}
+      "Domain": "${AUTH_DEVICE_AUTH_AUTHORITY:-${AUTH_AUTHORITY}}",
+      "ClientID": "${AUTH_DEVICE_AUTH_CLIENT_ID:-${AUTH_CLIENT_ID}}",
+      "DeviceAuthEndpoint": "${AUTH_DEVICE_AUTH_DEVICE_AUTHORIZATION_ENDPOINT:-${AUTH_DEVICE_AUTH_AUTHORITY:-${AUTH_AUTHORITY}}/protocol/openid-connect/auth}",
+      "TokenEndpoint": "${AUTH_DEVICE_AUTH_TOKEN_ENDPOINT:-${AUTH_DEVICE_AUTH_AUTHORITY:-${AUTH_AUTHORITY}}/protocol/openid-connect/token}",
+      "Scope": "${AUTH_DEVICE_AUTH_SCOPE}",
+      "UseIDToken": ${AUTH_DEVICE_AUTH_USE_ID_TOKEN:-true}
     }
   },
   "PKCEAuthorizationFlow": {
     "ProviderConfig": {
-      "Audience": "${NETBIRD_AUTH_AUDIENCE}",
-      "ClientID": "${NETBIRD_AUTH_CLIENT_ID}",
-      "ClientSecret": "${NETBIRD_AUTH_CLIENT_SECRET}",
+      "Audience": "${AUTH_AUDIENCE}",
+      "ClientID": "${AUTH_CLIENT_ID}",
+      "ClientSecret": "${AUTH_CLIENT_SECRET}",
       "Domain": "",
-      "AuthorizationEndpoint": "${NETBIRD_AUTH_PKCE_AUTHORIZATION_ENDPOINT}",
-      "TokenEndpoint": "${NETBIRD_AUTH_TOKEN_ENDPOINT}",
-      "Scope": "${NETBIRD_AUTH_SUPPORTED_SCOPES}",
-      "RedirectURLs": ${NETBIRD_AUTH_PKCE_REDIRECT_URLS},
-      "UseIDToken": ${NETBIRD_AUTH_PKCE_USE_ID_TOKEN:-false}
+      "AuthorizationEndpoint": "${AUTH_PKCE_AUTHORIZATION_ENDPOINT:-${AUTH_AUTHORITY}/api/oidc/authorization}",
+      "TokenEndpoint": "${AUTH_TOKEN_ENDPOINT:-${AUTH_AUTHORITY}/api/oidc/token}",
+      "Scope": "${AUTH_SUPPORTED_SCOPES}",
+      "RedirectURLs": ${AUTH_PKCE_REDIRECT_URLS:-[ "http://localhost:53000" ]},
+      "UseIDToken": ${AUTH_PKCE_USE_ID_TOKEN:-true}
     }
   }
 }

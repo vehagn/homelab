@@ -22,13 +22,13 @@ spec:
           type: RuntimeDefault
       containers:
         - name: coturn
-          image: coturn/coturn:4.6.2-r8 # renovate github-releases=coturn/coturn
+          image: coturn/coturn:4.6.2-r8 # renovate github-releases=coturn/coturn versioning=loose
           args:
             - --listening-ip=$(LISTENING_IP)
             - --listening-port=$(LISTENING_PORT)
             - --tls-listening-port=$(TLS_LISTENING_PORT)
             - --realm=$(REALM)
-            - --user="$(NETBIRD_COTURN_USER):$(NETBIRD_COTURN_PASSWORD)"
+            - --user="$(NETBIRD_USER):$(NETBIRD_PASSWORD)"
             - --lt-cred-mech
             - --cert=/usr/local/etc/tls.crt
             - --pkey=/usr/local/etc/tls.key
