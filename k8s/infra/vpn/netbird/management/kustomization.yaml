@@ -11,10 +11,8 @@ configMapGenerator:
     namespace: netbird
     literals:
       - AUTH_AUTHORITY="https://authelia.stonegarden.dev"
-      - AUTH_CLIENT_ID="netbird"
-      - AUTH_AUDIENCE="netbird"
       - AUTH_USER_ID_CLAIM="preferred_username"
-      - AUTH_SUPPORTED_SCOPES="openid profile email offline_access netbird-api"
+      - AUTH_SUPPORTED_SCOPES="openid profile email"
   - name: management-connection-config
     namespace: netbird
     literals:
@@ -33,4 +31,3 @@ resources:
   - deployment.yaml
   - svc.yaml
   - pvc.yaml
-  - coturn-credentials.yaml

@@ -27,6 +27,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: dashboard-config
+            - secretRef:
+                name: authelia-oidc-credentials
           ports:
             - name: http
               containerPort: 80

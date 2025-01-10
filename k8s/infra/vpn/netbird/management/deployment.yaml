@@ -46,6 +46,8 @@ spec:
             - configMapRef:
                 name: management-connection-config
             - secretRef:
+                name: authelia-oidc-credentials
+            - secretRef:
                 name: relay-secret
             - secretRef:
                 name: coturn-credentials

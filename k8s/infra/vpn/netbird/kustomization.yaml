@@ -4,6 +4,9 @@ kind: Kustomization
 resources:
   - ns.yaml
   - http-route.yaml
+  - relay-secret.yaml
+  - coturn-credentials.yaml
+  - authelia-oidc-credentials.yaml
   - agent
   - dashboard
   - management

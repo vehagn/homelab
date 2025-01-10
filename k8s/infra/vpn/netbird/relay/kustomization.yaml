@@ -11,5 +11,4 @@ configMapGenerator:
 
 resources:
   - deployment.yaml
-  - relay-secret.yaml
   - svc.yaml

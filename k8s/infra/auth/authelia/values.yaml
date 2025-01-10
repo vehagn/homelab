@@ -17,7 +17,7 @@ configMap:
       secret: { secret_name: crypto }
 
   access_control:
-    default_policy: two_factor
+    default_policy: deny
     rules:
       - domain_regex: ^.*\.stonegarden.dev$
         policy: two_factor
@@ -76,8 +76,7 @@ configMap:
         endpoints: [ userinfo, authorization, token, revocation, introspection ]
       clients:
         - client_id: argocd
-          client_secret:
-            path: /secrets/oidc-argocd/clientSecret
+          client_secret: { path: /secrets/client-argocd/client_secret.txt }
           client_name: Argo CD
           public: false
           authorization_policy: two_factor
@@ -102,15 +101,17 @@ configMap:
           scopes: [ openid, groups, email, profile, offline_access ]
           userinfo_signed_response_alg: none
         - client_id: netbird
+          client_secret: { path: /secrets/client-netbird/client_secret.txt }
           client_name: NetBird
-          public: true
+          public: false
           authorization_policy: two_factor
           audience: [ netbird ]
-          redirect_uris: 
+          redirect_uris:
             - http://localhost:53000
             - https://netbird.stonegarden.dev/callback
             - https://netbird.stonegarden.dev/silent-callback
-          scopes: [ openid, profile, email, offline_access, netbird-api ]
+          scopes: [ openid, profile, email ]
+          token_endpoint_auth_method: client_secret_post
 
 secret:
   additionalSecrets:
@@ -144,7 +145,11 @@ secret:
           path: tls.key
         - key: tls.crt
           path: tls.crt
-    oidc-argocd:
+    client-argocd:
       items:
         - key: clientSecret
-          path: clientSecret
+          path: client_secret.txt
+    client-netbird:
+      items:
+        - key: clientSecret
+          path: client_secret.txt

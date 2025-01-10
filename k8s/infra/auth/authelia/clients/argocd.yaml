@@ -1,0 +1,12 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: client-argocd
+  namespace: authelia
+spec:
+  encryptedData:
+    clientSecret: AgAn6O88yj/d04TfgnrynK9QZElubTyTtq5Dt/slVDgt2tQhqvJdZ+Ea96b9EhEc6vo+w5JwKzrLtHPPHB8ZW7ni9THerpOT0jZV1N8+CiQ2sx6qbK04PKdBOa4yIpdmnzXnHWETvm1zyJGbvZkOnCsrN+3uL4qZaQPcv7zV4w7onmlfNCZY6KWDbDiWiBNYggft19u2CYisZWhgBcGydDS3mch18sW9gZFUVWVlZYgRcxHCBcrttmq+o3yEFESi+bB7ZLLuBxgV9uq5Hdp5OUpmBr73CwNKdTaFWz4WMxH6jSwSmmG19miRhDce39iQauSR2I7PZ00JOwfFIvuI+Pnhhn0DwVOVZDkN8dtyrRjVY1qVqWfCsvBbCKfrjFAW7VyNUuarI3RqjnQjCU9K8vtvdN9UA/6vsvGdpkQNxrCgI/RPIVF/3HR4Onffu/QaSUUPgdhcN8Wz3yV+3chMR6B6VeBIybDiH7YPSKHLZt6z3CXY0o5Gox/KCoCDgBhLuZShGe5wWZ9bOJJFBlBS8ut/wXHwfkWsgGP6HmBXBf4u7hZxnmHWa3PkPAKmvSg+6jf3DaT8/syGYZJ/Za/ieTTFE/suPb5HMQFLOqqISrV6T9PUSD943QlDWUJizM+Vs8aiOOuUFmkDvhwbJ0m26Qsz34LbhUB1GGKINzDnGdIQ3CvHbpoxAcCSMRqn1Z/LD2I/fyX25wsvsMi2uvwQmVVXL+JDtDvN6L4PlyNjngCjfWLYruc7LfH2seMe7f6xT+2yD81kock4wiaUjWO3xK6wqT1pUsi0V5PRVy+m0cfPinNqr9+UhkHIvwHPwIORN5jtkkO9sY6cWixdrvjjE/ZBvpiKliO0el+yvdM4wKb/W7Za/Q==
+  template:
+    metadata:
+      name: client-argocd
+      namespace: authelia

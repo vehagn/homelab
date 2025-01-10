@@ -8,9 +8,10 @@ resources:
   - lldap-credentials.yaml
   - cert-rsa-jwk.yaml
   - cert-ecdsa-jwk.yaml
-  - oidc-argocd.yaml
   - http-route.yaml
   - cnpg-db.yaml
+  - clients/argocd.yaml
+  - clients/netbird.yaml
 
 helmCharts:
   - name: authelia
