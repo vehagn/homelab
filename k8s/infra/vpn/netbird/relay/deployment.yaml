@@ -35,3 +35,10 @@ spec:
             - containerPort: 80
               name: relay
               protocol: TCP
+          resources:
+            requests:
+              memory: 16Mi
+              cpu: 10m
+            limits:
+              memory: 64Mi
+              cpu: 4000m

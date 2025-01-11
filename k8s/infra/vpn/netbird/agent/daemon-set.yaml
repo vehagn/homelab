@@ -40,7 +40,7 @@ spec:
               mountPath: /var/lib/netbird
           resources:
             requests:
-              memory: 192Mi
+              memory: 128Mi
               cpu: 100m
             limits:
               memory: 256Mi
