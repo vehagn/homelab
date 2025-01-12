@@ -44,7 +44,7 @@ I've also written an article on how to get started
 with [Kubernetes on Proxmox](https://blog.stonegarden.dev/articles/2024/03/proxmox-k8s-with-cilium/) if virtualisation
 is more your thing.
 
-The current iteration of my homelab runs on [Talos](https://talos.dev) Kubernetes and is set up according 
+The current iteration of my homelab runs on [Talos](https://talos.dev) Kubernetes and is set up according
 to [this article](https://blog.stonegarden.dev/articles/2024/08/talos-proxmox-tofu/).
 
 ## ⚙️ Core Components
@@ -57,10 +57,11 @@ to [this article](https://blog.stonegarden.dev/articles/2024/08/talos-proxmox-to
 * [Cert-manager](https://cert-manager.io/): Cloud native certificate management.
 * [Sealed-secrets](https://github.com/bitnami-labs/sealed-secrets): Encrypt your Secret into a SealedSecret, which is
   safe to store - even inside a public repository.
-* [Keycloak](https://www.keycloak.org/): Open source identity and access management
+* [Authelia](https://www.authelia.com/): open-source authentication and authorization server
 * [Gateway API](https://gateway-api.sigs.k8s.io/): Next generation of Kubernetes Ingress
 * [AdGuardHome](https://github.com/AdguardTeam/AdGuardHome): Domain name server backed by Unbound
-* [Netbird](https://netbird.io/): Completely self hosted VPN solution
+* [NetBird](https://netbird.io/): Completely self hosted VPN solution
+* [CloudNativePG](https://cloudnative-pg.io/): PostgreSQL database operator
 
 ## 🗃️ Folder Structure
 
@@ -82,23 +83,28 @@ to [this article](https://blog.stonegarden.dev/articles/2024/08/talos-proxmox-to
 
 | Name   | Device                    | CPU             | RAM            | Storage          | Purpose           |
 |--------|---------------------------|-----------------|----------------|------------------|-------------------|
-| Abel   | CWWK 6 LAN Port           | Intel i3-N305   | 32 GB DDR5     | -                | Control-plane     |
+| Abel   | CWWK 6 LAN Port           | Intel i3-N305   | 48 GB DDR5     | -                | Control-plane     |
 | Euclid | ASUS ExpertCenter PN42    | Intel N100      | 32 GB DDR4     | -                | Control-plane     |
 | Cantor | ASUS PRIME N100I-D D4     | Intel N100      | 32 GB DDR4     | 5x8TB HDD RaidZ2 | NAS/Control-plane |
 | Gauss  | Dell Precision Tower 5810 | Xeon E5-1650 v3 | 64 GB DDR4 ECC | 14 TB HDD        | Compute           |
 
 ## 🏗️ Work in Progress
 
-- [ ] More lightweight auth (Authelia, Authentik, Zitadel, kanidm)
-- [ ] CNPG for databases
 - [ ] External DNS
+- [ ] Use BGP with Cilium and UniFi
+- [ ] Hajimari dashboard
+- [ ] Podcast client
+- [ ] Immich for photos
+- [ ] Nextcloud for files
+- [ ] Self-hosted git-solution (Gitea, GitLab, etc.)
 
 ## 👷‍ Future Projects
 
-- [ ] OPNSense/pfSense/OpenWRT
+- [ ] Explore Kanidm as an identity management platform
+- [ ] Explore other database operators
 - [ ] Implement LGTM-stack for monitoring
-- [ ] Use BGP instead of ARP in Cilium
 - [ ] Local LLM
+- [ ] Dynamic Resource Allocation for GPU
 - [ ] Cilium mTLS & SPIFFE/SPIRE
 - [ ] Ceph for distributed storage
-- [ ] Dynamic Resource Allocation for GPU
+- [ ] OPNSense/pfSense/OpenWRT
