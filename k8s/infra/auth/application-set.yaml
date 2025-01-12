@@ -16,7 +16,7 @@ spec:
     metadata:
       name: '{{ path.basename }}'
       labels:
-        dev.stonegarden: controllers
+        dev.stonegarden: auth
     spec:
       project: auth
       source:

@@ -26,26 +26,26 @@ spec:
                   name: lldap-credentials
                   key: LLDAP_LDAP_USER_PASS
           volumeMounts:
-            - name: user-configs
-              mountPath: /user-configs
+            - name: users
+              mountPath: /bootstrap/user-configs
               readOnly: true
-            - name: group-configs
-              mountPath: /group-configs
+            - name: groups
+              mountPath: /bootstrap/group-configs
               readOnly: true
       volumes:
-        - name: user-configs
+        - name: users
           projected:
             sources:
               - secret:
                   name: lldap-config
                   items:
                     - key: users.json
-                      path: user-configs.json
-        - name: group-configs
+                      path: users.json
+        - name: groups
           projected:
             sources:
               - secret:
                   name: lldap-config
                   items:
                     - key: groups.json
-                      path: group-configs.json
+                      path: groups.json

@@ -4,7 +4,6 @@ metadata:
   name: lldap
   namespace: lldap
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: lldap
@@ -16,8 +15,6 @@ spec:
       labels:
         app: lldap
     spec:
-      nodeSelector:
-        topology.kubernetes.io/zone: abel
       securityContext:
         runAsNonRoot: true
         runAsUser: 1001
@@ -33,12 +30,16 @@ spec:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
             capabilities:
-              drop: [ "ALL" ]
+              drop: [ ALL ]
           envFrom:
             - configMapRef:
                 name: common-env
+            - configMapRef:
+                name: lldap-config
             - secretRef:
                 name: lldap-credentials
+            - secretRef:
+                name: smtp-credentials
           ports:
             - name: ldap
               containerPort: 3890
