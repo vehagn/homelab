@@ -41,6 +41,11 @@ spec:
                   items:
                     - key: users.json
                       path: users.json
+              - configMap:
+                  name: users
+                  items:
+                    - key: test.json
+                      path: test.json
         - name: groups
           projected:
             sources:
