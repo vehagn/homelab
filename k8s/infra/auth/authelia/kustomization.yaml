@@ -6,6 +6,7 @@ resources:
   - ns.yaml
   - crypto.yaml
   - lldap-credentials.yaml
+  - smtp-credentials.yaml
   - cert-rsa-jwk.yaml
   - cert-ecdsa-jwk.yaml
   - http-route.yaml

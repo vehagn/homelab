@@ -39,8 +39,12 @@ configMap:
       password: { secret_name: authelia-postgres-app }
 
   notifier:
-    filesystem:
+    smtp:
       enabled: true
+      address: submission://smtp.sendgrid.net:587
+      sender: Authelia <ikkje-noko-svar@stonegarden.dev>
+      username: apikey
+      password: { secret_name: smtp-auth }
 
   authentication_backend:
     ldap:
@@ -135,6 +139,10 @@ secret:
       items:
         - key: password
           path: authentication.ldap.password.txt
+    smtp-auth:
+      items:
+        - key: password
+          path: notifier.smtp.password.txt
     crypto:
       items:
         - key: identity_providers.oidc.hmac.key
