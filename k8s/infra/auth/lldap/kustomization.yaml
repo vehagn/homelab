@@ -12,6 +12,9 @@ configMapGenerator:
     namespace: lldap
     literals:
       - LLDAP_HTTP_URL="https://lldap.stonegarden.dev"
+      - LLDAP_LDAPS_OPTIONS__ENABLED="true"
+      - LLDAP_LDAPS_OPTIONS__CERT_FILE="/cert/tls.crt"
+      - LLDAP_LDAPS_OPTIONS__KEY_FILE="/cert/tls.key"
   - name: bootstrap-env
     namespace: lldap
     literals:
@@ -27,6 +30,7 @@ resources:
   - ns.yaml
   - svc.yaml
   - cnpg-db.yaml
+  - cert.yaml
   - lldap-credentials.yaml
   - lldap-config.yaml
   - smtp-credentials.yaml

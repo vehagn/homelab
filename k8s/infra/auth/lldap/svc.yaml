@@ -3,8 +3,10 @@ kind: Service
 metadata:
   name: lldap
   namespace: lldap
+  annotations:
+    io.cilium/lb-ipam-ips: 192.168.1.242
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: lldap
   ports:
@@ -14,3 +16,6 @@ spec:
     - name: ldap
       port: 389
       targetPort: ldap
+    - name: ldaps
+      port: 636
+      targetPort: ldaps

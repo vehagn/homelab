@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cert
+  namespace: lldap
+spec:
+  dnsNames:
+    - lldap.stonegarden.dev
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: cloudflare-cluster-issuer
+  secretName: cert
+  usages:
+    - digital signature
+    - key encipherment

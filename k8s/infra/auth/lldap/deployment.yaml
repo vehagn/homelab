@@ -56,6 +56,16 @@ spec:
           volumeMounts:
             - name: lldap-data
               mountPath: /data
+            - name: cert
+              mountPath: /cert
       volumes:
+        - name: cert
+          secret:
+            secretName: cert
+            items:
+              - key: tls.key
+                path: tls.key
+              - key: tls.crt
+                path: tls.crt
         - name: lldap-data
           emptyDir: { }
