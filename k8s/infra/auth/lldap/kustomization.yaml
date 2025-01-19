@@ -26,6 +26,7 @@ configMapGenerator:
 resources:
   - ns.yaml
   - svc.yaml
+  - cnpg-db.yaml
   - lldap-credentials.yaml
   - lldap-config.yaml
   - smtp-credentials.yaml

@@ -40,6 +40,12 @@ spec:
                 name: lldap-credentials
             - secretRef:
                 name: smtp-credentials
+          env:
+            - name: LLDAP_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: lldap-postgres-app
+                  key: uri
           ports:
             - name: ldap
               containerPort: 3890
