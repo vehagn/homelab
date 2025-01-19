@@ -50,7 +50,7 @@ configMap:
     ldap:
       enabled: true
       implementation: lldap
-      address: ldap://lldap.lldap.svc.cluster.local
+      address: ldaps://lldap.stonegarden.dev
       base_dn: dc=stonegarden,dc=dev
       users_filter: (&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))
       additional_users_dn: ou=people

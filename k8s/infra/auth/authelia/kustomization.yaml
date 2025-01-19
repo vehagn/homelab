@@ -21,3 +21,6 @@ helmCharts:
     namespace: authelia
     version: 0.9.14
     valuesFile: values.yaml
+
+patches:
+  - path: patches/deployment-host-aliases.yaml

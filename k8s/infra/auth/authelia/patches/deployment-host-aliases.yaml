@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authelia
+spec:
+  template:
+    spec:
+      hostAliases:
+        - ip: 10.96.0.15
+          hostnames:
+            - lldap.stonegarden.dev
