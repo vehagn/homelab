@@ -25,7 +25,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: lldap
-          image: ghcr.io/lldap/lldap:2024-12-24-debian-rootless # renovate: docker=ghcr.io/lldap/lldap versioning=loose
+          image: docker.io/lldap/lldap:v0.6.1-alpine-rootless # renovate: docker=docker.io/lldap/lldap
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
