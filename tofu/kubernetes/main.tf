@@ -132,9 +132,9 @@ module "volumes" {
       node = "euclid"
       size = "1G"
     }
-    pv-lldap-postgres = {
+    pv-lldap-database = {
       node = "euclid"
-      size = "1G"
+      size = "2G"
     }
     pv-keycloak-postgres = {
       node = "euclid"
