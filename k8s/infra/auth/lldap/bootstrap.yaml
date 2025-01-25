@@ -10,10 +10,23 @@ spec:
   template:
     spec:
       restartPolicy: OnFailure
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: lldap-bootstrap
-          image: ghcr.io/lldap/lldap:2024-12-24-debian-rootless # renovate: docker=ghcr.io/lldap/lldap versioning=loose
+          image: ghcr.io/lldap/lldap:v0.6.1-alpine-rootless # renovate: docker=ghcr.io/lldap/lldap
           command: [ /app/bootstrap.sh ]
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ ALL ]
           envFrom:
             - configMapRef:
                 name: common-env
