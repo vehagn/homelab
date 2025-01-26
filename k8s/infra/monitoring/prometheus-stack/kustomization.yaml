@@ -4,4 +4,6 @@ kind: Kustomization
 resources:
   - ns.yaml
   - kube-prometheus-stack.yaml
-  - http-route.yaml
+  - alertmanager-http-route.yaml
+  - grafana-http-route.yaml
+  - prometheus-http-route.yaml
