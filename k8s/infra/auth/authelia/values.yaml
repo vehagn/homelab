@@ -43,6 +43,7 @@ configMap:
       enabled: true
       address: submission://smtp.sendgrid.net:587
       sender: Authelia <ikkje-noko-svar@stonegarden.dev>
+      disable_html_emails: true
       username: apikey
       password: { secret_name: smtp-auth }
 
