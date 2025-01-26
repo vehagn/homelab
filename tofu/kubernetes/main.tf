@@ -6,7 +6,7 @@ module "talos" {
   }
 
   image = {
-    version = "v1.8.1"
+    version = "v1.9.2"
     update_version = "v1.9.2" # renovate: github-releases=siderolabs/talos
     schematic = file("${path.module}/talos/image/schematic.yaml")
   }
@@ -32,7 +32,7 @@ module "talos" {
       mac_address   = "BC:24:11:2E:C8:00"
       vm_id         = 800
       cpu           = 8
-      ram_dedicated = 20480
+      ram_dedicated = 28672
       igpu          = true
     }
     "ctrl-01" = {
@@ -44,6 +44,7 @@ module "talos" {
       cpu           = 4
       ram_dedicated = 20480
       igpu          = true
+      #update        = true
     }
     "ctrl-02" = {
       host_node     = "cantor"
@@ -53,6 +54,7 @@ module "talos" {
       vm_id         = 802
       cpu           = 4
       ram_dedicated = 4096
+      #update        = true
     }
     #    "work-00" = {
     #      host_node     = "abel"
@@ -77,7 +79,7 @@ module "sealed_secrets" {
 
   // openssl req -x509 -days 365 -nodes -newkey rsa:4096 -keyout sealed-secrets.key -out sealed-secrets.cert -subj "/CN=sealed-secret/O=sealed-secret"
   cert = {
-    cert = file("${path.module}/bootstrap/sealed-secrets/certificate/sealed-secrets.cert")
+    cert = file("${path.module}/bootstrap/sealed-secrets/certificate/sealed-secrets.crt")
     key = file("${path.module}/bootstrap/sealed-secrets/certificate/sealed-secrets.key")
   }
 }
