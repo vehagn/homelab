@@ -13,23 +13,27 @@ spec:
         app: agent
     spec:
       securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
         seccompProfile:
           type: RuntimeDefault
-        sysctls:
-          # Considered unsafe, need to enable with kubelet argument.
-          # see https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/#enabling-unsafe-sysctls
-          - name: net.ipv4.conf.all.src_valid_mark
-            value: "1"
+        #sysctls:
+        #  # Considered unsafe, need to enable with kubelet argument.
+        #  # see https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/#enabling-unsafe-sysctls
+        #  - name: net.ipv4.conf.all.src_valid_mark
+        #    value: "1"
       containers:
         - name: agent
-          image: docker.io/netbirdio/netbird:0.36.3 # renovate: docker=docker.io/netbirdio/netbird
+          image: docker.io/netbirdio/netbird:0.36.3-rootless # renovate: docker=docker.io/netbirdio/netbird
           securityContext:
             allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: false
-            runAsNonRoot: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
             capabilities:
               drop: [ ALL ]
-              add: [ NET_ADMIN, NET_RAW, PERFMON, BPF ]
           envFrom:
             - configMapRef:
                 name: agent-config
