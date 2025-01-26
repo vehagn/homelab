@@ -34,6 +34,6 @@ spec:
     size: 1G
     pvcTemplate:
       storageClassName: proxmox-csi
-      volumeName: pv-authelia-database
+      volumeName: pv-authelia-postgres
       accessModes:
         - ReadWriteOnce

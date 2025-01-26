@@ -34,6 +34,6 @@ spec:
     size: 2G
     pvcTemplate:
       storageClassName: proxmox-csi
-      volumeName: pv-lldap-database
+      volumeName: pv-lldap-postgres
       accessModes:
         - ReadWriteOnce

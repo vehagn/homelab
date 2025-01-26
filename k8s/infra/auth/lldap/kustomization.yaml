@@ -21,16 +21,6 @@ configMapGenerator:
       - LLDAP_URL="http://lldap:80"
       - LLDAP_ADMIN_USERNAME="admin"
       - DO_CLEANUP="true"
-  - name: users
-    namespace: lldap
-    files:
-      - users/test.json
-      - users/more-users.json
-  - name: custom-schemas
-    namespace: lldap
-    files:
-      - group-schemas/group-application.json
-      - user-schemas/user-details.json
 
 resources:
   - ns.yaml

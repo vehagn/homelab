@@ -130,11 +130,11 @@ module "volumes" {
       node = "euclid"
       size = "1G"
     }
-    pv-authelia-database = {
+    pv-authelia-postgres = {
       node = "euclid"
-      size = "1G"
+      size = "2G"
     }
-    pv-lldap-database = {
+    pv-lldap-postgres = {
       node = "euclid"
       size = "2G"
     }

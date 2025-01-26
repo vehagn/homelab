@@ -30,6 +30,8 @@ tofu state rm 'module.volumes.module.proxmox-volume["pv-keycloak-postgres"].rest
 tofu state rm 'module.volumes.module.proxmox-volume["pv-netbird-management"].restapi_object.proxmox-volume'
 tofu state rm 'module.volumes.module.proxmox-volume["pv-netbird-signal"].restapi_object.proxmox-volume'
 tofu state rm 'module.volumes.module.proxmox-volume["pv-database"].restapi_object.proxmox-volume'
+tofu state rm 'module.volumes.module.proxmox-volume["pv-authelia-database"].restapi_object.proxmox-volume'
+tofu state rm 'module.volumes.module.proxmox-volume["pv-lldap-database"].restapi_object.proxmox-volume'
 ```
 
 ## import proxmox volume
