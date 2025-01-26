@@ -4,7 +4,7 @@ kind: Kustomization
 helmCharts:
   - name: sealed-secrets
     repo: oci://registry-1.docker.io/bitnamicharts
-    version: 2.5.0
+    version: 2.5.4
     releaseName: sealed-secrets-controller
     namespace: sealed-secrets
     includeCRDs: true
