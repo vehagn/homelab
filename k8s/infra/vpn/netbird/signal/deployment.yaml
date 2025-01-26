@@ -21,7 +21,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: signal
-          image: docker.io/netbirdio/signal:0.35.2 # renovate: docker=docker.io/netbirdio/signal
+          image: docker.io/netbirdio/signal:0.36.3 # renovate: docker=docker.io/netbirdio/signal
           args: [ --port, $(PORT), --log-level, $(LOG_LEVEL), --log-file, console ]
           securityContext:
             allowPrivilegeEscalation: false
