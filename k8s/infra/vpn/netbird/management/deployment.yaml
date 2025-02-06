@@ -58,7 +58,7 @@ spec:
               mountPath: /tmp/netbird
       containers:
         - name: management
-          image: docker.io/netbirdio/management:0.36.3 # renovate: docker=docker.io/netbirdio/management
+          image: docker.io/netbirdio/management:0.36.5 # renovate: docker=docker.io/netbirdio/management
           args: [ --dns-domain, $(DNS_DOMAIN), --log-level, $(LOG_LEVEL), --log-file, console, --idp-sign-key-refresh-enabled ]
           securityContext:
             allowPrivilegeEscalation: false

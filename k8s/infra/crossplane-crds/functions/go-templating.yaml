@@ -3,4 +3,4 @@ kind: Function
 metadata:
   name: function-go-templating
 spec:
-  package: xpkg.upbound.io/crossplane-contrib/function-go-templating:v0.9.0 # renovate: github-releases=crossplane-contrib/function-go-templating
+  package: xpkg.upbound.io/crossplane-contrib/function-go-templating:v0.9.1 # renovate: github-releases=crossplane-contrib/function-go-templating
