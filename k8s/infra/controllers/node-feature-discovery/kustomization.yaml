@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - ns.yaml
   # NFD rules for Intel HW
-  - https://github.com/intel/intel-device-plugins-for-kubernetes/deployments/nfd/overlays/node-feature-rules?ref=v0.31.1
+  - https://github.com/intel/intel-device-plugins-for-kubernetes/deployments/nfd/overlays/node-feature-rules?ref=v0.32.0
 
 # https://kubernetes-sigs.github.io/node-feature-discovery/v0.16/deployment/helm.html
 helmCharts:
