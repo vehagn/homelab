@@ -42,6 +42,7 @@ controller:
       memory: 4Gi
 
 dex:
+  enabled: false
   resources:
     requests:
       cpu: 10m
