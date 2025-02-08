@@ -1,3 +1,4 @@
+# https://github.com/cilium/cilium/blob/main/install/kubernetes/cilium/values.yaml
 cluster:
   name: talos
   id: 1
@@ -17,9 +18,15 @@ cgroup:
     enabled: false
   hostRoot: /sys/fs/cgroup
 
+# https://www.talos.dev/latest/talos-guides/network/host-dns/#forwarding-kube-dns-to-host-dns
+# https://docs.cilium.io/en/stable/operations/performance/tuning/#ebpf-host-routing
+bpf:
+  hostLegacyRouting: true
+
 # https://docs.cilium.io/en/stable/network/concepts/ipam/
 ipam:
   mode: kubernetes
+  multiPoolPreAllocation: ""
 
 operator:
   rollOutPods: true
