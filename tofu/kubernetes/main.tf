@@ -78,7 +78,7 @@ module "sealed_secrets" {
     kubernetes = kubernetes
   }
 
-  // openssl req -x509 -days 365 -nodes -newkey rsa:4096 -keyout sealed-secrets.key -out sealed-secrets.cert -subj "/CN=sealed-secret/O=sealed-secret"
+  // openssl req -x509 -days 365 -nodes -newkey rsa:4096 -keyout sealed-secrets.key -out sealed-secrets.crt -subj "/CN=sealed-secret/O=sealed-secret"
   cert = {
     cert = file("${path.module}/bootstrap/sealed-secrets/certificate/sealed-secrets.crt")
     key  = file("${path.module}/bootstrap/sealed-secrets/certificate/sealed-secrets.key")
