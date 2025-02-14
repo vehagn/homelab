@@ -1,18 +1,11 @@
 locals {
   version   = var.image.version
   schematic = var.image.schematic
+  image_id  = "${talos_image_factory_schematic.this.id}_${local.version}"
 
   update_version   = coalesce(var.image.update_version, var.image.version)
   update_schematic = coalesce(var.image.update_schematic, var.image.schematic)
-
-  image_hashed        = "${local.version}_${sha256(local.schematic)}"
-  update_image_hashed = "${local.update_version}_${sha256(local.update_schematic)}"
-
-  image_filename        = "talos-${local.version}-${talos_image_factory_schematic.this.id}-${var.image.platform}-${var.image.arch}.img"
-  update_image_filename = "talos-${local.update_version}-${talos_image_factory_schematic.updated.id}-${var.image.platform}-${var.image.arch}.img"
-
-  image_url        = "${var.image.factory_url}/image/${talos_image_factory_schematic.this.id}/${local.version}/${var.image.platform}-${var.image.arch}.raw.gz"
-  update_image_url = "${var.image.factory_url}/image/${talos_image_factory_schematic.updated.id}/${local.update_version}/${var.image.platform}-${var.image.arch}.raw.gz"
+  update_image_id  = "${talos_image_factory_schematic.updated.id}_${local.update_version}"
 }
 
 resource "talos_image_factory_schematic" "this" {
@@ -26,10 +19,10 @@ resource "talos_image_factory_schematic" "updated" {
 resource "proxmox_virtual_environment_download_file" "this" {
   for_each = {
     for k, v in var.nodes :
-    "${v.host_node}_${v.update == true ? local.update_image_hashed : local.image_hashed}" => {
-      host_node      = v.host_node
-      image_url      = "${v.update == true ? local.update_image_url : local.image_url}"
-      image_filename = "${v.update == true ? local.update_image_filename : local.image_filename}"
+    "${v.host_node}_${v.update == true ? local.update_image_id : local.image_id}" => {
+      host_node = v.host_node
+      version   = "${v.update == true ? local.update_version : local.version}"
+      schematic = "${v.update == true ? talos_image_factory_schematic.updated.id : talos_image_factory_schematic.this.id}"
     }
   }
 
@@ -37,8 +30,8 @@ resource "proxmox_virtual_environment_download_file" "this" {
   content_type = "iso"
   datastore_id = var.image.proxmox_datastore
 
-  file_name               = each.value.image_filename
-  url                     = each.value.image_url
+  file_name               = "talos-${each.value.schematic}-${each.value.version}-${var.image.platform}-${var.image.arch}.img"
+  url                     = "${var.image.factory_url}/image/${each.value.schematic}/${each.value.version}/${var.image.platform}-${var.image.arch}.raw.gz"
   decompression_algorithm = "gz"
   overwrite               = false
 }
