@@ -6,13 +6,14 @@ module "talos" {
   }
 
   image = {
-    version = "v1.9.2"
-    update_version = "v1.9.3" # renovate: github-releases=siderolabs/talos
-    schematic = file("${path.module}/talos/image/schematic.yaml")
+    version          = "v1.9.2"
+    update_version   = "v1.9.3" # renovate: github-releases=siderolabs/talos
+    schematic        = file("${path.module}/talos/image/schematic.yaml")
+    update_schematic = file("${path.module}/talos/image/updated_schematic.yaml")
   }
 
   cilium = {
-    values = file("${path.module}/../../k8s/infra/network/cilium/values.yaml")
+    values  = file("${path.module}/../../k8s/infra/network/cilium/values.yaml")
     install = file("${path.module}/talos/inline-manifests/cilium-install.yaml")
   }
 
@@ -71,22 +72,22 @@ module "talos" {
 
 module "sealed_secrets" {
   depends_on = [module.talos]
-  source = "./bootstrap/sealed-secrets"
+  source     = "./bootstrap/sealed-secrets"
 
   providers = {
     kubernetes = kubernetes
   }
 
-  // openssl req -x509 -days 365 -nodes -newkey rsa:4096 -keyout sealed-secrets.key -out sealed-secrets.cert -subj "/CN=sealed-secret/O=sealed-secret"
+  // openssl req -x509 -days 365 -nodes -newkey rsa:4096 -keyout sealed-secrets.key -out sealed-secrets.crt -subj "/CN=sealed-secret/O=sealed-secret"
   cert = {
     cert = file("${path.module}/bootstrap/sealed-secrets/certificate/sealed-secrets.crt")
-    key = file("${path.module}/bootstrap/sealed-secrets/certificate/sealed-secrets.key")
+    key  = file("${path.module}/bootstrap/sealed-secrets/certificate/sealed-secrets.key")
   }
 }
 
 module "proxmox_csi_plugin" {
   depends_on = [module.talos]
-  source = "./bootstrap/proxmox-csi-plugin"
+  source     = "./bootstrap/proxmox-csi-plugin"
 
   providers = {
     proxmox    = proxmox
@@ -98,7 +99,7 @@ module "proxmox_csi_plugin" {
 
 module "volumes" {
   depends_on = [module.proxmox_csi_plugin]
-  source = "./bootstrap/volumes"
+  source     = "./bootstrap/volumes"
 
   providers = {
     restapi    = restapi
