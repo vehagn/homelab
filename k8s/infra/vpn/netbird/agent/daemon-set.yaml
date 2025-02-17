@@ -22,7 +22,7 @@ spec:
             value: "1"
       containers:
         - name: agent
-          image: docker.io/netbirdio/netbird:0.36.5 # renovate: docker=docker.io/netbirdio/netbird
+          image: docker.io/netbirdio/netbird:0.36.7 # renovate: docker=docker.io/netbirdio/netbird
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: false
