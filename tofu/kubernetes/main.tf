@@ -9,6 +9,8 @@ module "talos" {
     version = "v1.9.2"
     update_version = "v1.9.3" # renovate: github-releases=siderolabs/talos
     schematic = file("${path.module}/talos/image/schematic.yaml")
+    # Point this to a new schematic file to update the schematic
+    update_schematic = file("${path.module}/talos/image/schematic.yaml")
   }
 
   cilium = {
@@ -77,7 +79,7 @@ module "sealed_secrets" {
     kubernetes = kubernetes
   }
 
-  // openssl req -x509 -days 365 -nodes -newkey rsa:4096 -keyout sealed-secrets.key -out sealed-secrets.cert -subj "/CN=sealed-secret/O=sealed-secret"
+  // openssl req -x509 -days 365 -nodes -newkey rsa:4096 -keyout sealed-secrets.key -out sealed-secrets.crt -subj "/CN=sealed-secret/O=sealed-secret"
   cert = {
     cert = file("${path.module}/bootstrap/sealed-secrets/certificate/sealed-secrets.crt")
     key = file("${path.module}/bootstrap/sealed-secrets/certificate/sealed-secrets.key")
