@@ -22,7 +22,6 @@ module "talos" {
     name            = "talos"
     endpoint        = "192.168.1.102"
     gateway         = "192.168.1.1"
-    talos_version   = "v1.8"
     proxmox_cluster = "homelab"
   }
 
