@@ -70,4 +70,10 @@ resource "proxmox_virtual_environment_vm" "this" {
       xvga    = false
     }
   }
+  lifecycle {
+    precondition {
+      condition     = length([for k, v in var.nodes : v.update if v.update == true]) == 1
+      error_message = "Cannot update more than a single node at once"
+    }
+  }
 }
