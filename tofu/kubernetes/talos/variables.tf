@@ -20,6 +20,7 @@ variable "cluster" {
     gateway         = string
     talos_version   = string
     proxmox_cluster = string
+    kubernetes_version = string
   })
 }
 
