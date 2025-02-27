@@ -16,6 +16,7 @@ data "talos_machine_configuration" "this" {
   talos_version    = var.cluster.talos_version
   machine_type     = each.value.machine_type
   machine_secrets  = talos_machine_secrets.this.machine_secrets
+  kubernetes_version = var.cluster.kubernetes_version
   config_patches   = each.value.machine_type == "controlplane" ? [
     templatefile("${path.module}/machine-config/control-plane.yaml.tftpl", {
       hostname       = each.key
