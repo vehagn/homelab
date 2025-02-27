@@ -3,17 +3,12 @@ machine:
     extraArgs:
       # Needed for Netbird agent https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/#enabling-unsafe-sysctls
       allowed-unsafe-sysctls: net.ipv4.conf.all.src_valid_mark
-  network:
-    hostname: ${hostname}
-  nodeLabels:
-    topology.kubernetes.io/region: ${cluster_name}
-    topology.kubernetes.io/zone: ${node_name}
 
 cluster:
   allowSchedulingOnControlPlanes: true
   apiServer:
     extraArgs:
-      oidc-issuer-url: https://authelia.stonegarden.dev
+      oidc-issuer-url: https://authelia.${base_domain}
       oidc-client-id: kubectl
       oidc-username-claim: preferred_username
       oidc-username-prefix: 'authelia:'
@@ -24,6 +19,11 @@ cluster:
       name: none
   proxy:
     disabled: true
+  discovery:
+    enabled: true
+    registries:
+      service:
+        disabled: false
   extraManifests:
     - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/standard-install.yaml
     - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.1/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml

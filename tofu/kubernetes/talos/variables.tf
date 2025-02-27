@@ -17,9 +17,12 @@ variable "cluster" {
   type = object({
     name            = string
     endpoint        = string
+    vip             = optional(string)
     gateway         = string
+    subnet_mask     = optional(string, "24")
     talos_version   = string
     proxmox_cluster = string
+    base_domain     = string
   })
 }
 
