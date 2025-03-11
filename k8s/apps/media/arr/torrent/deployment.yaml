@@ -57,7 +57,7 @@ spec:
             - name: tmp
               mountPath: /tmp
         - name: torrent
-          image: ghcr.io/onedr0p/qbittorrent:5.0.3 # renovate: docker=ghcr.io/onedr0p/qbittorrent
+          image: ghcr.io/onedr0p/qbittorrent:5.0.4 # renovate: docker=ghcr.io/onedr0p/qbittorrent
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
