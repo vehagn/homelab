@@ -16,20 +16,32 @@ data "talos_machine_configuration" "this" {
   talos_version    = var.cluster.talos_version
   machine_type     = each.value.machine_type
   machine_secrets  = talos_machine_secrets.this.machine_secrets
-  config_patches   = each.value.machine_type == "controlplane" ? [
-    templatefile("${path.module}/machine-config/control-plane.yaml.tftpl", {
-      hostname       = each.key
+  config_patches   = [
+    templatefile("${path.module}/machine-config/common.yaml.tftpl", {
       node_name      = each.value.host_node
       cluster_name   = var.cluster.proxmox_cluster
-      cilium_values  = var.cilium.values
-      cilium_install = var.cilium.install
     })
-  ] : [
-    templatefile("${path.module}/machine-config/worker.yaml.tftpl", {
-      hostname     = each.key
-      node_name    = each.value.host_node
-      cluster_name = var.cluster.proxmox_cluster
-    })
+    , each.value.machine_type == "controlplane" ?
+        templatefile("${path.module}/machine-config/control-plane.yaml.tftpl", {
+          cilium_values  = var.cilium.values
+          cilium_install = var.cilium.install
+          base_domain    = var.cluster.base_domain
+        }) : ""
+    , (each.value.machine_type == "controlplane" && var.cluster.vip != null)
+        ? templatefile("${path.module}/machine-config/network-vip.yaml.tftpl", {
+            hostname       = each.key
+            ip             = each.value.ip
+            mac_address    = lower(each.value.mac_address)
+            gateway        = var.cluster.gateway
+            subnet_mask    = var.cluster.subnet_mask
+            vip            = var.cluster.vip
+          }) : templatefile("${path.module}/machine-config/network-no-vip.yaml.tftpl", {
+            hostname       = each.key
+            ip             = each.value.ip
+            mac_address    = lower(each.value.mac_address)
+            gateway        = var.cluster.gateway
+            subnet_mask    = var.cluster.subnet_mask
+          })
   ]
 }
 
@@ -46,11 +58,8 @@ resource "talos_machine_configuration_apply" "this" {
 }
 
 resource "talos_machine_bootstrap" "this" {
-  depends_on = [talos_machine_configuration_apply.this]
-  //for_each             = var.nodes
-  //node                 = each.value.ip
-  node                 = [for k, v in var.nodes : v.ip if v.machine_type == "controlplane"][2]
-  endpoint             = var.cluster.endpoint
+  depends_on           = [talos_machine_configuration_apply.this]
+  node                 = [for k, v in var.nodes : v.ip if v.machine_type == "controlplane"][0]
   client_configuration = talos_machine_secrets.this.client_configuration
 }
 
@@ -74,8 +83,7 @@ resource "talos_cluster_kubeconfig" "this" {
     talos_machine_bootstrap.this,
     data.talos_cluster_health.this
   ]
-  node                 = [for k, v in var.nodes : v.ip if v.machine_type == "controlplane"][2]
-  endpoint             = var.cluster.endpoint
+  node                 = [for k, v in var.nodes : v.ip if v.machine_type == "controlplane"][0]
   client_configuration = talos_machine_secrets.this.client_configuration
   timeouts = {
     read = "1m"
