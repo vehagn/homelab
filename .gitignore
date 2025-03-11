@@ -9,8 +9,8 @@ output
 *.tfstate
 *.tfstate.*
 
-*.tfvars
-*.tfvars.json
+**/tofu/secrets/*/*auto.tfvars
+**/tofu/secrets/*/*auto.tfvars.json
 
 *.lock.hcl
 

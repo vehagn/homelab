@@ -4,9 +4,12 @@ variable "proxmox_node" {
     endpoint        = string
     insecure        = bool
     username        = string
-    api_token       = string
     image_datastore = string
   })
+}
+
+variable "proxmox_api_token" {
+  type      = string
   sensitive = true
 }
 

@@ -1,10 +1,12 @@
 locals {
   version = var.image.version
   schematic = var.image.schematic
+  schematic_file = file("${path.root}/${local.schematic}")
   schematic_id = jsondecode(data.http.schematic_id.response_body)["id"]
 
   update_version = coalesce(var.image.update_version, var.image.version)
   update_schematic = coalesce(var.image.update_schematic, var.image.schematic)
+  update_schematic_file = file("${path.root}/${local.update_schematic}")
   update_schematic_id = jsondecode(data.http.updated_schematic_id.response_body)["id"]
 
   image_id = "${local.schematic_id}_${local.version}"
@@ -14,28 +16,26 @@ locals {
   # ref - https://github.com/vehagn/homelab/issues/106
   # image_id = "${talos_image_factory_schematic.this.id}_${local.version}"
   # update_image_id = "${talos_image_factory_schematic.updated.id}_${local.update_version}"
-
-
 }
 
 data "http" "schematic_id" {
   url          = "${var.image.factory_url}/schematics"
   method       = "POST"
-  request_body = local.schematic
+  request_body = local.schematic_file
 }
 
 data "http" "updated_schematic_id" {
   url          = "${var.image.factory_url}/schematics"
   method       = "POST"
-  request_body = local.update_schematic
+  request_body = local.update_schematic_file
 }
 
 resource "talos_image_factory_schematic" "this" {
-  schematic = local.schematic
+  schematic = local.schematic_file
 }
 
 resource "talos_image_factory_schematic" "updated" {
-  schematic = local.update_schematic
+  schematic = local.update_schematic_file
 }
 
 resource "proxmox_virtual_environment_download_file" "this" {

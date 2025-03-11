@@ -2,42 +2,42 @@ terraform {
   required_providers {
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "2.35.1"
+      version = ">=2.35.1"
     }
     proxmox = {
       source  = "bpg/proxmox"
-      version = "0.70.1"
+      version = ">=0.70.1"
     }
     talos = {
       source  = "siderolabs/talos"
-      version = "0.7.1"
+      version = ">=0.7.1"
     }
     restapi = {
       source  = "Mastercard/restapi"
-      version = "1.20.0"
+      version = ">=1.20.0"
     }
   }
 }
 
 provider "proxmox" {
-  endpoint = var.proxmox.endpoint
-  insecure = var.proxmox.insecure
+  endpoint = var.proxmox_cluster.endpoint
+  insecure = var.proxmox_cluster.insecure
 
-  api_token = var.proxmox.api_token
+  api_token = var.proxmox_api_token
   ssh {
     agent    = true
-    username = var.proxmox.username
+    username = var.proxmox_cluster.username
   }
 }
 
 provider "restapi" {
-  uri                  = var.proxmox.endpoint
-  insecure             = var.proxmox.insecure
+  uri                  = var.proxmox_cluster.endpoint
+  insecure             = var.proxmox_cluster.insecure
   write_returns_object = true
 
   headers = {
     "Content-Type"  = "application/json"
-    "Authorization" = "PVEAPIToken=${var.proxmox.api_token}"
+    "Authorization" = "PVEAPIToken=${var.proxmox_api_token}"
   }
 }
 
