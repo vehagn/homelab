@@ -20,6 +20,7 @@ variable "cluster" {
     gateway         = string
     talos_version   = string
     proxmox_cluster = string
+    kubernetes_version = string
   })
 }
 
@@ -30,6 +31,7 @@ variable "nodes" {
     machine_type  = string
     datastore_id = optional(string, "local-zfs")
     ip            = string
+    dns           = optional(list(string))
     mac_address   = string
     vm_id         = number
     cpu           = number
