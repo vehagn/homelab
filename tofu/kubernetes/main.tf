@@ -32,7 +32,7 @@ module "talos" {
       host_node     = "abel"
       machine_type  = "controlplane"
       ip            = "192.168.1.100"
-      #dns           = ["1.1.1.1", "8.8.8.8"] # Optional Value.  Uncomment to use.
+      #dns           = ["1.1.1.1", "8.8.8.8"] # Optional Value.  Uncomment to use. 
       mac_address   = "BC:24:11:2E:C8:00"
       vm_id         = 800
       cpu           = 8
