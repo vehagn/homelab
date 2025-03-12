@@ -51,6 +51,15 @@ resource "proxmox_virtual_environment_vm" "this" {
 
   initialization {
     datastore_id = each.value.datastore_id
+
+    # Optional DNS Block.  Update Nodes with a list value to use.
+    dynamic "dns" {
+       for_each = try(each.value.dns, null) != null ? { "enabled" = each.value.dns } : {}
+       content {
+         servers = each.value.dns
+       }
+     }
+
     ip_config {
       ipv4 {
         address = "${each.value.ip}/${var.cluster.subnet_mask}"
