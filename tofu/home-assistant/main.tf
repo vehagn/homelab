@@ -8,12 +8,12 @@ terraform {
 }
 
 provider "proxmox" {
-  endpoint = var.proxmox_node.endpoint
-  insecure = var.proxmox_node.insecure
+  endpoint = var.proxmox_cluster.endpoint
+  insecure = var.proxmox_cluster.insecure
 
-  api_token = var.proxmox_node.api_token
+  api_token = var.proxmox_api_token
   ssh {
     agent    = true
-    username = var.proxmox_node.username
+    username = var.proxmox_cluster.username
   }
 }

@@ -16,8 +16,8 @@ resource "null_resource" "haos_image" {
 
 resource "proxmox_virtual_environment_file" "haos_generic_image" {
   depends_on = [null_resource.haos_image]
-  node_name    = var.proxmox_node.name
-  datastore_id = var.proxmox_node.image_datastore
+  node_name    = var.proxmox_cluster.name
+  datastore_id = var.proxmox_cluster.image_datastore
 
   content_type = "iso"
 

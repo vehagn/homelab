@@ -1,5 +1,5 @@
 resource "proxmox_virtual_environment_vm" "home_assistant" {
-  node_name = var.proxmox_node.name
+  node_name = var.proxmox_cluster.name
 
   name          = "Home-Assistant"
   description   = "Managed by OpenTofu"

@@ -1,54 +1,95 @@
 variable "proxmox" {
+  description = "Proxmox provider configuration"
   type = object({
     name         = string
     cluster_name = string
     endpoint     = string
     insecure     = bool
     username     = string
-    api_token    = string
   })
-  sensitive = true
 }
 
-#variable "cluster_config" {
-#  description = "Talos node configuration"
-#  type = object({
-#
-#    cluster_name    = string
-#    proxmox_cluster = string
-#    endpoint        = string
-#    talos_version   = string
-#
-#    nodes = map(
-#      object({
-#        host_node     = string
-#        machine_type  = string
-#        ip            = string
-#        mac_address   = string
-#        vm_id         = number
-#        cpu           = number
-#        ram_dedicated = number
-#        update = optional(bool, false)
-#        igpu = optional(bool, false)
-#      })
-#    )
-#  })
-#
-#  validation {
-#    condition     = length([
-#      for n in var.cluster_config.nodes : n if contains(["controlplane", "worker"], n.machine_type)]) == length(var.cluster_config.nodes)
-#    error_message = "Node machine_type must be either 'controlplane' or 'worker'."
-#  }
-#}
-#
-#variable "volumes" {
-#  type = map(
-#    object({
-#      node = string
-#      size = string
-#      storage = optional(string, "local-zfs")
-#      vmid = optional(number, 9999)
-#      format = optional(string, "raw")
-#    })
-#  )
-#}
+variable "proxmox_api_token" {
+  description = "API token for Proxmox"
+  type        = string
+  sensitive   = true
+}
+
+variable "talos_image" {
+  description = "Talos image configuration"
+  type = object({
+    factory_url = optional(string, "https://factory.talos.dev")
+    version        = string
+    schematic_path = string
+    update_version = optional(string)
+    update_schematic_path = optional(string)
+    arch = optional(string, "amd64")
+    platform = optional(string, "nocloud")
+    proxmox_datastore = optional(string, "local")
+  })
+}
+
+variable "talos_cluster_config" {
+  description = "Talos cluster configuration"
+  type = object({
+    name               = string
+    endpoint           = string
+    vip = optional(string)
+    gateway            = string
+    talos_machine_config_version = optional(string)
+    proxmox_cluster    = string
+    kubernetes_version = string
+    base_domain        = string
+  })
+}
+
+variable "cilium_config" {
+  description = "Path to Cilium installation manifest and configuration values"
+  type = object({
+    install_manifest_path = string
+    values_path           = string
+  })
+}
+
+variable "talos_nodes" {
+  type = map(
+    object({
+      host_node     = string
+      machine_type  = string
+      ip            = string
+      dns = optional(list(string))
+      mac_address   = string
+      vm_id         = number
+      cpu           = number
+      ram_dedicated = number
+      update = optional(bool, false)
+      igpu = optional(bool, false)
+    })
+  )
+  validation {
+    // @formatter:off
+    condition = length([for n in var.talos_nodes : n if contains(["controlplane", "worker"], n.machine_type)]) == length(var.talos_nodes)
+    error_message = "Node machine_type must be either 'controlplane' or 'worker'."
+    // @formatter:on
+  }
+}
+
+variable "sealed_secrets_config" {
+  description = "Sealed-secrets configuration"
+  type = object({
+    certificate_path     = string
+    certificate_key_path = string
+  })
+}
+
+variable "kubernetes_volumes" {
+  type = map(
+    object({
+      node = string
+      size = string
+      storage = optional(string, "local-zfs")
+      vmid = optional(number, 9999)
+      format = optional(string, "raw")
+    })
+  )
+}

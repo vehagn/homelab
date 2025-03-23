@@ -2,9 +2,9 @@ variable "image" {
   description = "Talos image configuration"
   type = object({
     factory_url = optional(string, "https://factory.talos.dev")
-    schematic = string
-    version   = string
-    update_schematic = optional(string)
+    schematic_path = string
+    version        = string
+    update_schematic_path = optional(string)
     update_version = optional(string)
     arch = optional(string, "amd64")
     platform = optional(string, "nocloud")
@@ -15,15 +15,15 @@ variable "image" {
 variable "cluster" {
   description = "Cluster configuration"
   type = object({
-    name                         = string
-    endpoint                     = string
+    name               = string
+    endpoint           = string
     vip = optional(string)
-    gateway                      = string
+    gateway            = string
     subnet_mask = optional(string, "24")
     talos_machine_config_version = optional(string)
-    proxmox_cluster              = string
-    kubernetes_version           = string
-    base_domain                  = string
+    proxmox_cluster    = string
+    kubernetes_version = string
+    base_domain        = string
   })
 }
 
@@ -34,7 +34,7 @@ variable "nodes" {
     machine_type  = string
     datastore_id = optional(string, "local-zfs")
     ip            = string
-    dns           = optional(list(string))
+    dns = optional(list(string))
     mac_address   = string
     vm_id         = number
     cpu           = number
@@ -47,7 +47,7 @@ variable "nodes" {
 variable "cilium" {
   description = "Cilium configuration"
   type = object({
-    values  = string
-    install = string
+    install_manifest_path = string
+    values_path  = string
   })
 }

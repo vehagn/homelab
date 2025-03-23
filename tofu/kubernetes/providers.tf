@@ -23,7 +23,7 @@ provider "proxmox" {
   endpoint = var.proxmox.endpoint
   insecure = var.proxmox.insecure
 
-  api_token = var.proxmox.api_token
+  api_token = var.proxmox_api_token
   ssh {
     agent    = true
     username = var.proxmox.username
@@ -37,7 +37,7 @@ provider "restapi" {
 
   headers = {
     "Content-Type"  = "application/json"
-    "Authorization" = "PVEAPIToken=${var.proxmox.api_token}"
+    "Authorization" = "PVEAPIToken=${var.proxmox_api_token}"
   }
 }
 

@@ -9,8 +9,8 @@ output
 *.tfstate
 *.tfstate.*
 
-*.tfvars
-*.tfvars.json
+*secret*.tfvars
+*secret*.tfvars.json
 
 *.lock.hcl
 

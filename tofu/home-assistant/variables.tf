@@ -1,12 +1,15 @@
-variable "proxmox_node" {
+variable "proxmox_cluster" {
   type = object({
     name            = string
     endpoint        = string
     insecure        = bool
     username        = string
-    api_token       = string
     image_datastore = string
   })
+}
+
+variable "proxmox_api_token" {
+  type = string
   sensitive = true
 }
 

@@ -34,8 +34,8 @@ data "talos_machine_configuration" "this" {
       vip          = var.cluster.vip
     }), each.value.machine_type == "controlplane" ?
       templatefile("${path.module}/machine-config/control-plane.yaml.tftpl", {
-        cilium_values  = var.cilium.values
-        cilium_install = var.cilium.install
+        cilium_values  = file("${path.root}/${var.cilium.values_path}")
+        cilium_install = file("${path.root}/${var.cilium.install_manifest_path}")
         base_domain    = var.cluster.base_domain
       }) : ""
   ]
