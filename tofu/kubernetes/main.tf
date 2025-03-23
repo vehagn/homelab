@@ -29,7 +29,9 @@ module "talos" {
     # Omit this if devices are not connected on layer 2
     vip             = "192.168.1.99"
     gateway         = "192.168.1.1"
-    talos_version   = "v1.8"
+    # The version of talos features to use in generated machine configuration. Generally the same as image version.
+    # See https://github.com/siderolabs/terraform-provider-talos/blob/main/docs/data-sources/machine_configuration.md
+    talos_machine_config_version   = "v1.9.2"
     proxmox_cluster = "homelab"
     kubernetes_version = "1.32.0"  # renovate: github-releases=kubernetes/kubernetes
     base_domain     = "stonegarden.dev"
