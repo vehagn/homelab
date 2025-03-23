@@ -39,6 +39,7 @@ variable "talos_cluster_config" {
     talos_machine_config_version = optional(string)
     proxmox_cluster    = string
     kubernetes_version = string
+    kubelet = optional(string)
     api_server = optional(string)
     cilium = object({
       bootstrap_manifest_path = string

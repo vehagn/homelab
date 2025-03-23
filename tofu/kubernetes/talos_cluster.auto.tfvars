@@ -17,6 +17,11 @@ talos_cluster_config = {
     bootstrap_manifest_path = "talos/inline-manifests/cilium-install.yaml"
     values_file_path        = "../../k8s/infra/network/cilium/values.yaml"
   }
+  kubelet = <<-EOT
+    extraArgs:
+      # Needed for Netbird agent https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/#enabling-unsafe-sysctls
+      allowed-unsafe-sysctls: net.ipv4.conf.all.src_valid_mark
+  EOT
   api_server = <<-EOT
     extraArgs:
       oidc-issuer-url: "https://authelia.stonegarden.dev"
