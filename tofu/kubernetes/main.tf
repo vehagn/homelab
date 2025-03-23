@@ -25,7 +25,7 @@ module "talos" {
     #       Not sure how it works if connected to the same router via ethernet (does it act as a switch then???)
     # Ref: https://www.talos.dev/v1.9/talos-guides/network/vip/#requirements
     # Note This is Kubernetes API endpoint. Different from all mentions of Talos endpoints.
-    endpoint        = "192.168.1.102"
+    endpoint = "192.168.1.102"
     # Omit this if devices are not connected on layer 2
     vip             = "192.168.1.99"
     gateway         = "192.168.1.1"

@@ -20,32 +20,22 @@ data "talos_machine_configuration" "this" {
   talos_version    = var.cluster.talos_version
   machine_type     = each.value.machine_type
   machine_secrets  = talos_machine_secrets.this.machine_secrets
-  config_patches   = [
+  config_patches = [
     templatefile("${path.module}/machine-config/common.yaml.tftpl", {
-      node_name      = each.value.host_node
-      cluster_name   = var.cluster.proxmox_cluster
-    })
-    , each.value.machine_type == "controlplane" ?
-        templatefile("${path.module}/machine-config/control-plane.yaml.tftpl", {
-          cilium_values  = var.cilium.values
-          cilium_install = var.cilium.install
-          base_domain    = var.cluster.base_domain
-        }) : ""
-    , (each.value.machine_type == "controlplane" && var.cluster.vip != null)
-        ? templatefile("${path.module}/machine-config/network-vip.yaml.tftpl", {
-            hostname       = each.key
-            ip             = each.value.ip
-            mac_address    = lower(each.value.mac_address)
-            gateway        = var.cluster.gateway
-            subnet_mask    = var.cluster.subnet_mask
-            vip            = var.cluster.vip
-          }) : templatefile("${path.module}/machine-config/network-no-vip.yaml.tftpl", {
-            hostname       = each.key
-            ip             = each.value.ip
-            mac_address    = lower(each.value.mac_address)
-            gateway        = var.cluster.gateway
-            subnet_mask    = var.cluster.subnet_mask
-          })
+      node_name    = each.value.host_node
+      cluster_name = var.cluster.proxmox_cluster
+      hostname     = each.key
+      ip           = each.value.ip
+      mac_address = lower(each.value.mac_address)
+      gateway      = var.cluster.gateway
+      subnet_mask  = var.cluster.subnet_mask
+      vip          = var.cluster.vip
+    }), each.value.machine_type == "controlplane" ?
+      templatefile("${path.module}/machine-config/control-plane.yaml.tftpl", {
+        cilium_values  = var.cilium.values
+        cilium_install = var.cilium.install
+        base_domain    = var.cluster.base_domain
+      }) : ""
   ]
 }
 
@@ -62,7 +52,7 @@ resource "talos_machine_configuration_apply" "this" {
 }
 
 resource "talos_machine_bootstrap" "this" {
-  depends_on           = [talos_machine_configuration_apply.this]
+  depends_on = [talos_machine_configuration_apply.this]
   # Bootstrap with the first node. VIP not yet available at this stage, so cant use var.cluster.endpoint as it may be set to VIP
   # ref - https://www.talos.dev/v1.9/talos-guides/network/vip/#caveats
   node                 = [for k, v in var.nodes : v.ip if v.machine_type == "controlplane"][0]
@@ -75,10 +65,10 @@ data "talos_cluster_health" "this" {
     talos_machine_bootstrap.this
   ]
   skip_kubernetes_checks = false
-  client_configuration = data.talos_client_configuration.this.client_configuration
-  control_plane_nodes  = [for k, v in var.nodes : v.ip if v.machine_type == "controlplane"]
-  worker_nodes         = [for k, v in var.nodes : v.ip if v.machine_type == "worker"]
-  endpoints            = data.talos_client_configuration.this.endpoints
+  client_configuration   = data.talos_client_configuration.this.client_configuration
+  control_plane_nodes    = [for k, v in var.nodes : v.ip if v.machine_type == "controlplane"]
+  worker_nodes           = [for k, v in var.nodes : v.ip if v.machine_type == "worker"]
+  endpoints              = data.talos_client_configuration.this.endpoints
   timeouts = {
     read = "10m"
   }
