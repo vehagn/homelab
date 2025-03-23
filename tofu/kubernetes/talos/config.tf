@@ -58,6 +58,7 @@ data "talos_machine_configuration" "this" {
     }), each.value.machine_type == "controlplane" ?
       templatefile("${path.module}/machine-config/control-plane.yaml.tftpl", {
         kubelet = var.cluster.kubelet
+        extra_manifests = jsonencode(var.cluster.extra_manifests)
         api_server = var.cluster.api_server
         inline_manifests = jsonencode(terraform_data.cilium_bootstrap_inline_manifests.output)
       }) : ""

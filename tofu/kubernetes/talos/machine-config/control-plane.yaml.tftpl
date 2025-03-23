@@ -16,7 +16,5 @@ cluster:
     registries:
       service:
         disabled: false
-  extraManifests:
-    - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/standard-install.yaml
-    - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.1/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml
+  extraManifests: ${extra_manifests}
   inlineManifests: ${inline_manifests}
