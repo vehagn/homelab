@@ -24,6 +24,10 @@ variable "cluster" {
     proxmox_cluster    = string
     kubernetes_version = string
     api_server = optional(string)
+    cilium = object({
+      bootstrap_manifest_path = string
+      values_file_path        = string
+    })
   })
 }
 
@@ -42,12 +46,4 @@ variable "nodes" {
     update = optional(bool, false)
     igpu = optional(bool, false)
   }))
-}
-
-variable "cilium" {
-  description = "Cilium configuration"
-  type = object({
-    install_manifest_path = string
-    values_path           = string
-  })
 }

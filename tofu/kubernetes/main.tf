@@ -7,7 +7,6 @@ module "talos" {
 
   image = var.talos_image
   cluster = var.talos_cluster_config
-  cilium = var.cilium_config
   nodes = var.talos_nodes
 }
 

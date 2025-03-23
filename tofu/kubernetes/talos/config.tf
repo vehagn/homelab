@@ -11,6 +11,29 @@ data "talos_client_configuration" "this" {
   endpoints            = [for k, v in var.nodes : v.ip if v.machine_type == "controlplane"]
 }
 
+resource "terraform_data" "cilium_bootstrap_inline_manifests" {
+  input = [
+    {
+      name     = "cilium-bootstrap"
+      contents = file("${path.root}/${var.cluster.cilium.bootstrap_manifest_path}")
+    },
+    {
+      name     = "cilium-values"
+      contents = yamlencode({
+        apiVersion = "v1"
+        kind       = "ConfigMap"
+        metadata = {
+          name      = "cilium-values"
+          namespace = "kube-system"
+        }
+        data = {
+          "values.yaml" = file("${path.root}/${var.cluster.cilium.values_file_path}")
+        }
+      })
+    }
+  ]
+}
+
 data "talos_machine_configuration" "this" {
   for_each        = var.nodes
   cluster_name    = var.cluster.name
@@ -34,9 +57,8 @@ data "talos_machine_configuration" "this" {
       vip          = var.cluster.vip
     }), each.value.machine_type == "controlplane" ?
       templatefile("${path.module}/machine-config/control-plane.yaml.tftpl", {
-        cilium_values  = file("${path.root}/${var.cilium.values_path}")
-        cilium_install = file("${path.root}/${var.cilium.install_manifest_path}")
         api_server = var.cluster.api_server
+        inline_manifests = jsonencode(terraform_data.cilium_bootstrap_inline_manifests.output)
       }) : ""
   ]
 }

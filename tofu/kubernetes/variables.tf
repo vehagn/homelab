@@ -40,14 +40,10 @@ variable "talos_cluster_config" {
     proxmox_cluster    = string
     kubernetes_version = string
     api_server = optional(string)
-  })
-}
-
-variable "cilium_config" {
-  description = "Path to Cilium installation manifest and configuration values"
-  type = object({
-    install_manifest_path = string
-    values_path           = string
+    cilium = object({
+      bootstrap_manifest_path = string
+      values_file_path        = string
+    })
   })
 }
 
