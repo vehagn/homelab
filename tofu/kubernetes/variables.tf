@@ -39,7 +39,7 @@ variable "talos_cluster_config" {
     talos_machine_config_version = optional(string)
     proxmox_cluster    = string
     kubernetes_version = string
-    base_domain        = string
+    api_server = optional(string)
   })
 }
 

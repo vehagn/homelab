@@ -36,7 +36,7 @@ data "talos_machine_configuration" "this" {
       templatefile("${path.module}/machine-config/control-plane.yaml.tftpl", {
         cilium_values  = file("${path.root}/${var.cilium.values_path}")
         cilium_install = file("${path.root}/${var.cilium.install_manifest_path}")
-        base_domain    = var.cluster.base_domain
+        api_server = var.cluster.api_server
       }) : ""
   ]
 }

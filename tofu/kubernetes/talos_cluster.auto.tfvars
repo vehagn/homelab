@@ -13,7 +13,15 @@ talos_cluster_config = {
   talos_machine_config_version = "v1.9.2"
   proxmox_cluster              = "homelab"
   kubernetes_version = "1.32.0"  # renovate: github-releases=kubernetes/kubernetes
-  base_domain                  = "stonegarden.dev"
+  api_server = <<-EOT
+    extraArgs:
+      oidc-issuer-url: "https://authelia.stonegarden.dev"
+      oidc-client-id: "kubectl"
+      oidc-username-claim: "preferred_username"
+      oidc-username-prefix: "authelia:"
+      oidc-groups-claim: "groups"
+      oidc-groups-prefix: "authelia:"
+  EOT
 }
 
 cilium_config = {

@@ -23,7 +23,7 @@ variable "cluster" {
     talos_machine_config_version = optional(string)
     proxmox_cluster    = string
     kubernetes_version = string
-    base_domain        = string
+    api_server = optional(string)
   })
 }
 
@@ -48,6 +48,6 @@ variable "cilium" {
   description = "Cilium configuration"
   type = object({
     install_manifest_path = string
-    values_path  = string
+    values_path           = string
   })
 }

@@ -7,13 +7,7 @@ machine:
 cluster:
   allowSchedulingOnControlPlanes: true
   apiServer:
-    extraArgs:
-      oidc-issuer-url: https://authelia.${base_domain}
-      oidc-client-id: kubectl
-      oidc-username-claim: preferred_username
-      oidc-username-prefix: 'authelia:'
-      oidc-groups-claim: groups
-      oidc-groups-prefix: 'authelia:'
+    ${indent(4, api_server)}
   network:
     cni:
       name: none
