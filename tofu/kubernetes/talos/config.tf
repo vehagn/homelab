@@ -12,14 +12,16 @@ data "talos_client_configuration" "this" {
 }
 
 data "talos_machine_configuration" "this" {
-  for_each         = var.nodes
-  cluster_name     = var.cluster.name
+  for_each        = var.nodes
+  cluster_name    = var.cluster.name
   # This is the Kubernetes API Server endpoint.
   # ref - https://www.talos.dev/v1.9/introduction/prodnotes/#decide-the-kubernetes-endpoint
   cluster_endpoint = "https://${var.cluster.endpoint}:6443"
-  talos_version    = var.cluster.talos_machine_config_version
-  machine_type     = each.value.machine_type
-  machine_secrets  = talos_machine_secrets.this.machine_secrets
+  # @formatter:off
+  talos_version = var.cluster.talos_machine_config_version != null ? var.cluster.talos_machine_config_version : (each.value.update == true ? var.image.update_version : var.image.version)
+  # @formatter:on
+  machine_type    = each.value.machine_type
+  machine_secrets = talos_machine_secrets.this.machine_secrets
   config_patches = [
     templatefile("${path.module}/machine-config/common.yaml.tftpl", {
       node_name    = each.value.host_node
