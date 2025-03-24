@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: torrent
-  namespace: arr
+  namespace: torrent
   labels:
     app: torrent
 spec:
@@ -57,7 +57,7 @@ spec:
             - name: tmp
               mountPath: /tmp
         - name: torrent
-          image: ghcr.io/onedr0p/qbittorrent:5.0.4 # renovate: docker=ghcr.io/onedr0p/qbittorrent
+          image: ghcr.io/home-operations/qbittorrent:5.0.4 # renovate: docker=ghcr.io/home-operations/qbittorrent
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true

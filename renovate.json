@@ -27,8 +27,9 @@
     {
       "groupName": "Media containers",
       "matchPackageNames": [
-        "ghcr.io/onedr0p/**",
-        "ghcr.io/jellyfin/**"
+        "ghcr.io/jellyfin/**",
+        "ghcr.io/home-operations/plex**",
+        "ghcr.io/home-operations/**arr**"
       ]
     },
     {

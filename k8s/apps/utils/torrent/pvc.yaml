@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: torrent-config
-  namespace: arr
+  namespace: torrent
 spec:
   storageClassName: proxmox-csi
   volumeName: pv-torrent

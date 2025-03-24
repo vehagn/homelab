@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: media
+  name: utils
   namespace: argocd
   labels:
     dev.stonegarden: application
@@ -11,7 +11,7 @@ spec:
         repoURL: https://github.com/vehagn/homelab
         revision: HEAD
         directories:
-          - path: k8s/apps/media/*
+          - path: k8s/apps/utils/*
   template:
     metadata:
       name: '{{ path.basename }}'
@@ -20,7 +20,7 @@ spec:
       finalizers:
         - resources-finalizer.argocd.argoproj.io
     spec:
-      project: media
+      project: dev
       source:
         repoURL: https://github.com/vehagn/homelab
         targetRevision: HEAD

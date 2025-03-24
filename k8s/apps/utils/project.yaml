@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: dev
+  name: utils
   namespace: argocd
 spec:
   sourceRepos:
@@ -9,7 +9,9 @@ spec:
   destinations:
     - namespace: 'argocd'
       server: '*'
-    - namespace: 'whoami'
+    - namespace: 'torrent'
+      server: '*'
+    - namespace: 'unrar'
       server: '*'
   clusterResourceWhitelist:
     - group: '*'
