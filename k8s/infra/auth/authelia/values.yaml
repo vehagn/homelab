@@ -2,7 +2,7 @@
 image:
   registry: ghcr.io
   repository: authelia/authelia
-  tag: 4.39.1 # renovate: docker=ghcr.io/authelia/authelia
+  tag: 4.38.18 # renovate: docker=ghcr.io/authelia/authelia
   pullPolicy: IfNotPresent
 
 pod:
@@ -104,9 +104,9 @@ configMap:
           scopes: [ openid, groups, email, profile, offline_access ]
           id_token_signed_response_alg: ES256
           access_token_signed_response_alg: ES256
-          revocation_endpoint_auth_method: none
-          introspection_endpoint_auth_method: none
-          pushed_authorization_request_endpoint_auth_method: none
+          #revocation_endpoint_auth_method: none
+          #introspection_endpoint_auth_method: none
+          #pushed_authorization_request_endpoint_auth_method: none
 
         - client_id: kubectl
           client_name: kubectl
@@ -116,9 +116,9 @@ configMap:
           require_pkce: true
           redirect_uris: [ http://localhost:8000, http://localhost:18000 ]
           scopes: [ openid, groups, email, profile, offline_access ]
-          revocation_endpoint_auth_method: none
-          introspection_endpoint_auth_method: none
-          pushed_authorization_request_endpoint_auth_method: none
+          #revocation_endpoint_auth_method: none
+          #introspection_endpoint_auth_method: none
+          #pushed_authorization_request_endpoint_auth_method: none
 
         - client_id: netbird
           client_secret: { path: /secrets/client-netbird/client_secret.txt }
