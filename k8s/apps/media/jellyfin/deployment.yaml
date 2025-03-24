@@ -25,7 +25,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: jellyfin
-          image: ghcr.io/jellyfin/jellyfin:10.10.5 # renovate: docker=ghcr.io/jellyfin/jellyfin
+          image: ghcr.io/jellyfin/jellyfin:10.10.6 # renovate: docker=ghcr.io/jellyfin/jellyfin
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
