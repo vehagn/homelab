@@ -3,4 +3,4 @@ kind: Function
 metadata:
   name: function-auto-ready
 spec:
-  package: xpkg.upbound.io/crossplane-contrib/function-auto-ready:v0.4.1 # renovate: github-releases=crossplane-contrib/function-auto-ready
+  package: xpkg.upbound.io/crossplane-contrib/function-auto-ready:v0.4.2 # renovate: github-releases=crossplane-contrib/function-auto-ready
