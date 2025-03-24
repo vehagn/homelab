@@ -1,5 +1,5 @@
 resource "talos_machine_secrets" "this" {
-  talos_version = var.cluster.talos_machine_config_version
+  talos_version = var.cluster.talos_machine_config_version != null ? var.cluster.talos_machine_config_version : var.image.update_version
 }
 
 data "talos_client_configuration" "this" {
