@@ -1,0 +1,6 @@
+terraform {
+  backend "gcs" {
+    bucket  = "<YOUR_GCS_BUCKET>"
+    prefix  = "prod/kubernetes"
+  }
+}
