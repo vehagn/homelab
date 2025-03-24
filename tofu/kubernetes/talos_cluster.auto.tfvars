@@ -9,8 +9,9 @@ talos_cluster_config = {
   vip                          = "192.168.1.99"
   gateway                      = "192.168.1.1"
   # The version of talos features to use in generated machine configuration. Generally the same as image version.
+  # Uncomment to use this instead of version from talos_image.
   # See https://github.com/siderolabs/terraform-provider-talos/blob/main/docs/data-sources/machine_configuration.md
-  talos_machine_config_version = "v1.9.2"
+  # talos_machine_config_version = "v1.9.2"
   proxmox_cluster              = "homelab"
   kubernetes_version = "1.32.0"  # renovate: github-releases=kubernetes/kubernetes
   cilium = {
