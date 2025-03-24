@@ -20,7 +20,7 @@ spec:
       finalizers:
         - resources-finalizer.argocd.argoproj.io
     spec:
-      project: dev
+      project: utils
       source:
         repoURL: https://github.com/vehagn/homelab
         targetRevision: HEAD
