@@ -39,6 +39,10 @@ kubernetes_volumes = {
     node = "euclid"
     size = "12G"
   }
+  pv-jellyfin-config = {
+    node = "euclid"
+    size = "12G"
+  }
   pv-netbird-signal = {
     node = "abel"
     size = "512M"
