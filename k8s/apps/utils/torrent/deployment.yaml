@@ -66,11 +66,11 @@ spec:
           ports:
             - name: http
               containerPort: 8080
-            - name: tcp
-              containerPort: 10011
+            - name: torrent-tcp
+              containerPort: 50413
               protocol: TCP
-            - name: udp
-              containerPort: 10011
+            - name: torrent-udp
+              containerPort: 50413
               protocol: UDP
           envFrom:
             - configMapRef:
