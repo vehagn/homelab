@@ -35,10 +35,6 @@ kubernetes_volumes = {
     node = "euclid"
     size = "2G"
   }
-  pv-jellyfin = {
-    node = "euclid"
-    size = "12G"
-  }
   pv-jellyfin-config = {
     node = "euclid"
     size = "12G"

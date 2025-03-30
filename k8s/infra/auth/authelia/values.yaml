@@ -2,7 +2,7 @@
 image:
   registry: ghcr.io
   repository: authelia/authelia
-  tag: 4.38.18 # renovate: docker=ghcr.io/authelia/authelia
+  tag: 4.39.1 # renovate: docker=ghcr.io/authelia/authelia
   pullPolicy: IfNotPresent
 
 pod:
@@ -79,8 +79,13 @@ configMap:
       cors:
         allowed_origins_from_client_redirect_uris: true
         endpoints: [ userinfo, authorization, token, revocation, introspection ]
+      claims_policies:
+        # https://www.authelia.com/integration/openid-connect/openid-connect-1.0-claims/#restore-functionality-prior-to-claims-parameter
+        default:
+          id_token: [ groups, email, email_verified, alt_emails, preferred_username, name ]
+        username_email:
+          id_token: [ email, email_verified, alt_emails, preferred_username, name ]
       clients:
-
         - client_id: argocd
           client_secret: { path: /secrets/client-argocd/client_secret.txt }
           client_name: Argo CD
@@ -104,27 +109,29 @@ configMap:
           scopes: [ openid, groups, email, profile, offline_access ]
           id_token_signed_response_alg: ES256
           access_token_signed_response_alg: ES256
-          #revocation_endpoint_auth_method: none
-          #introspection_endpoint_auth_method: none
-          #pushed_authorization_request_endpoint_auth_method: none
+          revocation_endpoint_auth_method: none
+          introspection_endpoint_auth_method: none
+          pushed_authorization_request_endpoint_auth_method: none
 
         - client_id: kubectl
           client_name: kubectl
           public: true
           authorization_policy: two_factor
+          claims_policy: default
           pre_configured_consent_duration: 1 month
           require_pkce: true
           redirect_uris: [ http://localhost:8000, http://localhost:18000 ]
           scopes: [ openid, groups, email, profile, offline_access ]
-          #revocation_endpoint_auth_method: none
-          #introspection_endpoint_auth_method: none
-          #pushed_authorization_request_endpoint_auth_method: none
+          revocation_endpoint_auth_method: none
+          introspection_endpoint_auth_method: none
+          pushed_authorization_request_endpoint_auth_method: none
 
         - client_id: netbird
           client_secret: { path: /secrets/client-netbird/client_secret.txt }
           client_name: NetBird
           public: false
           authorization_policy: two_factor
+          claims_policy: username_email
           pre_configured_consent_duration: 1 month
           require_pkce: true
           pkce_challenge_method: S256

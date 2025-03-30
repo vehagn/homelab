@@ -6,6 +6,7 @@ configs:
     admin.enabled: false
     url: https://argocd.stonegarden.dev
     # https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/#sensitive-data-and-sso-client-secrets
+    # https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/#retrieving-group-claims-when-not-in-the-token
     oidc.config: |
       name: 'Authelia'
       issuer: 'https://authelia.stonegarden.dev'
@@ -13,6 +14,10 @@ configs:
       clientSecret: $oidc:authelia.clientSecret
       cliClientID: 'argocd-cli'
       requestedScopes: [ 'openid', 'profile', 'email', 'groups', 'offline_access' ]
+      enableUserInfoGroups: true
+      userInfoPath: /api/oidc/userinfo
+      userInfoCacheExpiration: '5m'
+
   cmp:
     create: true
     plugins:
