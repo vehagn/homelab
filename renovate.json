@@ -35,7 +35,11 @@
     {
       "groupName": "Netbird",
       "matchPackageNames": [
-        "docker.io/netbirdio/**"
+        "docker.io/netbirdio/relay**",
+        "docker.io/netbirdio/signal",
+        "docker.io/netbirdio/netbird**",
+        "docker.io/netbirdio/management",
+        "docker.io/netbirdio/dashboard"
       ]
     },
     {
