@@ -33,9 +33,10 @@
       ]
     },
     {
-      "groupName": "Netbird",
+      "groupName": "NetBird",
       "matchPackageNames": [
-        "docker.io/netbirdio/**"
+        "**/netbirdio/**",
+        "netbirdio/**"
       ]
     },
     {
