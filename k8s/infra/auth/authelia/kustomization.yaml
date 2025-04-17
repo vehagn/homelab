@@ -19,7 +19,7 @@ helmCharts:
     repo: https://charts.authelia.com
     releaseName: authelia
     namespace: authelia
-    version: 0.10.4
+    version: 0.10.5
     valuesFile: values.yaml
 
 patches:
