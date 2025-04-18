@@ -31,10 +31,6 @@ kubernetes_volumes = {
     node = "euclid"
     size = "2G"
   }
-  pv-keycloak-postgres = {
-    node = "euclid"
-    size = "2G"
-  }
   pv-jellyfin-config = {
     node = "euclid"
     size = "12G"
