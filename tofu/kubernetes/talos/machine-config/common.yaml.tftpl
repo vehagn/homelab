@@ -2,6 +2,8 @@ machine:
   nodeLabels:
     topology.kubernetes.io/region: ${cluster_name}
     topology.kubernetes.io/zone: ${node_name}
+  kubelet:
+    image: ghcr.io/siderolabs/kubelet:${kubernetes_version}
   network:
     hostname: ${hostname}
     interfaces:
@@ -30,3 +32,13 @@ machine:
     net.ipv4.tcp_wmem: 4096 65536 33554432 # 10Gb/s
     net.ipv4.tcp_window_scaling: 1         # 10Gb/s
     vm.nr_hugepages: 1024                  # PostgreSQL
+
+cluster:
+  apiServer:
+    image: registry.k8s.io/kube-apiserver:${kubernetes_version}
+  controllerManager:
+    image: registry.k8s.io/kube-controller-manager:${kubernetes_version}
+  proxy:
+    image: registry.k8s.io/kube-proxy:${kubernetes_version}
+  scheduler:
+    image: registry.k8s.io/kube-scheduler:${kubernetes_version}
