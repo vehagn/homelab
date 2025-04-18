@@ -12,7 +12,7 @@ module "talos" {
 
 module "sealed_secrets" {
   depends_on = [module.talos]
-  source = "./bootstrap/sealed-secrets"
+  source     = "./bootstrap/sealed-secrets"
 
   providers = {
     kubernetes = kubernetes
@@ -23,7 +23,7 @@ module "sealed_secrets" {
 
 module "proxmox_csi_plugin" {
   depends_on = [module.talos]
-  source = "./bootstrap/proxmox-csi-plugin"
+  source     = "./bootstrap/proxmox-csi-plugin"
 
   providers = {
     proxmox    = proxmox
@@ -35,7 +35,7 @@ module "proxmox_csi_plugin" {
 
 module "volumes" {
   depends_on = [module.proxmox_csi_plugin]
-  source = "./bootstrap/volumes"
+  source     = "./bootstrap/volumes"
 
   providers = {
     restapi    = restapi

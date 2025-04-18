@@ -9,7 +9,7 @@ variable "proxmox_cluster" {
 }
 
 variable "proxmox_api_token" {
-  type = string
+  type      = string
   sensitive = true
 }
 

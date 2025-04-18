@@ -1,6 +1,6 @@
 locals {
   first_control_plane_node_ip = [for k, v in var.nodes : v.ip if v.machine_type == "controlplane"][0]
-  kubernetes_endpoint = coalesce(var.cluster.vip, local.first_control_plane_node_ip)
+  kubernetes_endpoint         = coalesce(var.cluster.vip, local.first_control_plane_node_ip)
   extra_manifests = concat(var.cluster.extra_manifests, [
     "https://github.com/kubernetes-sigs/gateway-api/releases/download/${var.cluster.gateway_api_version}/standard-install.yaml",
     "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/${var.cluster.gateway_api_version}/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml"
@@ -21,7 +21,7 @@ data "talos_client_configuration" "this" {
 resource "terraform_data" "cilium_bootstrap_inline_manifests" {
   input = [
     {
-      name = "cilium-bootstrap"
+      name     = "cilium-bootstrap"
       contents = file("${path.root}/${var.cluster.cilium.bootstrap_manifest_path}")
     },
     {
@@ -42,8 +42,8 @@ resource "terraform_data" "cilium_bootstrap_inline_manifests" {
 }
 
 data "talos_machine_configuration" "this" {
-  for_each        = var.nodes
-  cluster_name    = var.cluster.name
+  for_each     = var.nodes
+  cluster_name = var.cluster.name
   # This is the Kubernetes API Server endpoint.
   # ref - https://www.talos.dev/latest/introduction/prodnotes/#decide-the-kubernetes-endpoint
   cluster_endpoint = "https://${local.kubernetes_endpoint}:6443"
@@ -59,22 +59,22 @@ data "talos_machine_configuration" "this" {
       kubernetes_version = var.cluster.kubernetes_version
       hostname           = each.key
       ip                 = each.value.ip
-      mac_address = lower(each.value.mac_address)
+      mac_address        = lower(each.value.mac_address)
       gateway            = var.cluster.gateway
       subnet_mask        = var.cluster.subnet_mask
       vip                = var.cluster.vip
     }), each.value.machine_type == "controlplane" ?
-      templatefile("${path.module}/machine-config/control-plane.yaml.tftpl", {
-        kubelet    = var.cluster.kubelet
-        extra_manifests = jsonencode(local.extra_manifests)
-        api_server = var.cluster.api_server
-        inline_manifests = jsonencode(terraform_data.cilium_bootstrap_inline_manifests.output)
-      }) : ""
+    templatefile("${path.module}/machine-config/control-plane.yaml.tftpl", {
+      kubelet          = var.cluster.kubelet
+      extra_manifests  = jsonencode(local.extra_manifests)
+      api_server       = var.cluster.api_server
+      inline_manifests = jsonencode(terraform_data.cilium_bootstrap_inline_manifests.output)
+    }) : ""
   ]
 }
 
 resource "talos_machine_configuration_apply" "this" {
-  depends_on = [proxmox_virtual_environment_vm.this]
+  depends_on                  = [proxmox_virtual_environment_vm.this]
   for_each                    = var.nodes
   node                        = each.value.ip
   client_configuration        = talos_machine_secrets.this.client_configuration

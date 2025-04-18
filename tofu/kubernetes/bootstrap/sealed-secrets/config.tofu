@@ -6,7 +6,7 @@ resource "kubernetes_namespace" "sealed-secrets" {
 
 resource "kubernetes_secret" "sealed-secrets-key" {
   depends_on = [kubernetes_namespace.sealed-secrets]
-  type = "kubernetes.io/tls"
+  type       = "kubernetes.io/tls"
 
   metadata {
     name      = "sealed-secrets-bootstrap-key"

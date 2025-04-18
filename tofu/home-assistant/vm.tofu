@@ -3,7 +3,7 @@ resource "proxmox_virtual_environment_vm" "home_assistant" {
 
   name          = "Home-Assistant"
   description   = "Managed by OpenTofu"
-  tags = ["home-assistant"]
+  tags          = ["home-assistant"]
   on_boot       = true
   bios          = "ovmf"
   scsi_hardware = "virtio-scsi-single"

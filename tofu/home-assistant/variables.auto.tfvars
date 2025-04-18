@@ -6,4 +6,4 @@ proxmox_cluster = {
   image_datastore = "local"
 }
 
-haos_version      = "12.4"
+haos_version = "12.4"

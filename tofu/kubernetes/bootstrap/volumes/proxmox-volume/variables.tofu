@@ -1,10 +1,10 @@
 variable "volume" {
   type = object({
-    name = string
-    node = string
-    size = string
+    name    = string
+    node    = string
+    size    = string
     storage = optional(string, "local-zfs")
-    vmid = optional(number, 9999)
-    format = optional(string, "raw")
+    vmid    = optional(number, 9999)
+    format  = optional(string, "raw")
   })
 }
