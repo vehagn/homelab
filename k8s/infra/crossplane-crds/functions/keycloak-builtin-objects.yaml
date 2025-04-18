@@ -1,7 +1,0 @@
-apiVersion: pkg.crossplane.io/v1beta1
-kind: Function
-metadata:
-  name: function-keycloak-builtin-objects
-spec:
-  package: registry.gitlab.com/corewire/images/crossplane/function-keycloak-builtin-objects:v3.0.1 # renovate: gitlab-releases=corewire/images/crossplane/function-keycloak-builtin-objects
-  packagePullPolicy: Always
