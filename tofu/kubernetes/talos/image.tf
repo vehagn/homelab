@@ -1,5 +1,5 @@
 locals {
-  version = var.image.version
+  version      = var.image.version
   schematic = file("${path.root}/${var.image.schematic_path}")
   schematic_id = jsondecode(data.http.schematic_id.response_body)["id"]
 
@@ -8,7 +8,7 @@ locals {
   update_schematic = file("${path.root}/${local.update_schematic_path}")
   update_schematic_id = jsondecode(data.http.updated_schematic_id.response_body)["id"]
 
-  image_id = "${local.schematic_id}_${local.version}"
+  image_id        = "${local.schematic_id}_${local.version}"
   update_image_id = "${local.update_schematic_id}_${local.update_version}"
 
   # Comment the above 2 lines and un-comment the below 2 lines to use the provider schematic ID instead of the HTTP one

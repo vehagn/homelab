@@ -54,11 +54,11 @@ resource "proxmox_virtual_environment_vm" "this" {
 
     # Optional DNS Block.  Update Nodes with a list value to use.
     dynamic "dns" {
-       for_each = try(each.value.dns, null) != null ? { "enabled" = each.value.dns } : {}
-       content {
-         servers = each.value.dns
-       }
-     }
+      for_each = try(each.value.dns, null) != null ? { "enabled" = each.value.dns } : {}
+      content {
+        servers = each.value.dns
+      }
+    }
 
     ip_config {
       ipv4 {

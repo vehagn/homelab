@@ -15,14 +15,14 @@ variable "image" {
 variable "cluster" {
   description = "Cluster configuration"
   type = object({
-    name               = string
-    endpoint           = string
+    name                = string
     vip = optional(string)
-    gateway            = string
+    gateway             = string
     subnet_mask = optional(string, "24")
     talos_machine_config_version = optional(string)
-    proxmox_cluster    = string
-    kubernetes_version = string
+    proxmox_cluster     = string
+    kubernetes_version  = string
+    gateway_api_version = string
     extra_manifests = optional(list(string))
     kubelet = optional(string)
     api_server = optional(string)

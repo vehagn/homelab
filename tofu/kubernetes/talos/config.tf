@@ -1,24 +1,31 @@
+locals {
+  first_control_plane_node_ip = [for k, v in var.nodes : v.ip if v.machine_type == "controlplane"][0]
+  kubernetes_endpoint = coalesce(var.cluster.vip, local.first_control_plane_node_ip)
+  extra_manifests = concat(var.cluster.extra_manifests, [
+    "https://github.com/kubernetes-sigs/gateway-api/releases/download/${var.cluster.gateway_api_version}/standard-install.yaml",
+    "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/${var.cluster.gateway_api_version}/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml"
+  ])
+}
+
 resource "talos_machine_secrets" "this" {
-  talos_version = var.cluster.talos_machine_config_version != null ? var.cluster.talos_machine_config_version : var.image.update_version
+  // Changing talos_version causes trouble as new certs are created
 }
 
 data "talos_client_configuration" "this" {
   cluster_name         = var.cluster.name
   client_configuration = talos_machine_secrets.this.client_configuration
   nodes                = [for k, v in var.nodes : v.ip]
-  # Don't use vip in talosconfig endpoints
-  # ref - https://www.talos.dev/v1.9/talos-guides/network/vip/#caveats
   endpoints            = [for k, v in var.nodes : v.ip if v.machine_type == "controlplane"]
 }
 
 resource "terraform_data" "cilium_bootstrap_inline_manifests" {
   input = [
     {
-      name     = "cilium-bootstrap"
+      name = "cilium-bootstrap"
       contents = file("${path.root}/${var.cluster.cilium.bootstrap_manifest_path}")
     },
     {
-      name     = "cilium-values"
+      name = "cilium-values"
       contents = yamlencode({
         apiVersion = "v1"
         kind       = "ConfigMap"
@@ -38,8 +45,8 @@ data "talos_machine_configuration" "this" {
   for_each        = var.nodes
   cluster_name    = var.cluster.name
   # This is the Kubernetes API Server endpoint.
-  # ref - https://www.talos.dev/v1.9/introduction/prodnotes/#decide-the-kubernetes-endpoint
-  cluster_endpoint = "https://${var.cluster.endpoint}:6443"
+  # ref - https://www.talos.dev/latest/introduction/prodnotes/#decide-the-kubernetes-endpoint
+  cluster_endpoint = "https://${local.kubernetes_endpoint}:6443"
   # @formatter:off
   talos_version = var.cluster.talos_machine_config_version != null ? var.cluster.talos_machine_config_version : (each.value.update == true ? var.image.update_version : var.image.version)
   # @formatter:on
@@ -57,8 +64,8 @@ data "talos_machine_configuration" "this" {
       vip          = var.cluster.vip
     }), each.value.machine_type == "controlplane" ?
       templatefile("${path.module}/machine-config/control-plane.yaml.tftpl", {
-        kubelet = var.cluster.kubelet
-        extra_manifests = jsonencode(var.cluster.extra_manifests)
+        kubelet    = var.cluster.kubelet
+        extra_manifests = jsonencode(local.extra_manifests)
         api_server = var.cluster.api_server
         inline_manifests = jsonencode(terraform_data.cilium_bootstrap_inline_manifests.output)
       }) : ""
@@ -79,9 +86,10 @@ resource "talos_machine_configuration_apply" "this" {
 
 resource "talos_machine_bootstrap" "this" {
   depends_on = [talos_machine_configuration_apply.this]
-  # Bootstrap with the first node. VIP not yet available at this stage, so cant use var.cluster.endpoint as it may be set to VIP
+  # Bootstrap with the first control plane node.
+  # VIP not yet available at this stage, so can't use var.cluster.vip
   # ref - https://www.talos.dev/v1.9/talos-guides/network/vip/#caveats
-  node                 = [for k, v in var.nodes : v.ip if v.machine_type == "controlplane"][0]
+  node                 = local.first_control_plane_node_ip
   client_configuration = talos_machine_secrets.this.client_configuration
 }
 
@@ -105,11 +113,8 @@ resource "talos_cluster_kubeconfig" "this" {
     talos_machine_bootstrap.this,
     data.talos_cluster_health.this
   ]
-  # If using VIP, it should be up by now, but to be safer retrive from one of the nodes
-  # As mentioned don't use talosctl on vip
-  # ref - https://www.talos.dev/v1.9/talos-guides/network/vip/#caveats
-  # In kubeconfig endpoint will be polulated by cluster_endpoint from machine-config
-  node                 = [for k, v in var.nodes : v.ip if v.machine_type == "controlplane"][0]
+  # The kubeconfig endpoint will be populated from the talos_machine_configuration cluster_endpoint
+  node                 = local.first_control_plane_node_ip
   client_configuration = talos_machine_secrets.this.client_configuration
   timeouts = {
     read = "1m"

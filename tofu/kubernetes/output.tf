@@ -1,4 +1,34 @@
-resource "local_file" "machine_configs" {
+resource "local_file" "talos_machine_secrets" {
+  content = yamlencode({
+    cluster    = module.talos.machine_secrets.cluster
+    secrets    = module.talos.machine_secrets.secrets
+    trustdinfo = module.talos.machine_secrets.trustdinfo
+    certs = {
+      etcd = {
+        crt = module.talos.machine_secrets.certs.etcd.cert
+        key = module.talos.machine_secrets.certs.etcd.key
+      }
+      k8s = {
+        crt = module.talos.machine_secrets.certs.k8s.cert
+        key = module.talos.machine_secrets.certs.k8s.key
+      }
+      k8saggregator = {
+        crt = module.talos.machine_secrets.certs.k8s_aggregator.cert
+        key = module.talos.machine_secrets.certs.k8s_aggregator.key
+      }
+      k8sserviceaccount = {
+        key = module.talos.machine_secrets.certs.k8s_serviceaccount.key
+      }
+      os = {
+        crt = module.talos.machine_secrets.certs.os.cert
+        key = module.talos.machine_secrets.certs.os.key
+      }
+    }
+  })
+  filename = "output/talos-machine-secrets.yaml"
+}
+
+resource "local_file" "talos_machine_configs" {
   for_each        = module.talos.machine_config
   content         = each.value.machine_configuration
   filename        = "output/talos-machine-config-${each.key}.yaml"

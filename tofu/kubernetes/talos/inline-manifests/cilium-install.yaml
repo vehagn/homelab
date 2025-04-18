@@ -8,9 +8,9 @@ roleRef:
   kind: ClusterRole
   name: cluster-admin
 subjects:
-- kind: ServiceAccount
-  name: cilium-install
-  namespace: kube-system
+  - kind: ServiceAccount
+    name: cilium-install
+    namespace: kube-system
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -58,28 +58,28 @@ spec:
       serviceAccountName: cilium-install
       hostNetwork: true
       containers:
-      - name: cilium-install
-        image: quay.io/cilium/cilium-cli-ci:latest
-        env:
-        - name: KUBERNETES_SERVICE_HOST
-          valueFrom:
-            fieldRef:
-              apiVersion: v1
-              fieldPath: status.podIP
-        - name: KUBERNETES_SERVICE_PORT
-          value: "6443"
-        volumeMounts:
-          - name: values
-            mountPath: /root/app/values.yaml
-            subPath: values.yaml
-        command:
-          - cilium
-          - install
-          - --version=v1.17.3 # renovate: github-releases=cilium/cilium
-          - --set
-          - kubeProxyReplacement=true
-          - --values
-          - values.yaml
+        - name: cilium-install
+          image: quay.io/cilium/cilium-cli-ci:latest
+          env:
+            - name: KUBERNETES_SERVICE_HOST
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+            - name: KUBERNETES_SERVICE_PORT
+              value: "6443"
+          volumeMounts:
+            - name: values
+              mountPath: /root/app/values.yaml
+              subPath: values.yaml
+          command:
+            - cilium
+            - install
+            - --version=v1.17.3 # renovate: github-releases=cilium/cilium
+            - --set
+            - kubeProxyReplacement=true
+            - --values
+            - values.yaml
       volumes:
         - name: values
           configMap:

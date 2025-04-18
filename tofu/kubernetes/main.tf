@@ -5,9 +5,9 @@ module "talos" {
     proxmox = proxmox
   }
 
-  image = var.talos_image
+  image   = var.talos_image
   cluster = var.talos_cluster_config
-  nodes = var.talos_nodes
+  nodes   = var.talos_nodes
 }
 
 module "sealed_secrets" {
@@ -43,5 +43,5 @@ module "volumes" {
   }
 
   proxmox_api = var.proxmox
-  volumes = var.kubernetes_volumes
+  volumes     = var.kubernetes_volumes
 }
