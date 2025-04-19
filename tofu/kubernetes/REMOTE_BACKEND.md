@@ -5,11 +5,7 @@
 2. Create and download the [service account key](https://cloud.google.com/iam/docs/keys-create-delete#creating).
 3. Create a GCS bucket for tofu state with public access prevention and versioning as necessary.
 4. In the permissions tab of the bucket, give **Storage Object Admin** access to the service account.
-5. Copy backend.tf.sample to backend.tf and make necessary changes.
-
-```shell
-cp remote_backend.tf.sample remote_backend.tf
-```
+5. Edit backend.auto.tfvars.
 
 ### Encryption key
 
@@ -21,21 +17,12 @@ python3 -c 'import os;import base64;print(base64.b64encode(os.urandom(32)).decod
 
 `Without the encryption key, your state would not be recoverable. Store in a password manager, if not using any kms like bws.`
 
-### Environment variables
+1. Set the enable_state in remote_state.auto.tfvars
+1. Set the enable_state in remote_state.auto.tfvars or bws.auto.tfvars. (Note: If not using bws, don't commit this file, rename it tosomething like remote_state_secrets.auto.tfvars).
 
 ```shell
-export GOOGLE_APPLICATION_CREDENTIALS="<YOUR_DOWNLOADED_KEY_PATH>"
-export GOOGLE_ENCRYPTION_KEY="<YOUR_GENERATED_ENCRYPTION_KEY>"
+tofu init -migrate-state
 ```
-
-Run tofu init / plan / apply as usual.
-
-### Bitwarden Secrets Manager
-
-Store the downloaded key contents and generated encryption key into GOOGLE_CREDENTIALS and GOOGLE_ENCRYPTION_KEY
-respectively in bws.
-
-Run bws run -- tofu init / plan / apply as usual.
 
 ### Beta Notice
 

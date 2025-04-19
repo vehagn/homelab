@@ -16,14 +16,22 @@ terraform {
       source  = "Mastercard/restapi"
       version = "2.0.1"
     }
+    bitwarden = {
+      source  = "maxlaverse/bitwarden"
+      version = ">= 0.13.6"
+    }
   }
+}
+
+locals {
+  proxmox_api_token = try(data.bitwarden_secret.secrets["proxmox_api_token"], null) != null ? data.bitwarden_secret.secrets["proxmox_api_token"].value : var.proxmox_api_token
 }
 
 provider "proxmox" {
   endpoint = var.proxmox.endpoint
   insecure = var.proxmox.insecure
 
-  api_token = var.proxmox_api_token
+  api_token = local.proxmox_api_token
   ssh {
     agent    = true
     username = var.proxmox.username
@@ -37,7 +45,7 @@ provider "restapi" {
 
   headers = {
     "Content-Type"  = "application/json"
-    "Authorization" = "PVEAPIToken=${var.proxmox_api_token}"
+    "Authorization" = "PVEAPIToken=${local.proxmox_api_token}"
   }
 }
 
@@ -46,4 +54,20 @@ provider "kubernetes" {
   client_certificate     = base64decode(module.talos.kube_config.kubernetes_client_configuration.client_certificate)
   client_key             = base64decode(module.talos.kube_config.kubernetes_client_configuration.client_key)
   cluster_ca_certificate = base64decode(module.talos.kube_config.kubernetes_client_configuration.ca_certificate)
+}
+
+provider "bitwarden" {
+  alias  = "ro"
+  access_token = var.bws_access_token_ro
+  experimental {
+    embedded_client = true
+  }
+}
+
+provider "bitwarden" {
+  alias  = "rw"
+  access_token = var.bws_access_token_rw
+  experimental {
+    embedded_client = true
+  }
 }
