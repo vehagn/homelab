@@ -16,14 +16,43 @@ terraform {
       source  = "Mastercard/restapi"
       version = "2.0.1"
     }
+    infisical = {
+      source  = "infisical/infisical"
+      version = ">= 0.15.7"
+    }
+    external = {
+      source  = "hashicorp/external"
+      version = ">= 2.3.4"
+    }
   }
+  encryption {
+    key_provider "pbkdf2" "my_passphrase" {
+      passphrase = local.tofu_encryption_passphrase
+    }
+    method "aes_gcm" "my_method" {
+      keys = key_provider.pbkdf2.my_passphrase
+    }
+    state {
+      method   = method.aes_gcm.my_method
+      enforced = true
+    }
+    plan {
+      method   = method.aes_gcm.my_method
+      enforced = true
+    }
+  }
+}
+
+locals {
+  proxmox_api_token          = var.proxmox_api_token
+  tofu_encryption_passphrase = var.tofu_encryption_passphrase
 }
 
 provider "proxmox" {
   endpoint = var.proxmox.endpoint
   insecure = var.proxmox.insecure
 
-  api_token = var.proxmox_api_token
+  api_token = local.proxmox_api_token
   ssh {
     agent    = true
     username = var.proxmox.username
@@ -37,7 +66,7 @@ provider "restapi" {
 
   headers = {
     "Content-Type"  = "application/json"
-    "Authorization" = "PVEAPIToken=${var.proxmox_api_token}"
+    "Authorization" = "PVEAPIToken=${local.proxmox_api_token}"
   }
 }
 
