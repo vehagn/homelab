@@ -11,9 +11,14 @@ a more thorough explanation of how everything works.
 
 ## Initialize tofu
 
+One cluster/state per branch.
+
+Initialize tofu.
 ```shell
 tofu init
 ```
+
+Note: If using remote state, follow these [instructions](REMOTE_BACKEND.md).
 
 ## Proxmox
 
@@ -25,13 +30,7 @@ export TF_VAR_proxmox_api_token="<YOUR_API_TOKEN>"
 
 ### Optional External Secrets Manager / Other methods
 
-**Bitwarden Secrets Manager** - Name your secret TF_VAR_proxmox_api_token in bws.
-
-```shell
-bws run -- tofu ...
-```
-
-Note: By default, the shell is sh. Change with --shell if required.
+**Bitwarden Secrets Manager** - Set BWS_ACCESS_TOKEN environment variable and change bws.auto.tfvars
 
 ## Sealed-secrets
 

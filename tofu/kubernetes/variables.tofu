@@ -13,6 +13,42 @@ variable "proxmox_api_token" {
   description = "API token for Proxmox"
   type        = string
   sensitive   = true
+  default = null
+}
+
+variable "google_cloud" {
+  description = "Google Cloud configuration"
+  type = object({
+    enable_remote_state         = optional(bool, false)
+    credentials_file            = optional(string, "")
+    encryption_key              = optional(string, "")
+  })
+}
+
+variable "bws_access_token_ro" {
+  description = "BWS Read only Access Token"
+  type = string
+  sensitive   = true
+  default = ""
+}
+
+variable "bws_access_token_rw" {
+  description = "BWS Read-Write Access Token"
+  type = string
+  sensitive   = true
+  default = ""
+}
+
+variable "bws_project_id_rw" {
+  description = "BWS Read-Write Project ID"
+  type = string
+  default = ""
+}
+
+variable "bws_secrets" {
+  description = "BWS secrets"
+  type = map(string)
+  default = {}
 }
 
 variable "talos_image" {
