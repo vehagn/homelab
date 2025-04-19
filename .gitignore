@@ -11,6 +11,7 @@ output
 
 *secret*.tfvars
 *secret*.tfvars.json
+*secrets*.env
 !sealed-secrets.auto.tfvars
 
 *.lock.hcl

@@ -1,0 +1,435 @@
+name: Build Dev Container
+
+# This workflow builds and maintains devcontainer base container images:
+# 1. With necessary kubernetes tools
+# 2. Builds multi-architecture container images (amd64/arm64)
+# 3. Tags them with date and commit hash identifiers
+# 4. Keeps the container registry clean by removing old images
+
+on:
+  workflow_dispatch: # Manual trigger
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/.devcontainer/**" # Only run when devcontainer config changes
+  schedule:
+    - cron: "0 0 1 * *" # Build latest image monthly to incorporate any missed updates
+
+env:
+  # Common variables used across jobs
+  IMAGE_REPO_NAME: "k8s_setup" # The name of your image repository
+  KEEP_RECENT_COUNT: 3 # Number of recent image versions to keep
+  DELETE_OLDER_THAN_DAYS: 30 # Delete images older than this many days
+  DRY_RUN_CLEANUP: "false" # Set to "true" for cleanup dry run mode
+
+jobs:
+  build-and-push:
+    name: Build & Push Dev Container
+    runs-on: ubuntu-latest
+    permissions:
+      packages: "write" # Needed to push to GHCR
+      contents: "read" # Needed to read the repository
+    outputs:
+      build-success: ${{ steps.build-status.outputs.success }}
+      image-base: ${{ steps.setup-vars.outputs.image-base }}
+    steps:
+      - name: Checkout Repository
+        id: checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 1 # Only need the latest commit for the SHA
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2
+
+      - name: Prepare DevPod
+        run: |
+          curl -L -o devpod "https://github.com/loft-sh/devpod/releases/latest/download/devpod-linux-amd64" \
+            && sudo install -c -m 0755 devpod /usr/local/bin \
+            && rm -f devpod
+          devpod provider add docker
+
+      - name: Setup Build Variables
+        id: setup-vars
+        run: |
+          # Set up image name and versioning
+          OWNER_LOWERCASE=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          IMAGE_NAME_BASE="ghcr.io/$OWNER_LOWERCASE/${{ env.IMAGE_REPO_NAME }}"
+
+          # Generate a version string: YYYYMMDD-HHMMSS-shortSHA
+          DATE_TAG=$(date +'%Y%m%d-%H%M%S')
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          VERSION_TAG_BASE="$DATE_TAG-$SHORT_SHA"
+
+          echo "image-base=$IMAGE_NAME_BASE" >> $GITHUB_OUTPUT
+          echo "version-tag=$VERSION_TAG_BASE" >> $GITHUB_OUTPUT
+
+          echo "Building images for $IMAGE_NAME_BASE with version tag base: $VERSION_TAG_BASE"
+
+      - name: Build and Push Architecture-Specific Images
+        id: build-images
+        run: |
+          set -e # Exit on error
+          IMAGE_NAME_BASE="${{ steps.setup-vars.outputs.image-base }}"
+          VERSION_TAG_BASE="${{ steps.setup-vars.outputs.version-tag }}"
+
+          # Function to verify image exists in registry
+          verify_image_exists() {
+            local image_ref=$1
+            local max_attempts=6
+            local attempt=1
+            echo "Verifying image exists: $image_ref"
+            while [ $attempt -le $max_attempts ]; do
+              if docker manifest inspect "$image_ref" >/dev/null 2>&1; then
+                echo "✓ Image verified: $image_ref"
+                return 0
+              fi
+              echo "Attempt $attempt/$max_attempts: Image not yet available, waiting 10s..."
+              sleep 10
+              ((attempt++))
+            done
+            echo "✗ Failed to verify image after $max_attempts attempts: $image_ref"
+            return 1
+          }
+
+          # Build architecture-specific images with retry logic
+          set -e # Exit on error
+          BUILT_IMAGES=()
+
+          for ARCH in arm64 amd64; do
+            echo "Building and pushing for linux/$ARCH..."
+
+            # Retry logic for build
+            MAX_RETRIES=3
+            RETRY_COUNT=0
+            BUILD_SUCCESS=false # Reset for each architecture
+
+            while [ $RETRY_COUNT -lt $MAX_RETRIES ] && [ "$BUILD_SUCCESS" = "false" ]; do
+              if [ $RETRY_COUNT -gt 0 ]; then
+                echo "Retry attempt $RETRY_COUNT for $ARCH..."
+                sleep 10 # Wait before retry
+              fi
+
+              current_attempt_log_file="devpod_build_${ARCH}_attempt_${RETRY_COUNT}.log"
+              echo "Running devpod build for $ARCH (Attempt $((RETRY_COUNT + 1))/$MAX_RETRIES)..."
+
+              # Execute devpod build and capture all output (stdout & stderr)
+              if devpod build . \
+                --devcontainer-path ".github/.devcontainer/devcontainer.json" \
+                --platform "linux/$ARCH" \
+                --tag "latest-$VERSION_TAG_BASE-$ARCH,latest-$ARCH" \
+                --repository "$IMAGE_NAME_BASE" > "$current_attempt_log_file" 2>&1; then
+
+                # devpod build command was SUCCESSFUL (exit code 0)
+                echo "✓ DevPod Build command SUCCEEDED for $ARCH."
+                cat "$current_attempt_log_file" # Log output for transparency
+
+                used_cache=false
+                # Only check for cache usage IF devpod build command itself succeeded
+                if grep -iq "Found existing prebuilt image" "$current_attempt_log_file"; then
+                  used_cache=true
+                  echo "DevPod indicated using a cached/prebuilt image for $ARCH."
+                fi
+
+                # --- Proceed with verification ---
+                verified_latest_arch_tag=false
+                echo "Verifying $IMAGE_NAME_BASE:latest-$ARCH in registry..."
+                if verify_image_exists "$IMAGE_NAME_BASE:latest-$ARCH"; then
+                  echo "✓ Image verified: $IMAGE_NAME_BASE:latest-$ARCH"
+                  verified_latest_arch_tag=true
+                else
+                  echo "✗ CRITICAL: Verification failed for $IMAGE_NAME_BASE:latest-$ARCH in registry."
+                  # BUILD_SUCCESS remains false.
+                fi
+
+                verified_version_specific_tag=false
+                if [ "$verified_latest_arch_tag" = "true" ]; then
+                  # If latest-$ARCH is confirmed, now check cache status for version-specific tag handling
+                  if [ "$used_cache" = "true" ]; then
+                    # devpod build was successful, latest-$ARCH is in registry, and cache was used.
+                    # Skip explicit verification of version-specific tag, assume acceptable due to caching.
+                    echo "ℹ️  DevPod used cache and $IMAGE_NAME_BASE:latest-$ARCH is verified."
+                    echo "    Skipping explicit check for $IMAGE_NAME_BASE:latest-$VERSION_TAG_BASE-$ARCH and marking as acceptable."
+                    verified_version_specific_tag=true
+                  else
+                    # Cache was NOT used (or we want to be absolutely sure for non-cached builds).
+                    # Proceed with actual verification of the version-specific tag.
+                    echo "Verifying $IMAGE_NAME_BASE:latest-$VERSION_TAG_BASE-$ARCH in registry (cache not used)..."
+                    if verify_image_exists "$IMAGE_NAME_BASE:latest-$VERSION_TAG_BASE-$ARCH"; then
+                      echo "✓ Image verified: $IMAGE_NAME_BASE:latest-$VERSION_TAG_BASE-$ARCH"
+                      verified_version_specific_tag=true
+                    else
+                      echo "✗ Verification failed for $IMAGE_NAME_BASE:latest-$VERSION_TAG_BASE-$ARCH in registry (cache not used)."
+                      # verified_version_specific_tag remains false, leading to BUILD_SUCCESS=false for this attempt
+                    fi
+                  fi
+                else
+                  echo "Skipping verification of $IMAGE_NAME_BASE:latest-$VERSION_TAG_BASE-$ARCH because $IMAGE_NAME_BASE:latest-$ARCH verification failed."
+                  # verified_version_specific_tag remains false (its default)
+                fi
+
+                # Determine overall success for THIS ATTEMPT based on verifications
+                if [ "$verified_latest_arch_tag" = "true" ] && [ "$verified_version_specific_tag" = "true" ]; then
+                  echo "✓ All image verification conditions met for $ARCH for this attempt."
+                  BUILD_SUCCESS=true # This attempt for this ARCH is successful
+                else
+                  echo "✗ Image verification conditions NOT met for $ARCH on this attempt (even though devpod build command may have succeeded)."
+                  # BUILD_SUCCESS remains false, will trigger retry for this ARCH or eventual failure.
+                fi
+                # --- End of verification ---
+
+              else
+                # devpod build command FAILED (non-zero exit code)
+                echo "✗ devpod build command FAILED for $ARCH (attempt $((RETRY_COUNT + 1)))."
+                cat "$current_attempt_log_file" # Log output on failure
+                # BUILD_SUCCESS remains false. No need to check for cache or verify images.
+              fi
+              # --- End of devpod build if/else ---
+
+              rm -f "$current_attempt_log_file" # Clean up log file for this attempt
+
+              if [ "$BUILD_SUCCESS" = "false" ]; then
+                ((RETRY_COUNT++))
+                # Sleep is handled at the beginning of the retry iteration
+              fi
+            done # End of retry while loop
+
+            # After all retries for an ARCH:
+            if [ "$BUILD_SUCCESS" = "true" ]; then
+              echo "✓ Successfully built and verified images for $ARCH."
+              BUILT_IMAGES+=("$ARCH")
+            else
+              echo "✗ Failed to build and verify for $ARCH after $MAX_RETRIES attempts."
+              exit 1 # Fail the entire job if any arch fails
+            fi
+          done # End of for ARCH loop
+
+          echo "Successfully built images for architectures: ${BUILT_IMAGES[*]}"
+
+      - name: Create Multi-Architecture Manifest
+        id: create-manifest
+        run: |
+          IMAGE_NAME_BASE="${{ steps.setup-vars.outputs.image-base }}"
+
+          echo "Creating multi-architecture manifest for '$IMAGE_NAME_BASE:latest'..."
+
+          # Verify prerequisite images exist before creating manifest
+          echo "Final verification of architecture-specific images..."
+          for ARCH in arm64 amd64; do
+            if ! docker manifest inspect "$IMAGE_NAME_BASE:latest-$ARCH" >/dev/null 2>&1; then
+              echo "✗ Missing required image: $IMAGE_NAME_BASE:latest-$ARCH"
+              exit 1
+            fi
+            echo "✓ Confirmed exists: $IMAGE_NAME_BASE:latest-$ARCH"
+          done
+
+          # Create manifest with retry logic
+          MAX_RETRIES=3
+          RETRY_COUNT=0
+
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            if [ $RETRY_COUNT -gt 0 ]; then
+              echo "Retry attempt $RETRY_COUNT for manifest creation..."
+              sleep 15
+            fi
+
+            # Remove existing manifest if it exists (for retries)
+            docker manifest rm "$IMAGE_NAME_BASE:latest" 2>/dev/null || true
+
+            if docker manifest create "$IMAGE_NAME_BASE:latest" \
+                 --amend "$IMAGE_NAME_BASE:latest-arm64" \
+                 --amend "$IMAGE_NAME_BASE:latest-amd64"; then
+
+              echo "✓ Manifest created successfully"
+
+              if docker manifest push "$IMAGE_NAME_BASE:latest"; then
+                echo "✓ Manifest pushed successfully"
+                break
+              else
+                echo "✗ Failed to push manifest (attempt $((RETRY_COUNT + 1)))"
+              fi
+            else
+              echo "✗ Failed to create manifest (attempt $((RETRY_COUNT + 1)))"
+            fi
+
+            ((RETRY_COUNT++))
+          done
+
+          if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
+            echo "✗ Failed to create/push manifest after $MAX_RETRIES attempts"
+            exit 1
+          fi
+
+          echo "✓ Successfully created and pushed multi-architecture manifest"
+
+      - name: Set Build Status
+        id: build-status
+        if: always()
+        run: |
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "success=true" >> $GITHUB_OUTPUT
+          else
+            echo "success=false" >> $GITHUB_OUTPUT
+          fi
+
+  cleanup-ghcr-images:
+    name: Cleanup Old GHCR Images
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    # Run cleanup even if build partially failed (to clean up partial artifacts)
+    # But only run on scheduled events, manual dispatches, or pushes to main
+    if: always() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'push')
+    permissions:
+      packages: write # Needed to delete package versions
+      contents: read # Needed for gh to determine owner/repo
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.13.0"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./.github/workflows/python_scripts/requirements.txt
+
+      - name: Make Python cleanup script executable
+        run: |
+          chmod +x ./.github/workflows/python_scripts/cleanup_ghcr_images.py
+
+      - name: Run Python cleanup script with enhanced error handling
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Starting cleanup process..."
+          echo "Build status from previous job: ${{ needs.build-and-push.outputs.build-success }}"
+
+          # Run cleanup with retry logic for specific error codes
+          MAX_CLEANUP_RETRIES=3
+          CLEANUP_RETRY=0
+          CLEANUP_SUCCESS=false
+
+          # Disable exit-on-error to handle Python script exit codes properly
+          set +e
+
+          while [ $CLEANUP_RETRY -lt $MAX_CLEANUP_RETRIES ] && [ "$CLEANUP_SUCCESS" = "false" ]; do
+            if [ $CLEANUP_RETRY -gt 0 ]; then
+              echo "Cleanup retry attempt $CLEANUP_RETRY..."
+              sleep 60 # Wait longer between cleanup retries
+            fi
+
+            echo "Running Python cleanup script..."
+            ./.github/workflows/python_scripts/cleanup_ghcr_images.py \
+              --image_repo_name "${{ env.IMAGE_REPO_NAME }}" \
+              --keep_recent_count "${{ env.KEEP_RECENT_COUNT }}" \
+              --delete_older_than_days "${{ env.DELETE_OLDER_THAN_DAYS }}" \
+              --repo_owner "${{ github.repository_owner }}" \
+              --token "${{ secrets.GITHUB_TOKEN }}" \
+              --max_retries 3 \
+              --retry_delay 5 \
+              ${{ env.DRY_RUN_CLEANUP == 'true' && '--dry_run' || '' }}
+
+            EXIT_CODE=$?
+            echo "Python script completed with exit code: $EXIT_CODE"
+
+            # Success states (0-9)
+            if [ $EXIT_CODE -le 9 ]; then
+              case $EXIT_CODE in
+                0)
+                  echo "✅ Cleanup completed successfully"
+                  ;;
+                1)
+                  echo "⚠️  Cleanup completed with minor warnings"
+                  ;;
+                2)
+                  echo "ℹ️  Cleanup completed - no action needed"
+                  ;;
+                *)
+                  echo "ℹ️  Cleanup completed with status $EXIT_CODE"
+                  ;;
+              esac
+              CLEANUP_SUCCESS=true
+              break  # Exit the retry loop successfully
+
+            # Authentication/Permission errors (10-19)
+            elif [ $EXIT_CODE -ge 10 ] && [ $EXIT_CODE -lt 20 ]; then
+              echo "🔒 Authentication or permission error (code $EXIT_CODE)"
+              echo "- Check GitHub token permissions"
+              echo "- Verify token has not expired"
+              exit $EXIT_CODE
+
+            # Rate limiting errors (20-29)
+            elif [ $EXIT_CODE -ge 20 ] && [ $EXIT_CODE -lt 30 ]; then
+              echo "⏳ Rate limit error (code $EXIT_CODE)"
+              if [ $CLEANUP_RETRY -lt $((MAX_CLEANUP_RETRIES - 1)) ]; then
+                echo "Waiting before retry..."
+                ((CLEANUP_RETRY++))
+                continue
+              fi
+              echo "❌ Rate limit error persists after retries"
+              exit $EXIT_CODE
+
+            # API errors (30-39)
+            elif [ $EXIT_CODE -ge 30 ] && [ $EXIT_CODE -lt 40 ]; then
+              echo "🌐 API error (code $EXIT_CODE)"
+              if [ $CLEANUP_RETRY -lt $((MAX_CLEANUP_RETRIES - 1)) ]; then
+                echo "Retrying..."
+                ((CLEANUP_RETRY++))
+                continue
+              fi
+              echo "❌ API error persists after retries"
+              exit $EXIT_CODE
+
+            # Configuration/Input errors (40-49)
+            elif [ $EXIT_CODE -ge 40 ] && [ $EXIT_CODE -lt 50 ]; then
+              echo "⚙️  Configuration error (code $EXIT_CODE)"
+              echo "- Check script arguments"
+              echo "- Verify repository exists"
+              exit $EXIT_CODE
+
+            # Unexpected errors (50-59)
+            elif [ $EXIT_CODE -ge 50 ] && [ $EXIT_CODE -lt 60 ]; then
+              echo "❌ Unexpected error (code $EXIT_CODE)"
+              if [ $CLEANUP_RETRY -lt $((MAX_CLEANUP_RETRIES - 1)) ]; then
+                echo "Retrying..."
+                ((CLEANUP_RETRY++))
+                continue
+              fi
+              echo "❌ Unexpected error persists after retries"
+              exit $EXIT_CODE
+
+            # Script interruption (130)
+            elif [ $EXIT_CODE -eq 130 ]; then
+              echo "🛑 Script was interrupted"
+              exit $EXIT_CODE
+
+            # Unknown error codes
+            else
+              echo "❓ Unknown error code: $EXIT_CODE"
+              exit $EXIT_CODE
+            fi
+          done
+
+          if [ "$CLEANUP_SUCCESS" != "true" ]; then
+            echo "❌ Cleanup failed after $MAX_CLEANUP_RETRIES attempts"
+            exit 1
+          fi
+
+          echo "✅ Cleanup process completed successfully"

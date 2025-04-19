@@ -65,6 +65,18 @@
         "patch"
       ],
       "automerge": true
+    },
+    {
+      "description": "Manage and group GitHub Action updates (including commit SHAs)",
+      "matchManagers": ["github-actions"],
+      "groupName": "github-actions",
+      "automerge": true,
+      "automergeType": "pr",
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "digest"
+      ]
     }
   ]
 }
