@@ -21,21 +21,12 @@ python3 -c 'import os;import base64;print(base64.b64encode(os.urandom(32)).decod
 
 `Without the encryption key, your state would not be recoverable. Store in a password manager, if not using any kms like bws.`
 
-### Environment variables
+1. Set the enable_state in remote_state.auto.tfvars
+1. Set the enable_state in remote_state.auto.tfvars or bws.auto.tfvars. (Note: If not using bws, don't commit this file, rename it tosomething like remote_state_secrets.auto.tfvars).
 
 ```shell
-export GOOGLE_APPLICATION_CREDENTIALS="<YOUR_DOWNLOADED_KEY_PATH>"
-export GOOGLE_ENCRYPTION_KEY="<YOUR_GENERATED_ENCRYPTION_KEY>"
+tofu init -migrate-state
 ```
-
-Run tofu init / plan / apply as usual.
-
-### Bitwarden Secrets Manager
-
-Store the downloaded key contents and generated encryption key into GOOGLE_CREDENTIALS and GOOGLE_ENCRYPTION_KEY
-respectively in bws.
-
-Run bws run -- tofu init / plan / apply as usual.
 
 ### Beta Notice
 
