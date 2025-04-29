@@ -19,6 +19,10 @@ kubernetes_volumes = {
     node = "euclid"
     size = "1G"
   }
+  pv-audiobookshelf = {
+    node = "euclid"
+    size = "4G"
+  }
   pv-remark42 = {
     node = "euclid"
     size = "1G"

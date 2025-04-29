@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audiobookshelf
+  namespace: audiobookshelf
+  labels:
+    app: audiobookshelf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: audiobookshelf
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      namespace: audiobookshelf
+      labels:
+        app: audiobookshelf
+    spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: euclid
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 2501
+        runAsGroup: 2501
+        fsGroup: 2501
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: audiobookshelf
+          image: ghcr.io/advplyr/audiobookshelf:2.21.0 # renovate: docker=ghcr.io/advplyr/audiobookshelf
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ "ALL" ]
+          ports:
+            - name: http
+              containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: common-env
+                optional: true
+          volumeMounts:
+            - name: audiobookshelf
+              mountPath: /config
+              subPath: config
+            - name: audiobookshelf
+              mountPath: /metadata
+              subPath: metadata
+            - name: audiobooks
+              mountPath: /audiobooks
+            - name: podcasts
+              mountPath: /podcasts
+            - name: tmp
+              mountPath: /tmp
+          resources:
+            requests:
+              cpu: 50m
+              memory: 384Mi
+            limits:
+              cpu: 1000m
+              memory: 512Mi
+      volumes:
+        - name: audiobookshelf
+          persistentVolumeClaim:
+            claimName: audiobookshelf
+        - name: audiobooks
+          nfs:
+            server: 192.168.1.117
+            path: /mnt/pool-0/data/media/audiobooks
+        - name: podcasts
+          nfs:
+            server: 192.168.1.117
+            path: /mnt/pool-0/data/media/podcasts
+        - name: tmp
+          emptyDir: { }

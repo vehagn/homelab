@@ -11,6 +11,8 @@ spec:
       server: '*'
     - namespace: 'arr'
       server: '*'
+    - namespace: 'audiobookshelf'
+      server: '*'
     - namespace: 'plex'
       server: '*'
     - namespace: 'jellyfin'
