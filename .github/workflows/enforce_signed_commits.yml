@@ -1,5 +1,8 @@
 name: Check signed commits in PR
-on: pull_request_target
+on:
+  pull_request_target:
+  pull_request:
+
 
 jobs:
   check-signed-commits:
