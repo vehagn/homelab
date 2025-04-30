@@ -19,15 +19,14 @@ jobs:
       - name: Check last commit sign-off
         id: check
         run: |
-          unsigned=$(git log --format='%ae' -n 1 | grep -v 'Signed-off-by:')
-          if [[ -n "$unsigned" ]]; then
+          signed_off=$(git log -n 1 --format=%B | grep -i 'Signed-off-by:')
+          echo "$signed_off"
+          if [[ -z "$signed_off" ]]; then
             echo "Error: The last commit is missing the Signed-off-by line:"
-            echo "$unsigned"
-            echo "::set-output name=signed_off::false"
-            exit 1
+            echo "signed_off=false" >> "$GITHUB_OUTPUT"
           else
             echo "The last commit is properly signed off."
-            echo "::set-output name=signed_off::true"
+            echo "signed_off=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Close PR and comment if not signed off (Bash)
