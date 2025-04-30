@@ -20,7 +20,7 @@ jobs:
         id: check
         run: |
           signed_off=$(git log -n 1 --format=%B | grep -i 'Signed-off-by:')
-          echo "$signed_off"
+          echo $signed_off
           if [[ -z "$signed_off" ]]; then
             echo "Error: The last commit is missing the Signed-off-by line:"
             echo "signed_off=false" >> "$GITHUB_OUTPUT"
