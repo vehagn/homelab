@@ -1,0 +1,35 @@
+name: Auto Squash PR Commits (Preserve Feature Branch History)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - 'main' # Apply to all PRs, adjust as needed
+
+jobs:
+  auto_squash:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Squash merge to PR branch
+        run: |
+          PR_HEAD_REF="${GITHUB_HEAD_REF}" # Feature branch
+          PR_BASE_REF="${GITHUB_BASE_REF}" # Main branch
+          PR_NUMBER=$(echo "$GITHUB_REF" | awk -F'/' '{print $3}') # Extract PR number from the ref
+
+          echo "Squashing commits from PR #$PR_NUMBER ($HEAD_REF) onto $BASE_REF..."
+
+          git checkout "$BASE_REF"
+          git merge --squash "$HEAD_REF"
+
+          echo "Creating a new squashed commit for the PR..."
+          git commit -m "Squashed commits from PR #${{ steps.get_pr_info.outputs.prNumber }}"
+
+          echo "Force pushing squashed commit to origin/$BASE_REF..."
+          git push origin "$BASE_REF" --force # Push the squashed commit to the *target* branch of the PR
+
+          echo "Pull Request #$PR_NUMBER has been updated with a squashed version of commits (preserving feature branch history)."
