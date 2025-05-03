@@ -5,10 +5,11 @@ metadata:
   namespace: audiobookshelf
 spec:
   parentRefs:
+    - name: external
+      namespace: gateway
     - name: internal
       namespace: gateway
   hostnames:
-    - "audiobookshelf.stonegarden.dev"
     - "abs.stonegarden.dev"
   rules:
     - matches:

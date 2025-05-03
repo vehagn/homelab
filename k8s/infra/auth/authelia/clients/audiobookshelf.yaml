@@ -1,0 +1,12 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: client-audiobookshelf
+  namespace: authelia
+spec:
+  encryptedData:
+    clientSecret: AgCDrroc9HdC8EIbzxYI94ubAW7X1YmqS8QHmcCSOM/xQjBmSaiOgR0dfw/mD0hbpsEaRF5VQie9JOQ/4nO3qjTPYGYBRwD0pEqqymaiHOA6Smv54wL/xl77MZw3ouk+JPIyX2895KbpjRpjGKYZlkFj9WNaOSSKN9Q39KynLG5mm9xS/pYfsVTc8DnHDklR0dNfLCnY1y3WW05cylmDrPoIb3Ppps0JnjY3JpjOZIe4TRFmwJqLgYlgYh+Z1rTD1iApl5hbi68gq2JsJ3ylSiS6w+HU+66yNvY1o/1j2ai7u+aessI/Y5Imct65hYF69AfwouEE6srRmQbtg+0EKahIfBngYNcEUXbp/HSX8A7fbvTWY/aaPcOqc3E8nAS79Vjcwf3PwwBEGS90ZQSMd5T70UICgXt0Bct6eHT7KLpJhL/eUFeMdiTDFEzGiDanBuXJzNaQThH/lWT3wDgM0ekIMoyFrYaNM7uSZgaZEyIl+B3la637h/qvXWF+NULprtu/VTE+ULg5vtysIdb3DLUyWNtqNy0aCSEmLZkJO7YSS0h+u57lQ2nhCxVu51SzcYPgX4Bxr2deo4pD43FGfF8WYZDo6mh4dlU4x6LJztJTo4/qzbeceX/5gvkVepNjyhRppFFUUQ1BXiJF7FgP80R1hbpPbjb72rmYH+V+qAS+jpeun5JiwmBifueTPFcmubmUkWhPlQpHt3wDqxnve6eSBqLEZ6LfF5CxoHbpU8PMsSmdMPLcntUCW9iVhvlHd0FZNByI2M5/sRNiUH6Z6LbqNftWYU3t9yp3lrE6OMo9NoJISgbBWkWkTVflpxWFjgX/2PcYkf7x3GWnE23gyQyURs4yVKznYBnkv3d/ddX5nB7xSA==
+  template:
+    metadata:
+      name: client-audiobookshelf
+      namespace: authelia

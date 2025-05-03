@@ -12,6 +12,7 @@ resources:
   - http-route.yaml
   - cnpg-db.yaml
   - clients/argocd.yaml
+  - clients/audiobookshelf.yaml
   - clients/netbird.yaml
 
 helmCharts:

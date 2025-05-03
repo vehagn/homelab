@@ -113,6 +113,21 @@ configMap:
           introspection_endpoint_auth_method: none
           pushed_authorization_request_endpoint_auth_method: none
 
+        - client_id: audiobookshelf
+          client_secret: { path: /secrets/client-audiobookshelf/client_secret.txt }
+          client_name: Audiobookshelf
+          public: false
+          authorization_policy: two_factor
+          pre_configured_consent_duration: 1 month
+          require_pkce: true
+          redirect_uris:
+            - https://abs.stonegarden.dev/audiobookshelf/auth/openid/callback
+            - https://abs.stonegarden.dev/audiobookshelf/auth/openid/mobile-redirect
+            - audiobookshelf://oauth
+          scopes: [ openid, groups, email, profile, offline_access ]
+          id_token_signed_response_alg: ES256
+          access_token_signed_response_alg: ES256
+
         - client_id: kubectl
           client_name: kubectl
           public: true
@@ -180,6 +195,10 @@ secret:
         - key: tls.crt
           path: tls.crt
     client-argocd:
+      items:
+        - key: clientSecret
+          path: client_secret.txt
+    client-audiobookshelf:
       items:
         - key: clientSecret
           path: client_secret.txt
