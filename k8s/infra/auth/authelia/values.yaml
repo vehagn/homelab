@@ -7,10 +7,15 @@ image:
 
 pod:
   kind: Deployment
+  env:
+    - name: TZ
+      value: Europe/Oslo
 
 configMap:
   default_2fa_method: totp
   theme: dark
+  log:
+    level: info
 
   identity_validation:
     reset_password:
@@ -25,8 +30,7 @@ configMap:
   session:
     encryption_key: { secret_name: crypto }
     cookies:
-      - subdomain: authelia
-        domain: stonegarden.dev
+      - domain: stonegarden.dev
 
   storage:
     encryption_key: { secret_name: crypto }
@@ -59,6 +63,11 @@ configMap:
       additional_groups_dn: ou=groups
       user: UID=authelia,OU=people,DC=stonegarden,DC=dev
       password: { secret_name: lldap-auth }
+      attributes:
+        extra:
+          audiobookshelf_groups:
+            multi_valued: true
+            value_type: string
 
   identity_providers:
     oidc:
@@ -80,11 +89,17 @@ configMap:
         allowed_origins_from_client_redirect_uris: true
         endpoints: [ userinfo, authorization, token, revocation, introspection ]
       claims_policies:
+        audiobookshelf:
+          custom_claims:
+            audiobookshelf: { attribute: audiobookshelf_groups }
         # https://www.authelia.com/integration/openid-connect/openid-connect-1.0-claims/#restore-functionality-prior-to-claims-parameter
         default:
-          id_token: [ groups, email, email_verified, alt_emails, preferred_username, name ]
+          id_token: [ email, email_verified, alt_emails, name, preferred_username, groups ]
         username_email:
-          id_token: [ email, email_verified, alt_emails, preferred_username, name ]
+          id_token: [ email, email_verified, alt_emails, name, preferred_username ]
+      scopes:
+        audiobookshelf:
+          claims: [ audiobookshelf ]
       clients:
         - client_id: argocd
           client_secret: { path: /secrets/client-argocd/client_secret.txt }
@@ -95,7 +110,7 @@ configMap:
           redirect_uris:
             - https://argocd.stonegarden.dev/auth/callback
             - https://argocd.stonegarden.dev/applications
-          scopes: [ openid, groups, email, profile, offline_access ]
+          scopes: [ openid, email, profile, offline_access, groups ]
           userinfo_signed_response_alg: none
           id_token_signed_response_alg: ES256
           access_token_signed_response_alg: ES256
@@ -106,7 +121,7 @@ configMap:
           authorization_policy: two_factor
           pre_configured_consent_duration: 1 month
           redirect_uris: [ http://localhost:8085/auth/callback ]
-          scopes: [ openid, groups, email, profile, offline_access ]
+          scopes: [ openid, email, profile, offline_access, groups ]
           id_token_signed_response_alg: ES256
           access_token_signed_response_alg: ES256
           revocation_endpoint_auth_method: none
@@ -117,14 +132,15 @@ configMap:
           client_secret: { path: /secrets/client-audiobookshelf/client_secret.txt }
           client_name: Audiobookshelf
           public: false
-          authorization_policy: two_factor
+          authorization_policy: one_factor
+          claims_policy: audiobookshelf
           pre_configured_consent_duration: 1 month
           require_pkce: true
           redirect_uris:
             - https://abs.stonegarden.dev/audiobookshelf/auth/openid/callback
             - https://abs.stonegarden.dev/audiobookshelf/auth/openid/mobile-redirect
             - audiobookshelf://oauth
-          scopes: [ openid, groups, email, profile, offline_access ]
+          scopes: [ openid, email, profile, offline_access, audiobookshelf ]
           id_token_signed_response_alg: ES256
           access_token_signed_response_alg: ES256
 
@@ -136,7 +152,7 @@ configMap:
           pre_configured_consent_duration: 1 month
           require_pkce: true
           redirect_uris: [ http://localhost:8000, http://localhost:18000 ]
-          scopes: [ openid, groups, email, profile, offline_access ]
+          scopes: [ openid, email, profile, offline_access, groups ]
           revocation_endpoint_auth_method: none
           introspection_endpoint_auth_method: none
           pushed_authorization_request_endpoint_auth_method: none
