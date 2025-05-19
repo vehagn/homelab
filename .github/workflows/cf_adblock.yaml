@@ -1,0 +1,122 @@
+name: Monthly Cloudflare Adblock Update
+
+on:
+  workflow_dispatch: # Allows manual triggering
+  schedule:
+    - cron: "0 0 1 * *" # Runs at 00:00 UTC on the 1st day of every month
+
+env:
+  TF_VAR_gcs_env: prod
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  update_cf_adblock:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/karteekiitg/k8s_setup:latest
+
+    steps:
+      - name: Checkout repository
+        id: checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Load .env file to environment
+        shell: bash
+        run: |
+          if [ -f "./.env" ]; then
+            echo "Sourcing .env file..."
+            grep -v '^[[:space:]]*#' ./.env | grep -v '^[[:space:]]*$' | grep '=' >> $GITHUB_ENV
+            echo "Finished processing .env file for GITHUB_ENV."
+          else
+            echo -e "\033[31mError: .env file not found at ./.\033[0m"
+            exit 1
+          fi
+
+      - name: Load secrets to environment
+        shell: bash
+        env: # Environment variables specific to THIS step
+          TF_VAR_infisical_client_secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
+        run: |
+          echo "Making setup_infisical.sh executable..."
+          chmod +x ./.devcontainer/setup_infisical.sh
+          echo "Running setup_infisical.sh..."
+          ./.devcontainer/setup_infisical.sh
+          if [ $? -ne 0 ]; then
+            echo -e "\033[31mError: setup_infisical.sh failed. See script output above for details.\033[0m"
+            exit 1
+          fi
+
+          EXPORT_FILE="$HOME/.infisical_exports.env"
+
+          if [ -f "$EXPORT_FILE" ]; then
+            echo "Sourcing secrets from $EXPORT_FILE to GITHUB_ENV (filtering, handling 'export' prefix, and stripping quotes)..."
+
+            # Pre-filter with grep to remove comments and truly empty lines, ensure '=' exists
+            # Then pipe into the while loop for further processing
+            grep -v '^[[:space:]]*#' "$EXPORT_FILE" | grep -v '^[[:space:]]*$' | grep '=' | \
+            while IFS= read -r line || [ -n "$line" ]; do # Read whole line
+              # Remove "export " prefix if it exists from the already filtered line
+              line_no_export="${line#export }"
+
+              # At this point, 'line_no_export' should be in KEY=VALUE format
+              # (possibly with quotes around VALUE) because of the preceding grep filters.
+              # We still split to handle the value quoting.
+
+              key="${line_no_export%%=*}"
+              value_with_potential_quotes="${line_no_export#*=}"
+
+              # Remove leading/trailing single quotes from value_with_potential_quotes
+              value_cleaned="${value_with_potential_quotes#\'}"
+              value_cleaned="${value_cleaned%\'}"
+              # Remove leading/trailing double quotes from value_with_potential_quotes
+              value_cleaned="${value_cleaned#\"}"
+              value_cleaned="${value_cleaned%\"}"
+
+              echo "$key=$value_cleaned" >> $GITHUB_ENV
+            done
+
+            echo "Finished processing $EXPORT_FILE for GITHUB_ENV."
+            echo "Removing $EXPORT_FILE..."
+            rm -f "$EXPORT_FILE"
+          else
+            echo -e "\033[31mError: Secrets export file ($EXPORT_FILE) was not found after running setup_infisical.sh.\033[0m"
+            exit 1
+          fi
+          echo "Secrets loaded and temporary file removed."
+
+      - name: Authenticate to Google Cloud
+        id: google-auth
+        uses: google-github-actions/auth@ba79af03959ebeac9769e648f473a284504d9193
+        with:
+          workload_identity_provider: ${{ env.GCP_WORKLOAD_IDENTITY_PROVIDER }} # Now from Infisical via env
+          service_account: ${{ env.GCP_SERVICE_ACCOUNT_EMAIL }} # Now from Infisical via env
+
+      - name: Run Adblock List Chunking Script
+        run: bash chunk_adblock_lists.sh 1000 90
+        working-directory: ./tofu/cf-adblock # Ensures script is run in the correct context
+
+      - name: OpenTofu Init for cf-adblock
+        run: tofu init
+        working-directory: ./tofu/cf-adblock
+
+      - name: OpenTofu Apply for cf-adblock
+        id: apply_cf_adblock
+        shell: bash
+        run: tofu apply -auto-approve
+        working-directory: ./tofu/cf-adblock
+
+      - name: Install Python dependencies
+        shell: bash
+        run: |
+          echo "Installing cloudflare Python library..."
+          pip3 install cloudflare
+
+      - name: Run Cloudflare Adblock Management Script
+        shell: bash
+        run: |
+          echo "Running Python script manage_cloudflare_adblock.py..."
+          python3 manage_cloudflare_adblock.py 1000 90
+        working-directory: ./tofu/cf-adblock # Runs Python script from the same dir as chunker & TF
