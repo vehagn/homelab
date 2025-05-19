@@ -1,0 +1,102 @@
+name: Monthly Cloudflare Adblock Update
+
+on:
+  workflow_dispatch: # Allows manual triggering
+  schedule:
+    - cron: "0 0 1 * *" # Runs at 00:00 UTC on the 1st day of every month
+
+env:
+  TF_VAR_gcs_env: prod
+
+jobs:
+  update_cf_adblock:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # Required to checkout the repository
+
+    steps:
+      - name: Checkout repository
+        id: checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Load .env file to environment
+        run: |
+          if [ -f "./.env" ]; then
+            echo "Sourcing .env file..."
+            grep -v '^[[:space:]]*#' ./.env | grep -v '^[[:space:]]*$' | grep '=' >> $GITHUB_ENV
+            echo "Finished processing .env file for GITHUB_ENV."
+          else
+            echo -e "\033[31mError: .env file not found at ./.\033[0m"
+            exit 1
+          fi
+
+      - name: Fetch tofu read-only secrets from Infisical
+        id: infisical-fetch-ro
+        uses: Infisical/secrets-action@08d433afae6a851f9081d0563a01a55fdf96568b
+        with:
+          domain: ${{ env.TF_VAR_infisical_domain }}
+          project-slug: ${{ env.TF_VAR_infisical_project_id }}
+          env-slug: prod
+          secret-path: "/tofu" # Secrets from the /tofu path
+          client-id: ${{ env.TF_VAR_infisical_client_id }}
+          client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
+          # The secrets-action exports fetched secrets as environment variables by default.
+
+      - name: Fetch tofu read-write secrets from Infisical
+        id: infisical-fetch-rw
+        uses: Infisical/secrets-action@08d433afae6a851f9081d0563a01a55fdf96568b
+        with:
+          domain: ${{ env.TF_VAR_infisical_domain }}
+          project-slug: ${{ env.TF_VAR_infisical_project_id }}
+          env-slug: prod
+          secret-path: "/tofu_rw" # Secrets from the /tofu_rw path
+          client-id: ${{ env.TF_VAR_infisical_client_id }} # Assuming same client ID/secret for both
+          client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
+          # The secrets-action exports fetched secrets as environment variables by default.
+
+      - name: Authenticate to Google Cloud
+        id: google-auth
+        uses: google-github-actions/auth@ba79af03959ebeac9769e648f473a284504d9193
+        with:
+          workload_identity_provider: ${{ env.GCP_WORKLOAD_IDENTITY_PROVIDER }} # Now from Infisical via env
+          service_account: ${{ env.GCP_SERVICE_ACCOUNT_EMAIL }} # Now from Infisical via env
+
+      - name: Setup OpenTofu
+        id: setup-tofu
+        uses: opentofu/setup-opentofu@592200bd4b9bbf4772ace78f887668b1aee8f716
+        with:
+          tofu_version: "1.9.1"
+
+      - name: Run Adblock List Chunking Script
+        run: bash chunk_adblock_lists.sh 1000
+        working-directory: ./tofu/cf-adblock # Ensures script is run in the correct context
+
+      - name: OpenTofu Init for cf-adblock
+        run: tofu init
+        working-directory: ./tofu/cf-adblock
+
+      - name: OpenTofu Plan for cf-adblock
+        id: plan
+        run: tofu plan -out=tfplan -detailed-exitcode
+        working-directory: ./tofu/cf-adblock
+        continue-on-error: true # Allows us to check the exit code
+
+      - name: OpenTofu Apply for cf-adblock
+        # Only apply if the plan has changes (exit code 2)
+        # Exit code 0 means no changes, 1 means error, 2 means changes exist.
+        if: steps.plan.outputs.exitcode == 2
+        run: tofu apply -auto-approve tfplan
+        working-directory: ./tofu/cf-adblock
+
+      - name: Plan Summary
+        run: |
+          echo "OpenTofu Plan Exit Code: ${{ steps.plan.outputs.exitcode }}"
+          if [ "${{ steps.plan.outputs.exitcode }}" = "0" ]; then
+            echo "No changes to apply."
+          elif [ "${{ steps.plan.outputs.exitcode }}" = "2" ]; then
+            echo "Changes were applied."
+          else
+            echo -e "\033[31mOpenTofu plan failed or had an error.\033[0m"
+            # You might want to add more error handling here
+          fi
+        working-directory: ./tofu/cf-adblock

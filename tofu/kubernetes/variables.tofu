@@ -10,9 +10,17 @@ variable "proxmox" {
 }
 
 variable "proxmox_api_token" {
-  description = "API token for Proxmox"
+  description = "Proxmox API Token"
   type        = string
   sensitive   = true
+  default     = null
+}
+
+variable "tofu_encryption_passphrase" {
+  description = "State encryption passphrase"
+  type        = string
+  sensitive   = true
+  default     = null
 }
 
 variable "talos_image" {
@@ -35,6 +43,7 @@ variable "talos_cluster_config" {
     name                         = string
     vip                          = optional(string)
     gateway                      = string
+    subnet_mask                  = optional(string, "24")
     talos_machine_config_version = optional(string)
     proxmox_cluster              = string
     kubernetes_version           = string
@@ -90,4 +99,18 @@ variable "kubernetes_volumes" {
       format  = optional(string, "raw")
     })
   )
+}
+
+# Define a variable for the GCS bucket name.
+# Set this in .env file in root, which should automatically set it in devcontainer env.
+variable "bucket_name" {
+  description = "The globally unique name for the GCS bucket."
+  type        = string
+}
+
+# Define a variable for part of gcs prefix.
+# This should be set automatically based on branch logic in devcontainer.
+variable "gcs_env" {
+  description = "Part of GCS prefix."
+  type        = string
 }

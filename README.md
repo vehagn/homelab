@@ -8,9 +8,11 @@ using [GitOps](https://en.wikipedia.org/wiki/DevOps) practices.
 Held together using [Proxmox VE](https://www.proxmox.com/en/proxmox-virtual-environment),
 [OpenTofu](https://opentofu.org/), [Talos](https://talos.dev), [Kubernetes](https://kubernetes.io/),
 [Argo CD](https://argoproj.github.io/cd/) and copious amounts of [YAML](https://yaml.org/) with some help
-from [Renovate](https://www.mend.io/renovate/).
+from [Renovate](https://www.mend.io/renovate/) and [DevContainers](https://containers.dev/).
 
 </div>
+
+DevContainer Usage [Instructions](.devcontainer/README.md).
 
 ---
 
@@ -76,7 +78,7 @@ to [this article](https://blog.stonegarden.dev/articles/2024/08/talos-proxmox-to
     ├── 📂 home-assistant  # Home Assistant VM
     └── 📂 kubernetes      # Kubernetes VM configuration
         ├── 📂 bootstrap   # Kubernetes bootstrap config
-        └── 📂 talos       # Talos configuration 
+        └── 📂 talos       # Talos configuration
 ```
 
 ## 🖥️ Hardware

@@ -11,6 +11,7 @@ output
 
 *secret*.tfvars
 *secret*.tfvars.json
+*secrets*.env
 !sealed-secrets.auto.tfvars
 
 *.lock.hcl
@@ -31,3 +32,5 @@ override.tf.json
 
 *.pem
 *.crt
+
+processed_adblock_chunks
