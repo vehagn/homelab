@@ -7,7 +7,7 @@ Changes if necessary:
 4. DevPod link below, to your liking. Note: workspace property below doesn't as of now. [Open Issue](https://github.com/loft-sh/devpod/issues/1843).
 5. Create docker/k8s provider in DevPod app. Change settings to your liking.
 
-[![Open in DevPod!](https://devpod.sh/assets/open-in-devpod.svg)](https://devpod.sh/open#git@github.com:karteekiitg/homelab.git@prod&workspace=my-k8s-workspace&provider=docker&ide=zed)
+[![Open in DevPod!](https://devpod.sh/assets/open-in-devpod.svg)](https://devpod.sh/open#git@github.com:karteekiitg/homelab.git&workspace=my-k8s-workspace&provider=docker&ide=zed)
 
 Note: If using branches for prod, staging, dev as intended, change the above link adding **@BRANCH** at the end of your git url (e.g. https://devpod.sh/open#git@github.com:karteekiitg/homelab.git@prod) or alternatively add it in devpod directly (need to do that everytime you create a workspace in ui or cmdline).
 

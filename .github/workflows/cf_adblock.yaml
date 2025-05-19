@@ -8,11 +8,15 @@ on:
 env:
   TF_VAR_gcs_env: prod
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   update_cf_adblock:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read # Required to checkout the repository
+    container:
+      image: ghcr.io/karteekiitg/k8s_setup:latest
 
     steps:
       - name: Checkout repository
@@ -20,6 +24,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Load .env file to environment
+        shell: bash
         run: |
           if [ -f "./.env" ]; then
             echo "Sourcing .env file..."
@@ -30,29 +35,57 @@ jobs:
             exit 1
           fi
 
-      - name: Fetch tofu read-only secrets from Infisical
-        id: infisical-fetch-ro
-        uses: Infisical/secrets-action@08d433afae6a851f9081d0563a01a55fdf96568b
-        with:
-          domain: ${{ env.TF_VAR_infisical_domain }}
-          project-slug: ${{ env.TF_VAR_infisical_project_id }}
-          env-slug: prod
-          secret-path: "/tofu" # Secrets from the /tofu path
-          client-id: ${{ env.TF_VAR_infisical_client_id }}
-          client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
-          # The secrets-action exports fetched secrets as environment variables by default.
+      - name: Load secrets to environment
+        shell: bash
+        env: # Environment variables specific to THIS step
+          TF_VAR_infisical_client_secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
+        run: |
+          echo "Making setup_infisical.sh executable..."
+          chmod +x ./.devcontainer/setup_infisical.sh
+          echo "Running setup_infisical.sh..."
+          ./.devcontainer/setup_infisical.sh
+          if [ $? -ne 0 ]; then
+            echo -e "\033[31mError: setup_infisical.sh failed. See script output above for details.\033[0m"
+            exit 1
+          fi
 
-      - name: Fetch tofu read-write secrets from Infisical
-        id: infisical-fetch-rw
-        uses: Infisical/secrets-action@08d433afae6a851f9081d0563a01a55fdf96568b
-        with:
-          domain: ${{ env.TF_VAR_infisical_domain }}
-          project-slug: ${{ env.TF_VAR_infisical_project_id }}
-          env-slug: prod
-          secret-path: "/tofu_rw" # Secrets from the /tofu_rw path
-          client-id: ${{ env.TF_VAR_infisical_client_id }} # Assuming same client ID/secret for both
-          client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
-          # The secrets-action exports fetched secrets as environment variables by default.
+          EXPORT_FILE="$HOME/.infisical_exports.env"
+
+          if [ -f "$EXPORT_FILE" ]; then
+            echo "Sourcing secrets from $EXPORT_FILE to GITHUB_ENV (filtering, handling 'export' prefix, and stripping quotes)..."
+
+            # Pre-filter with grep to remove comments and truly empty lines, ensure '=' exists
+            # Then pipe into the while loop for further processing
+            grep -v '^[[:space:]]*#' "$EXPORT_FILE" | grep -v '^[[:space:]]*$' | grep '=' | \
+            while IFS= read -r line || [ -n "$line" ]; do # Read whole line
+              # Remove "export " prefix if it exists from the already filtered line
+              line_no_export="${line#export }"
+
+              # At this point, 'line_no_export' should be in KEY=VALUE format
+              # (possibly with quotes around VALUE) because of the preceding grep filters.
+              # We still split to handle the value quoting.
+
+              key="${line_no_export%%=*}"
+              value_with_potential_quotes="${line_no_export#*=}"
+
+              # Remove leading/trailing single quotes from value_with_potential_quotes
+              value_cleaned="${value_with_potential_quotes#\'}"
+              value_cleaned="${value_cleaned%\'}"
+              # Remove leading/trailing double quotes from value_with_potential_quotes
+              value_cleaned="${value_cleaned#\"}"
+              value_cleaned="${value_cleaned%\"}"
+
+              echo "$key=$value_cleaned" >> $GITHUB_ENV
+            done
+
+            echo "Finished processing $EXPORT_FILE for GITHUB_ENV."
+            echo "Removing $EXPORT_FILE..."
+            rm -f "$EXPORT_FILE"
+          else
+            echo -e "\033[31mError: Secrets export file ($EXPORT_FILE) was not found after running setup_infisical.sh.\033[0m"
+            exit 1
+          fi
+          echo "Secrets loaded and temporary file removed."
 
       - name: Authenticate to Google Cloud
         id: google-auth
@@ -60,12 +93,6 @@ jobs:
         with:
           workload_identity_provider: ${{ env.GCP_WORKLOAD_IDENTITY_PROVIDER }} # Now from Infisical via env
           service_account: ${{ env.GCP_SERVICE_ACCOUNT_EMAIL }} # Now from Infisical via env
-
-      - name: Setup OpenTofu
-        id: setup-tofu
-        uses: opentofu/setup-opentofu@592200bd4b9bbf4772ace78f887668b1aee8f716
-        with:
-          tofu_version: "1.9.1"
 
       - name: Run Adblock List Chunking Script
         run: bash chunk_adblock_lists.sh 1000
@@ -75,28 +102,8 @@ jobs:
         run: tofu init
         working-directory: ./tofu/cf-adblock
 
-      - name: OpenTofu Plan for cf-adblock
-        id: plan
-        run: tofu plan -out=tfplan -detailed-exitcode
-        working-directory: ./tofu/cf-adblock
-        continue-on-error: true # Allows us to check the exit code
-
       - name: OpenTofu Apply for cf-adblock
-        # Only apply if the plan has changes (exit code 2)
-        # Exit code 0 means no changes, 1 means error, 2 means changes exist.
-        if: steps.plan.outputs.exitcode == 2
-        run: tofu apply -auto-approve tfplan
-        working-directory: ./tofu/cf-adblock
-
-      - name: Plan Summary
-        run: |
-          echo "OpenTofu Plan Exit Code: ${{ steps.plan.outputs.exitcode }}"
-          if [ "${{ steps.plan.outputs.exitcode }}" = "0" ]; then
-            echo "No changes to apply."
-          elif [ "${{ steps.plan.outputs.exitcode }}" = "2" ]; then
-            echo "Changes were applied."
-          else
-            echo -e "\033[31mOpenTofu plan failed or had an error.\033[0m"
-            # You might want to add more error handling here
-          fi
+        id: apply
+        shell: bash
+        run: tofu apply -auto-approve
         working-directory: ./tofu/cf-adblock

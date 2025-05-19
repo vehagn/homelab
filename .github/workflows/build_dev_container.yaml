@@ -1,31 +1,44 @@
 name: Build Dev Container
 
+# This workflow builds and maintains devcontainer base container images:
+# 1. With necessary kubernetes tools
+# 2. Builds multi-architecture container images (amd64/arm64)
+# 3. Tags them with date and commit hash identifiers
+# 4. Keeps the container registry clean by removing old images
+
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Manual trigger
   push:
     branches:
       - main
     paths:
-      - ".github/.devcontainer/**"
+      - ".github/.devcontainer/**" # Only run when devcontainer config changes
   schedule:
-    - cron: "0 0 1 * *" # Build latest image monthly
+    - cron: "0 0 1 * *" # Build latest image monthly to incorporate any missed updates
 
 env:
-  IMAGE_NAME: ghcr.io/karteekiitg/k8s_setup:latest
+  # Common variables used across jobs
+  IMAGE_REPO_NAME: "k8s_setup" # The name of your image repository
+  KEEP_RECENT_COUNT: 3 # Number of recent image versions to keep
+  DELETE_OLDER_THAN_DAYS: 30 # Delete images older than this many days
+  DRY_RUN_CLEANUP: "false" # Set to "true" for cleanup dry run mode
 
 jobs:
   build-and-push:
+    name: Build & Push Dev Container
     runs-on: ubuntu-latest
     permissions:
-      packages: "write"
-      contents: "write"
+      packages: "write" # Needed to push to GHCR
+      contents: "read" # Needed to read the repository
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         id: checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 1 # Only need the latest commit for the SHA
 
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -45,26 +58,94 @@ jobs:
             && rm -f devpod
           devpod provider add docker
 
-      - name: "Build and push image"
+      - name: Build and Push Architecture-Specific Images
         run: |
-          set -x
-          for ARCH in amd64 arm64; do
-            # Build for $ARCH
-            devpod build . --devcontainer-path .github/.devcontainer/devcontainer.json --platform linux/$ARCH --skip-push
-            ID=$(docker images --format "{{.ID}} {{.CreatedAt}} {{.Tag}}" | sort -rk 2 | grep "devpod" | awk 'NR==1{print $1}')
-            echo "found image: $ID"
-            if [ -z "${ID}" ]; then
-              echo "Image ID empty, exiting"
-              exit 0
+          # Set up image name and versioning
+          OWNER_LOWERCASE=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          IMAGE_NAME_BASE="ghcr.io/$OWNER_LOWERCASE/${{ env.IMAGE_REPO_NAME }}"
+
+          # Generate a version string: YYYYMMDD-HHMMSS-shortSHA
+          DATE_TAG=$(date +'%Y%m%d-%H%M%S')
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          VERSION_TAG_BASE="$DATE_TAG-$SHORT_SHA" # Base for versioned tags
+
+          echo "Building images for $IMAGE_NAME_BASE with version tag base: $VERSION_TAG_BASE"
+
+          # Build architecture-specific images
+          set -e # Exit on error
+          for ARCH in arm64 amd64; do
+            echo "Building and pushing for linux/$ARCH..."
+
+            # Each image gets tagged with:
+            # 1. latest-YYYYMMDD-HHMMSS-shortSHA-ARCH (versioned)
+            # 2. latest-ARCH (rolling latest for each architecture)
+            if ! devpod build . \
+              --devcontainer-path ".github/.devcontainer/devcontainer.json" \
+              --platform "linux/$ARCH" \
+              --tag "latest-$VERSION_TAG_BASE-$ARCH,latest-$ARCH" \
+              --repository "$IMAGE_NAME_BASE"; then
+
+              echo "Failed to build image for $ARCH"
+              exit 1
             fi
-            docker image ls
-            docker tag $ID $IMAGE_NAME-$ARCH
-            docker push $IMAGE_NAME-$ARCH
+
+            echo "Successfully built and pushed $ARCH image"
           done
 
-          # Combine into multi-arch image
-          docker manifest create $IMAGE_NAME \
-                 --amend $IMAGE_NAME-amd64 \
-                 --amend $IMAGE_NAME-arm64
+          # Create and push the :latest manifest (combines both architectures)
+          echo "Creating multi-architecture manifest for '$IMAGE_NAME_BASE:latest'..."
+          if ! docker manifest create "$IMAGE_NAME_BASE:latest" \
+                 --amend "$IMAGE_NAME_BASE:latest-arm64" \
+                 --amend "$IMAGE_NAME_BASE:latest-amd64"; then
 
-          docker manifest push $IMAGE_NAME
+            echo "Failed to create manifest"
+            exit 1
+          fi
+
+          if ! docker manifest push "$IMAGE_NAME_BASE:latest"; then
+            echo "Failed to push manifest"
+            exit 1
+          fi
+
+          echo "Successfully built and pushed all images for $IMAGE_NAME_BASE"
+
+  cleanup-ghcr-images:
+    name: Cleanup Old GHCR Images
+    runs-on: ubuntu-latest
+    needs: build-and-push # Run after build-and-push completes successfully
+    # Only run on scheduled events, manual dispatches, or pushes to main
+    if: success() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'push')
+    permissions:
+      packages: write # Needed to delete package versions
+      contents: read # Needed for gh to determine owner/repo
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.13.0"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./.github/workflows/python_scripts/requirements.txt
+
+      - name: Make Python cleanup script executable
+        run: |
+          chmod +x ./.github/workflows/python_scripts/cleanup_ghcr_images.py
+
+      - name: Run Python cleanup script
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ./.github/workflows/python_scripts/cleanup_ghcr_images.py \
+            --image_repo_name "${{ env.IMAGE_REPO_NAME }}" \
+            --keep_recent_count "${{ env.KEEP_RECENT_COUNT }}" \
+            --delete_older_than_days "${{ env.DELETE_OLDER_THAN_DAYS }}" \
+            --repo_owner "${{ github.repository_owner }}" \
+            --token "${{ secrets.GITHUB_TOKEN }}" \
+            ${{ env.DRY_RUN_CLEANUP == 'true' && '--dry_run' || '' }}
