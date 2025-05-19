@@ -35,7 +35,7 @@ jobs:
         uses: Infisical/secrets-action@08d433afae6a851f9081d0563a01a55fdf96568b
         with:
           domain: ${{ env.TF_VAR_infisical_domain }}
-          project-slug: ${{ env.TF_VAR_infisical_project_id }}
+          project-slug: ${{ env.TF_VAR_infisical_project_slug }}
           env-slug: prod
           secret-path: "/tofu" # Secrets from the /tofu path
           client-id: ${{ env.TF_VAR_infisical_client_id }}
