@@ -1,0 +1,62 @@
+name: Validate tofu formatting monthly
+
+on:
+  schedule:
+    # Runs at 00:00 UTC on the first day of every month
+    - cron: "0 0 1 * *"
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  check_all:
+    name: Check all tofu file formatting
+    runs-on: ubuntu-latest
+    # Permissions needed for the job
+    permissions:
+      contents: read # To check out the code
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@592200bd4b9bbf4772ace78f887668b1aee8f716 # v1.0.5
+        with:
+          tofu_version: latest
+
+      - name: Validate tofu fmt for all files in tofu/ directory
+        run: |
+          # Allow the script to continue even if tofu fmt fails for one file
+          set +e
+
+          # Initialize overall check status (0 = success, 1 = failure)
+          CHECK_STATUS=0
+
+          echo "Searching for and checking .tofu and .tfvars files in the 'tofu/' directory recursively..."
+          echo "### Tofu Format Check Results" >> $GITHUB_STEP_SUMMARY # Add a header to the summary
+
+          # Use find to locate files and pipe them safely to a while loop
+          # This handles filenames with spaces or special characters correctly.
+          find tofu/ -type f \( -name '*.tofu' -o -name '*.tfvars' \) -print0 | while IFS= read -r -d $'\0' file; do
+            echo "Checking tofu fmt on ${file}..." # Log which file is being checked
+
+            # Run tofu fmt in check mode. It exits with non-zero status if formatting is needed.
+            tofu fmt -check "${file}"
+            FMT_STATUS=$?
+
+            # If tofu fmt failed (exit status is not 0)
+            if [[ $FMT_STATUS -ne 0 ]]; then
+              # Add a failure message to the GitHub Actions summary
+              echo "❌ **${file}**: Needs formatting. Run \`tofu fmt\`." >> $GITHUB_STEP_SUMMARY
+              # Update the overall check status to failure
+              CHECK_STATUS=1
+            else
+              # Add a success message to the GitHub Actions summary
+              echo "✅ **${file}**: Formatted correctly." >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+
+          # Exit the step with the final check status
+          # If CHECK_STATUS is 1, the step (and job) will fail. If 0, it succeeds.
+          echo "Final check status: ${CHECK_STATUS}"
+          exit ${CHECK_STATUS}
