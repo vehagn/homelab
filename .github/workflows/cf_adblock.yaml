@@ -49,8 +49,6 @@ jobs:
 
           EXPORT_FILE="$HOME/.infisical_exports.env"
 
-          cat "$HOME/.infisical_exports.env"
-
           if [ -f "$EXPORT_FILE" ]; then
             echo "Sourcing secrets from $EXPORT_FILE to GITHUB_ENV (filtering, handling 'export' prefix, and stripping quotes)..."
 
@@ -76,8 +74,6 @@ jobs:
               value_cleaned="${value_cleaned%\"}"
 
               echo "$key=$value_cleaned" >> $GITHUB_ENV
-
-              echo "$key=$value_cleaned"
             done
 
             echo "Finished processing $EXPORT_FILE for GITHUB_ENV."
@@ -95,12 +91,6 @@ jobs:
         with:
           workload_identity_provider: ${{ env.GCP_WORKLOAD_IDENTITY_PROVIDER }} # Now from Infisical via env
           service_account: ${{ env.GCP_SERVICE_ACCOUNT_EMAIL }} # Now from Infisical via env
-
-      - name: Setup OpenTofu
-        id: setup-tofu
-        uses: opentofu/setup-opentofu@592200bd4b9bbf4772ace78f887668b1aee8f716
-        with:
-          tofu_version: "1.9.1"
 
       - name: Run Adblock List Chunking Script
         run: bash chunk_adblock_lists.sh 1000
