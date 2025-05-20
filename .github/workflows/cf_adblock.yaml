@@ -105,5 +105,5 @@ jobs:
       - name: OpenTofu Apply for cf-adblock
         id: apply
         shell: bash
-        run: tofu apply -auto-approve tfplan
+        run: tofu apply -auto-approve
         working-directory: ./tofu/cf-adblock
