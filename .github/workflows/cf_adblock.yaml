@@ -11,6 +11,8 @@ env:
 jobs:
   update_cf_adblock:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/karteekiitg/k8s_setup:latest
     permissions:
       contents: read # Required to checkout the repository
 
@@ -30,29 +32,27 @@ jobs:
             exit 1
           fi
 
-      - name: Fetch tofu read-only secrets from Infisical
-        id: infisical-fetch-ro
-        uses: Infisical/secrets-action@08d433afae6a851f9081d0563a01a55fdf96568b
-        with:
-          domain: ${{ env.TF_VAR_infisical_domain }}
-          project-slug: ${{ env.TF_VAR_infisical_project_slug }}
-          env-slug: prod
-          secret-path: "/tofu" # Secrets from the /tofu path
-          client-id: ${{ env.TF_VAR_infisical_client_id }}
-          client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
-          # The secrets-action exports fetched secrets as environment variables by default.
-
-      - name: Fetch tofu read-write secrets from Infisical
-        id: infisical-fetch-rw
-        uses: Infisical/secrets-action@08d433afae6a851f9081d0563a01a55fdf96568b
-        with:
-          domain: ${{ env.TF_VAR_infisical_domain }}
-          project-slug: ${{ env.TF_VAR_infisical_project_id }}
-          env-slug: prod
-          secret-path: "/tofu_rw" # Secrets from the /tofu_rw path
-          client-id: ${{ env.TF_VAR_infisical_client_id }} # Assuming same client ID/secret for both
-          client-secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
-          # The secrets-action exports fetched secrets as environment variables by default.
+      - name: Load secrets to environment
+        env: # Environment variables specific to THIS step
+          TF_VAR_infisical_client_secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
+        run: |
+          echo "Making setup_infisical.sh executable..."
+          chmod +x ./.devcontainer/setup_infisical.sh
+          echo "Running setup_infisical.sh..."
+          ./.devcontainer/setup_infisical.sh
+          if [ $? -ne 0 ]; then
+            echo -e "\033[31mError: setup_infisical.sh failed. See script output above for details.\033[0m"
+            exit 1
+          fi
+          if [ -f "$HOME/.infisical_exports.env" ]; then
+            echo "Sourcing .infisical_exports.env file..."
+            grep -v '^[[:space:]]*#' "$HOME/.infisical_exports.env" | grep -v '^[[:space:]]*$' | grep '=' >> $GITHUB_ENV
+            echo "Finished processing .infisical_exports.env file for GITHUB_ENV."
+            rm -f "$HOME/.infisical_exports.env"
+          else
+            echo -e "\033[31mError: .infisical_exports.env file not found ./.\033[0m"
+            exit 1
+          fi
 
       - name: Authenticate to Google Cloud
         id: google-auth
