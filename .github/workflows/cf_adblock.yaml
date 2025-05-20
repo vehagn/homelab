@@ -47,6 +47,8 @@ jobs:
 
           EXPORT_FILE="$HOME/.infisical_exports.env"
 
+          cat "$HOME/.infisical_exports.env"
+
           if [ -f "$EXPORT_FILE" ]; then
             echo "Sourcing secrets from $EXPORT_FILE to GITHUB_ENV (filtering, handling 'export' prefix, and stripping quotes)..."
 
@@ -72,6 +74,8 @@ jobs:
               value_cleaned="${value_cleaned%\"}"
 
               echo "$key=$value_cleaned" >> $GITHUB_ENV
+
+              echo "$key=$value_cleaned"
             done
 
             echo "Finished processing $EXPORT_FILE for GITHUB_ENV."
