@@ -24,6 +24,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Load .env file to environment
+        shell: bash
         run: |
           if [ -f "./.env" ]; then
             echo "Sourcing .env file..."
@@ -35,6 +36,7 @@ jobs:
           fi
 
       - name: Load secrets to environment
+        shell: bash
         env: # Environment variables specific to THIS step
           TF_VAR_infisical_client_secret: ${{ secrets.INFISICAL_CLIENT_SECRET }}
         run: |
@@ -100,32 +102,8 @@ jobs:
         run: tofu init
         working-directory: ./tofu/cf-adblock
 
-      - name: OpenTofu Plan for cf-adblock
-        id: plan # This ID is used by GHA to set steps.plan.outputs.exitcode
-        shell: bash
-        run: tofu plan -out=tfplan -detailed-exitcode
-        working-directory: ./tofu/cf-adblock
-        continue-on-error: true # Allows us to check the exit code
-
       - name: OpenTofu Apply for cf-adblock
         id: apply
         shell: bash
-        # Only apply if the plan has changes (tofu_plan_exit_code '2')
-        if: steps.plan.outputs.exitcode == '2'
         run: tofu apply -auto-approve tfplan
-        working-directory: ./tofu/cf-adblock
-        continue-on-error: true # Allows us to check the exit code
-
-      - name: Plan Summary
-        shell: bash
-        run: |
-          echo "OpenTofu Plan Exit Code: ${{ steps.plan.outputs.exitcode }}"
-          if [ "${{ steps.plan.outputs.exitcode }}" = "0" ]; then
-            echo "No changes to apply."
-          elif [ "${{ steps.plan.outputs.exitcode }}" = "2" ] && [ "${{ steps.plan.outputs.exitcode }}" = "0" ]; then
-            echo "Changes were applied."
-          else
-            echo -e "\033[31mOpenTofu plan failed or apply failed.\033[0m"
-            # You might want to add more error handling here
-          fi
         working-directory: ./tofu/cf-adblock
