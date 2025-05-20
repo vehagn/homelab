@@ -8,13 +8,15 @@ on:
 env:
   TF_VAR_gcs_env: prod
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   update_cf_adblock:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/karteekiitg/k8s_setup:latest
-    permissions:
-      contents: read # Required to checkout the repository
 
     steps:
       - name: Checkout repository
