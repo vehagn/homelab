@@ -44,15 +44,44 @@ jobs:
             echo -e "\033[31mError: setup_infisical.sh failed. See script output above for details.\033[0m"
             exit 1
           fi
-          if [ -f "$HOME/.infisical_exports.env" ]; then
-            echo "Sourcing .infisical_exports.env file..."
-            grep -v '^[[:space:]]*#' "$HOME/.infisical_exports.env" | grep -v '^[[:space:]]*$' | grep '=' >> $GITHUB_ENV
-            echo "Finished processing .infisical_exports.env file for GITHUB_ENV."
-            rm -f "$HOME/.infisical_exports.env"
+
+          EXPORT_FILE="$HOME/.infisical_exports.env"
+
+          if [ -f "$EXPORT_FILE" ]; then
+            echo "Sourcing secrets from $EXPORT_FILE to GITHUB_ENV (filtering, handling 'export' prefix, and stripping quotes)..."
+
+            # Pre-filter with grep to remove comments and truly empty lines, ensure '=' exists
+            # Then pipe into the while loop for further processing
+            grep -v '^[[:space:]]*#' "$EXPORT_FILE" | grep -v '^[[:space:]]*$' | grep '=' | \
+            while IFS= read -r line || [ -n "$line" ]; do # Read whole line
+              # Remove "export " prefix if it exists from the already filtered line
+              line_no_export="${line#export }"
+
+              # At this point, 'line_no_export' should be in KEY=VALUE format
+              # (possibly with quotes around VALUE) because of the preceding grep filters.
+              # We still split to handle the value quoting.
+
+              key="${line_no_export%%=*}"
+              value_with_potential_quotes="${line_no_export#*=}"
+
+              # Remove leading/trailing single quotes from value_with_potential_quotes
+              value_cleaned="${value_with_potential_quotes#\'}"
+              value_cleaned="${value_cleaned%\'}"
+              # Remove leading/trailing double quotes from value_with_potential_quotes
+              value_cleaned="${value_cleaned#\"}"
+              value_cleaned="${value_cleaned%\"}"
+
+              echo "$key=$value_cleaned" >> $GITHUB_ENV
+            done
+
+            echo "Finished processing $EXPORT_FILE for GITHUB_ENV."
+            echo "Removing $EXPORT_FILE..."
+            rm -f "$EXPORT_FILE"
           else
-            echo -e "\033[31mError: .infisical_exports.env file not found ./.\033[0m"
+            echo -e "\033[31mError: Secrets export file ($EXPORT_FILE) was not found after running setup_infisical.sh.\033[0m"
             exit 1
           fi
+          echo "Secrets loaded and temporary file removed."
 
       - name: Authenticate to Google Cloud
         id: google-auth
