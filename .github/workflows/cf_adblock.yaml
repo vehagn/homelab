@@ -103,61 +103,29 @@ jobs:
       - name: OpenTofu Plan for cf-adblock
         id: plan # This ID is used by GHA to set steps.plan.outputs.exitcode
         shell: bash
-        run: |
-          set -o pipefail # Ensures that if tofu plan fails, the script fails
-          tofu plan -out=tfplan -detailed-exitcode
-          PLAN_EXIT_CODE=$? # Capture the exit code of tofu plan
-
-          echo "tofu_plan_exit_code=${PLAN_EXIT_CODE}" >> $GITHUB_OUTPUT # Make it available as a step output
-
-          if [ $PLAN_EXIT_CODE -eq 1 ]; then
-            echo "OpenTofu plan encountered an error."
-            exit 1 # Explicitly fail the step for GHA if plan had an error
-          else
-            echo "OpenTofu plan completed. Exit code: $PLAN_EXIT_CODE (0=no changes, 2=changes exist)"
-            exit 0 # Explicitly mark step as success for GHA if 0 or 2
-          fi
+        run: tofu plan -out=tfplan -detailed-exitcode
         working-directory: ./tofu/cf-adblock
+        continue-on-error: true # Allows us to check the exit code
 
       - name: OpenTofu Apply for cf-adblock
         id: apply
-        # Only apply if the plan has changes (tofu_plan_exit_code '2')
-        if: steps.plan.outputs.tofu_plan_exit_code == '2'
         shell: bash
+        # Only apply if the plan has changes (tofu_plan_exit_code '2')
+        if: steps.plan.outputs.exitcode == '2'
         run: tofu apply -auto-approve tfplan
         working-directory: ./tofu/cf-adblock
+        continue-on-error: true # Allows us to check the exit code
 
       - name: Plan Summary
         shell: bash
-        # This step should ideally run regardless of the apply step's outcome,
-        # so 'if: always()' might be useful if previous steps could fail and you still want a summary.
-        # For now, it runs if the plan step didn't hard fail (exit 1).
         run: |
-          PLAN_DETAILED_EXIT_CODE="${{ steps.plan.outputs.tofu_plan_exit_code }}"
-          GHA_PLAN_STEP_EXIT_CODE="${{ steps.plan.exitcode }}" # Original GHA exit code for the plan step
-
-          echo "OpenTofu Plan Detailed Exit Code (from step output): $PLAN_DETAILED_EXIT_CODE"
-          echo "GitHub Actions 'OpenTofu Plan' Step Exit Code: $GHA_PLAN_STEP_EXIT_CODE"
-
-          if [ "$PLAN_DETAILED_EXIT_CODE" = "0" ]; then
-            echo "OpenTofu Plan: No changes were found."
-          elif [ "$PLAN_DETAILED_EXIT_CODE" = "2" ]; then
-            # Check if the apply step actually ran and its outcome
-            # This assumes you give the apply step an id: apply as shown above
-            if [ "${{ steps.apply.outcome }}" == "success" ] && [ "${{ steps.apply.conclusion }}" == "success" ]; then
-              echo "OpenTofu Plan: Changes were found and successfully applied."
-            elif [ "${{ steps.apply.outcome }}" == "failure" ] || [ "${{ steps.apply.conclusion }}" == "failure" ]; then
-              echo -e "\033[31mOpenTofu Plan: Changes were found, but the apply step failed.\033[0m"
-            elif [ "${{ steps.plan.outputs.tofu_plan_exit_code }}" == "2" ]; then
-              # This case means apply step was skipped because its 'if' condition wasn't met
-              # (e.g. if apply was conditional on something else beyond plan exit code 2)
-              # OR if the apply step doesn't have an id or outcome isn't being checked.
-              # For your current setup, if plan is 2, apply *should* run.
-              echo "OpenTofu Plan: Changes were found. Apply step was triggered."
-            fi
-          elif [ "$PLAN_DETAILED_EXIT_CODE" = "1" ]; then
-            echo -e "\033[31mOpenTofu Plan: Plan generation failed with an error (Code: $PLAN_DETAILED_EXIT_CODE).\033[0m"
+          echo "OpenTofu Plan Exit Code: ${{ steps.plan.outputs.exitcode }}"
+          if [ "${{ steps.plan.outputs.exitcode }}" = "0" ]; then
+            echo "No changes to apply."
+          elif [ "${{ steps.plan.outputs.exitcode }}" = "2" ] && [ "${{ steps.plan.outputs.exitcode }}" = "0" ]; then
+            echo "Changes were applied."
           else
-            echo -e "\033[31mOpenTofu Plan: Encountered an unexpected detailed exit code: $PLAN_DETAILED_EXIT_CODE.\033[0m"
+            echo -e "\033[31mOpenTofu plan failed or apply failed.\033[0m"
+            # You might want to add more error handling here
           fi
         working-directory: ./tofu/cf-adblock
