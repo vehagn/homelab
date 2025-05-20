@@ -102,6 +102,7 @@ jobs:
 
       - name: OpenTofu Plan for cf-adblock
         id: plan # This ID is used by GHA to set steps.plan.outputs.exitcode
+        shell: bash
         run: |
           set -o pipefail # Ensures that if tofu plan fails, the script fails
           tofu plan -out=tfplan -detailed-exitcode
@@ -122,10 +123,12 @@ jobs:
         id: apply
         # Only apply if the plan has changes (tofu_plan_exit_code '2')
         if: steps.plan.outputs.tofu_plan_exit_code == '2'
+        shell: bash
         run: tofu apply -auto-approve tfplan
         working-directory: ./tofu/cf-adblock
 
       - name: Plan Summary
+        shell: bash
         # This step should ideally run regardless of the apply step's outcome,
         # so 'if: always()' might be useful if previous steps could fail and you still want a summary.
         # For now, it runs if the plan step didn't hard fail (exit 1).
