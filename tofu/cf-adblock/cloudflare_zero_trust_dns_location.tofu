@@ -25,6 +25,7 @@ output "dns_location_homelab" {
   value = {
     # These attributes will be populated with the unique IPs/hostnames assigned by Cloudflare
     # after a successful 'tofu apply'.
+    id                      = cloudflare_zero_trust_dns_location.homelab.id # Added ID output for external scripts
     doh                     = "https://${cloudflare_zero_trust_dns_location.homelab.doh_subdomain}.cloudflare-gateway.com/dns-query"
     ipv4_destination        = cloudflare_zero_trust_dns_location.homelab.ipv4_destination
     ipv4_destination_backup = cloudflare_zero_trust_dns_location.homelab.ipv4_destination_backup # May not be populated if only one IPv4 is assigned
@@ -33,4 +34,9 @@ output "dns_location_homelab" {
     ip = cloudflare_zero_trust_dns_location.homelab.ip
     # dns_destination_ipv6_block_id is not relevant when Cloudflare assigns IPs.
   }
+}
+
+output "dns_location_homelab_id" {
+  description = "The ID of the HomeLab DNS location for use in other configurations or scripts."
+  value       = cloudflare_zero_trust_dns_location.homelab.id
 }

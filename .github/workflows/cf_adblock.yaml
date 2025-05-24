@@ -95,7 +95,7 @@ jobs:
           service_account: ${{ env.GCP_SERVICE_ACCOUNT_EMAIL }} # Now from Infisical via env
 
       - name: Run Adblock List Chunking Script
-        run: bash chunk_adblock_lists.sh 1000
+        run: bash chunk_adblock_lists.sh 1000 90
         working-directory: ./tofu/cf-adblock # Ensures script is run in the correct context
 
       - name: OpenTofu Init for cf-adblock
@@ -103,7 +103,20 @@ jobs:
         working-directory: ./tofu/cf-adblock
 
       - name: OpenTofu Apply for cf-adblock
-        id: apply
+        id: apply_cf_adblock
         shell: bash
         run: tofu apply -auto-approve
         working-directory: ./tofu/cf-adblock
+
+      - name: Install Python dependencies
+        shell: bash
+        run: |
+          echo "Installing cloudflare Python library..."
+          pip3 install cloudflare
+
+      - name: Run Cloudflare Adblock Management Script
+        shell: bash
+        run: |
+          echo "Running Python script manage_cloudflare_adblock.py..."
+          python3 manage_cloudflare_adblock.py 1000 90
+        working-directory: ./tofu/cf-adblock # Runs Python script from the same dir as chunker & TF
