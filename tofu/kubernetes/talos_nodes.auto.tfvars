@@ -18,7 +18,7 @@ talos_nodes = {
     cpu           = 4
     ram_dedicated = 20480
     igpu          = true
-    #update        = true
+#    update        = true
   }
   "ctrl-02" = {
     host_node     = "cantor"
@@ -28,7 +28,7 @@ talos_nodes = {
     vm_id         = 802
     cpu           = 4
     ram_dedicated = 6144
-    #update        = true
+#    update        = true
   }
   #    "work-00" = {
   #      host_node     = "abel"
