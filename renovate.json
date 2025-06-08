@@ -4,6 +4,12 @@
     "config:recommended",
     ":rebaseStalePrs"
   ],
+  "terraform": {
+    "managerFilePatterns": [
+      "/\\.tf$/",
+      "/\\.tofu$/"
+    ]
+  },
   "kustomize": {
     "managerFilePatterns": [
       "/(^|/)kustomization\\.ya?ml(\\.j2)?$/"
@@ -14,6 +20,7 @@
       "customType": "regex",
       "managerFilePatterns": [
         "/\\.tf$/",
+        "/\\.tofu$/",
         "/\\.tftpl$/",
         "/\\.yaml$/",
         "/\\.sh$/",
