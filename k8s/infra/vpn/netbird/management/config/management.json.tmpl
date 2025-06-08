@@ -34,22 +34,20 @@
   "Datadir": "",
   "HttpConfig": {
     "Address": "0.0.0.0:80",
-    "AuthAudience": "${AUTH_AUDIENCE:-${AUTH_CLIENT_ID}}",
+    "AuthAudience": "${AUTH_CLIENT_ID}",
     "AuthUserIDClaim": "${AUTH_USER_ID_CLAIM:-sub}",
     "CertFile": "${MGMT_API_CERT_FILE}",
     "CertKey": "${MGMT_API_CERT_KEY_FILE}",
-    "OIDCConfigEndpoint": "${AUTH_OIDC_CONFIGURATION_ENDPOINT:-${AUTH_AUTHORITY}/.well-known/openid-configuration}"
+    "OIDCConfigEndpoint": "${AUTH_AUTHORITY}/.well-known/openid-configuration"
   },
   "IdpManagerConfig": { },
   "DeviceAuthorizationFlow": { },
   "PKCEAuthorizationFlow": {
     "ProviderConfig": {
-      "Audience": "${AUTH_AUDIENCE:-${AUTH_CLIENT_ID}}",
+      "Audience": "${AUTH_CLIENT_ID}",
       "ClientID": "${AUTH_CLIENT_ID}",
       "ClientSecret": "${AUTH_CLIENT_SECRET}",
       "Domain": "",
-      "AuthorizationEndpoint": "${AUTH_PKCE_AUTHORIZATION_ENDPOINT:-${AUTH_AUTHORITY}/api/oidc/authorization}",
-      "TokenEndpoint": "${AUTH_PKCE_TOKEN_ENDPOINT:-${AUTH_AUTHORITY}/api/oidc/token}",
       "Scope": "${AUTH_SUPPORTED_SCOPES}",
       "RedirectURLs": ${AUTH_PKCE_REDIRECT_URLS:-[ "http://localhost:53000" ]},
       "UseIDToken": ${AUTH_PKCE_USE_ID_TOKEN:-true}
