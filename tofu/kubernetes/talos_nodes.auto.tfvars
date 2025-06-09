@@ -30,14 +30,14 @@ talos_nodes = {
     ram_dedicated = 6144
     #update        = true
   }
-  #    "work-00" = {
-  #      host_node     = "abel"
-  #      machine_type  = "worker"
-  #      ip            = "192.168.1.110"
-  #      dns           = ["1.1.1.1", "8.8.8.8"] # Optional Value.
-  #      mac_address   = "BC:24:11:2E:A8:00"
-  #      vm_id         = 810
-  #      cpu           = 8
-  #      ram_dedicated = 4096
-  #    }
+  "work-00" = {
+    host_node     = "abel"
+    machine_type  = "worker"
+    ip            = "192.168.1.110"
+    dns           = ["1.1.1.1", "8.8.8.8"] # Optional Value.
+    mac_address   = "BC:24:11:2E:A8:00"
+    vm_id         = 810
+    cpu           = 8
+    ram_dedicated = 4096
+  }
 }

@@ -1,0 +1,11 @@
+machine:
+  network:
+    interfaces:
+      - deviceSelector:
+          hardwareAddr: ${mac_address}
+        addresses:
+          - ${ip}/${subnet_mask}
+        routes:
+          - network: 0.0.0.0/0
+            gateway: ${gateway}
+        dhcp: false
