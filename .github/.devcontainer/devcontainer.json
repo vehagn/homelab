@@ -1,0 +1,40 @@
+{
+  "name": "DevPod Development Image",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": true,
+      "installOhMyZshConfig": true,
+      "upgradePackages": true,
+      "username": "homelab"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
+      "version": "latest",
+      "minikube": "none"
+    },
+    "ghcr.io/dhoeric/features/k9s:1": {
+      "version": "latest"
+    },
+    "ghcr.io/robbert229/devcontainer-features/opentofu:1": {
+      "version": "1.9.1"
+    },
+    "ghcr.io/devcontainers-extra/features/talosctl:1": {},
+    "ghcr.io/devcontainers-extra/features/helmfile:1": {},
+    "ghcr.io/devcontainers-extra/features/argo-cd:1": {},
+    "ghcr.io/dhoeric/features/google-cloud-cli:1": {
+      "installGkeGcloudAuthPlugin": "true"
+    },
+    "ghcr.io/devcontainers/features/aws-cli:1": {},
+    "ghcr.io/skriptfabrik/devcontainer-features/hcloud-cli:1": {},
+    "ghcr.io/robbert229/devcontainer-features/postgresql-client:1": {},
+    "ghcr.io/skriptfabrik/devcontainer-features/infisical-cli:1.1.1": {},
+    "ghcr.io/jungaretti/features/vim:1": {}
+  }
+}
