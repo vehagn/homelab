@@ -1,6 +1,18 @@
 machine:
-  kubelet:
-    ${indent(4, kubelet)}
+  network:
+    interfaces:
+      - deviceSelector:
+          hardwareAddr: ${mac_address}
+        addresses:
+          - ${ip}/${subnet_mask}
+        routes:
+          - network: 0.0.0.0/0
+            gateway: ${gateway}
+        dhcp: false
+%{ if vip != null }
+        vip:
+          ip: ${vip}
+%{ endif }
 
 cluster:
   allowSchedulingOnControlPlanes: true
