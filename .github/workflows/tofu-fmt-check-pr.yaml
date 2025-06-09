@@ -1,0 +1,92 @@
+name: Validate tofu formatting on pull request
+
+on:
+  # Triggers the workflow on pull request events targeting the main or prod branches
+  pull_request_target:
+    branches:
+      - main
+      - prod
+  # Also triggers on direct pull requests to main or prod (for forks or direct pushes)
+  pull_request:
+    branches:
+      - main
+      - prod
+
+jobs:
+  validate:
+    name: tofu fmt check
+    runs-on: ubuntu-latest
+    # Permissions needed for the job
+    permissions:
+      contents: read # To check out the code
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
+        with:
+          # Fetch depth 2 is needed for comparing changes in PRs
+          fetch-depth: 2
+
+      - name: Get changed files
+        id: changed_files # Assign an ID to refer to the outputs of this step
+        uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c # v46.0.5
+        with:
+          # Specify the output format for the list of files
+          files_separator: " " # Use space as a separator for the loop below
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@592200bd4b9bbf4772ace78f887668b1aee8f716 # v1.0.5
+        with:
+          tofu_version: latest
+
+      - name: Validate tofu fmt (added/modified)
+        run: |
+          # Allow the script to continue even if tofu fmt fails for one file
+          set +e
+
+          # Initialize check status (0 = success, 1 = failure)
+          CHECK_STATUS=0
+          echo "CHECK_STATUS=${CHECK_STATUS}" >> $GITHUB_ENV
+
+          echo "### Formatting Check for Changed Tofu Files" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          CHANGED_TOFU_FILES=""
+
+          # Loop through all files that were added or modified in the PR
+          # Use the output from the 'tj-actions/changed-files' step
+          for changed_file in ${{ steps.changed_files.outputs.all_changed_and_modified_files }}; do
+            echo "Checking tofu fmt on ${changed_file}..."
+
+            # Check if the file has a .tofu or .tfvars extension
+            if [[ $changed_file == *.tofu || $changed_file == *.tfvars ]]; then
+              CHANGED_TOFU_FILES="$CHANGED_TOFU_FILES $changed_file"
+              # Run tofu fmt in check mode. It exits with non-zero status if formatting is needed.
+              tofu fmt -check $changed_file
+              FMT_STATUS=$? # Capture the exit status of the tofu fmt command
+
+              # If tofu fmt failed (exit status is not 0)
+              if [[ $FMT_STATUS -ne 0 ]]; then
+                echo "- ❌ **${changed_file}** is not properly formatted. Please run \`tofu fmt\`." >> $GITHUB_STEP_SUMMARY
+                # Update the overall check status to failure
+                CHECK_STATUS=1
+                echo "CHECK_STATUS=${CHECK_STATUS}" >> $GITHUB_ENV
+              else
+                echo "- ✅ **${changed_file}** is properly formatted." >> $GITHUB_STEP_SUMMARY
+              fi
+            else
+              echo "Skipping non-tofu file: ${changed_file}"
+            fi
+          done
+
+          if [[ -z "$CHANGED_TOFU_FILES" ]]; then
+            echo "No changed or modified .tofu or .tfvars files found." >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Final check status: $CHECK_STATUS" >> $GITHUB_STEP_SUMMARY
+
+          # Exit the step with the final check status
+          # If CHECK_STATUS is 1, the step (and job) will fail. If 0, it succeeds.
+          echo "Final check status: $CHECK_STATUS"
+          exit $CHECK_STATUS
