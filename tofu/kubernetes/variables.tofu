@@ -10,9 +10,17 @@ variable "proxmox" {
 }
 
 variable "proxmox_api_token" {
-  description = "API token for Proxmox"
+  description = "Proxmox API Token"
   type        = string
   sensitive   = true
+  default     = null
+}
+
+variable "tofu_encryption_passphrase" {
+  description = "State encryption passphrase"
+  type        = string
+  sensitive   = true
+  default     = null
 }
 
 variable "talos_image" {
