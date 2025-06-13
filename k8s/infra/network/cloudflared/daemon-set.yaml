@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: cloudflared
-          image: cloudflare/cloudflared:2025.5.0 # renovate: docker=cloudflare/cloudflared
+          image: cloudflare/cloudflared:2025.6.0 # renovate: docker=cloudflare/cloudflared
           imagePullPolicy: IfNotPresent
           args:
             - tunnel
