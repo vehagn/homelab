@@ -1,24 +1,13 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    ":rebaseStalePrs"
-  ],
+  "extends": ["config:recommended", ":rebaseStalePrs"],
   "kustomize": {
-    "fileMatch": [
-      "(^|/)kustomization\\.ya?ml(\\.j2)?$"
-    ]
+    "fileMatch": ["(^|/)kustomization\\.ya?ml(\\.j2)?$"]
   },
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": [
-        "\\.tf$",
-        "\\.tftpl$",
-        "\\.yaml$",
-        "\\.sh$",
-        "\\.tfvars"
-      ],
+      "fileMatch": ["\\.tf$", "\\.tftpl$", "\\.yaml$", "\\.sh$", "\\.tfvars"],
       "matchStrings": [
         "(?<currentValue>[\\w+\\.\\-]*)['\",;]*\\s*#\\s?renovate: (?<datasource>\\S+)=(?<depName>\\S+)\\s?(registry=(?<registryUrl>\\S+))?\\s?(versioning=(?<versioning>\\S+))?"
       ]
@@ -35,48 +24,41 @@
     },
     {
       "groupName": "NetBird",
-      "matchPackageNames": [
-        "**/netbirdio/**",
-        "netbirdio/**"
-      ]
+      "matchPackageNames": ["**/netbirdio/**", "netbirdio/**"]
     },
     {
       "groupName": "Intel Device Plugins",
-      "matchPackageNames": [
-        "/intel-device-plugins/"
-      ]
+      "matchPackageNames": ["/intel-device-plugins/"]
     },
     {
       "groupName": "Cilium",
-      "matchPackageNames": [
-        "/cilium/"
-      ]
+      "matchPackageNames": ["/cilium/"]
     },
     {
-      "matchManagers": [
-        "terraform"
-      ],
-      "matchDepTypes": [
-        "provider",
-        "required_provider"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
+      "matchManagers": ["terraform"],
+      "matchDepTypes": ["provider", "required_provider"],
+      "matchUpdateTypes": ["minor", "patch"],
       "automerge": true
     },
     {
-      "description": "Manage and group GitHub Action updates (including commit SHAs)",
+      "description": "HIGHLY TRUSTED VENDORS: Automerge non-major updates for official and trusted actions",
       "matchManagers": ["github-actions"],
-      "groupName": "github-actions",
+      "matchPackagePatterns": [
+        "^actions/",
+        "^github/",
+        "^google-github-actions/",
+        "^opentofu/",
+        "^docker/"
+      ],
       "automerge": true,
       "automergeType": "pr",
-      "matchUpdateTypes": [
-        "minor",
-        "patch",
-        "digest"
-      ]
+      "matchUpdateTypes": ["digest", "minor", "patch"]
+    },
+    {
+      "description": "ALL OTHERS: Group all other GitHub Action updates for manual review",
+      "matchManagers": ["github-actions"],
+      "groupName": "github-actions-community",
+      "groupSlug": "github-actions-community"
     }
   ]
 }
