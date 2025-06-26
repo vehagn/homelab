@@ -1,0 +1,6 @@
+terraform {
+  backend "gcs" {
+    bucket = var.bucket_name
+    prefix = "kubernetes/${var.gcs_prefix_env}"
+  }
+}
