@@ -56,11 +56,12 @@ configMap:
       enabled: true
       implementation: lldap
       address: ldaps://lldap.stonegarden.dev
-      base_dn: dc=stonegarden,dc=dev
-      users_filter: (&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))
-      additional_users_dn: ou=people
-      groups_filter: (member={dn})
-      additional_groups_dn: ou=groups
+      base_dn: DC=stonegarden,DC=dev
+      additional_users_dn: ""
+      #additional_users_dn: OU=people
+      #additional_groups_dn: OU=groups
+      #users_filter: (&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))
+      #groups_filter: (member={DN})
       user: UID=authelia,OU=people,DC=stonegarden,DC=dev
       password: { secret_name: lldap-auth }
       attributes:
