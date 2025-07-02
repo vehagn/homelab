@@ -57,11 +57,6 @@ configMap:
       implementation: lldap
       address: ldaps://lldap.stonegarden.dev
       base_dn: DC=stonegarden,DC=dev
-      #additional_users_dn: ""
-      #additional_users_dn: OU=people
-      #additional_groups_dn: OU=groups
-      #users_filter: (&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))
-      #groups_filter: (member={DN})
       user: UID=authelia,OU=people,DC=stonegarden,DC=dev
       password: { secret_name: lldap-auth }
       attributes:
@@ -112,6 +107,7 @@ configMap:
             - https://argocd.stonegarden.dev/auth/callback
             - https://argocd.stonegarden.dev/applications
           scopes: [ openid, email, profile, offline_access, groups ]
+          grant_types: [ authorization_code, refresh_token ]
           userinfo_signed_response_alg: none
           id_token_signed_response_alg: ES256
           access_token_signed_response_alg: ES256
@@ -142,6 +138,7 @@ configMap:
             - https://abs.stonegarden.dev/audiobookshelf/auth/openid/mobile-redirect
             - audiobookshelf://oauth
           scopes: [ openid, email, profile, offline_access, audiobookshelf ]
+          grant_types: [ authorization_code, refresh_token ]
           id_token_signed_response_alg: ES256
           access_token_signed_response_alg: ES256
 
@@ -154,6 +151,7 @@ configMap:
           require_pkce: true
           redirect_uris: [ http://localhost:8000, http://localhost:18000 ]
           scopes: [ openid, email, profile, offline_access, groups ]
+          grant_types: [ authorization_code, refresh_token ]
           revocation_endpoint_auth_method: none
           introspection_endpoint_auth_method: none
           pushed_authorization_request_endpoint_auth_method: none
@@ -173,6 +171,7 @@ configMap:
             - https://netbird.stonegarden.dev/callback
             - https://netbird.stonegarden.dev/silent-callback
           scopes: [ openid, profile, email, offline_access ]
+          grant_types: [ authorization_code, refresh_token ]
           token_endpoint_auth_method: client_secret_post
 
 secret:
