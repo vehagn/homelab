@@ -4,35 +4,30 @@ terraform {
       source  = "hashicorp/google"
       version = "~> 6.33.0"
     }
-    infisical = {
-      source  = "infisical/infisical"
-      version = ">= 0.15.7"
-    }
-    external = {
-      source  = "hashicorp/external"
-      version = ">= 2.3.4"
-    }
   }
   encryption {
-    key_provider "pbkdf2" "my_passphrase" {
-      passphrase = var.tofu_encryption_passphrase
+    key_provider "pbkdf2" "encryption_passphrase" {
+      passphrase = var.encryption_passphrase
     }
-    method "aes_gcm" "my_method" {
-      keys = key_provider.pbkdf2.my_passphrase
+    method "aes_gcm" "encryption_method" {
+      keys = key_provider.pbkdf2.encryption_passphrase
     }
     state {
-      method   = method.aes_gcm.my_method
+      method   = method.aes_gcm.encryption_method
       enforced = true
     }
     plan {
-      method   = method.aes_gcm.my_method
+      method   = method.aes_gcm.encryption_method
       enforced = true
     }
   }
+  backend "gcs" {
+    bucket = var.bucket_name
+    prefix = var.state_prefix
+  }
 }
 
-# Configure the Google Cloud provider
 provider "google" {
-  project = var.gcp_project_id
-  region  = var.gcp_region
+  project = var.gcp.project_id
+  region  = var.gcp.region
 }

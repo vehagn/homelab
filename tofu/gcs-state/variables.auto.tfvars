@@ -1,8 +1,6 @@
-# The Google Cloud project ID to deploy resources into.
-gcp_project_id = "homelab-454718"
+gcp = {
+  project_id = "homelab-359819",
+  region = "europe-west1"
+}
 
-# Ideally, set TF_VAR_bucket_name in .env at root.
-# bucket_name = "kj-homelab-tf-state"
-
-# The Google Cloud region to deploy resources into.
-gcp_region = "us-east1"
+gcp_sa_dev_emails = ["veghag@gmail.com"]
