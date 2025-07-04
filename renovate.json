@@ -72,6 +72,34 @@
         "patch"
       ],
       "automerge": true
+    },
+    {
+      "description": "HIGHLY TRUSTED VENDORS: Automerge non-major updates for official and trusted actions",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchPackagePatterns": [
+        "^actions/",
+        "^github/",
+        "^google-github-actions/",
+        "^opentofu/",
+        "^docker/"
+      ],
+      "automerge": true,
+      "automergeType": "pr",
+      "matchUpdateTypes": [
+        "digest",
+        "minor",
+        "patch"
+      ]
+    },
+    {
+      "description": "ALL OTHERS: Group all other GitHub Action updates for manual review",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "groupName": "github-actions-community",
+      "groupSlug": "github-actions-community"
     }
   ]
 }
