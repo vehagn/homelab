@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/devcontainers/base:alpine
 
 # Install required packages
-RUN apk -U add \
+RUN apk add --no-cache \
     curl \
     bash \
     git \
