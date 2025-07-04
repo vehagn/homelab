@@ -66,12 +66,14 @@
       "matchDepTypes": [
         "provider",
         "required_provider"
+      ]
+    },
+    {
+      "matchManagers": [
+        "github-actions"
       ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "automerge": true
+      "groupName": "GitHub Actions",
+      "groupSlug": "github-actions"
     }
   ]
 }
