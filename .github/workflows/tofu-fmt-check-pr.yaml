@@ -62,7 +62,7 @@ jobs:
             if [[ $changed_file == *.tofu || $changed_file == *.tfvars ]]; then
               CHANGED_TOFU_FILES="$CHANGED_TOFU_FILES $changed_file"
               # Run tofu fmt in check mode. It exits with non-zero status if formatting is needed.
-              tofu fmt -check $changed_file
+              tofu fmt -check -diff $changed_file
               FMT_STATUS=$? # Capture the exit status of the tofu fmt command
 
               # If tofu fmt failed (exit status is not 0)
