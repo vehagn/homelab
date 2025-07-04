@@ -1,4 +1,4 @@
-FROM docker.io/docker:28.3.1-dind-alpine3.22
+FROM mcr.microsoft.com/devcontainers/base:alpine
 
 # Install required packages
 RUN apk -U add \
@@ -13,8 +13,7 @@ RUN apk -U add \
     k9s \
     yq \
     jq \
+    openssl \
     vim
 
 RUN curl -sL https://talos.dev/install | sh
-
-RUN adduser -s /bin/bash -D homelab -G docker
