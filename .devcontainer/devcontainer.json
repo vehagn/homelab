@@ -5,12 +5,5 @@
   "mounts": [
     "target=/tmp,type=tmpfs"
   ],
-  "features": {
-    "ghcr.io/devcontainers/features/common-utils:2": {
-      "username": "homelab"
-    },
-    "ghcr.io/devcontainers-extra/features/talosctl:1": {},
-  },
-  "overrideCommand": false,
   "remoteUser": "homelab",
 }
