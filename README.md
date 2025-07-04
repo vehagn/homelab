@@ -26,7 +26,8 @@ Most of the services run on [Talos](https://www.talos.dev/) flavoured [Kubernete
 though I'm also running a [TrueNAS](https://www.truenas.com/) VM for storage
 and [Home Assistant](https://www.home-assistant.io/) VM for home automation.
 
-To organise all the configuration I've opted for an approach using Kustomized Helm
+To organise all the configuration,
+I've opted for an approach using Kustomized Helm
 with [Argo CD](https://argoproj.github.io/cd/) which I've explained in more
 detail [in this article](https://blog.stonegarden.dev/articles/2023/09/argocd-kustomize-with-helm/).
 
@@ -34,9 +35,9 @@ I journal my homelab journey over at my self-hosted [blog](https://blog.stonegar
 
 ## 🧑‍💻 Getting Started
 
-If you're new to Kubernetes I've written a fairly thorough guide
+If you're new to Kubernetes, I've written a fairly thorough guide
 on [Bootstrapping k3s with Cilium](https://blog.stonegarden.dev/articles/2024/02/bootstrapping-k3s-with-cilium/).
-In the article I try to guide you from a fresh Debian 12 Bookworm install to a working cluster using
+In the article I try to guide you from a fresh Debian 12 Bookworm installation to a working cluster using
 the [k3s](https://k3s.io) flavour of Kubernetes with [Cilium](https://cilium.io) as a [CNI](https://www.cni.dev)
 and [IngressController](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
@@ -46,6 +47,12 @@ is more your thing.
 
 The current iteration of my homelab runs on [Talos](https://talos.dev) Kubernetes and is set up according
 to [this article](https://blog.stonegarden.dev/articles/2024/08/talos-proxmox-tofu/).
+
+## 🏃 Devcontainer
+
+A [devcontainer](https://containers.dev/) containing the required tools is available for this repository
+as [ghcr.io/vehagn/homelab-devcontainer](https://github.com/vehagn/homelab/pkgs/container/homelab-devcontainer).
+See [./devcontainer](./.devcontainer) for details.
 
 ## ⚙️ Core Components
 
