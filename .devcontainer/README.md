@@ -15,6 +15,17 @@ Note: Suggest to use original image (i.e no need to change step 1,2 and 3) to re
 
 Note: By default, tries to load `.env` from the project root and `.devcontainer/infisical_secrets.env` to the environment variables in the devcontainer.
 
+Example `.env`
+
+```shell
+TF_VAR_infisical_domain=<infisical_domain>
+TF_VAR_infisical_client_id=<infisical_client_id>
+TF_VAR_infisical_project_id=<infisical_project_id>
+TF_VAR_infisical_ro_secrets_path=/tofu
+TF_VAR_infisical_rw_secrets_path=/tofu_rw
+TF_VAR_bucket_name=<bucket_name>
+```
+
 ## Infisical Setup (Optional)
 
 1.  **Infisical Console**:
