@@ -1,0 +1,61 @@
+name: OpenTofu validation
+
+on:
+  push:
+    branches: [ '**' ]
+    paths:
+      - '**.tf'
+      - '**.tofu'
+      - '**.tfvars'
+      - '**.tftpl'
+  pull_request:
+    branches: [ main ]
+  pull_request_target:
+    branches: [ main ]
+
+permissions:
+  packages: write
+
+jobs:
+  validate-tofu:
+    name: Validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      TOFU_DIR: tofu/kubernetes
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 #v3.4.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tofu init
+        uses: devcontainers/ci@8bf61b26e9c3a98f69cb6ce2f88d24ff59b785c6 #v0.3.1900000417
+        with:
+          imageName: ghcr.io/vehagn/homelab-devcontainer
+          cacheFrom: ghcr.io/vehagn/homelab-devcontainer
+          push: never
+          runCmd: tofu -chdir=${{ env.TOFU_DIR }} init
+
+      - name: Tofu validate
+        uses: devcontainers/ci@8bf61b26e9c3a98f69cb6ce2f88d24ff59b785c6 #v0.3.1900000417
+        with:
+          imageName: ghcr.io/vehagn/homelab-devcontainer
+          cacheFrom: ghcr.io/vehagn/homelab-devcontainer
+          push: never
+          runCmd: tofu -chdir=${{ env.TOFU_DIR }} validate
+
+      - name: Tofu format
+        uses: devcontainers/ci@8bf61b26e9c3a98f69cb6ce2f88d24ff59b785c6 #v0.3.1900000417
+        with:
+          imageName: ghcr.io/vehagn/homelab-devcontainer
+          cacheFrom: ghcr.io/vehagn/homelab-devcontainer
+          push: never
+          runCmd: tofu -chdir=${{ env.TOFU_DIR }} fmt -recursive -diff -check
