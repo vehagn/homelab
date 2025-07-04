@@ -1,0 +1,15 @@
+{
+  "build": {
+    "dockerfile": "Containerfile"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": "true",
+      "username": "homelab",
+      "userUid": "1001",
+      "userGid": "1001",
+      "upgradePackages": "true"
+    },
+  },
+  "remoteUser": "homelab"
+}
