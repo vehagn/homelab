@@ -1,0 +1,12 @@
+terraform {
+  backend "s3" {
+    bucket                      = var.bucket_name
+    key                         = "remote-state/cf/${var.branch_env}"
+    region                      = "auto"
+    endpoint                    = "https://${var.cloudflare_account_id}.r2.cloudflarestorage.com"
+    access_key                  = var.cloudflare_r2_tofu_access_key
+    secret_key                  = var.cloudflare_r2_tofu_access_secret
+    skip_credentials_validation = true
+    skip_metadata_api_check     = true
+  }
+}

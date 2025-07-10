@@ -1,6 +1,6 @@
 terraform {
   backend "gcs" {
     bucket = var.bucket_name
-    prefix = "kubernetes/${var.branch_env}"
+    prefix = "remote-state/gcs/${var.branch_env}"
   }
 }

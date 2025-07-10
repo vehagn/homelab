@@ -21,16 +21,16 @@ _zsh_setup_homelab_env() {
   export GIT_BRANCH=\$(git symbolic-ref --short HEAD 2>/dev/null || echo 'unknown')
   echo "Zsh: GIT_BRANCH set to '\$GIT_BRANCH'"
 
-  # 2. Set TF_VAR_gcs_env based on GIT_BRANCH
-  echo "Zsh: Setting TF_VAR_gcs_env based on GIT_BRANCH ('\$GIT_BRANCH')..."
+  # 2. Set TF_VAR_branch_env based on GIT_BRANCH
+  echo "Zsh: Setting TF_VAR_branch_env based on GIT_BRANCH ('\$GIT_BRANCH')..."
   if [ "\$GIT_BRANCH" = "main" ] || [ "\$GIT_BRANCH" = "prod" ]; then
-    export TF_VAR_gcs_env="prod"
+    export TF_VAR_branch_env="prod"
   elif [ "\$GIT_BRANCH" = "staging" ]; then
-    export TF_VAR_gcs_env="staging"
+    export TF_VAR_branch_env="staging"
   else
-    export TF_VAR_gcs_env="dev"
+    export TF_VAR_branch_env="dev"
   fi
-  echo "Zsh: TF_VAR_gcs_env set to '\$TF_VAR_gcs_env'"
+  echo "Zsh: TF_VAR_branch_env set to '\$TF_VAR_branch_env'"
 
   # 3. Source .env file
   if [ -f "$ENV_FILE_PATH" ]; then

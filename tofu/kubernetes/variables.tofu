@@ -101,16 +101,26 @@ variable "kubernetes_volumes" {
   )
 }
 
-# Define a variable for the GCS bucket name.
+# Define a variable for the bucket name.
 # Set this in .env file in root, which should automatically set it in devcontainer env.
 variable "bucket_name" {
-  description = "The globally unique name for the GCS bucket."
+  description = "The globally unique name for the bucket."
   type        = string
+
+  validation {
+    condition     = can(regex("^[a-z0-9][a-z0-9-]*[a-z0-9]$", var.bucket_name))
+    error_message = "Bucket name must be lowercase, alphanumeric, and hyphens only."
+  }
+
+  validation {
+    condition     = length(var.bucket_name) >= 3 && length(var.bucket_name) <= 63
+    error_message = "Bucket name must be between 3 and 63 characters."
+  }
 }
 
-# Define a variable for part of gcs prefix.
+# Define a variable for part of bucket prefix.
 # This should be set automatically based on branch logic in devcontainer.
-variable "gcs_env" {
-  description = "Part of GCS prefix."
+variable "branch_env" {
+  description = "Part of bucket prefix."
   type        = string
 }
