@@ -9,3 +9,16 @@ variable "wif_config" {
     provider_display_name = string
   })
 }
+
+variable "gcp" {
+  description = "Google Cloud project ID and region to deploy resources into"
+  type = object({
+    project_id = string,
+    region     = string
+  })
+}
+
+variable "service_account_name" {
+  description = "GCP SA Dev emails"
+  type        = string
+}

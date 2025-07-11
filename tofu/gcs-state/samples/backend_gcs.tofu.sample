@@ -1,6 +1,0 @@
-terraform {
-  backend "gcs" {
-    bucket = var.bucket_name
-    prefix = "gcs-state/${var.gcs_prefix_env}"
-  }
-}

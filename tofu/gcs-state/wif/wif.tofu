@@ -1,13 +1,10 @@
-# --- Workload Identity Federation for GitHub Actions ---
-
-# Data source to get the current project details (like project number)
 data "google_project" "current" {
-  project_id = var.gcp_project_id # Assuming var.gcp_project_id is defined and set
+  project_id = var.gcp.project_id # Assuming var.gcp_project_id is defined and set
 }
 
 # 1. Create a Workload Identity Pool
 resource "google_iam_workload_identity_pool" "github_pool" {
-  project                   = var.gcp_project_id
+  project                   = var.gcp.project_id
   workload_identity_pool_id = var.wif_config.pool_id
   display_name              = var.wif_config.pool_display_name
   description               = "Workload Identity Pool for GitHub Actions to access GCP resources for ${var.wif_config.github_owner}/${var.wif_config.github_repository}"
@@ -16,7 +13,7 @@ resource "google_iam_workload_identity_pool" "github_pool" {
 
 # 2. Create a Workload Identity Provider within the pool for GitHub
 resource "google_iam_workload_identity_pool_provider" "github_provider" {
-  project                            = var.gcp_project_id
+  project                            = var.gcp.project_id
   workload_identity_pool_id          = google_iam_workload_identity_pool.github_pool.workload_identity_pool_id
   workload_identity_pool_provider_id = var.wif_config.provider_id
   display_name                       = var.wif_config.provider_display_name
@@ -44,7 +41,7 @@ resource "google_iam_workload_identity_pool_provider" "github_provider" {
 # This allows workflows from your GitHub repository (matching the provider's condition)
 # to generate tokens for the 'tofu-dev-sa' service account (defined in gcs.tofu).
 resource "google_service_account_iam_member" "github_wif_user_for_tofu_sa" {
-  service_account_id = google_service_account.tofu_dev_sa.name # From gcs.tofu
+  service_account_id = var.service_account_name
   role               = "roles/iam.workloadIdentityUser"
 
   # This member principal string identifies the GitHub Actions principals that can impersonate.

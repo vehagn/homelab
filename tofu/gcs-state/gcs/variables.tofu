@@ -3,9 +3,12 @@ variable "bucket_name" {
   type        = string
 }
 
-variable "region" {
-  description = "Google Cloud region to deploy resources into"
-  type = string
+variable "gcp" {
+  description = "Google Cloud project ID and region to deploy resources into"
+  type = object({
+    project_id = string,
+    region     = string
+  })
 }
 
 variable "gcp_sa_dev_emails" {

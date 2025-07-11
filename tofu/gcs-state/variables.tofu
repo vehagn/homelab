@@ -1,3 +1,9 @@
+variable "encryption_passphrase" {
+  description = "Encryption passphrase for Tofu state encryption"
+  type        = string
+  sensitive   = true
+}
+
 variable "gcp" {
   description = "Google Cloud project ID and region to deploy resources into"
   type = object({
@@ -22,8 +28,14 @@ variable "gcp_sa_dev_emails" {
   type = list(string)
 }
 
-variable "encryption_passphrase" {
-  description = "Encryption passphrase for Tofu state encryption"
-  type        = string
-  sensitive   = true
+variable "wif_config" {
+  description = "Configuration for Workload Identity Federation with GitHub Actions."
+  type = object({
+    github_owner          = string
+    github_repository     = string
+    pool_id               = string
+    pool_display_name     = string
+    provider_id           = string
+    provider_display_name = string
+  })
 }

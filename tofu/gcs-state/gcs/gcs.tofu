@@ -14,7 +14,7 @@ resource "google_service_account_iam_member" "tofu_dev_sa_token_creator" {
 # Bucket names must be globally unique.
 resource "google_storage_bucket" "tofu_remote_state" {
   name          = var.bucket_name
-  location      = var.region
+  location      = var.gcp.region
   storage_class = "STANDARD"
 
   uniform_bucket_level_access = true
