@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TARGET_INFISICAL_ENV_SLUG="$TF_VAR_gcs_env"
+TARGET_INFISICAL_ENV_SLUG="$TF_VAR_branch_env"
 
 if [[ -v TF_VAR_infisical_domain ]] && [[ -n "$TF_VAR_infisical_domain" ]] &&
    [[ -v TF_VAR_infisical_client_id ]] && [[ -n "$TF_VAR_infisical_client_id" ]] &&
@@ -36,7 +36,7 @@ else
   if [[ ! -v TF_VAR_infisical_project_id ]]; then echo -e "\033[31m  - TF_VAR_infisical_project_id\033[0m"; fi
   if [[ ! -v TF_VAR_infisical_ro_secrets_path ]]; then echo -e "\033[31m  - TF_VAR_infisical_ro_secrets_path\033[0m"; fi
   if [[ ! -v TF_VAR_infisical_rw_secrets_path ]]; then echo -e "\033[31m  - TF_VAR_infisical_rw_secrets_path\033[0m"; fi
-  if [[ ! -v TARGET_INFISICAL_ENV_SLUG ]]; then echo -e "\033[31m  - TF_VAR_gcs_env\033[0m"; fi
+  if [[ ! -v TARGET_INFISICAL_ENV_SLUG ]]; then echo -e "\033[31m  - TARGET_INFISICAL_ENV_SLUG\033[0m"; fi
   if [[ ! -v TF_VAR_infisical_client_secret ]]; then echo -e "\033[31m  - TF_VAR_infisical_client_secret\033[0m"; fi
 fi
 

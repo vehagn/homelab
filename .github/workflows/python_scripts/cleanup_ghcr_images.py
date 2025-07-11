@@ -383,7 +383,7 @@ def _should_retry_request_error(
   # Type narrowing for response attribute
   response = e.response if hasattr(e, 'response') else None
   status_code = response.status_code if response is not None else None
-
+  
   is_critical, reason = ErrorClassification.classify_error(
     error_msg,
     status_code=status_code,

@@ -4,20 +4,18 @@
 // see the documentation: https://zed.dev/docs/configuring-zed#settings-files
 {
   "file_types": {
-    "Terraform": [
-      "tofu",
-      "terraform",
-      "tf",
-      "tfvars",
-      "tfvars.json",
-      "auto.tfvars",
-      "auto.tfvars.json",
-      "tfvars.yaml",
-      "tfvars.yml",
-      "tofu.sample",
-      "terraform.sample",
-      "tf.sample"
-    ]
+    "OpenTofu": ["tofu"],
+    "OpenTofu Vars": ["tfvars"]
+  },
+  "languages": {
+    "OpenTofu": {
+      "formatter": {
+        "external": {
+          "command": "tofu",
+          "arguments": ["fmt", "-"]
+        }
+      }
+    }
   },
   "tab_size": 2
 }
