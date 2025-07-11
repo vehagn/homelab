@@ -37,22 +37,26 @@ resource "talos_image_factory_schematic" "updated" {
   schematic = local.update_schematic
 }
 
+# Note the ellipsis (...) after the for-loop. This collects values with same keys into a list.
+# The key is purposefully made up of the values (image_id contains both schematic id and version),
+# since all values under a key therefore are the same, we can simply select the first element of the value list.
+# Improvements are welcome!
 resource "proxmox_virtual_environment_download_file" "this" {
   for_each = {
     for k, v in var.nodes :
     "${v.host_node}_${v.update == true ? local.update_image_id : local.image_id}" => {
       host_node = v.host_node
-      version   = v.update == true ? local.update_version : local.version
       schematic = v.update == true ? talos_image_factory_schematic.updated.id : talos_image_factory_schematic.this.id
-    }
+      version   = v.update == true ? local.update_version : local.version
+    }...
   }
 
-  node_name    = each.value.host_node
+  node_name    = each.value[0].host_node
   content_type = "iso"
   datastore_id = var.image.proxmox_datastore
 
-  file_name               = "talos-${each.value.schematic}-${each.value.version}-${var.image.platform}-${var.image.arch}.img"
-  url                     = "${var.image.factory_url}/image/${each.value.schematic}/${each.value.version}/${var.image.platform}-${var.image.arch}.raw.gz"
+  file_name               = "talos-${each.value[0].schematic}-${each.value[0].version}-${var.image.platform}-${var.image.arch}.img"
+  url                     = "${var.image.factory_url}/image/${each.value[0].schematic}/${each.value[0].version}/${var.image.platform}-${var.image.arch}.raw.gz"
   decompression_algorithm = "gz"
   overwrite               = false
 }

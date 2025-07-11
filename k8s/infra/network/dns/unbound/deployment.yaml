@@ -37,7 +37,7 @@ spec:
               memory: 128Mi
           startupProbe:
             exec:
-              command: ['drill', '@127.0.0.1', '-p', '53', 'nrk.no']
+              command: [ 'drill', '@127.0.0.1', '-p', '53', 'nrk.no' ]
             initialDelaySeconds: 10
             failureThreshold: 3
             timeoutSeconds: 5
@@ -45,7 +45,23 @@ spec:
             - name: config
               mountPath: /opt/unbound/etc/unbound/unbound.conf
               subPath: unbound.conf
+            - name: a-records
+              mountPath: /opt/unbound/etc/unbound/a-records.conf
+              subPath: a-records.conf
+            - name: forward-records
+              mountPath: /opt/unbound/etc/unbound/forward-records.conf
+              subPath: forward-records.conf
+            - name: srv-records
+              mountPath: /opt/unbound/etc/unbound/srv-records.conf
+              subPath: srv-records.conf
       volumes:
         - name: config
           configMap:
             name: unbound-config
+            items: [ { key: unbound.conf.default, path: unbound.conf } ]
+        - name: a-records
+          configMap: { name: unbound-a-records }
+        - name: forward-records
+          configMap: { name: unbound-forward-records }
+        - name: srv-records
+          configMap: { name: unbound-srv-records }

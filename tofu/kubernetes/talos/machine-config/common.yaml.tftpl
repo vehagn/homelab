@@ -1,24 +1,12 @@
 machine:
+  kubelet:
+    image: ghcr.io/siderolabs/kubelet:${kubernetes_version}
+    ${indent(4, kubelet)}
   nodeLabels:
     topology.kubernetes.io/region: ${cluster_name}
     topology.kubernetes.io/zone: ${node_name}
-  kubelet:
-    image: ghcr.io/siderolabs/kubelet:${kubernetes_version}
   network:
     hostname: ${hostname}
-    interfaces:
-      - deviceSelector:
-          hardwareAddr: ${mac_address}
-        addresses:
-          - ${ip}/${subnet_mask}
-        routes:
-          - network: 0.0.0.0/0
-            gateway: ${gateway}
-        dhcp: false
-%{ if vip != null }
-        vip:
-          ip: ${vip}
-%{ endif }
   sysctls:
     fs.inotify.max_user_watches: 1048576   # Watchdog
     fs.inotify.max_user_instances: 8192    # Watchdog

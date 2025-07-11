@@ -15,6 +15,7 @@ configMapGenerator:
       - LLDAP_LDAPS_OPTIONS__ENABLED="true"
       - LLDAP_LDAPS_OPTIONS__CERT_FILE="/cert/tls.crt"
       - LLDAP_LDAPS_OPTIONS__KEY_FILE="/cert/tls.key"
+      - RUST_LOG=warn
   - name: bootstrap-env
     namespace: lldap
     literals:

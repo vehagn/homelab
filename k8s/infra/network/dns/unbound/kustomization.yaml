@@ -6,6 +6,18 @@ configMapGenerator:
     namespace: dns
     files:
       - config/unbound.conf
+      - config/unbound.conf.example
+      - config/unbound.conf.default
+      - config/unbound.conf.recursive
+  - name: unbound-a-records
+    namespace: dns
+    files: [ config/a-records.conf ]
+  - name: unbound-forward-records
+    namespace: dns
+    files: [ config/forward-records.conf ]
+  - name: unbound-srv-records
+    namespace: dns
+    files: [ config/srv-records.conf ]
 
 resources:
   - svc.yaml

@@ -1,13 +1,31 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", ":rebaseStalePrs"],
+  "extends": [
+    "config:recommended",
+    ":rebaseStalePrs"
+  ],
+  "terraform": {
+    "managerFilePatterns": [
+      "/\\.tf$/",
+      "/\\.tofu$/"
+    ]
+  },
   "kustomize": {
-    "fileMatch": ["(^|/)kustomization\\.ya?ml(\\.j2)?$"]
+    "managerFilePatterns": [
+      "/(^|/)kustomization\\.ya?ml(\\.j2)?$/"
+    ]
   },
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["\\.tf$", "\\.tftpl$", "\\.yaml$", "\\.sh$", "\\.tfvars"],
+      "managerFilePatterns": [
+        "/\\.tf$/",
+        "/\\.tofu$/",
+        "/\\.tftpl$/",
+        "/\\.yaml$/",
+        "/\\.sh$/",
+        "/\\.tfvars/"
+      ],
       "matchStrings": [
         "(?<currentValue>[\\w+\\.\\-]*)['\",;]*\\s*#\\s?renovate: (?<datasource>\\S+)=(?<depName>\\S+)\\s?(registry=(?<registryUrl>\\S+))?\\s?(versioning=(?<versioning>\\S+))?"
       ]
@@ -24,25 +42,42 @@
     },
     {
       "groupName": "NetBird",
-      "matchPackageNames": ["**/netbirdio/**", "netbirdio/**"]
+      "matchPackageNames": [
+        "**/netbirdio/**",
+        "netbirdio/**"
+      ]
     },
     {
       "groupName": "Intel Device Plugins",
-      "matchPackageNames": ["/intel-device-plugins/"]
+      "matchPackageNames": [
+        "/intel-device-plugins/"
+      ]
     },
     {
       "groupName": "Cilium",
-      "matchPackageNames": ["/cilium/"]
+      "matchPackageNames": [
+        "/cilium/"
+      ]
     },
     {
-      "matchManagers": ["terraform"],
-      "matchDepTypes": ["provider", "required_provider"],
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchManagers": [
+        "terraform"
+      ],
+      "matchDepTypes": [
+        "provider",
+        "required_provider"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "automerge": true
     },
     {
       "description": "HIGHLY TRUSTED VENDORS: Automerge non-major updates for official and trusted actions",
-      "matchManagers": ["github-actions"],
+      "matchManagers": [
+        "github-actions"
+      ],
       "matchPackagePatterns": [
         "^actions/",
         "^github/",
@@ -52,11 +87,17 @@
       ],
       "automerge": true,
       "automergeType": "pr",
-      "matchUpdateTypes": ["digest", "minor", "patch"]
+      "matchUpdateTypes": [
+        "digest",
+        "minor",
+        "patch"
+      ]
     },
     {
       "description": "ALL OTHERS: Group all other GitHub Action updates for manual review",
-      "matchManagers": ["github-actions"],
+      "matchManagers": [
+        "github-actions"
+      ],
       "groupName": "github-actions-community",
       "groupSlug": "github-actions-community"
     }

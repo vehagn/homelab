@@ -28,7 +28,7 @@
     "ghcr.io/devcontainers-extra/features/helmfile:1": {},
     "ghcr.io/devcontainers-extra/features/argo-cd:1": {},
     "ghcr.io/dhoeric/features/google-cloud-cli:1": {
-      "installGkeGcloudAuthPlugin": "true"
+      "installGkeGcloudAuthPlugin": true
     },
     "ghcr.io/devcontainers/features/aws-cli:1": {},
     "ghcr.io/skriptfabrik/devcontainer-features/hcloud-cli:1": {},

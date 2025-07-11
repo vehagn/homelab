@@ -44,6 +44,9 @@ spec:
             - name: groups
               mountPath: /bootstrap/group-configs
               readOnly: true
+            - name: user-schemas
+              mountPath: /bootstrap/user-schemas
+              readOnly: true
             - name: users
               mountPath: /bootstrap/user-configs
               readOnly: true
@@ -58,6 +61,14 @@ spec:
                   items:
                     - key: groups.json
                       path: groups.json
+        - name: user-schemas
+          projected:
+            sources:
+              - secret:
+                  name: lldap-config
+                  items:
+                    - key: user-schemas.json
+                      path: user-schemas.json
         - name: users
           projected:
             sources:

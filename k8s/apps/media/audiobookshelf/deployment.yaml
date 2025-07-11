@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: radarr
-  namespace: arr
+  name: audiobookshelf
+  namespace: audiobookshelf
   labels:
-    app: radarr
+    app: audiobookshelf
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: radarr
+      app: audiobookshelf
   strategy:
     type: Recreate
   template:
     metadata:
-      namespace: radarr
+      namespace: audiobookshelf
       labels:
-        app: radarr
+        app: audiobookshelf
     spec:
       nodeSelector:
-        topology.kubernetes.io/zone: cantor
+        topology.kubernetes.io/zone: euclid
       securityContext:
         runAsNonRoot: true
         runAsUser: 2501
@@ -29,8 +29,8 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - name: radarr
-          image: ghcr.io/home-operations/radarr:5.26.1 # renovate: docker=ghcr.io/home-operations/radarr
+        - name: audiobookshelf
+          image: ghcr.io/advplyr/audiobookshelf:2.24.0 # renovate: docker=ghcr.io/advplyr/audiobookshelf
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
@@ -38,32 +38,42 @@ spec:
               drop: [ "ALL" ]
           ports:
             - name: http
-              containerPort: 7878
+              containerPort: 80
           envFrom:
             - configMapRef:
                 name: common-env
                 optional: true
           volumeMounts:
-            - name: radarr-config
+            - name: audiobookshelf
               mountPath: /config
+              subPath: config
+            - name: audiobookshelf
+              mountPath: /metadata
+              subPath: metadata
+            - name: audiobooks
+              mountPath: /audiobooks
+            - name: podcasts
+              mountPath: /podcasts
             - name: tmp
               mountPath: /tmp
-            - name: data
-              mountPath: /app/data
           resources:
             requests:
               cpu: 50m
-              memory: 128Mi
+              memory: 384Mi
             limits:
               cpu: 1000m
-              memory: 256Mi
+              memory: 512Mi
       volumes:
-        - name: radarr-config
+        - name: audiobookshelf
           persistentVolumeClaim:
-            claimName: radarr-config
-        - name: tmp
-          emptyDir: { }
-        - name: data
+            claimName: audiobookshelf
+        - name: audiobooks
           nfs:
             server: 192.168.1.117
-            path: /mnt/pool-0/data
+            path: /mnt/pool-0/data/media/audiobooks
+        - name: podcasts
+          nfs:
+            server: 192.168.1.117
+            path: /mnt/pool-0/data/media/podcasts
+        - name: tmp
+          emptyDir: { }
