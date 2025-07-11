@@ -63,6 +63,9 @@ source ~/.zshrc
 # Re-initialize tofu to migrate state to R2 backend
 # Double check TF_VAR_branch_env is properly set to your env - prod/staging/dev - everytime you checkout a new branch.
 tofu init -migrate-state
+
+# Remove any leftover local state files - careful, know what you are doing!
+# rm *.tfstate*
 ```
 
 Your OpenTofu state is now securely stored in the Cloudflare R2 bucket.
