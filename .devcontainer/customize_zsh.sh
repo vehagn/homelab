@@ -1,10 +1,9 @@
 #!/bin/bash
 
-# Get the workdir from the first argument
-WRK_DIR="$1"
-
-# Get the zshrc file path from the second argument
-ZSHRC_FILE_PATH="$2"
+# The postCreateCommand is run from the workspace root, so we can use pwd.
+WRK_DIR="$(pwd)"
+# The .zshrc file is consistently located in the user's home directory.
+ZSHRC_FILE_PATH="$HOME/.zshrc"
 
 ENV_FILE_PATH=$WRK_DIR/.env
 INFISICAL_FILE_PATH=$WRK_DIR/.devcontainer/setup_infisical.sh
