@@ -89,7 +89,7 @@ jobs:
 
       - name: Run Adblock List Chunking Script
         run: bash chunk_adblock_lists.sh 1000 90
-        working-directory: ./tofu/cf-adblock # Ensures script is run in the correct context
+        working-directory: ./tofu/cloudflare/adblock
 
       - name: OpenTofu Init for cf-adblock
         run: tofu init
