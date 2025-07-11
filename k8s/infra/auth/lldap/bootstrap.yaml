@@ -20,7 +20,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: lldap-bootstrap
-          image: ghcr.io/lldap/lldap:v0.6.1-alpine-rootless # renovate: docker=ghcr.io/lldap/lldap
+          image: ghcr.io/lldap/lldap:2025-07-10-alpine-rootless # renovate: docker=ghcr.io/lldap/lldap
           command: [ /app/bootstrap.sh ]
           securityContext:
             allowPrivilegeEscalation: false

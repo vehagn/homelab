@@ -54,9 +54,8 @@ configMap:
       password: { secret_name: lldap-auth }
       attributes:
         extra:
-          audiobookshelf_groups:
-            multi_valued: true
-            value_type: string
+          argocd: { multi_valued: true, value_type: string }
+          audiobookshelf: { multi_valued: true, value_type: string }
 
   identity_providers:
     oidc:
@@ -77,15 +76,19 @@ configMap:
         allowed_origins_from_client_redirect_uris: true
         endpoints: [ userinfo, authorization, token, revocation, introspection ]
       claims_policies:
+        argocd:
+          custom_claims: { argocd: { attribute: argocd } }
+        #  id_token: [ argocd ]
         audiobookshelf:
-          custom_claims:
-            audiobookshelf: { attribute: audiobookshelf_groups }
+          custom_claims: { audiobookshelf: { attribute: audiobookshelf } }
         # https://www.authelia.com/integration/openid-connect/openid-connect-1.0-claims/#restore-functionality-prior-to-claims-parameter
         legacy:
           id_token: [ email, email_verified, alt_emails, name, preferred_username, groups ]
         username_email:
           id_token: [ email, email_verified, alt_emails, name, preferred_username ]
       scopes:
+        argocd:
+          claims: [ argocd ]
         audiobookshelf:
           claims: [ audiobookshelf ]
       clients:
@@ -94,11 +97,13 @@ configMap:
           client_name: Argo CD
           public: false
           authorization_policy: two_factor
+          claims_policy: argocd
           pre_configured_consent_duration: 1 month
           redirect_uris:
             - https://argocd.stonegarden.dev/auth/callback
             - https://argocd.stonegarden.dev/applications
-          scopes: [ openid, email, profile, offline_access, groups ]
+            - http://localhost:1234
+          scopes: [ openid, email, profile, offline_access, argocd, groups ]
           grant_types: [ authorization_code, refresh_token ]
           userinfo_signed_response_alg: none
           id_token_signed_response_alg: ES256
@@ -108,9 +113,10 @@ configMap:
           client_name: Argo CD (CLI)
           public: true
           authorization_policy: two_factor
+          claims_policy: argocd
           pre_configured_consent_duration: 1 month
           redirect_uris: [ http://localhost:8085/auth/callback ]
-          scopes: [ openid, email, profile, offline_access, groups ]
+          scopes: [ openid, email, profile, offline_access, argocd ]
           id_token_signed_response_alg: ES256
           access_token_signed_response_alg: ES256
           revocation_endpoint_auth_method: none
