@@ -32,18 +32,19 @@ Before applying this module, you must complete the following steps in your Cloud
 
 Ensure the following environment variables are set in your execution environment:
 
-- `TF_VAR_cloudflare_account_id`
-- `TF_VAR_cloudflare_zone_id`
+- `TF_VAR_cloudflare_account_id` - set it in infisical manually
+- `TF_VAR_cloudflare_zone_id` - set it in infisical manually
 - `TF_VAR_cloudflare_email_tofu_token` - automatically set in the devcontainer by [cloudflare account tokens](../account-tokens/cf/README.md).
 - `TF_VAR_cloudflare_r2_tofu_access_key` - automatically set in the devcontainer by [cloudflare remote state](../../remote-state/cf/README.md).
 - `TF_VAR_cloudflare_r2_tofu_access_secret` - automatically set in the devcontainer by [cloudflare remote state](../../remote-state/cf/README.md).
 - `TF_VAR_bucket_name` - automatically set in the devcontainer when set in the `.env` file in the root folder.
 - `TF_VAR_branch_env`- automatically set in the devcontainer base on the current branch.
-- `TF_VAR_tofu_encryption_passphrase`
+- `TF_VAR_tofu_encryption_passphrase` - set it in infisical manually
 - `TF_VAR_email_options` - Detailed docs on how to set these variables can be found in the [email-gateway-cloudflare](https://github.com/CutTheCrapTech/email-gateway-cloudflare).
 - `TF_VAR_email_secret_mapping` - Detailed docs on how to set these variables can be found in the [email-gateway-cloudflare](https://github.com/CutTheCrapTech/email-gateway-cloudflare).
-- `TF_VAR_email_routing_addresses` - destination addresses - example: `["a@your-domain.com", "b@your-domain.com"]`
+- `TF_VAR_email_routing_addresses` - destination addresses - example: `["x@gmail.com", "y@gmail.com"]`
 - `TF_VAR_email_routing_rules` - routing rules for non catch-all forwarding - example: `{"a@your-domain.com": "x@gmail.com", "b@your-domain.com": "y@gmail.com"}`
+- Note: You might need to run `source ~/.zshrc` in your devcontainer to ensure some of environment variables are loaded correctly after they are automatically set up in Infisical for the first time by remote state / account tokens.
 
 ### Execution
 
@@ -56,3 +57,11 @@ tofu init
 # Run tofu apply to create the email routing rules and worker
 tofu apply
 ```
+
+## Known Issues
+
+### Perpetual Diff in Worker Bindings
+
+Due to the way the Cloudflare Terraform provider handles `secret_text` bindings for workers, you may notice a perpetual "in-place update" for the `cloudflare_workers_script.email_gateway_worker` resource in your `tofu plan` output. The provider cannot read the secret's value back from Cloudflare, so it conservatively proposes an update on every plan to ensure the secret is correctly set.
+
+This is expected and harmless. The plan will simply re-apply the same secret value. It is a known inconvenience of the provider's design, and you can safely proceed with the apply.

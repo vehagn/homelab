@@ -1,9 +1,12 @@
-
 terraform {
   required_providers {
     cloudflare = {
       source  = "cloudflare/cloudflare"
       version = ">= 5.6.0"
+    }
+    infisical = {
+      source  = "infisical/infisical"
+      version = ">= 0.15.21"
     }
   }
   encryption {

@@ -28,11 +28,13 @@ resource "cloudflare_email_routing_catch_all" "email_routing_catch_all" {
   zone_id = var.cloudflare_zone_id
   actions = [{
     type  = "worker"
-    value = ["email-gateway"]
+    value = ["email-gateway-${var.branch_env}"]
   }]
   matchers = [{
     type = "all"
   }]
   enabled = true
   name    = "Catch-all rule."
+
+  depends_on = [cloudflare_workers_script.email_gateway_worker]
 }

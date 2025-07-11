@@ -21,17 +21,18 @@ Before applying this module, you must have the following in place:
 1.  **Configured Remote State**: A remote backend (in this case, Cloudflare R2) must be fully configured and operational. The `backend.tf` file in this module is already configured to use the R2 bucket.
 2.  **Infisical Project**: An Infisical project must exist, and you must have the necessary credentials (client ID, client secret, project ID) to authenticate and write secrets.
 3.  **Environment Variables**: The following environment variables must be set in your execution environment (e.g., your devcontainer's `.env` file):
-    - `TF_VAR_cloudflare_account_id`
-    - `TF_VAR_cloudflare_master_account_api_token`
-    - `TF_VAR_cloudflare_r2_tofu_access_key`
-    - `TF_VAR_cloudflare_r2_tofu_access_secret`
-    - `TF_VAR_bucket_name`
-    - `TF_VAR_branch_env`
-    - `TF_VAR_tofu_encryption_passphrase`
-    - `TF_VAR_infisical_domain`
-    - `TF_VAR_infisical_client_id`
-    - `TF_VAR_infisical_client_secret`
-    - `TF_VAR_infisical_project_id`
+    - `TF_VAR_cloudflare_account_id` - set it in infisical manually
+    - `TF_VAR_cloudflare_master_account_api_token` - set it in infisical manually
+    - `TF_VAR_cloudflare_r2_tofu_access_key` - automatically set in the devcontainer by [cloudflare remote state](../../remote-state/cf/README.md).
+    - `TF_VAR_cloudflare_r2_tofu_access_secret` - automatically set in the devcontainer by [cloudflare remote state](../../remote-state/cf/README.md).
+    - `TF_VAR_bucket_name` - automatically set in the devcontainer when set in the `.env` file in the root folder.
+    - `TF_VAR_branch_env`- automatically set in the devcontainer base on the current branch.
+    - `TF_VAR_tofu_encryption_passphrase` - set it in infisical manually
+    - `TF_VAR_infisical_domain` - automatically set in the devcontainer when set in the `.env` file in the root folder.
+    - `TF_VAR_infisical_client_id` - automatically set in the devcontainer when set in the `.env` file in the root folder.
+    - `TF_VAR_infisical_client_secret` - set it in [devcontainer](/.devcontainer/README.md) manually.
+    - `TF_VAR_infisical_project_id` - automatically set in the devcontainer when set in the `.env` file in the root folder.
+    - Note: You might need to run `source ~/.zshrc` in your devcontainer to ensure the environment variables are loaded correctly after they are automatically set up in Infisical for the first time by remote state.
 
 ### Execution
 

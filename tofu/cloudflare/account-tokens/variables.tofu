@@ -4,6 +4,11 @@ variable "cloudflare_account_id" {
   description = "The Cloudflare account ID."
 }
 
+variable "cloudflare_zone_id" {
+  description = "The Zone ID to apply zone-level permissions to."
+  type        = string
+}
+
 variable "cloudflare_master_account_api_token" {
   type        = string
   description = "The Cloudflare Account API token for creating access creds."
@@ -13,13 +18,11 @@ variable "cloudflare_master_account_api_token" {
 variable "cloudflare_r2_tofu_access_key" {
   type        = string
   description = "The Cloudflare R2 access key for tofu remote state."
-  sensitive   = true
 }
 
 variable "cloudflare_r2_tofu_access_secret" {
   type        = string
   description = "The Cloudflare R2 access secret for tofu remote state."
-  sensitive   = true
 }
 
 # Define a variable for the bucket name.

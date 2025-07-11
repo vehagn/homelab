@@ -12,6 +12,15 @@ This OpenTofu module is responsible for provisioning the foundational infrastruc
     - `TF_VAR_cloudflare_account_id`: Your Cloudflare account ID.
     - `TF_VAR_tofu_encryption_passphrase`: Encryption passphrase for encrypting the state file.
     - The rest of the variables are automatically picked up from the devContainer environment.
+    - Note: If you create these variables after loading the devContainer, you will need to run `source ~/.zshrc` again to load them into the environment.
+  - **Other Secrets:**
+    - `TF_VAR_bucket_name` - automatically set in the devcontainer when set in the `.env` file in the root folder.
+    - `TF_VAR_branch_env`- automatically set in the devcontainer base on the current branch.
+    - `TF_VAR_tofu_encryption_passphrase` - set it in infisical manually
+    - `TF_VAR_infisical_domain` - automatically set in the devcontainer when set in the `.env` file in the root folder.
+    - `TF_VAR_infisical_client_id` - automatically set in the devcontainer when set in the `.env` file in the root folder.
+    - `TF_VAR_infisical_client_secret` - set it in [devcontainer](/.devcontainer/README.md) manually.
+    - `TF_VAR_infisical_project_id` - automatically set in the devcontainer when set in the `.env` file in the root folder.
   - **Output Secrets (Automatically generated and stored by this Tofu module in Infisical under the path defined by `var.infisical_rw_secrets_path` (default: `/tofu_rw`) in the `prod` Infisical environment):**
     - `TF_VAR_cloudflare_r2_tofu_access_key`: The S3-compatible Access Key ID for the R2 bucket.
     - `TF_VAR_cloudflare_r2_tofu_access_secret`: The S3-compatible Secret Access Key for the R2 bucket.
@@ -45,7 +54,7 @@ Migrate your OpenTofu state to the newly provisioned R2 bucket.
 cp samples/backend_r2.tofu.sample ./backend.tofu
 
 # Load Cloudflare tokens into the devcontainer environment
-../../../.devcontainer/customize_zsh.sh
+source ~/.zshrc
 
 # If in local environment, you could run
 # export TF_VAR_cloudflare_r2_tofu_access_key=$(tofu output -raw r2_access_key_id)

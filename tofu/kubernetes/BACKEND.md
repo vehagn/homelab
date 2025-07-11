@@ -25,20 +25,6 @@ tofu init
 
 **Note: If your are using local backend with dev devcontainers and git repo, your state file will be deleted when the container is removed. So be very careful.**
 
-### GCS
-
-1. Follow instructions in [Google Cloud](../state/gcs/README.md) to setup GCS bucket for remote state.
-
-```shell
-# GCS Backend
-cp samples/backend_gcs.tofu.sample ./backend.tofu
-```
-
-```shell
-# Initialize tofu
-tofu init
-```
-
 ### R2
 
 1. Follow instructions in [Cloudflare R2](../remote_state/cf/README.md) to setup R2 bucket for remote state.
@@ -46,6 +32,20 @@ tofu init
 ```shell
 # R2 Backend
 cp samples/backend_r2.tofu.sample ./backend.tofu
+```
+
+```shell
+# Initialize tofu
+tofu init
+```
+
+### GCS
+
+1. Follow instructions in [Google Cloud](../state/gcs/README.md) to setup GCS bucket for remote state.
+
+```shell
+# GCS Backend
+cp samples/backend_gcs.tofu.sample ./backend.tofu
 ```
 
 ```shell

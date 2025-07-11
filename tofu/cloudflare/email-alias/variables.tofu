@@ -18,13 +18,11 @@ variable "cloudflare_email_tofu_token" {
 variable "cloudflare_r2_tofu_access_key" {
   type        = string
   description = "The Cloudflare R2 access key for tofu remote state."
-  sensitive   = true
 }
 
 variable "cloudflare_r2_tofu_access_secret" {
   type        = string
   description = "The Cloudflare R2 access secret for tofu remote state."
-  sensitive   = true
 }
 
 # Define a variable for the bucket name.
