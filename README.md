@@ -51,62 +51,38 @@ to [this article](https://blog.stonegarden.dev/articles/2024/08/talos-proxmox-to
 
 ## ⚙️ Core Components
 
-* [Proxmox VE](https://www.proxmox.com/en/proxmox-virtual-environment): Server management and KVM hypervisor.
-* [OpenTofu](https://opentofu.org/): Open source infrastructure as code tool.
-* [Cilium](https://cilium.io/): eBPF-based Networking, Observability, Security.
-* [Proxmox CSI Plugin](https://github.com/sergelogvinov/proxmox-csi-plugin): CSI driver for storage
-* [Argo CD](https://argo-cd.readthedocs.io/en/stable/): Declarative, GitOps continuous delivery tool for Kubernetes.
-* [Cert-manager](https://cert-manager.io/): Cloud native certificate management.
-* [Sealed-secrets](https://github.com/bitnami-labs/sealed-secrets): Encrypt your Secret into a SealedSecret, which is
-  safe to store - even inside a public repository.
-* [Authelia](https://www.authelia.com/): open-source authentication and authorization server
-* [Gateway API](https://gateway-api.sigs.k8s.io/): Next generation of Kubernetes Ingress
-* [AdGuardHome](https://github.com/AdguardTeam/AdGuardHome): Domain name server backed by Unbound
-* [NetBird](https://netbird.io/): Completely self hosted VPN solution
-* [CloudNativePG](https://cloudnative-pg.io/): PostgreSQL database operator
+- [Proxmox VE](https://www.proxmox.com/en/proxmox-virtual-environment): Server management and KVM hypervisor.
+- [OpenTofu](https://opentofu.org/): Open source infrastructure as code tool.
+- [DevContainers](https://containers.dev/): Container as a full-featured development environment.
+- [Cilium](https://cilium.io/): eBPF-based Networking, Observability, Security.
+- [Proxmox CSI Plugin](https://github.com/sergelogvinov/proxmox-csi-plugin): CSI driver for storage
+- [Argo CD](https://argo-cd.readthedocs.io/en/stable/): Declarative, GitOps continuous delivery tool for Kubernetes.
+- [Cloudflare ZeroTrust](https://developers.cloudflare.com/cloudflare-one/): Cloudflare ZeroTrust.
+- [Infisical](https://infisical.com/): Open source secrets management.
+- [Pocket ID](https://github.com/pocket-id/pocket-id): Open source authentication and authorization server
+- [Gateway API](https://gateway-api.sigs.k8s.io/): Next generation of Kubernetes Ingress
+- [NetBird](https://netbird.io/): Completely self hosted VPN solution
+- [CloudNativePG](https://cloudnative-pg.io/): PostgreSQL database operator
 
 ## 🗃️ Folder Structure
 
 ```shell
 .
-├── 📂 docs                # Documentation
-├── 📂 k8s                 # Kubernetes manifests
-│   ├── 📂 apps            # Applications
-│   ├── 📂 infra           # Infrastructure components
-│   └── 📂 sets            # Bootstrapping ApplicationSets
-└── 📂 tofu                # Tofu configuration
-    ├── 📂 home-assistant  # Home Assistant VM
-    └── 📂 kubernetes      # Kubernetes VM configuration
-        ├── 📂 bootstrap   # Kubernetes bootstrap config
-        └── 📂 talos       # Talos configuration
+├── 📂 docs                       # Documentation
+├── 📂 k8s                        # Kubernetes manifests
+│   ├── 📂 apps                  # Applications
+│   ├── 📂 infra                 # Infrastructure components
+│   └── 📂 sets                  # Bootstrapping ApplicationSets
+└── 📂 tofu                       # Tofu configuration
+    ├── 📂 home-assistant         # Home Assistant VM
+    └── 📂 kubernetes             # Kubernetes VM configuration
+        ├── 📂 bootstrap          # Kubernetes bootstrap config
+        └── 📂 talos              # Talos configuration
+    └── 📂 cloudflare             # Cloudflare configuration
+        ├── 📂 account-tokens     # Scoped account tokens
+        └── 📂 email-alias        # Email routing
+        └── 📂 adblock            # AdBlock configuration
+    └── 📂 remote-state           # Opentofu remote state management
+        ├── 📂 cf                 # Cloudflare
+        └── 📂 gcs                # Google cloud storage
 ```
-
-## 🖥️ Hardware
-
-| Name   | Device                    | CPU             | RAM            | Storage          | Purpose           |
-|--------|---------------------------|-----------------|----------------|------------------|-------------------|
-| Abel   | CWWK 6 LAN Port           | Intel i3-N305   | 48 GB DDR5     | -                | Control-plane     |
-| Euclid | ASUS ExpertCenter PN42    | Intel N100      | 32 GB DDR4     | -                | Control-plane     |
-| Cantor | ASUS PRIME N100I-D D4     | Intel N100      | 32 GB DDR4     | 5x8TB HDD RaidZ2 | NAS/Control-plane |
-| Gauss  | Dell Precision Tower 5810 | Xeon E5-1650 v3 | 64 GB DDR4 ECC | 14 TB HDD        | Compute           |
-
-## 🏗️ Work in Progress
-
-- [ ] External DNS
-- [ ] Use BGP with Cilium and UniFi
-- [ ] Hajimari dashboard
-- [ ] Podcast client
-- [ ] Immich for photos
-- [ ] Nextcloud for files
-- [ ] Self-hosted git-solution (Gitea, GitLab, etc.)
-
-## 👷‍ Future Projects
-
-- [ ] Explore Kanidm as an identity management platform
-- [ ] Explore other database operators
-- [ ] Implement LGTM-stack for monitoring
-- [ ] Local LLM
-- [ ] Dynamic Resource Allocation for GPU
-- [ ] Cilium mTLS & SPIFFE/SPIRE
-- [ ] Ceph for distributed storage
-- [ ] OPNSense/pfSense/OpenWRT
