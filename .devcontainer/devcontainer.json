@@ -2,5 +2,5 @@
   "name": "DevPod Development",
   "image": "ghcr.io/vehagn/k8s_setup:latest",
   "remoteUser": "homelab",
-  "postCreateCommand": "bash .devcontainer/customize_zsh.sh \"/workspaces/$DEVPOD_WORKSPACE_ID\" ~/.zshrc"
+  "postCreateCommand": "bash .devcontainer/customize_zsh.sh"
 }

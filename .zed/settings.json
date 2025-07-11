@@ -1,0 +1,21 @@
+// Folder-specific settings
+//
+// For a full list of overridable settings, and general information on folder-specific settings,
+// see the documentation: https://zed.dev/docs/configuring-zed#settings-files
+{
+  "file_types": {
+    "OpenTofu": ["tofu"],
+    "OpenTofu Vars": ["tfvars"]
+  },
+  "languages": {
+    "OpenTofu": {
+      "formatter": {
+        "external": {
+          "command": "tofu",
+          "arguments": ["fmt", "-"]
+        }
+      }
+    }
+  },
+  "tab_size": 2
+}
