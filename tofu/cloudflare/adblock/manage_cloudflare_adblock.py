@@ -14,8 +14,8 @@ from typing import List, Dict, Optional, Any, Tuple, Literal
 # --- Configuration ---
 # These would ideally be fetched from environment variables or a config file
 # For GitHub Actions, CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN will be set as env vars
-CLOUDFLARE_ACCOUNT_ID = os.environ.get("TF_VAR_cloudflare_secondary_account_id")
-CLOUDFLARE_API_TOKEN = os.environ.get("TF_VAR_cloudflare_secondary_api_token")
+CLOUDFLARE_ACCOUNT_ID = os.environ.get("TF_VAR_cloudflare_account_id")
+CLOUDFLARE_API_TOKEN = os.environ.get("TF_VAR_cloudflare_zero_trust_tofu_token")
 # The DNS Location ID will be passed as an argument or fetched from Terraform output
 # For now, let's assume it's passed as an environment variable by the GitHub Action
 DNS_LOCATION_ID = os.environ.get("DNS_LOCATION_ID")

@@ -6,7 +6,7 @@ on:
     - cron: "0 0 1 * *" # Runs at 00:00 UTC on the 1st day of every month
 
 env:
-  TF_VAR_gcs_env: prod
+  TF_VAR_branch_env: prod
 
 permissions:
   contents: read
@@ -87,26 +87,19 @@ jobs:
           fi
           echo "Secrets loaded and temporary file removed."
 
-      - name: Authenticate to Google Cloud
-        id: google-auth
-        uses: google-github-actions/auth@ba79af03959ebeac9769e648f473a284504d9193
-        with:
-          workload_identity_provider: ${{ env.GCP_WORKLOAD_IDENTITY_PROVIDER }} # Now from Infisical via env
-          service_account: ${{ env.GCP_SERVICE_ACCOUNT_EMAIL }} # Now from Infisical via env
-
       - name: Run Adblock List Chunking Script
         run: bash chunk_adblock_lists.sh 1000 90
-        working-directory: ./tofu/cf-adblock # Ensures script is run in the correct context
+        working-directory: ./tofu/cloudflare/adblock
 
       - name: OpenTofu Init for cf-adblock
         run: tofu init
-        working-directory: ./tofu/cf-adblock
+        working-directory: ./tofu/cloudflare/adblock
 
       - name: OpenTofu Apply for cf-adblock
         id: apply_cf_adblock
         shell: bash
         run: tofu apply -auto-approve
-        working-directory: ./tofu/cf-adblock
+        working-directory: ./tofu/cloudflare/adblock
 
       - name: Install Python dependencies
         shell: bash
@@ -119,4 +112,4 @@ jobs:
         run: |
           echo "Running Python script manage_cloudflare_adblock.py..."
           python3 manage_cloudflare_adblock.py 1000 90
-        working-directory: ./tofu/cf-adblock # Runs Python script from the same dir as chunker & TF
+        working-directory: ./tofu/cloudflare/adblock # Runs Python script from the same dir as chunker & TF

@@ -1,12 +1,13 @@
+
 terraform {
   required_providers {
-    http = {
-      source  = "hashicorp/http"
-      version = ">=3.5.0"
-    }
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = ">= 5.3.0"
+      version = ">= 5.6.0"
+    }
+    infisical = {
+      source  = "infisical/infisical"
+      version = ">= 0.15.21"
     }
   }
   encryption {
@@ -17,16 +18,16 @@ terraform {
       keys = key_provider.pbkdf2.my_passphrase
     }
     state {
-      method = method.aes_gcm.my_method
+      method   = method.aes_gcm.my_method
       enforced = true
     }
     plan {
-      method = method.aes_gcm.my_method
+      method   = method.aes_gcm.my_method
       enforced = true
     }
   }
 }
 
 provider "cloudflare" {
-  api_token = var.cloudflare_secondary_api_token
+  api_token = var.cloudflare_master_account_api_token
 }

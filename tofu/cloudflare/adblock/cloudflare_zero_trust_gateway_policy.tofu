@@ -1,5 +1,5 @@
 resource "cloudflare_zero_trust_gateway_policy" "block_malware" {
-  account_id = var.cloudflare_secondary_account_id
+  account_id = var.cloudflare_account_id
 
   name        = "Block malware"
   description = "Block known threats based on Cloudflare's threat intelligence"

@@ -1,5 +1,5 @@
 resource "cloudflare_zero_trust_dns_location" "homelab" {
-  account_id     = var.cloudflare_secondary_account_id
+  account_id     = var.cloudflare_account_id
   name           = "HomeLab" # This will be the name in the Cloudflare dashboard
   client_default = true      # Set to true if this should be the default location for WARP clients
   ecs_support    = false

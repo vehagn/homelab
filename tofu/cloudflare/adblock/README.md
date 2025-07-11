@@ -40,12 +40,12 @@ For a detailed breakdown of the workflow steps, see [DOCS.md](./DOCS.md#github-a
 
 Configure these securely. The GitHub Action fetches them via Infisical secrets automatically (surfaced as `TF_VAR_...` or regular environment variables). They must also be present in devcontainer.
 
-- `TF_VAR_cloudflare_secondary_account_id`: Your Cloudflare Account ID for Zero Trust configurations (used by OpenTofu and the Python script).
-- `TF_VAR_cloudflare_secondary_api_token`: Cloudflare API Token with necessary permissions for Zero Trust management (used by OpenTofu and the Python script). **Sensitive secret.**
+- `TF_VAR_cloudflare_account_id`: Your Cloudflare Account ID for Zero Trust configurations (used by OpenTofu and the Python script).
+- `TF_VAR_cloudflare_zero_trust_tofu_token`: Cloudflare API Token with necessary permissions for Zero Trust management (used by OpenTofu and the Python script). **Sensitive secret.** - Generated automatically via [account-tokens](../account-tokens/README.md)
 - `TF_VAR_bucket_name`: GCS bucket name for OpenTofu remote state.
 - `TF_VAR_tofu_encryption_passphrase`: Passphrase for OpenTofu state encryption. **Sensitive secret.**
-- `GCP_WORKLOAD_IDENTITY_PROVIDER`: GCP Workload Identity Provider ID for GitHub Actions authentication.
-- `GCP_SERVICE_ACCOUNT_EMAIL`: GCP Service Account email for GCS access.
+- `TF_VAR_cloudflare_r2_tofu_access_key`: Cloudflare R2 access key for remote state. **Sensitive secret.** - Generated automatically via [remote-state/cf](../../remote-state/cf/README.md)
+- `TF_VAR_cloudflare_r2_tofu_access_secret`: Cloudflare R2 access secret for remote state. **Sensitive secret.** - Generated automatically via [remote-state/cf](../../remote-state/cf/README.md)
 
 ## Manual Setup & Execution (Local Environment)
 
