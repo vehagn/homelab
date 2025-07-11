@@ -1,7 +1,7 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: ecdsa-jwk
+  name: jwk-ecdsa
   namespace: authelia
 spec:
   dnsNames:
@@ -14,7 +14,7 @@ spec:
     algorithm: ECDSA
     encoding: PKCS8
     size: 256
-  secretName: ecdsa-jwk
+  secretName: jwk-ecdsa
   usages:
     - digital signature
     - key encipherment

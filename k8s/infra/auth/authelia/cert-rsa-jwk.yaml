@@ -1,7 +1,7 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: rsa-jwk
+  name: jwk-rsa
   namespace: authelia
 spec:
   dnsNames:
@@ -14,7 +14,7 @@ spec:
     algorithm: RSA
     encoding: PKCS8
     size: 2048
-  secretName: rsa-jwk
+  secretName: jwk-rsa
   usages:
     - digital signature
     - key encipherment
