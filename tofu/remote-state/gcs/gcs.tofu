@@ -40,9 +40,9 @@ resource "google_storage_bucket" "tofu_remote_state" {
       type = "Delete"
     }
     condition {
-      age                = 30         # Delete noncurrent versions older than 90 days
-      num_newer_versions = 100        # Keep up to 100 newer versions
-      with_state         = "ARCHIVED" # Apply this rule to noncurrent versions
+      age                = 90           # Delete noncurrent versions older than 90 days
+      num_newer_versions = 100          # Keep up to 100 newer versions
+      with_state         = "NONCURRENT" # Apply this rule to noncurrent versions
     }
   }
 }

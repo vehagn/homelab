@@ -25,7 +25,7 @@ resource "infisical_secret" "gcp_wif_details" {
   name  = each.key   # The name of the secret in Infisical
   value = each.value # The value of the secret
 
-  env_slug     = "prod"
+  env_slug     = var.branch_env
   folder_path  = var.infisical_rw_secrets_path
   workspace_id = var.infisical_project_id
 

@@ -33,14 +33,17 @@ After this OpenTofu configuration is applied, the `workload_identity_provider_na
 2. Setup \*.auto.tfvars files.
 3. Setup .env file in root folder and commit it to git.
 4. Setup TF_VAR_tofu_encryption_passphrase as per instruction below and save them to infisical in `/tofu` directory (or the directory defined in TF_VAR_infisical_ro_secrets_path in .env file in root).
-   ```shell
+   ```bash
    # TF_VAR_tofu_encryption_passphrase generation command
    openssl rand -base64 32
    ```
 5. Setup TF_VAR_gcp_sa_dev_emails = ["email1@example.com","email2@example.com"] (emails you want to grant access to) below and save them to infisical in `/tofu` directory (or the directory defined in TF_VAR_infisical_ro_secrets_path in .env file in root).
 6. Follow devcontainers docs [here](/DEVCONTAINER.md). If done properly, all secrets from infisical will be available in the container environment.
 
-```shell
+```bash
+# Copy local backend file
+cp samples/backend_local.tofu.sample ./backend.tofu
+
 # Initialize tofu
 tofu init
 
@@ -48,11 +51,11 @@ tofu init
 tofu apply
 ```
 
-```shell
+```bash
 # Copy GCS backend file
 cp samples/backend_gcs.tofu.sample ./backend.tofu
 
 # Re-initialize tofu to migrate state to GCS backend
-# Double check TF_VAR_gcs_env is properly set to your env - prod/staging/dev - everytime you checkout a new branch.
+# Double check TF_VAR_branch_env is properly set to your env - prod/staging/dev - everytime you checkout a new branch.
 tofu init -migrate-state
 ```
