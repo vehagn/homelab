@@ -16,7 +16,7 @@ configs:
       requestedScopes: [ 'openid' ]
       enableUserInfoGroups: true
       requestedIDTokenClaims: 
-        argocd: { essential: true }
+        argocd_claim: { essential: true }
         email: { essential: false }
         name: { essential: false }
         preferred_username: { essential: false }
@@ -35,7 +35,7 @@ configs:
     controller.diff.server.side: true
     server.insecure: true
   rbac:
-    scopes: '[ argocd ]'
+    scopes: '[ argocd_claim ]'
     policy.csv: |
       g, admin, role:admin
       g, read, role:readonly
