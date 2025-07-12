@@ -10,6 +10,15 @@ pod:
   env:
     - name: TZ
       value: Europe/Oslo
+  extraVolumeMounts:
+    - name: consent
+      mountPath: /config/assets/locales/en/consent.json
+      subPath: consent.json
+  extraVolumes:
+    - name: consent
+      configMap:
+        defaultMode: 0644
+        name: consent
 
 configMap:
   default_2fa_method: totp
@@ -25,6 +34,9 @@ configMap:
 
   session:
     cookies: [ { domain: stonegarden.dev } ]
+
+  server:
+    asset_path: /config/assets/
 
   storage:
     postgres:
@@ -100,6 +112,7 @@ configMap:
           authorization_policy: two_factor
           claims_policy: argocd
           pre_configured_consent_duration: 1 month
+          require_pkce: true
           redirect_uris:
             - https://argocd.stonegarden.dev/auth/callback
             - https://argocd.stonegarden.dev/applications

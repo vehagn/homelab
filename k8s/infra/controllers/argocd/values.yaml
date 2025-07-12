@@ -13,12 +13,13 @@ configs:
       clientID: 'argocd'
       clientSecret: $oidc:authelia.clientSecret
       cliClientID: 'argocd-cli'
-      requestedScopes: [ 'openid', 'profile', 'email', 'offline_access', 'argocd' ]
+      requestedScopes: [ 'openid' ]
       enableUserInfoGroups: true
       requestedIDTokenClaims: 
         argocd: { essential: true }
-        profile: { essential: false }
         email: { essential: false }
+        name: { essential: false }
+        preferred_username: { essential: false }
         offline_access: { essential: false }
       userInfoPath: /api/oidc/userinfo
       userInfoCacheExpiration: '5m'
