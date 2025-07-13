@@ -1,0 +1,18 @@
+extends: default
+
+yaml-files:
+  - '*.yaml'
+  - '*.yml'
+
+ignore: |
+  README.md
+  LICENSE
+  secret**.yaml
+
+rules:
+  document-start: { present: false }
+  brackets:
+    min-spaces-inside: 0
+    max-spaces-inside: 10
+  line-length:
+    allow-non-breakable-inline-mappings: true

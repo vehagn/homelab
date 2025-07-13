@@ -1,8 +1,8 @@
 # Devcontainer
 
-Prefer installing packages in Containerfile.
-If the package is not available in the regular repository,
-check available features at [https://containers.dev/features](https://containers.dev/features).
+A container with all the necessary tools and then some used in this homelab.
+Check available features at [https://containers.dev/features](https://containers.dev/features),
+or edit the `Containerfile`.
 
 **Disclaimer**: this is a fairly untested feature from the main author,
 feedback is welcome.

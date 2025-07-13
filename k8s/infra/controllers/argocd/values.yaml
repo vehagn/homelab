@@ -15,7 +15,7 @@ configs:
       cliClientID: 'argocd-cli'
       requestedScopes: [ 'openid', 'offline_access' ]
       enableUserInfoGroups: true
-      requestedIDTokenClaims: 
+      requestedIDTokenClaims:
         argocd_claim: { essential: true }
         name: { essential: false }
         email: { essential: false }

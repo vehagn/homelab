@@ -5,7 +5,7 @@ cluster:
 
 kubeProxyReplacement: true
 
- # Talos specific
+# Talos specific
 k8sServiceHost: localhost
 k8sServicePort: 7445
 securityContext:
