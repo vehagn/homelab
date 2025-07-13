@@ -86,3 +86,10 @@ to [this article](https://blog.stonegarden.dev/articles/2024/08/talos-proxmox-to
         ├── 📂 cf                 # Cloudflare
         └── 📂 gcs                # Google cloud storage
 ```
+
+## 🙏 Credits
+
+A huge thank you to the following people and projects that have inspired and helped shape this homelab repo:
+
+- **[vehagn/homelab](https://github.com/vehagn/homelab):** This repository was originally forked from here. Building on top of the already solid repo, I implement my own takes on the architecture, in this repo. My sincere thanks to Vehagn for sharing such a solid foundation.
+- **[Marco Lancini's Blog](https://blog.marcolancini.it/2022/blog-serverless-ad-blocking-with-cloudflare-gateway/):** The adblocking via Cloudflare was inspired by this blog post on serverless ad-blocking.
