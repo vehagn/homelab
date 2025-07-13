@@ -22,9 +22,10 @@
     "ghcr.io/devcontainers/features/hugo:1": {
       "extended": "true"
     },
-    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
     "ghcr.io/devcontainers-extra/features/argo-cd:1": {},
     "ghcr.io/devcontainers-extra/features/helmfile:1": {},
+    "ghcr.io/devcontainers-extra/features/kubectl-asdf:2": {},
+    "ghcr.io/devcontainers-extra/features/kubectx-kubens:1": {},
     "ghcr.io/devcontainers-extra/features/talosctl:1": {},
     "ghcr.io/devcontainers-extra/features/yamllint:2": {},
     "ghcr.io/dhoeric/features/k9s:1": {},
@@ -35,7 +36,6 @@
       "jqVersion": "latest",
       "yqVersion": "latest"
     },
-    "ghcr.io/jungaretti/features/vim:1": {},
     "ghcr.io/robbert229/devcontainer-features/postgresql-client:1": {},
     "ghcr.io/robbert229/devcontainer-features/opentofu:1": {},
     "ghcr.io/schlich/devcontainer-features/powerlevel10k:1": {},

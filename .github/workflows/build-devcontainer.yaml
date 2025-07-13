@@ -12,6 +12,7 @@ jobs:
   build:
     name: Build devcontainer
     runs-on: ubuntu-latest
+    timeout-minutes: 240
     permissions:
       contents: read
       packages: write
