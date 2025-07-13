@@ -44,8 +44,8 @@
     "updated_at": "Profile Update Time",
     "website": "Website URL",
     "zoneinfo": "Timezone",
-    "argocd": "Argo CD permissions",
-    "audiobookshelf": "Audiobookshelf permissions"
+    "argocd_claim": "Argo CD Membership",
+    "audiobookshelf": "Audiobookshelf Membership"
   },
   "scopes": {
     "address": "Access your address",
@@ -56,7 +56,7 @@
     "openid": "Use OpenID to verify your identity",
     "phone": "Access your phone number",
     "profile": "Access your profile information",
-    "argocd": "Argo CD",
-    "audiobookshelf": "Audiobookshelf"
+    "argocd_scope": "Access Argo CD memberships",
+    "audiobookshelf": "Access Audiobookshelf memberships"
   }
 }

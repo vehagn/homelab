@@ -13,14 +13,13 @@ configs:
       clientID: 'argocd'
       clientSecret: $oidc:authelia.clientSecret
       cliClientID: 'argocd-cli'
-      requestedScopes: [ 'openid' ]
+      requestedScopes: [ 'openid', 'offline_access' ]
       enableUserInfoGroups: true
       requestedIDTokenClaims: 
-        argocd: { essential: true }
-        email: { essential: false }
+        argocd_claim: { essential: true }
         name: { essential: false }
+        email: { essential: false }
         preferred_username: { essential: false }
-        offline_access: { essential: false }
       userInfoPath: /api/oidc/userinfo
       userInfoCacheExpiration: '5m'
 
@@ -35,10 +34,10 @@ configs:
     controller.diff.server.side: true
     server.insecure: true
   rbac:
-    scopes: '[ argocd ]'
+    scopes: '[ argocd_claim ]'
     policy.csv: |
       g, admin, role:admin
-      g, read, role:readonly
+      g, readonly, role:readonly
 
 crds:
   install: true
