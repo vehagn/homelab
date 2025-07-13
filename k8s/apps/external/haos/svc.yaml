@@ -5,6 +5,6 @@ metadata:
   namespace: haos
 spec:
   ports:
-    - name: http 
+    - name: http
       protocol: TCP
       port: 8123
