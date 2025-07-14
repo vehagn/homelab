@@ -1,0 +1,106 @@
+FROM docker.io/ubuntu:24.04
+ARG TARGETARCH
+
+RUN rm -rf /home/ubuntu
+
+RUN apt update && \
+    apt install -y --no-install-recommends \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    wget \
+    gnupg \
+    git \
+    jq \
+    yamllint && \
+    apt clean
+
+# Add GitHub CLI repo
+RUN mkdir -p -m 755 /etc/apt/keyrings && \
+	  mkdir -p -m 755 /etc/apt/sources.list.d && \
+	  curl https://cli.github.com/packages/githubcli-archive-keyring.gpg | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null && \
+	  chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg && \
+	  echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+
+# Add Adoption repo for JRE needed by IDEA devcontainer
+RUN curl -sSL https://packages.adoptium.net/artifactory/api/gpg/key/public | gpg --dearmor | tee /etc/apt/trusted.gpg.d/adoptium.gpg > /dev/null && \
+    echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list
+
+# Add Postgresql repo
+RUN curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg >/dev/null && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/trusted.gpg.d/apt.postgresql.org.gpg] https://apt.postgresql.org/pub/repos/apt $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+
+# Add OpenTofu repo
+RUN curl -fsSL https://get.opentofu.org/opentofu.gpg | tee /etc/apt/keyrings/opentofu.gpg > /dev/null && \
+    curl -fsSL https://packages.opentofu.org/opentofu/tofu/gpgkey | gpg --no-tty --batch --dearmor -o /etc/apt/keyrings/opentofu-repo.gpg > /dev/null && \
+    chmod a+r /etc/apt/keyrings/opentofu.gpg /etc/apt/keyrings/opentofu-repo.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/opentofu.gpg,/etc/apt/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main \
+    deb-src [signed-by=/etc/apt/keyrings/opentofu.gpg,/etc/apt/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main" | \
+    tee /etc/apt/sources.list.d/opentofu.list > /dev/null && \
+    chmod a+r /etc/apt/sources.list.d/opentofu.list
+
+# Install packages from added repos
+RUN apt update && \
+    apt install -y --no-install-recommends \
+    gh \
+    temurin-21-jre \
+    postgresql-client \
+    tofu && \
+    apt clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install kubectl
+RUN curl -sSLO "https://dl.k8s.io/release/$(curl -sSL https://dl.k8s.io/release/stable.txt)/bin/linux/${TARGETARCH}/kubectl" && \
+    curl -sSLO "https://dl.k8s.io/release/$(curl -sSL https://dl.k8s.io/release/stable.txt)/bin/linux/${TARGETARCH}/kubectl.sha256" && \
+    echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check && \
+    install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && \
+    rm kubectl kubectl.sha256
+
+    # Install kubecolor for some colour https://kubecolor.github.io/
+RUN curl -sSL -o kubecolor.deb "https://kubecolor.github.io/packages/deb/pool/main/k/kubecolor/kubecolor_$(curl -sSL https://kubecolor.github.io/packages/deb/version)_${TARGETARCH}.deb" && \
+    dpkg -i kubecolor.deb && \
+    rm kubecolor.deb
+
+# Install k9s
+RUN curl -sSL -o k9s.deb "https://github.com/derailed/k9s/releases/latest/download/k9s_Linux_${TARGETARCH}.deb" && \
+    dpkg -i k9s.deb && \
+    rm k9s.deb
+
+# Install Argo CD CLI
+RUN curl -sSL -o argocd "https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-${TARGETARCH}" && \
+    install -o root -g root -m 0755 argocd /usr/local/bin/argocd && \
+    rm argocd
+
+# Install yq
+RUN curl -sSL -o yq "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${TARGETARCH}" && \
+    install -o root -g root -m 0755 yq /usr/local/bin/yq && \
+    rm yq
+
+# Install talosctl
+RUN curl -sSL -o talosctl "https://github.com/siderolabs/talos/releases/latest/download/talosctl-linux-${TARGETARCH}" && \
+    install -o root -g root -m 0755 talosctl /usr/local/bin/talosctl && \
+    rm talosctl
+
+RUN adduser dev
+USER dev
+
+# Install krew, a plugin manager for kubectl https://krew.sigs.k8s.io/
+RUN (cd "$(mktemp -d)" && \
+    curl -sSL -o krew.tar.gz "https://github.com/kubernetes-sigs/krew/releases/latest/download/krew-linux_${TARGETARCH}.tar.gz" && \
+    tar zxvf krew.tar.gz && \
+    ./krew-linux_${TARGETARCH} install krew && \
+    rm *) && \
+    echo "export PATH=\"${KREW_ROOT:-$HOME/.krew}/bin:$PATH\"" >> ${HOME}/.bashrc
+
+# Install kubectl plugins for easy switching of context and namespace, as well as OIDC login
+RUN PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH" kubectl krew install ctx ns oidc-login
+
+# Alias everything
+RUN echo "alias kubectl='kubecolor'" >> ${HOME}/.bash_aliases && \
+    echo "alias k='kubectl'" >> ${HOME}/.bash_aliases && \
+    echo "alias kz='kubectl kustomize --enable-helm'" >> ${HOME}/.bash_aliases && \
+    echo "alias tf='tofu'" >> ${HOME}/.bash_aliases && \
+    echo "alias tl='talosctl'" >> ${HOME}/.bash_aliases && \
+    echo "alias yl='yamllint'" >> ${HOME}/.bash_aliases
+
+USER root

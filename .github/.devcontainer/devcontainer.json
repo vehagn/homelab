@@ -1,0 +1,17 @@
+{
+  "name": "Stonegarden Homelab Devcontainer",
+  "build": {
+    "dockerfile": "Containerfile"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": true,
+      "installOhMyZshConfig": true,
+      "upgradePackages": true,
+      "username": "dev"
+    },
+  },
+  "remoteUser": "dev"
+}

@@ -1,9 +1,10 @@
 # Devcontainer
 
-The `devcontainer.json` file uses a pre-built image based on the configuration in the `devcontainer-build.json` file.
+The `devcontainer.json` file uses a pre-built image based on the configuration in the `./.github/.devcontainer`
+directory.
 
 Check available Devcontainer features at [https://containers.dev/features](https://containers.dev/features),
-or edit the `Containerfile`.
+or edit the `Containerfile` there.
 
 **Disclaimer**: this is a fairly untested feature from the main author,
 feedback is welcome.
@@ -19,7 +20,7 @@ Alternatively, you can start the devcontainer manually by running
 
 ```shell
 docker run -it --rm \
-  --user $(id -u):$(id -g) \
+  --user dev \
   --name homelab-devcontainer \
   --mount target=/tmp,type=tmpfs \
   --mount type=bind,src=.,dst=/workspace \

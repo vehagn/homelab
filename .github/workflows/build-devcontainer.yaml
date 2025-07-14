@@ -3,7 +3,7 @@ name: Build devcontainer
 on:
   push:
     branches: [ main ]
-    paths: [ '.devcontainer/**' ]
+    paths: [ '.github/.devcontainer/**' ]
   schedule:
     - cron: '4 20 28 * *'
 
@@ -36,7 +36,7 @@ jobs:
       - name: Pre-build dev container image
         uses: devcontainers/ci@8bf61b26e9c3a98f69cb6ce2f88d24ff59b785c6 #v0.3.1900000417
         with:
-          configFile: ./.devcontainer/devcontainer-build.json
+          subFolder: ./.github
           platform: linux/amd64,linux/arm64
           imageName: ghcr.io/vehagn/homelab-devcontainer
           cacheFrom: ghcr.io/vehagn/homelab-devcontainer
