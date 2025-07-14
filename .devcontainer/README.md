@@ -1,7 +1,8 @@
 # Devcontainer
 
-A container with all the necessary tools and then some used in this homelab.
-Check available features at [https://containers.dev/features](https://containers.dev/features),
+The `devcontainer.json` file uses a pre-built image based on the configuration in the `devcontainer-build.json` file.
+
+Check available Devcontainer features at [https://containers.dev/features](https://containers.dev/features),
 or edit the `Containerfile`.
 
 **Disclaimer**: this is a fairly untested feature from the main author,

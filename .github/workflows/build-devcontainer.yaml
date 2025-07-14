@@ -1,7 +1,6 @@
 name: Build devcontainer
 
 on:
-  workflow_dispatch: { }
   push:
     branches: [ main ]
     paths: [ ".devcontainer/**" ]
@@ -12,7 +11,7 @@ jobs:
   build:
     name: Build devcontainer
     runs-on: ubuntu-latest
-    timeout-minutes: 240
+    timeout-minutes: 120
     permissions:
       contents: read
       packages: write
@@ -37,6 +36,7 @@ jobs:
       - name: Pre-build dev container image
         uses: devcontainers/ci@8bf61b26e9c3a98f69cb6ce2f88d24ff59b785c6 #v0.3.1900000417
         with:
+          configFile: ./.devcontainer/devcontainer-build.json
           platform: linux/amd64,linux/arm64
           imageName: ghcr.io/vehagn/homelab-devcontainer
           cacheFrom: ghcr.io/vehagn/homelab-devcontainer
