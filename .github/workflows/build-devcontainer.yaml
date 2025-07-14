@@ -3,9 +3,9 @@ name: Build devcontainer
 on:
   push:
     branches: [ main ]
-    paths: [ ".devcontainer/**" ]
+    paths: [ '.devcontainer/**' ]
   schedule:
-    - cron: "4 20 28 * *"
+    - cron: '4 20 28 * *'
 
 jobs:
   build:

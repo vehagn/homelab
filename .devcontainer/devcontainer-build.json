@@ -13,7 +13,6 @@
       "username": "homelab"
     },
     "ghcr.io/devcontainers/features/github-cli:1": {},
-    "ghcr.io/devcontainers/features/go:1": {},
     "ghcr.io/devcontainers/features/java:1": {},
     "ghcr.io/devcontainers-extra/features/argo-cd:1": {},
     "ghcr.io/devcontainers-extra/features/talosctl:1": {},
