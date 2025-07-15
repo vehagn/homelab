@@ -1,52 +1,115 @@
 FROM docker.io/ubuntu:24.04
+
 ARG TARGETARCH
 
-RUN rm -rf /home/ubuntu
+ARG USER_ID=1000
+ARG USER_GID=1000
+ARG USERNAME=dev
 
-RUN apt update && \
-    apt install -y --no-install-recommends \
+RUN userdel ubuntu && \
+    rm -rf /home/ubuntu
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     apt-transport-https \
     ca-certificates \
-    curl \
-    wget \
-    gnupg \
+    yamllint \
+    apt-utils \
+    bash-completion \
+    openssh-client \
     git \
+    gnupg \
+    gnupg2 \
+    dirmngr \
+    iproute2 \
+    procps \
+    lsof \
+    htop \
+    net-tools \
+    psmisc \
+    curl \
+    tree \
+    wget \
+    rsync \
+    unzip \
+    bzip2 \
+    xz-utils \
+    zip \
+    nano \
+    vim \
+    less \
     jq \
-    yamllint && \
-    apt clean
+    lsb-release \
+    dialog \
+    libc6 \
+    libgcc1 \
+    libkrb5-3 \
+    libgssapi-krb5-2 \
+    libicu[0-9][0-9] \
+    liblttng-ust[0-9] \
+    libstdc++6 \
+    zlib1g \
+    locales \
+    sudo \
+    ncdu \
+    man-db \
+    strace \
+    manpages \
+    init-system-helpers \
+    libssl3 \
+    zsh \
+    && \
+    apt-get -y upgrade && \
+    apt-get -y autoremove && \
+    apt-get clean
+
+# Generate en_US.UTF-8 locale
+RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
+    locale-gen
 
 # Add GitHub CLI repo
 RUN mkdir -p -m 755 /etc/apt/keyrings && \
 	  mkdir -p -m 755 /etc/apt/sources.list.d && \
-	  curl https://cli.github.com/packages/githubcli-archive-keyring.gpg | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null && \
-	  chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg && \
-	  echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+	  curl https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+    | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null && \
+	  chmod 644 /etc/apt/keyrings/githubcli-archive-keyring.gpg && \
+	  echo "deb [arch=${TARGETARCH} signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+    | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
 
 # Add Adoption repo for JRE needed by IDEA devcontainer
-RUN curl -sSL https://packages.adoptium.net/artifactory/api/gpg/key/public | gpg --dearmor | tee /etc/apt/trusted.gpg.d/adoptium.gpg > /dev/null && \
-    echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list
+RUN curl -sSL https://packages.adoptium.net/artifactory/api/gpg/key/public \
+    | gpg --dearmor \
+    | tee /etc/apt/trusted.gpg.d/adoptium.gpg > /dev/null && \
+    echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" \
+    | tee /etc/apt/sources.list.d/adoptium.list > /dev/null
 
 # Add Postgresql repo
-RUN curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | tee /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg >/dev/null && \
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/trusted.gpg.d/apt.postgresql.org.gpg] https://apt.postgresql.org/pub/repos/apt $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+RUN curl https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+    | gpg --dearmor \
+    | tee /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg >/dev/null && \
+    echo "deb [arch=${TARGETARCH} signed-by=/etc/apt/trusted.gpg.d/apt.postgresql.org.gpg] https://apt.postgresql.org/pub/repos/apt $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release)-pgdg main" \
+    | tee /etc/apt/sources.list.d/pgdg.list > /dev/null
 
 # Add OpenTofu repo
-RUN curl -fsSL https://get.opentofu.org/opentofu.gpg | tee /etc/apt/keyrings/opentofu.gpg > /dev/null && \
-    curl -fsSL https://packages.opentofu.org/opentofu/tofu/gpgkey | gpg --no-tty --batch --dearmor -o /etc/apt/keyrings/opentofu-repo.gpg > /dev/null && \
-    chmod a+r /etc/apt/keyrings/opentofu.gpg /etc/apt/keyrings/opentofu-repo.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/opentofu.gpg,/etc/apt/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main \
-    deb-src [signed-by=/etc/apt/keyrings/opentofu.gpg,/etc/apt/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main" | \
-    tee /etc/apt/sources.list.d/opentofu.list > /dev/null && \
-    chmod a+r /etc/apt/sources.list.d/opentofu.list
+RUN curl -fsSL https://get.opentofu.org/opentofu.gpg \
+    | tee /etc/apt/keyrings/opentofu.gpg > /dev/null && \
+    curl -fsSL https://packages.opentofu.org/opentofu/tofu/gpgkey \
+    | gpg --no-tty --batch --dearmor -o /etc/apt/keyrings/opentofu-repo.gpg > /dev/null && \
+    chmod 644 /etc/apt/keyrings/opentofu.gpg /etc/apt/keyrings/opentofu-repo.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/opentofu.gpg,/etc/apt/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main" \
+    | tee /etc/apt/sources.list.d/opentofu.list > /dev/null && \
+    echo "deb-src [signed-by=/etc/apt/keyrings/opentofu.gpg,/etc/apt/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main" \
+    | tee -a /etc/apt/sources.list.d/opentofu.list > /dev/null && \
+    chmod 644 /etc/apt/sources.list.d/opentofu.list
 
 # Install packages from added repos
-RUN apt update && \
-    apt install -y --no-install-recommends \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     gh \
     temurin-21-jre \
     postgresql-client \
     tofu && \
-    apt clean && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Install kubectl
@@ -81,8 +144,53 @@ RUN curl -sSL -o talosctl "https://github.com/siderolabs/talos/releases/latest/d
     install -o root -g root -m 0755 talosctl /usr/local/bin/talosctl && \
     rm talosctl
 
-RUN adduser dev
-USER dev
+# Add user and configure ZSH
+RUN groupadd --gid ${USER_GID} ${USERNAME} && \
+    useradd -s /bin/bash --uid ${USER_ID} --gid ${USERNAME} -m ${USERNAME} && \
+    echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL \
+    | tee /etc/sudoers.d/${USERNAME} > /dev/null && \
+    chmod 0440 /etc/sudoers.d/${USERNAME} && \
+    mkdir -p /home/${USERNAME} && \
+    mkdir -p /home/${USERNAME}/.config && \
+    cp /etc/skel/.bashrc /home/${USERNAME}/.bashrc && \
+    cp /etc/skel/.profile /home/${USERNAME}/.profile && \
+    echo "$(curl -sSfL https://raw.githubusercontent.com/devcontainers/features/refs/heads/main/src/common-utils/scripts/rc_snippet.sh)" \
+    | tee -a /etc/bash.bashrc && \
+    echo "$(curl -sSfL https://raw.githubusercontent.com/devcontainers/features/refs/heads/main/src/common-utils/scripts/bash_theme_snippet.sh)" \
+    | tee -a /root/.bashrc && \
+    echo "$(curl -sSfL https://raw.githubusercontent.com/devcontainers/features/refs/heads/main/src/common-utils/scripts/bash_theme_snippet.sh)" \
+    | tee -a /home/${USERNAME}/.bashrc && \
+    chown ${USERNAME}:${USERNAME} /home/${USERNAME}/.bashrc && \
+    echo "source ${HOME}/.profile" \
+    | tee -a /home/${USERNAME}/.zprofile && \
+    chown ${USERNAME}:${USERNAME} /home/${USERNAME}/.zprofile && \
+    echo "$(curl -sSfL https://raw.githubusercontent.com/devcontainers/features/refs/heads/main/src/common-utils/scripts/rc_snippet.sh)" \
+    | tee -a /etc/zsh/zshrc && \
+    chsh --shell /bin/zsh ${USERNAME} && \
+    umask g-w,o-w && \
+    mkdir -p /home/${USERNAME}/.oh-my-zsh && \
+    git clone --depth=1 \
+        -c core.eol=lf \
+        -c core.autocrlf=false \
+        -c fsck.zeroPaddedFilemode=ignore \
+        -c fetch.fsck.zeroPaddedFilemode=ignore \
+        -c receive.fsck.zeroPaddedFilemode=ignore \
+        "https://github.com/ohmyzsh/ohmyzsh" "/home/${USERNAME}/.oh-my-zsh" 2>&1 && \
+    cd /home/${USERNAME}/.oh-my-zsh && \
+    git repack -a -d -f --depth=1 --window=1 && \
+    mkdir -p /home/${USERNAME}/.oh-my-zsh/custom/themes && \
+    curl -sSfL https://raw.githubusercontent.com/devcontainers/features/refs/heads/main/src/common-utils/scripts/devcontainers.zsh-theme \
+    -o /home/${USERNAME}/.oh-my-zsh/custom/themes/codespaces.zsh-theme && \
+    ln -sf "/home/${USERNAME}/.oh-my-zsh/custom/themes/devcontainers.zsh-theme" "/home/${USERNAME}/.oh-my-zsh/custom/themes/codespaces.zsh-theme" && \
+    cat "/home/${USERNAME}/.oh-my-zsh/templates/zshrc.zsh-template" > /home/${USERNAME}/.zshrc && \
+    echo "DISABLE_AUTO_UPDATE=true" >> /home/${USERNAME}/.zshrc && \
+    echo "DISABLE_UPDATE_PROMPT=true" >> /home/${USERNAME}/.zshrc && \
+    sed -i -e 's/ZSH_THEME=.*/ZSH_THEME="devcontainers"/g' /home/$USERNAME/.zshrc && \
+    chown ${USERNAME}:${USERNAME} /home/${USERNAME} && \
+    chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}
+
+USER ${USERNAME}
+WORKDIR /home/${USERNAME}
 
 # Install krew, a plugin manager for kubectl https://krew.sigs.k8s.io/
 RUN (cd "$(mktemp -d)" && \
@@ -102,5 +210,3 @@ RUN echo "alias kubectl='kubecolor'" >> ${HOME}/.bash_aliases && \
     echo "alias tf='tofu'" >> ${HOME}/.bash_aliases && \
     echo "alias tl='talosctl'" >> ${HOME}/.bash_aliases && \
     echo "alias yl='yamllint'" >> ${HOME}/.bash_aliases
-
-USER root
