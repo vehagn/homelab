@@ -1,4 +1,4 @@
-name: OpenTofu validation
+name: Tofu format
 
 on:
   push:
@@ -9,31 +9,26 @@ on:
       - '**.tfvars'
       - '**.tftpl'
   pull_request:
-    branches: [ main ]
-  pull_request_target:
-    branches: [ main ]
+    types: [ opened, synchronize ]
+    branches: [ '**' ]
+    paths:
+      - '**.tf'
+      - '**.tofu'
+      - '**.tfvars'
+      - '**.tftpl'
 
 jobs:
   tofu-format:
-    name: Validate
+    name: run tofu format
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    env:
-      TOFU_DIR: tofu
 
     steps:
       - name: Checkout
         uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 #v3.4.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Tofu format
         uses: docker://ghcr.io/vehagn/homelab-devcontainer
         with:
-          args: tofu -chdir=${{ env.TOFU_DIR }} fmt -recursive -diff -check
+          args: tofu fmt -recursive -diff -check

@@ -2,13 +2,14 @@ FROM docker.io/ubuntu:24.04
 
 ARG TARGETARCH
 
-ARG USER_ID=1000
-ARG USER_GID=1000
+ARG USER_ID=1001
+ARG USER_GID=1001
 ARG USERNAME=dev
 
-RUN userdel ubuntu && \
-    rm -rf /home/ubuntu
+# Remove ubuntu user
+RUN userdel -r ubuntu
 
+# Install common packages
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     apt-transport-https \
