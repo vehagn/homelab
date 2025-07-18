@@ -134,7 +134,7 @@ RUN curl -sSLO "https://dl.k8s.io/release/$(curl -sSL https://dl.k8s.io/release/
     install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && \
     rm kubectl kubectl.sha256
 
-    # Install kubecolor for some colour https://kubecolor.github.io/
+# Install kubecolor for some colour https://kubecolor.github.io/
 RUN curl -sSL -o kubecolor.deb "https://kubecolor.github.io/packages/deb/pool/main/k/kubecolor/kubecolor_$(curl -sSL https://kubecolor.github.io/packages/deb/version)_${TARGETARCH}.deb" && \
     dpkg -i kubecolor.deb && \
     rm kubecolor.deb
@@ -152,6 +152,11 @@ RUN curl -sSL -o argocd "https://github.com/argoproj/argo-cd/releases/latest/dow
 # Install yq
 RUN curl -sSL -o yq "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${TARGETARCH}" && \
     install -o root -g root -m 0755 yq /usr/local/bin/yq && \
+    rm yq
+
+# Install kubeconform
+RUN curl -sSL -o yq "https://github.com/yannh/kubeconform/releases/latest/download/kubeconform_linux_${TARGETARCH}" && \
+    install -o root -g root -m 0755 yq /usr/local/bin/kubeconform && \
     rm yq
 
 # Install talosctl
@@ -221,6 +226,7 @@ RUN PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH" kubectl krew install ctx ns oidc-
 # Alias everything
 RUN echo "alias kubectl='kubecolor'" >> ${HOME}/.bash_aliases && \
     echo "alias k='kubectl'" >> ${HOME}/.bash_aliases && \
+    echo "alias kc='kubeconform'" >> ${HOME}/.bash_aliases && \
     echo "alias kz='kubectl kustomize --enable-helm'" >> ${HOME}/.bash_aliases && \
     echo "alias tf='tofu'" >> ${HOME}/.bash_aliases && \
     echo "alias tl='talosctl'" >> ${HOME}/.bash_aliases && \
