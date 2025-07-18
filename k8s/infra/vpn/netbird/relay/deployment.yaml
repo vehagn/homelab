@@ -16,7 +16,7 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - image: docker.io/netbirdio/relay:0.46.0 # renovate: docker=docker.io/netbirdio/relay
+        - image: docker.io/netbirdio/relay:0.51.1 # renovate: docker=docker.io/netbirdio/relay
           imagePullPolicy: IfNotPresent
           name: relay
           securityContext:
