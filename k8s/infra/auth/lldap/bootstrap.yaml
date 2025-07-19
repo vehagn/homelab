@@ -25,55 +25,39 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
-            capabilities:
-              drop: [ ALL ]
+            capabilities: { drop: [ ALL ] }
           envFrom:
-            - configMapRef:
-                name: common-env
-            - configMapRef:
-                name: bootstrap-env
+            - configMapRef: { name: lldap-config }
+            - configMapRef: { name: bootstrap-config }
           env:
+            - name: LLDAP_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef: { name: lldap-credentials, key: LLDAP_LDAP_USER_DN }
             - name: LLDAP_ADMIN_PASSWORD
               valueFrom:
-                secretKeyRef:
-                  name: lldap-credentials
-                  key: LLDAP_LDAP_USER_PASS
+                secretKeyRef: { name: lldap-credentials, key: LLDAP_LDAP_USER_PASS }
           volumeMounts:
-            - name: tmp
-              mountPath: /tmp
-            - name: groups
-              mountPath: /bootstrap/group-configs
-              readOnly: true
-            - name: user-schemas
-              mountPath: /bootstrap/user-schemas
-              readOnly: true
-            - name: users
-              mountPath: /bootstrap/user-configs
-              readOnly: true
+            - { name: tmp, mountPath: /tmp }
+            - { name: groups, mountPath: /bootstrap/group-configs, readOnly: true }
+            - { name: user-schemas, mountPath: /bootstrap/user-schemas, readOnly: true }
+            - { name: users, mountPath: /bootstrap/user-configs, readOnly: true }
       volumes:
-        - name: tmp
-          emptyDir: { }
+        - { name: tmp, emptyDir: { } }
         - name: groups
           projected:
             sources:
               - secret:
-                  name: lldap-config
-                  items:
-                    - key: groups.json
-                      path: groups.json
+                  name: lldap-bootstrap
+                  items: [ { key: groups.json, path: groups.json } ]
         - name: user-schemas
           projected:
             sources:
               - secret:
-                  name: lldap-config
-                  items:
-                    - key: user-schemas.json
-                      path: user-schemas.json
+                  name: lldap-bootstrap
+                  items: [ { key: user-schemas.json, path: user-schemas.json } ]
         - name: users
           projected:
             sources:
               - secret:
-                  name: lldap-config
-                  items:
-                    - key: users.json
-                      path: users.json
+                  name: lldap-bootstrap
+                  items: [ { key: users.json, path: users.json } ]
