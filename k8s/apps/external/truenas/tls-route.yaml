@@ -5,11 +5,7 @@ metadata:
   namespace: truenas
 spec:
   parentRefs:
-    - name: tls-passthrough
-      namespace: gateway
-  hostnames:
-    - "truenas.stonegarden.dev"
+    - { name: internal, namespace: gateway }
+  hostnames: [ truenas.stonegarden.dev ]
   rules:
-    - backendRefs:
-        - name: truenas
-          port: 443
+    - backendRefs: [ { name: truenas, port: 443 } ]
