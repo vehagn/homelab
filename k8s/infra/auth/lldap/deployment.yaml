@@ -32,40 +32,25 @@ spec:
             capabilities:
               drop: [ ALL ]
           envFrom:
-            - configMapRef:
-                name: common-env
-            - configMapRef:
-                name: lldap-config
-            - secretRef:
-                name: lldap-credentials
-            - secretRef:
-                name: smtp-credentials
+            - configMapRef: { name: lldap-config }
+            - secretRef: { name: lldap-crypto }
+            - secretRef: { name: lldap-credentials }
+            - secretRef: { name: smtp-credentials }
           env:
             - name: LLDAP_DATABASE_URL
               valueFrom:
-                secretKeyRef:
-                  name: lldap-postgres-app
-                  key: uri
+                secretKeyRef: { name: lldap-postgres-app, key: uri }
           ports:
-            - name: ldap
-              containerPort: 3890
-            - name: ldaps
-              containerPort: 6360
-            - name: web
-              containerPort: 17170
+            - { name: ldap, containerPort: 3890 }
+            - { name: ldaps, containerPort: 6360 }
+            - { name: web, containerPort: 17170 }
           volumeMounts:
-            - name: lldap-data
-              mountPath: /data
-            - name: cert
-              mountPath: /cert
+            - { name: lldap-data, mountPath: /data }
+            - { name: cert, mountPath: /cert }
       volumes:
         - name: cert
           secret:
             secretName: cert
-            items:
-              - key: tls.key
-                path: tls.key
-              - key: tls.crt
-                path: tls.crt
+            items: [ { key: tls.key, path: tls.key }, { key: tls.crt, path: tls.crt } ]
         - name: lldap-data
           emptyDir: { }

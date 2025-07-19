@@ -2,25 +2,27 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 configMapGenerator:
-  - name: common-env
+  - name: lldap-config
     namespace: lldap
     literals:
       - TZ="Europe/Oslo"
       - GID="1001"
       - UID="1001"
-  - name: lldap-config
-    namespace: lldap
-    literals:
+      - LLDAP_LDAP_BASE_DN="DC=stonegarden,DC=dev"
       - LLDAP_HTTP_URL="https://lldap.stonegarden.dev"
       - LLDAP_LDAPS_OPTIONS__ENABLED="true"
       - LLDAP_LDAPS_OPTIONS__CERT_FILE="/cert/tls.crt"
       - LLDAP_LDAPS_OPTIONS__KEY_FILE="/cert/tls.key"
+      - LLDAP_SMTP_OPTIONS__ENABLE_PASSWORD_RESET="true"
+      - LLDAP_SMTP_OPTIONS__SERVER="smtp.sendgrid.net"
+      - LLDAP_SMTP_OPTIONS__PORT="587"
+      - LLDAP_SMTP_OPTIONS__SMTP_ENCRYPTION="STARTTLS"
+      - LLDAP_SMTP_OPTIONS__FROM="LLDAP <ikkje-noko-svar@stonegarden.dev>"
       - RUST_LOG=warn
-  - name: bootstrap-env
+  - name: bootstrap-config
     namespace: lldap
     literals:
       - LLDAP_URL="http://lldap:80"
-      - LLDAP_ADMIN_USERNAME="admin"
       - DO_CLEANUP="true"
 
 resources:
@@ -28,8 +30,9 @@ resources:
   - svc.yaml
   - cnpg-db.yaml
   - cert.yaml
+  - lldap-crypto.yaml
   - lldap-credentials.yaml
-  - lldap-config.yaml
+  - lldap-bootstrap.yaml
   - smtp-credentials.yaml
   - deployment.yaml
   - http-route.yaml
