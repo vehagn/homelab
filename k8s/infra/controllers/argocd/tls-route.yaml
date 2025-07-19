@@ -5,11 +5,7 @@ metadata:
   namespace: argocd
 spec:
   parentRefs:
-    - name: internal
-      namespace: gateway
-  hostnames:
-    - "argocd.stonegarden.dev"
+    - { name: internal, namespace: gateway }
+  hostnames: [ argocd.stonegarden.dev ]
   rules:
-    - backendRefs:
-        - name: argocd-server
-          port: 443
+    - backendRefs: [ { name: argocd-server, port: 443 } ]
