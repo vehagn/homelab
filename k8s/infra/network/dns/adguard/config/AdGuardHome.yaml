@@ -143,10 +143,6 @@ filtering:
   rewrites:
     - domain: coturn.stonegarden.dev
       answer: 192.168.1.226
-    - domain: proxmox.stonegarden.dev
-      answer: 192.168.1.221
-    - domain: truenas.stonegarden.dev
-      answer: 192.168.1.221
     - domain: '*.stonegarden.dev'
       answer: 192.168.1.220
     - domain: stonegarden.dev
