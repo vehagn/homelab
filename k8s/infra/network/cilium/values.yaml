@@ -70,6 +70,8 @@ loadBalancer:
 
 gatewayAPI:
   enabled: true
+  enableAlpn: true
+  enableAppProtocol: true
 envoy:
   securityContext:
     capabilities:

@@ -3,7 +3,8 @@ kind: Kustomization
 
 resources:
   - ns.yaml
-  - http-route.yaml
+#  - http-route.yaml
+  - tls-route.yaml
   - oidc.yaml
 
 helmCharts:
