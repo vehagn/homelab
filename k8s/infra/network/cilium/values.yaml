@@ -70,8 +70,8 @@ loadBalancer:
 
 gatewayAPI:
   enabled: true
-  enableAlpn: true
-  enableAppProtocol: true
+#  enableAlpn: true
+#  enableAppProtocol: true
 envoy:
   securityContext:
     capabilities:
@@ -87,13 +87,7 @@ hubble:
     enabled: true
     rollOutPods: true
 
-ingressController:
-  enabled: false
-  default: true
-  loadbalancerMode: shared
-  service:
-    annotations:
-      io.cilium/lb-ipam-ips: 192.168.1.223
+ingressController: { enabled: false }
 
 # mTLS
 authentication:
