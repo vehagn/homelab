@@ -12,7 +12,7 @@ configMapGenerator:
     literals:
       - AUTH_AUTHORITY="https://authelia.stonegarden.dev"
       - AUTH_USER_ID_CLAIM="preferred_username"
-      - AUTH_SUPPORTED_SCOPES="openid profile email"
+      - AUTH_SUPPORTED_SCOPES="openid profile email offline_access"
   - name: management-connection-config
     namespace: netbird
     literals:

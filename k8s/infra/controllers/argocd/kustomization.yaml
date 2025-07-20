@@ -3,7 +3,7 @@ kind: Kustomization
 
 resources:
   - ns.yaml
-#  - http-route.yaml
+  - grpc-route.yaml
   - tls-route.yaml
   - oidc.yaml
 

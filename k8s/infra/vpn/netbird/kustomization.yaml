@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ns.yaml
   - http-route.yaml
+  - grpc-route.yaml
   - relay-secret.yaml
   - coturn-credentials.yaml
   - authelia-oidc-credentials.yaml

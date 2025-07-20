@@ -15,11 +15,11 @@ spec:
       securityContext:
         seccompProfile:
           type: RuntimeDefault
-        sysctls:
-          # Considered unsafe, need to enable with kubelet argument.
-          # see https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/#enabling-unsafe-sysctls
-          - name: net.ipv4.conf.all.src_valid_mark
-            value: "1"
+#        sysctls:
+#          # Considered unsafe, need to enable with kubelet argument.
+#          # see https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/#enabling-unsafe-sysctls
+#          - name: net.ipv4.conf.all.src_valid_mark
+#            value: "1"
       containers:
         - name: agent
           image: docker.io/netbirdio/netbird:0.51.1 # renovate: docker=docker.io/netbirdio/netbird

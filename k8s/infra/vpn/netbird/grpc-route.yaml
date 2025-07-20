@@ -1,0 +1,19 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: GRPCRoute
+metadata:
+  name: grpc-route
+  namespace: netbird
+spec:
+  parentRefs:
+    - { name: external, namespace: gateway }
+    - { name: internal, namespace: gateway }
+  hostnames: [ "netbird.stonegarden.dev" ]
+  rules:
+    - backendRefs: [ { name: management, port: 80 } ]
+      matches:
+        - headers: [ { name: Content-Type, value: application/grpc } ]
+        - method: { service: management.ManagementService }
+    - backendRefs: [ { name: signal, port: 80 } ]
+      matches:
+        - headers: [ { name: Content-Type, value: application/grpc } ]
+        - method: { service: signalexchange.SignalExchange }

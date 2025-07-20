@@ -5,41 +5,13 @@ metadata:
   namespace: netbird
 spec:
   parentRefs:
-    - name: external
-      namespace: gateway
-    - name: internal
-      namespace: gateway
-  hostnames:
-    - "netbird.stonegarden.dev"
+    - { name: external, namespace: gateway }
+    - { name: internal, namespace: gateway }
+  hostnames: [ "netbird.stonegarden.dev" ]
   rules:
-    - backendRefs:
-        - name: dashboard
-          port: 80
-      matches:
-        - path:
-            type: PathPrefix
-            value: /
-    - backendRefs:
-        - name: relay
-          port: 80
-      matches:
-        - path:
-            type: PathPrefix
-            value: /relay
-    - backendRefs:
-        - name: management
-          port: 80
-      matches:
-        - path:
-            type: PathPrefix
-            value: /api
-        - path:
-            type: PathPrefix
-            value: /management.ManagementService/
-    - backendRefs:
-        - name: signal
-          port: 80
-      matches:
-        - path:
-            type: PathPrefix
-            value: /signalexchange.SignalExchange/
+    - backendRefs: [ { name: dashboard, port: 80 } ]
+      matches: [ { path: { type: PathPrefix, value: / } } ]
+    - backendRefs: [ { name: relay, port: 80 } ]
+      matches: [ { path: { type: PathPrefix, value: /relay } } ]
+    - backendRefs: [ { name: management, port: 80 } ]
+      matches: [ { path: { type: PathPrefix, value: /api } } ]
