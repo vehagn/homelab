@@ -64,6 +64,8 @@ dns:
   use_http3_upstreams: false
   serve_plain_dns: true
   hostsfile_enabled: true
+  pending_requests:
+    enabled: true
 tls:
   enabled: false
   server_name: ""
@@ -102,7 +104,7 @@ filters:
     id: 2
 whitelist_filters: [ ]
 user_rules:
-  - '@@||sdk.iad-01.braze.com^$important' # Payments?
+  - '@@||sdk.iad-01.braze.com^$important'
   - '@@||www.merchant-center-analytics.goog^$important'
 dhcp:
   enabled: false
@@ -133,6 +135,7 @@ filtering:
     enabled: false
     bing: true
     duckduckgo: true
+    ecosia: true
     google: true
     pixabay: true
     yandex: true
@@ -141,12 +144,14 @@ filtering:
   parental_block_host: family-block.dns.adguard.com
   safebrowsing_block_host: standard-block.dns.adguard.com
   rewrites:
-    - domain: coturn.stonegarden.dev
-      answer: 192.168.1.226
     - domain: '*.stonegarden.dev'
       answer: 192.168.1.220
     - domain: stonegarden.dev
       answer: 192.168.1.220
+    - domain: coturn.stonegarden.dev
+      answer: 192.168.1.226
+  safe_fs_patterns:
+    - /opt/adguardhome/work/data/userfilters/*
   safebrowsing_cache_size: 1048576
   safesearch_cache_size: 1048576
   parental_cache_size: 1048576
@@ -166,6 +171,7 @@ clients:
     hosts: true
   persistent: [ ]
 log:
+  enabled: true
   file: ""
   max_backups: 0
   max_size: 100
@@ -177,4 +183,4 @@ os:
   group: ""
   user: ""
   rlimit_nofile: 0
-schema_version: 28
+schema_version: 29
