@@ -1,6 +1,6 @@
 # 1. Fetch latest release data from GitHub API
-data "http" "github_latest_release" {
-  url = "https://api.github.com/repos/CutTheCrapTech/email-gateway-cloudflare/releases/latest"
+data "http" "github_releases" {
+  url = "https://api.github.com/repos/CutTheCrapTech/email-gateway-cloudflare/releases"
 
   # GitHub API may require this header
   request_headers = {
@@ -8,7 +8,10 @@ data "http" "github_latest_release" {
   }
 }
 
-# 2. Parse the JSON response and extract the tag name (version)
+# 2. Parse the JSON response and extract the tag name (version) for the correct package
 locals {
-  latest_version = jsondecode(data.http.github_latest_release.response_body).tag_name
+  package_name   = "@email-gateway/cloudflare-worker"
+  releases       = jsondecode(data.http.github_releases.response_body)
+  worker_release = [for r in local.releases : r if startswith(r.tag_name, "${local.package_name}@")][0]
+  latest_version = local.worker_release.tag_name
 }
