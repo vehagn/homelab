@@ -27,3 +27,13 @@ resource "infisical_secret" "cloudflare_email_tofu_token" {
   folder_path  = var.infisical_rw_secrets_path
   workspace_id = var.infisical_project_id
 }
+
+# Store Github Workers Account Token
+resource "infisical_secret" "cloudflare_gha_workers_deployment" {
+  name  = "TF_VAR_cloudflare_gha_workers_deployment"
+  value = cloudflare_account_token.gha_workers_deployment.value
+
+  env_slug     = var.branch_env
+  folder_path  = var.infisical_rw_secrets_path
+  workspace_id = var.infisical_project_id
+}
