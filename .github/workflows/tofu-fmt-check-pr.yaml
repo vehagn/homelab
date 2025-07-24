@@ -1,13 +1,8 @@
 name: Validate tofu formatting on pull request
 
 on:
-  # Triggers the workflow on pull request events targeting the main or prod branches
-  pull_request_target:
-    branches:
-      - main
-      - prod
-  # Also triggers on direct pull requests to main or prod (for forks or direct pushes)
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     branches:
       - main
       - prod
