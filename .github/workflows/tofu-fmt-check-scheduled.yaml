@@ -11,7 +11,7 @@ jobs:
   check_all:
     name: Check all tofu file formatting
     runs-on: ubuntu-latest
-    # Permissions needed for the job
+    # Permissions needed for this job
     permissions:
       contents: read # To check out the code
 
