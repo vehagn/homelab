@@ -11,10 +11,10 @@ spec:
     app: torrent
   ports:
     - name: torrent-tcp
-      port: 10010
+      port: 10011
       targetPort: torrent-tcp
       protocol: TCP
     - name: torrent-udp
-      port: 10010
+      port: 10011
       targetPort: torrent-udp
       protocol: UDP
