@@ -45,7 +45,8 @@
     "website": "Website URL",
     "zoneinfo": "Timezone",
     "argocd_claim": "Argo CD Membership",
-    "audiobookshelf": "Audiobookshelf Membership"
+    "audiobookshelf": "Audiobookshelf Membership",
+    "grafana": "Grafana Membership"
   },
   "scopes": {
     "address": "Access your address",
@@ -57,6 +58,7 @@
     "phone": "Access your phone number",
     "profile": "Access your profile information",
     "argocd_scope": "Access Argo CD memberships",
-    "audiobookshelf": "Access Audiobookshelf memberships"
+    "audiobookshelf": "Access Audiobookshelf memberships",
+    "grafana": "Access Grafana memberships"
   }
 }

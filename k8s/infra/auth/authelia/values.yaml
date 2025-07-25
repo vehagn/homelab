@@ -68,6 +68,7 @@ configMap:
         extra:
           argocd: { multi_valued: true, value_type: string }
           audiobookshelf: { multi_valued: true, value_type: string }
+          grafana: { multi_valued: true, value_type: string }
 
   identity_providers:
     oidc:
@@ -94,8 +95,10 @@ configMap:
           id_token: [ email, email_verified, alt_emails, name, preferred_username, argocd_claim ]
         audiobookshelf:
           custom_claims: { audiobookshelf: { attribute: audiobookshelf } }
-        # https://www.authelia.com/integration/openid-connect/openid-connect-1.0-claims/#restore-functionality-prior-to-claims-parameter
+        grafana:
+          custom_claims: { grafana: { attribute: grafana } }
         legacy:
+          # https://www.authelia.com/integration/openid-connect/openid-connect-1.0-claims/#restore-functionality-prior-to-claims-parameter
           id_token: [ email, email_verified, alt_emails, name, preferred_username, groups ]
         username_email:
           id_token: [ email, email_verified, alt_emails, name, preferred_username ]
@@ -104,6 +107,8 @@ configMap:
           claims: [ argocd_claim ]
         audiobookshelf:
           claims: [ audiobookshelf ]
+        grafana:
+          claims: [ grafana ]
       clients:
         - client_id: argocd
           client_secret: { path: /secrets/client-argocd/client_secret.txt }
@@ -111,7 +116,7 @@ configMap:
           public: false
           authorization_policy: two_factor
           claims_policy: argocd_policy
-          pre_configured_consent_duration: 1 month
+          pre_configured_consent_duration: 3 months
           require_pkce: false
           redirect_uris:
             - https://argocd.stonegarden.dev/auth/callback
@@ -127,7 +132,7 @@ configMap:
           public: true
           authorization_policy: two_factor
           claims_policy: argocd_policy
-          pre_configured_consent_duration: 1 month
+          pre_configured_consent_duration: 3 months
           redirect_uris: [ http://localhost:8085/auth/callback ]
           scopes: [ openid, email, profile, offline_access, argocd_scope ]
           id_token_signed_response_alg: ES256
@@ -142,7 +147,7 @@ configMap:
           public: false
           authorization_policy: one_factor
           claims_policy: audiobookshelf
-          pre_configured_consent_duration: 1 month
+          pre_configured_consent_duration: 3 months
           require_pkce: true
           redirect_uris:
             - https://abs.stonegarden.dev/audiobookshelf/auth/openid/callback
@@ -153,12 +158,30 @@ configMap:
           id_token_signed_response_alg: ES256
           access_token_signed_response_alg: ES256
 
+        - client_id: grafana
+          client_secret: { path: /secrets/client-grafana/client_secret.txt }
+          client_name: Grafana
+          public: false
+          authorization_policy: two_factor
+          claims_policy: grafana
+          pre_configured_consent_duration: 3 months
+          require_pkce: true
+          pkce_challenge_method: S256
+          redirect_uris: [ https://grafana.stonegarden.dev/login/generic_oauth ]
+          scopes: [ openid, email, profile, offline_access, grafana ]
+          response_types: [ code ]
+          grant_types: [ authorization_code, refresh_token ]
+          userinfo_signed_response_alg: none
+          id_token_signed_response_alg: ES256
+          access_token_signed_response_alg: ES256
+          token_endpoint_auth_method: client_secret_basic
+
         - client_id: kubectl
           client_name: kubectl
           public: true
           authorization_policy: two_factor
           claims_policy: legacy
-          pre_configured_consent_duration: 1 month
+          pre_configured_consent_duration: 3 months
           require_pkce: true
           redirect_uris: [ http://localhost:8000, http://localhost:18000 ]
           scopes: [ openid, email, profile, offline_access, groups ]
@@ -173,7 +196,7 @@ configMap:
           public: false
           authorization_policy: two_factor
           claims_policy: username_email
-          pre_configured_consent_duration: 1 month
+          pre_configured_consent_duration: 3 months
           require_pkce: true
           pkce_challenge_method: S256
           audience: [ netbird ]
@@ -205,6 +228,8 @@ secret:
     client-argocd:
       items: [ { key: clientSecret, path: client_secret.txt } ]
     client-audiobookshelf:
+      items: [ { key: clientSecret, path: client_secret.txt } ]
+    client-grafana:
       items: [ { key: clientSecret, path: client_secret.txt } ]
     client-netbird:
       items: [ { key: clientSecret, path: client_secret.txt } ]

@@ -19,6 +19,7 @@ resources:
   - cnpg-db.yaml
   - clients/argocd.yaml
   - clients/audiobookshelf.yaml
+  - clients/grafana.yaml
   - clients/netbird.yaml
 
 helmCharts:

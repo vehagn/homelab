@@ -3,10 +3,10 @@ kind: Kustomization
 
 resources:
   - ns.yaml
-#  - kube-prometheus-stack.yaml
   - alertmanager-http-route.yaml
   - grafana-http-route.yaml
   - prometheus-http-route.yaml
+  - grafana-oidc-credentials.yaml
 
 helmCharts:
   - name: kube-prometheus-stack
