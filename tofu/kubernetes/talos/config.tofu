@@ -3,7 +3,8 @@ locals {
   kubernetes_endpoint         = coalesce(var.cluster.vip, local.first_control_plane_node_ip)
   extra_manifests = concat(var.cluster.extra_manifests, [
     "https://github.com/kubernetes-sigs/gateway-api/releases/download/${var.cluster.gateway_api_version}/standard-install.yaml",
-    "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/${var.cluster.gateway_api_version}/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml"
+    "https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/${var.cluster.gateway_api_version}/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml",
+    "https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/heads/main/charts/kube-prometheus-stack/charts/crds/crds/crd-servicemonitors.yaml"
   ])
 }
 

@@ -1,5 +1,12 @@
+# https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml
 prometheus:
   prometheusSpec:
+    podMonitorNamespaceSelector: { }
+    podMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelector: { }
+    serviceMonitorNamespaceSelector: { }
+    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelector: { }
     nodeSelector:
       topology.kubernetes.io/zone: abel
     storageSpec:
@@ -18,3 +25,23 @@ prometheus:
 
 nodeExporter:
   enabled: false
+
+grafana:
+  enabled: true
+  defaultDashboardsEnabled: true
+  defaultDashboardsTimezone: Europe/Oslo
+  # https://github.com/grafana/helm-charts/issues/527#issuecomment-982319638
+  sidecar:
+    dashboards:
+      enabled: true
+      searchNamespace: ALL
+      folder: /tmp/dashboards
+      folderAnnotation: grafana_folder
+      annotations:
+        grafana_folder: "Kubernetes"
+      provider:
+        allowUiUpdates: false
+        foldersFromFilesStructure: true
+
+    datasources:
+      enabled: true

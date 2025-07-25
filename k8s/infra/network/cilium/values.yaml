@@ -30,6 +30,16 @@ ipam:
 
 operator:
   rollOutPods: true
+  prometheus:
+    metricsService: true
+    enabled: true
+    port: 9963
+    serviceMonitor:
+      enabled: true
+  dashboards:
+    enabled: true
+    annotations:
+      grafana_folder: "Cilium"
   resources:
     limits:
       cpu: 500m
@@ -72,7 +82,13 @@ gatewayAPI:
   enabled: true
 #  enableAlpn: true
 #  enableAppProtocol: true
+
 envoy:
+  prometheus:
+    enabled: true
+    port: "9964"
+    serviceMonitor:
+      enabled: true
   securityContext:
     capabilities:
       keepCapNetBindService: true
@@ -80,14 +96,44 @@ envoy:
 
 hubble:
   enabled: true
+  metrics:
+    enabled:
+      - dns
+      - drop
+      - tcp
+      - flow
+      - port-distribution
+      - icmp
+      - "httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction;sourceContext=workload-name|reserved-identity;destinationContext=workload-name|reserved-identity"
+    enableOpenMetrics: true
+    port: 9965
+    serviceMonitor:
+      enabled: true
+    dashboards:
+      enabled: true
+      annotations:
+        grafana_folder: "Hubble"
   relay:
     enabled: true
     rollOutPods: true
+    prometheus:
+      enabled: true
+      port: 9966
+      serviceMonitor:
+        enabled: true
   ui:
     enabled: true
     rollOutPods: true
 
 ingressController: { enabled: false }
+
+clustermesh:
+  apiserver:
+    metrics:
+      enabled: true
+      port: 9962
+      serviceMonitor:
+        enabled: true
 
 # mTLS
 authentication:
@@ -99,3 +145,16 @@ authentication:
         server:
           dataStorage:
             storageClass: cilium-spire-sc
+
+prometheus:
+  metricsService: true
+  enabled: true
+  port: 9962
+  serviceMonitor:
+    enabled: true
+    trustCRDsExist: true
+
+dashboards:
+  enabled: true
+  annotations:
+    grafana_folder: "Cilium"
