@@ -1,10 +1,29 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+# Manually render ServiceMonitors since Argo CD chart checks if they exist
+# Argo CD thinks the cluster doesn't have this capability
+# Could possibly alter the plugin
+# > helm template argo/argo-cd --api-versions monitoring.coreos.com/v1 -f values.yaml
+
 resources:
   - ns.yaml
   - tls-route.yaml
   - oidc.yaml
+  - service-monitors/argocd-application-controller.yaml
+  - service-monitors/argocd-applicationset-controller.yaml
+  - service-monitors/argocd-redis.yaml
+  - service-monitors/argocd-repo-server.yaml
+  - service-monitors/argocd-server.yaml
+
+configMapGenerator:
+  - name: argocd-dashboard
+    namespace: argocd
+    # From https://github.com/argoproj/argo-cd/blob/master/examples/dashboard.json
+    files: [ argocd-dashboard.json ]
+    options:
+      annotations: { grafana_folder: "Argo CD" }
+      labels: { grafana_dashboard: "1" }
 
 helmCharts:
   - name: argo-cd

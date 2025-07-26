@@ -45,6 +45,10 @@ crds:
   keep: false
 
 controller:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
   resources:
     requests:
       cpu: 100m
@@ -54,6 +58,10 @@ controller:
 
 dex:
   enabled: false
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
   resources:
     requests:
       cpu: 10m
@@ -62,6 +70,10 @@ dex:
       memory: 128Mi
 
 redis:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
   resources:
     requests:
       cpu: 100m
@@ -70,6 +82,10 @@ redis:
       memory: 1Gi
 
 server:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
   resources:
     requests:
       cpu: 50m
@@ -90,6 +106,10 @@ server:
     servicePortHttpsAppProtocol: kubernetes.io/h2c
 
 repoServer:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
   containerSecurityContext:
     readOnlyRootFilesystem: true
   volumes:
@@ -128,6 +148,10 @@ repoServer:
           name: cmp-tmp
 
 applicationSet:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
   resources:
     requests:
       cpu: 50m
@@ -137,6 +161,10 @@ applicationSet:
 
 notifications:
   enabled: false
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
   resources:
     requests:
       cpu: 100m
