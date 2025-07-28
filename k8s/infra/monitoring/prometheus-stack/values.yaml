@@ -24,7 +24,7 @@ prometheus:
               app: prometheus
 
 nodeExporter:
-  enabled: false
+  enabled: true
 
 grafana:
   enabled: true
