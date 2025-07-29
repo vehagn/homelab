@@ -14,7 +14,7 @@ configMapGenerator:
       - LLDAP_LDAPS_OPTIONS__CERT_FILE="/cert/tls.crt"
       - LLDAP_LDAPS_OPTIONS__KEY_FILE="/cert/tls.key"
       - LLDAP_SMTP_OPTIONS__ENABLE_PASSWORD_RESET="true"
-      - LLDAP_SMTP_OPTIONS__SERVER="smtp.sendgrid.net"
+      - LLDAP_SMTP_OPTIONS__SERVER="smtp-relay.brevo.com"
       - LLDAP_SMTP_OPTIONS__PORT="587"
       - LLDAP_SMTP_OPTIONS__SMTP_ENCRYPTION="STARTTLS"
       - LLDAP_SMTP_OPTIONS__FROM="LLDAP <ikkje-noko-svar@stonegarden.dev>"

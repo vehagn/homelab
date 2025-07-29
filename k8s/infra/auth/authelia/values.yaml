@@ -24,7 +24,7 @@ configMap:
   default_2fa_method: totp
   theme: dark
   log:
-    level: info
+    level: debug
 
   access_control:
     default_policy: deny
@@ -50,11 +50,11 @@ configMap:
   notifier:
     smtp:
       enabled: true
-      address: submission://smtp.sendgrid.net:587
+      address: smtp://smtp-relay.brevo.com:587
       sender: Authelia <ikkje-noko-svar@stonegarden.dev>
-      disable_html_emails: true
-      username: apikey
-      password: { secret_name: smtp-auth }
+      disable_html_emails: false
+      username: 93744d001@smtp-brevo.com
+      password: { secret_name: smtp-credentials }
 
   authentication_backend:
     ldap:
@@ -63,7 +63,7 @@ configMap:
       address: ldaps://lldap.stonegarden.dev
       base_dn: DC=stonegarden,DC=dev
       user: UID=authelia,OU=people,DC=stonegarden,DC=dev
-      password: { secret_name: lldap-auth }
+      password: { secret_name: lldap-credentials }
       attributes:
         extra:
           argocd: { multi_valued: true, value_type: string }
@@ -213,9 +213,9 @@ secret:
   additionalSecrets:
     authelia-postgres-app:
       items: [ { key: password, path: storage.postgres.password.txt } ]
-    lldap-auth:
+    lldap-credentials:
       items: [ { key: password, path: authentication.ldap.password.txt } ]
-    smtp-auth:
+    smtp-credentials:
       items: [ { key: password, path: notifier.smtp.password.txt } ]
     jwk-rsa:
       items:
