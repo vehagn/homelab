@@ -50,10 +50,10 @@ configMap:
   notifier:
     smtp:
       enabled: true
-      address: smtp://smtp-relay.brevo.com:587
+      address: smtp://smtp.mailersend.net:587
       sender: Authelia <ikkje-noko-svar@stonegarden.dev>
       disable_html_emails: false
-      username: 93744d001@smtp-brevo.com
+      username: MS_aGoHwE@stonegarden.dev
       password: { secret_name: smtp-credentials }
 
   authentication_backend:
