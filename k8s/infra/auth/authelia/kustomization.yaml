@@ -5,8 +5,13 @@ namespace: authelia
 configMapGenerator:
   - name: consent
     namespace: authelia
-    files:
-      - ./locales/en/consent.json
+    files: [ ./locales/en/consent.json ]
+  - name: grafana-dashboard
+    namespace: authelia
+    files: [ ./dashboards/simple.json ]
+    options:
+      annotations: { grafana_folder: "Authelia" }
+      labels: { grafana_dashboard: "1" }
 
 resources:
   - ns.yaml

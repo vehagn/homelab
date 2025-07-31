@@ -27,7 +27,14 @@ configMap:
   default_2fa_method: totp
   theme: dark
   log:
-    level: debug
+    level: info
+
+  telemetry:
+    metrics:
+      enabled: true
+      port: 9959
+      serviceMonitor:
+        enabled: true
 
   access_control:
     default_policy: deny
