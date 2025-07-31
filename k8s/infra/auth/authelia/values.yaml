@@ -10,6 +10,9 @@ pod:
   env:
     - name: TZ
       value: Europe/Oslo
+    - name: AUTHELIA_NOTIFIER_SMTP_USERNAME
+      valueFrom:
+        secretKeyRef: { name: smtp-credentials, key: username }
   extraVolumeMounts:
     - name: consent
       mountPath: /config/assets/locales/en/consent.json
@@ -53,7 +56,6 @@ configMap:
       address: smtp://smtp.mailersend.net:587
       sender: Authelia <ikkje-noko-svar@stonegarden.dev>
       disable_html_emails: false
-      username: MS_aGoHwE@stonegarden.dev
       password: { secret_name: smtp-credentials }
 
   authentication_backend:
