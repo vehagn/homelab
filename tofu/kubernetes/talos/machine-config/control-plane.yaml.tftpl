@@ -1,3 +1,4 @@
+# https://www.talos.dev/v1.10/reference/configuration/v1alpha1/config/
 machine:
   network:
     interfaces:
@@ -18,6 +19,15 @@ cluster:
   allowSchedulingOnControlPlanes: true
   apiServer:
     ${indent(4, api_server)}
+  controllerManager:
+    extraArgs:
+      bind-address: 0.0.0.0
+  etcd:
+    extraArgs:
+      listen-metrics-urls: http://0.0.0.0:2381
+  scheduler:
+    extraArgs:
+      bind-address: 0.0.0.0
   network:
     cni:
       name: none

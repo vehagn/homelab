@@ -23,12 +23,65 @@ prometheus:
             matchLabels:
               app: prometheus
 
+# https://github.com/siderolabs/talos/discussions/7214
+kubeControllerManager:
+  enabled: true
+  serviceMonitor:
+    relabelings:
+      - sourceLabels: [ __meta_kubernetes_pod_node_name ]
+        separator: ;
+        regex: ^(.*)$
+        targetLabel: nodename
+        replacement: $1
+        action: replace
+    metricRelabelings:
+      - action: labeldrop
+        regex: pod
+
+kubeEtcd:
+  enabled: true
+  service:
+    selector:
+      # etcd doesn't run as a container,
+      # but most probably runs on the same nodes that host a controller
+      k8s-app: kube-controller-manager
+  serviceMonitor:
+    relabelings:
+      - sourceLabels: [ __meta_kubernetes_pod_node_name ]
+        separator: ;
+        regex: ^(.*)$
+        targetLabel: nodename
+        replacement: $1
+        action: replace
+    metricRelabelings:
+      - action: labeldrop
+        regex: pod
+
+kubeProxy:
+  # Cilium replaces Kube Proxy
+  enabled: false
+
+
+kubeScheduler:
+  enabled: true
+  serviceMonitor:
+    relabelings:
+      - sourceLabels: [ __meta_kubernetes_pod_node_name ]
+        separator: ;
+        regex: ^(.*)$
+        targetLabel: nodename
+        replacement: $1
+        action: replace
+    metricRelabelings:
+      - action: labeldrop
+        regex: pod
+
 nodeExporter:
   enabled: true
 
 grafana:
   enabled: true
-  envFromSecrets: [ {name: grafana-oidc-credentials } ]
+  envFromSecrets: [ { name: grafana-oidc-credentials } ]
   grafana.ini:
     security:
       disable_initial_admin_creation: false
