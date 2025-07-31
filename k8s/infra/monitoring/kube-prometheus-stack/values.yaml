@@ -31,7 +31,9 @@ grafana:
   envFromSecrets: [ {name: grafana-oidc-credentials } ]
   grafana.ini:
     security:
-      disable_initial_admin_creation: true
+      disable_initial_admin_creation: false
+      admin_user: $__env{GF_SECURITY_ADMIN_USER}
+      admin_password: $__env{GF_SECURITY_ADMIN_PASSWORD}
     paths:
       data: "/var/lib/grafana/"
       logs: "/var/log/grafana"
@@ -44,12 +46,12 @@ grafana:
     server:
       root_url: https://grafana.stonegarden.dev
     auth.basic:
-      enabled: false
+      enabled: true
     auth.generic_oauth:
       enabled: true
       name: Authelia
-      client_id: "${OIDC_CLIENT_ID}"
-      client_secret: "${OIDC_CLIENT_SECRET}"
+      client_id: $__env{OIDC_CLIENT_ID}
+      client_secret: $__env{OIDC_CLIENT_SECRET}
       auth_style: InHeader
       scopes: openid email profile offline_access grafana
       empty_scopes: false
