@@ -75,3 +75,37 @@ tofu import 'module.volumes.module.persistent-volume["pv-netbird-management"].ku
 tofu import 'module.volumes.module.persistent-volume["pv-plex"].kubernetes_persistent_volume.pv' pv-plex
 tofu import 'module.volumes.module.persistent-volume["pv-prometheus"].kubernetes_persistent_volume.pv' pv-prometheus
 ```
+
+## Backup volume on Proxmox node
+
+list all volumes
+
+```shell
+zfs list
+```
+
+create snapshot
+
+```shell
+zfs snapshot rpool/data/<NAME>@backup
+```
+
+list snapshots
+
+```shell
+zfs list -t snapshot
+```
+
+```shell
+zpool create rpool/data/<NAME>-backup
+```
+
+```shell
+root@abel:~# zfs send rpool/data/<NAME>@backup | zfs receive -F -u rpool/data/<NAME>-backup
+```
+
+## Manually mount disk
+
+```shell
+qm set <vmid> -<disk_type> <storage>:<volume>
+```

@@ -51,6 +51,10 @@ kubernetes_volumes = {
     node = "abel"
     size = "12G"
   }
+  pv-plex-config = {
+    node = "abel"
+    size = "12G"
+  }
   pv-prometheus = {
     node = "abel"
     size = "10G"
