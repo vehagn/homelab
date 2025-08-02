@@ -59,7 +59,7 @@ spec:
       hostNetwork: true
       containers:
         - name: cilium-install
-          image: quay.io/cilium/cilium-cli:v0.18.5 # renovate: github-releases=cilium/cilium-cli
+          image: quay.io/cilium/cilium-cli:v0.18.6 # renovate: github-releases=cilium/cilium-cli
           env:
             - name: KUBERNETES_SERVICE_HOST
               valueFrom:
@@ -75,7 +75,7 @@ spec:
           command:
             - cilium
             - install
-            - --version=v1.17.6 # renovate: github-releases=cilium/cilium
+            - --version=v1.18.0 # renovate: github-releases=cilium/cilium
             - --set
             - kubeProxyReplacement=true
             - --values
