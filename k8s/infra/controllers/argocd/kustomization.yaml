@@ -15,15 +15,7 @@ resources:
   - service-monitors/argocd-redis.yaml
   - service-monitors/argocd-repo-server.yaml
   - service-monitors/argocd-server.yaml
-
-configMapGenerator:
-  - name: argocd-dashboard
-    namespace: argocd
-    # From https://github.com/argoproj/argo-cd/blob/master/examples/dashboard.json
-    files: [ argocd-dashboard.json ]
-    options:
-      annotations: { grafana_folder: "Argo CD" }
-      labels: { grafana_dashboard: "1" }
+  - dashboard.yaml
 
 helmCharts:
   - name: argo-cd

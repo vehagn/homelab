@@ -38,8 +38,6 @@ operator:
       enabled: true
   dashboards:
     enabled: true
-    annotations:
-      grafana_folder: "Cilium"
   resources:
     limits:
       cpu: 500m
@@ -111,8 +109,6 @@ hubble:
       enabled: true
     dashboards:
       enabled: true
-      annotations:
-        grafana_folder: "Hubble"
   relay:
     enabled: true
     rollOutPods: true
@@ -156,5 +152,3 @@ prometheus:
 
 dashboards:
   enabled: true
-  annotations:
-    grafana_folder: "Cilium"

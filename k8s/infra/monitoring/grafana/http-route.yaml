@@ -2,7 +2,7 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: grafana
-  namespace: monitoring
+  namespace: grafana
 spec:
   parentRefs:
     - name: internal
@@ -15,5 +15,5 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: kube-prometheus-stack-grafana
-          port: 80
+        - name: grafana-service
+          port: 3000
