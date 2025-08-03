@@ -6,10 +6,9 @@ configMapGenerator:
     namespace: netbird
     literals:
       - NB_HOSTNAME="talos-agent"
-      - NB_LOG_LEVEL="warn"
+      - NB_LOG_LEVEL="info"
       - NB_MANAGEMENT_URL="https://netbird.stonegarden.dev"
       - NB_ADMIN_URL="https://netbird.stonegarden.dev"
-      - NB_CONFIG="/var/lib/netbird/config.json"
 
 resources:
   - agent-setup-key.yaml
