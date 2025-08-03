@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ns.yaml
+  - grafana.yaml
+  - grafana-operator-dashboard.yaml
+  - http-route.yaml
+  - admin-credentials.yaml
+  - oidc-credentials.yaml
+  - datasources/alertmanager-operated.yaml
+  - datasources/prometheus-operated.yaml
+
+helmCharts:
+  - name: grafana-operator
+    repo: oci://ghcr.io/grafana/helm-charts
+    includeCRDs: true
+    namespace: grafana
+    version: v5.19.1 # renovate: github-releases=grafana/grafana-operator
+    releaseName: grafana-operator
+    valuesFile: ./values.yaml

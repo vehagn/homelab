@@ -4,6 +4,8 @@ kind: Kustomization
 resources:
   - announce.yaml
   - ip-pool.yaml
+  - dashboards/cilium.yaml
+  - dashboards/cilium-operator.yaml
 
 helmCharts:
   - name: cilium

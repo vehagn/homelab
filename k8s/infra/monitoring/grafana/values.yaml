@@ -1,0 +1,7 @@
+# https://github.com/grafana/grafana-operator/blob/master/deploy/helm/grafana-operator/values.yaml
+
+serviceMonitor:
+  enabled: true
+
+dashboard:
+  enabled: true

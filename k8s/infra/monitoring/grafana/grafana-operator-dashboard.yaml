@@ -1,0 +1,15 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: grafana-operator
+  namespace: grafana
+spec:
+  allowCrossNamespaceImport: true
+  folder: Grafana
+  resyncPeriod: 10m
+  instanceSelector:
+    matchLabels:
+      app: grafana
+  configMapRef:
+    name: grafana-operator-dashboard
+    key: grafana-operator.json
