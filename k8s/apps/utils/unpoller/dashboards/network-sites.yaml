@@ -1,0 +1,16 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: network-sites
+  namespace: unpoller
+spec:
+  allowCrossNamespaceImport: true
+  folder: UniFi
+  resyncPeriod: 10m
+  instanceSelector:
+    matchLabels:
+      app: grafana
+  datasources:
+    - inputName: DS_PROMETHEUS
+      datasourceName: default
+  url: https://grafana.com/api/dashboards/11311/revisions/latest/download

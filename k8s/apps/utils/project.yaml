@@ -11,6 +11,8 @@ spec:
       server: '*'
     - namespace: 'torrent'
       server: '*'
+    - namespace: 'unpoller'
+      server: '*'
     - namespace: 'unrar'
       server: '*'
   clusterResourceWhitelist:

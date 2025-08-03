@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: unpoller
+  namespace: unpoller
+  labels:
+    app: unpoller
+spec:
+  type: ClusterIP
+  selector:
+    app: unpoller
+  ports:
+    - name: metrics
+      port: 9130
+      targetPort: metrics

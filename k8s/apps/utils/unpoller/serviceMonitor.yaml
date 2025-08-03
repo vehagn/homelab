@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: unpoller
+  namespace: unpoller
+spec:
+  endpoints:
+    - path: /metrics
+      port: metrics
+  namespaceSelector:
+    matchNames:
+      - unpoller
+  selector:
+    matchLabels:
+      app: unpoller

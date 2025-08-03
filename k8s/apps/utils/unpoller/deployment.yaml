@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unpoller
+  namespace: unpoller
+spec:
+  selector:
+    matchLabels:
+      app: unpoller
+  template:
+    metadata:
+      labels:
+        app: unpoller
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: unpoller
+          image: ghcr.io/unpoller/unpoller:v2.15.3 # renovate: github-releases=unpoller/unpoller
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            capabilities:
+              drop: [ ALL ]
+          resources:
+            requests:
+              memory: 16Mi
+              cpu: 5m
+            limits:
+              memory: 32Mi
+          ports:
+            - name: metrics
+              containerPort: 9130
+          livenessProbe:
+            httpGet: { path: /, port: metrics }
+          readinessProbe:
+            httpGet: { path: /,  port: metrics }
+          volumeMounts:
+            - name: config
+              mountPath: /etc/unpoller/up.conf
+              subPath: up.conf
+            - name: user-credentials
+              mountPath: /mnt/secrets/password
+              subPath: password
+      volumes:
+        - name: config
+          configMap:
+            name: unpoller-config
+        - name: user-credentials
+          secret:
+            secretName: user-credentials
