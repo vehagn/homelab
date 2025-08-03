@@ -39,7 +39,7 @@ spec:
         spec:
           containers:
             - name: grafana
-              image: docker.io/grafana/grafana:11.3.0 # renovate: docker=docker.io/grafana/grafana
+              image: docker.io/grafana/grafana:12.1.0 # renovate: docker=docker.io/grafana/grafana
               env:
                 - name: GF_SECURITY_ADMIN_USER
                   valueFrom:
