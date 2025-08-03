@@ -1,0 +1,15 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: hubble
+  namespace: kube-system
+spec:
+  allowCrossNamespaceImport: true
+  folder: Hubble
+  resyncPeriod: 10m
+  instanceSelector:
+    matchLabels:
+      app: grafana
+  configMapRef:
+    name: hubble-dashboard
+    key: hubble-dashboard.json

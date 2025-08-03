@@ -1,0 +1,15 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: cilium
+  namespace: kube-system
+spec:
+  allowCrossNamespaceImport: true
+  folder: Cilium
+  resyncPeriod: 10m
+  instanceSelector:
+    matchLabels:
+      app: grafana
+  configMapRef:
+    name: cilium-dashboard
+    key: cilium-dashboard.json

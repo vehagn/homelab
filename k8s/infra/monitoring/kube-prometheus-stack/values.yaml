@@ -81,6 +81,11 @@ nodeExporter:
 
 grafana:
   enabled: true
+  operator:
+    dashboardsConfigMapRefEnabled: true
+    matchLabels:
+      app: grafana
+    folder: Kubernetes
   envFromSecrets: [ { name: grafana-oidc-credentials } ]
   grafana.ini:
     security:
