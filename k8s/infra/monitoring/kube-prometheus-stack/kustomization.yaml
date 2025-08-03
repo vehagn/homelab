@@ -4,10 +4,7 @@ kind: Kustomization
 resources:
   - ns.yaml
   - alertmanager-http-route.yaml
-  - grafana-http-route.yaml
   - prometheus-http-route.yaml
-  - grafana-admin-credentials.yaml
-  - grafana-oidc-credentials.yaml
 
 helmCharts:
   - name: kube-prometheus-stack
@@ -17,8 +14,3 @@ helmCharts:
     version: 75.12.0
     releaseName: kube-prometheus-stack
     valuesFile: ./values.yaml
-
-patches:
-  - path: patches/grafana-admin-user-credentials.yaml
-  - path: patches/grafana-sc-dashboard-admin-user-credentials.yaml
-  - path: patches/grafana-sc-datasources-admin-user-credentials.yaml

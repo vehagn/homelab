@@ -1,0 +1,13 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: authelia
+  namespace: authelia
+spec:
+  allowCrossNamespaceImport: true
+  folder: Authelia
+  resyncPeriod: 10m
+  instanceSelector:
+    matchLabels:
+      app: grafana
+  url: https://raw.githubusercontent.com/authelia/authelia/refs/heads/master/examples/grafana-dashboards/simple.json

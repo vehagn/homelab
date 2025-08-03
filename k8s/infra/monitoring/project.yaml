@@ -10,6 +10,8 @@ spec:
   destinations:
     - namespace: 'argocd'
       server: '*'
+    - namespace: 'grafana'
+      server: '*'
     - namespace: 'kube-system'
       server: '*'
     - namespace: 'monitoring'

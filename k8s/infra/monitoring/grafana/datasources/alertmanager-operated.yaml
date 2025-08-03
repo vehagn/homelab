@@ -1,0 +1,19 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: k8s-alertmanager
+  namespace: grafana
+spec:
+  allowCrossNamespaceImport: true
+  instanceSelector:
+    matchLabels:
+      app: grafana
+  datasource:
+    name: K8s Alertmanager
+    type: alertmanager
+    access: proxy
+    url: http://alertmanager-operated.monitoring.svc.cluster.local:9093
+    isDefault: false
+    jsonData:
+      handleGrafanaManagedAlerts: false                                                                                                                                               │
+      implementation: prometheus

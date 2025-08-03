@@ -61,7 +61,6 @@ kubeProxy:
   # Cilium replaces Kube Proxy
   enabled: false
 
-
 kubeScheduler:
   enabled: true
   serviceMonitor:
@@ -80,59 +79,13 @@ nodeExporter:
   enabled: true
 
 grafana:
-  enabled: true
-  envFromSecrets: [ { name: grafana-oidc-credentials } ]
-  grafana.ini:
-    security:
-      disable_initial_admin_creation: false
-      admin_user: $__env{GF_SECURITY_ADMIN_USER}
-      admin_password: $__env{GF_SECURITY_ADMIN_PASSWORD}
-    paths:
-      data: "/var/lib/grafana/"
-      logs: "/var/log/grafana"
-      plugins: "/var/lib/grafana/plugins"
-      provisioning: "/etc/grafana/provisioning"
-    analytics:
-      check_for_updates: false
-    log:
-      mode: console
-    server:
-      root_url: https://grafana.stonegarden.dev
-    auth.basic:
-      enabled: true
-    auth.generic_oauth:
-      enabled: true
-      name: Authelia
-      client_id: $__env{OIDC_CLIENT_ID}
-      client_secret: $__env{OIDC_CLIENT_SECRET}
-      auth_style: InHeader
-      scopes: openid email profile offline_access grafana
-      empty_scopes: false
-      use_pkce: true
-      use_refresh_token: true
-      auth_url: https://authelia.stonegarden.dev/api/oidc/authorization
-      token_url: https://authelia.stonegarden.dev/api/oidc/token
-      api_url: https://authelia.stonegarden.dev/api/oidc/userinfo
-      signout_redirect_url: https://authelia.stonegarden.dev/logout
-      login_attribute_path: preferred_username
-      name_attribute_path: name
-      allow_assign_grafana_admin: true
-      role_attribute_path: contains(grafana[*], 'grafana_admin') && 'GrafanaAdmin' || contains(grafana[*], 'admin') && 'Admin' || contains(grafana[*], 'editor') && 'Editor' || 'Viewer'
-      auto_login: true
+  enabled: false
+  forceDeployDatasources: false
+  forceDeployDashboards: true
   defaultDashboardsEnabled: true
   defaultDashboardsTimezone: Europe/Oslo
-  # https://github.com/grafana/helm-charts/issues/527#issuecomment-982319638
-  sidecar:
-    dashboards:
-      enabled: true
-      searchNamespace: ALL
-      folder: /tmp/dashboards
-      folderAnnotation: grafana_folder
-      annotations:
-        grafana_folder: "Kubernetes"
-      provider:
-        allowUiUpdates: false
-        foldersFromFilesStructure: true
-
-    datasources:
-      enabled: true
+  operator:
+    dashboardsConfigMapRefEnabled: true
+    matchLabels:
+      app: grafana
+    folder: Kubernetes
