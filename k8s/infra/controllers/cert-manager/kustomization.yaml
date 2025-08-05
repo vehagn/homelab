@@ -5,6 +5,7 @@ resources:
   - ns.yaml
   - cloudflare-api-token.yaml
   - cluster-issuer.yaml
+  - dashboard.yaml
 
 helmCharts:
   - name: cert-manager
