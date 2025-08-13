@@ -116,6 +116,13 @@ RUN curl -fsSL https://get.opentofu.org/opentofu.gpg \
     | tee -a /etc/apt/sources.list.d/opentofu.list > /dev/null && \
     chmod 644 /etc/apt/sources.list.d/opentofu.list
 
+# Add gcloud CLI repo
+RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg \
+    | gpg --dearmor \
+    | tee /usr/share/keyrings/cloud.google.gpg > /dev/null && \
+    echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" \
+    | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list > /dev/null
+
 # Install packages from added repos
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -123,7 +130,8 @@ RUN apt-get update && \
     nodejs \
     temurin-${JAVA_VERSION}-jre \
     postgresql-client \
-    tofu && \
+    tofu \
+    google-cloud-cli && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -227,7 +235,7 @@ RUN PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH" kubectl krew install ctx ns oidc-
 RUN echo "alias kubectl='kubecolor'" >> ${HOME}/.bash_aliases && \
     echo "alias k='kubectl'" >> ${HOME}/.bash_aliases && \
     echo "alias kc='kubeconform'" >> ${HOME}/.bash_aliases && \
-    echo "alias kz='kubectl kustomize --enable-helm'" >> ${HOME}/.bash_aliases && \
+    echo "alias kz='kubectl kustomize --enable-helm --load-restrictor LoadRestrictionsNone'" >> ${HOME}/.bash_aliases && \
     echo "alias tf='tofu'" >> ${HOME}/.bash_aliases && \
     echo "alias tl='talosctl'" >> ${HOME}/.bash_aliases && \
     echo "alias yl='yamllint'" >> ${HOME}/.bash_aliases
