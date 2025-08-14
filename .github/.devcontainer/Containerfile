@@ -131,7 +131,8 @@ RUN apt-get update && \
     temurin-${JAVA_VERSION}-jre \
     postgresql-client \
     tofu \
-    google-cloud-cli && \
+    google-cloud-cli \
+    google-cloud-cli-gke-gcloud-auth-plugin && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
