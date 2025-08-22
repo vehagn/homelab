@@ -11,6 +11,6 @@ helmCharts:
     repo: https://prometheus-community.github.io/helm-charts
     includeCRDs: true
     namespace: monitoring
-    version: 75.15.1
+    version: 76.5.1
     releaseName: kube-prometheus-stack
     valuesFile: ./values.yaml
