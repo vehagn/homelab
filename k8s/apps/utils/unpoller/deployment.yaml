@@ -22,7 +22,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: unpoller
-          image: ghcr.io/unpoller/unpoller:v2.15.3 # renovate: github-releases=unpoller/unpoller
+          image: ghcr.io/unpoller/unpoller:v2.15.4 # renovate: github-releases=unpoller/unpoller
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
