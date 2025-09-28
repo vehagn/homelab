@@ -17,7 +17,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: dashboard
-          image: docker.io/netbirdio/dashboard:v2.15.0 # renovate: docker=docker.io/netbirdio/dashboard
+          image: docker.io/netbirdio/dashboard:v2.18.1 # renovate: docker=docker.io/netbirdio/dashboard
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: false
