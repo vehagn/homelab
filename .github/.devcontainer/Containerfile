@@ -6,8 +6,8 @@ ARG USER_ID=1001
 ARG USER_GID=1001
 ARG USERNAME=dev
 
-ARG NODE_VERSION=22
-ARG JAVA_VERSION=21
+ARG NODE_VERSION=24
+ARG JAVA_VERSION=25
 
 # Remove ubuntu user
 RUN userdel -r ubuntu
@@ -91,18 +91,25 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
     echo "Pin-Priority: 600" | tee -a /etc/apt/preferences.d/nodejs > /dev/null
 
 # Add Adoption repo for JRE needed by IDEA devcontainer
-RUN curl -sSL https://packages.adoptium.net/artifactory/api/gpg/key/public \
+RUN curl -fsSL https://packages.adoptium.net/artifactory/api/gpg/key/public \
     | gpg --dearmor \
     | tee /etc/apt/trusted.gpg.d/adoptium.gpg > /dev/null && \
     echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" \
     | tee /etc/apt/sources.list.d/adoptium.list > /dev/null
 
 # Add Postgresql repo
-RUN curl https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+RUN curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
     | gpg --dearmor \
-    | tee /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg >/dev/null && \
+    | tee /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg > /dev/null && \
     echo "deb [arch=${TARGETARCH} signed-by=/etc/apt/trusted.gpg.d/apt.postgresql.org.gpg] https://apt.postgresql.org/pub/repos/apt $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release)-pgdg main" \
     | tee /etc/apt/sources.list.d/pgdg.list > /dev/null
+
+# Add Helm repo
+RUN curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey \
+    | gpg --dearmor \
+    | tee tee /etc/apt/trusted.gpg.d/helm.gpg > /dev/null && \
+    echo "deb [signed-by=/etc/apt/trusted.gpg.d/helm.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main" \
+    | tee /etc/apt/sources.list.d/helm-stable-debian.list > /dev/null
 
 # Add OpenTofu repo
 RUN curl -fsSL https://get.opentofu.org/opentofu.gpg \
@@ -117,7 +124,7 @@ RUN curl -fsSL https://get.opentofu.org/opentofu.gpg \
     chmod 644 /etc/apt/sources.list.d/opentofu.list
 
 # Add gcloud CLI repo
-RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg \
+RUN curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg \
     | gpg --dearmor \
     | tee /usr/share/keyrings/cloud.google.gpg > /dev/null && \
     echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" \
@@ -130,6 +137,7 @@ RUN apt-get update && \
     nodejs \
     temurin-${JAVA_VERSION}-jre \
     postgresql-client \
+    helm \
     tofu \
     google-cloud-cli \
     google-cloud-cli-gke-gcloud-auth-plugin && \
