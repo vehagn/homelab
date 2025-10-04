@@ -64,6 +64,9 @@ k8sClientRateLimit:
   qps: 20
   burst: 100
 
+bgpControlPlane:
+  enabled: true
+
 l2announcements:
   enabled: true
 
