@@ -4,7 +4,10 @@ metadata:
   name: coturn
   namespace: coturn
   annotations:
-    io.cilium/lb-ipam-ips: 192.168.1.226
+    io.cilium/lb-ipam-ips: 172.20.10.140
+  labels:
+    bgp.cilium.io/advertise-service: default
+    lb-ipam.cilium.io/ip-pool: default
 spec:
   type: LoadBalancer
   selector:
