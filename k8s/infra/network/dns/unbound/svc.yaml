@@ -4,7 +4,10 @@ metadata:
   name: unbound
   namespace: dns
   annotations:
-    io.cilium/lb-ipam-ips: 192.168.1.252
+    io.cilium/lb-ipam-ips: 172.20.10.150
+  labels:
+    bgp.cilium.io/advertise-service: default
+    lb-ipam.cilium.io/ip-pool: default
 spec:
   type: LoadBalancer
   # https://kubernetes.io/docs/concepts/services-networking/cluster-ip-allocation/

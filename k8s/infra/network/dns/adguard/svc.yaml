@@ -4,9 +4,14 @@ metadata:
   name: adguard
   namespace: dns
   annotations:
-    io.cilium/lb-ipam-ips: 192.168.1.253
+    io.cilium/lb-ipam-ips: 172.20.10.153
+  labels:
+    bgp.cilium.io/advertise-service: default
+    lb-ipam.cilium.io/ip-pool: default
 spec:
   type: LoadBalancer
+  # https://kubernetes.io/docs/concepts/services-networking/cluster-ip-allocation/
+  clusterIP: 10.96.0.12
   ports:
     - name: http
       protocol: TCP
