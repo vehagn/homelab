@@ -23,6 +23,11 @@ cgroup:
 bpf:
   hostLegacyRouting: true
 
+## ???
+# routingMode: "host"
+# ipv4NativeRoutingCIDR=10.0.0.0/8
+# k8s.requireIPv4PodCIDR=true
+
 # https://docs.cilium.io/en/stable/network/concepts/ipam/
 ipam:
   mode: kubernetes
@@ -59,12 +64,8 @@ resources:
 #debug:
 #  enabled: true
 
-# Increase rate limit when doing L2 announcements
-k8sClientRateLimit:
-  qps: 20
-  burst: 100
-
-l2announcements:
+# https://docs.cilium.io/en/latest/network/bgp-control-plane/bgp-control-plane-v2/
+bgpControlPlane:
   enabled: true
 
 externalIPs:
