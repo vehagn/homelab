@@ -4,7 +4,10 @@ metadata:
   name: lldap
   namespace: lldap
   annotations:
-    io.cilium/lb-ipam-ips: 192.168.1.242
+    io.cilium/lb-ipam-ips: 172.20.10.120
+  labels:
+    bgp.cilium.io/advertise-service: default
+    lb-ipam.cilium.io/ip-pool: default
 spec:
   type: LoadBalancer
   # https://kubernetes.io/docs/concepts/services-networking/cluster-ip-allocation/

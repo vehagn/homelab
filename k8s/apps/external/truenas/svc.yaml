@@ -8,3 +8,4 @@ spec:
     - name: https
       protocol: TCP
       port: 443
+      appProtocol: kubernetes.io/h2c

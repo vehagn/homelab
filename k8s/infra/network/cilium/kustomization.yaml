@@ -3,7 +3,10 @@ kind: Kustomization
 
 resources:
   - announce.yaml
-  - ip-pool.yaml
+  - default-ip-pool.yaml
+  - bgp-advertisement.yaml
+  - bgp-peer-config.yaml
+  - bgp-cluster-config.yaml
   - dashboards/cilium.yaml
   - dashboards/cilium-operator.yaml
 
