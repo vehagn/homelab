@@ -30,7 +30,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: lidarr
-          image: ghcr.io/home-operations/lidarr:2.14.3 # renovate: docker=ghcr.io/home-operations/lidarr
+          image: ghcr.io/home-operations/lidarr:3.0.0 # renovate: docker=ghcr.io/home-operations/lidarr
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
