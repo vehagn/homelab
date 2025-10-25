@@ -32,7 +32,7 @@ configs:
           args: [ kustomize build --enable-helm ]
   params:
     controller.diff.server.side: true
-    server.insecure: false
+    server.insecure: true
   rbac:
     scopes: '[ argocd_claim ]'
     policy.csv: |
@@ -92,18 +92,18 @@ server:
       memory: 64Mi
     limits:
       memory: 1Gi
-  certificate:
-    enabled: true
-    domain: argocd.stonegarden.dev
-    issuer:
-      group: cert-manager.io
-      kind: ClusterIssuer
-      name: cloudflare-cluster-issuer
-    privateKey:
-      algorithm: ECDSA
-      size: 256
-  service:
-    servicePortHttpsAppProtocol: kubernetes.io/h2c
+  #certificate:
+  #  enabled: false
+  #  domain: argocd.stonegarden.dev
+  #  issuer:
+  #    group: cert-manager.io
+  #    kind: ClusterIssuer
+  #    name: cloudflare-cluster-issuer
+  #  privateKey:
+  #    algorithm: ECDSA
+  #    size: 256
+  #service:
+  #  servicePortHttpsAppProtocol: kubernetes.io/h2c
 
 repoServer:
   metrics:
