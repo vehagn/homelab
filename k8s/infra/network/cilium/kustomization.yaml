@@ -13,7 +13,7 @@ resources:
 helmCharts:
   - name: cilium
     repo: https://helm.cilium.io
-    version: 1.18.2 # renovate: github-releases=cilium/cilium
+    version: 1.18.3 # renovate: github-releases=cilium/cilium
     releaseName: "cilium"
     includeCRDs: true
     namespace: kube-system
