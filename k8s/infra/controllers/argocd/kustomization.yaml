@@ -8,7 +8,9 @@ kind: Kustomization
 
 resources:
   - ns.yaml
-  - tls-route.yaml
+  - http-route.yaml
+  - grpc-service.yaml
+  - grpc-route.yaml
   - oidc.yaml
   - service-monitors/argocd-application-controller.yaml
   - service-monitors/argocd-applicationset-controller.yaml
