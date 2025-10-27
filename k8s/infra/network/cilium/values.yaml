@@ -96,6 +96,10 @@ gatewayAPI:
   enableAlpn: true
   enableAppProtocol: true
 
+# https://github.com/cilium/cilium/issues/43814
+extraConfig:
+  proxy-stream-idle-timeout-seconds: "3600"
+
 envoy:
   prometheus:
     enabled: true
