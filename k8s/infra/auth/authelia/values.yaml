@@ -242,6 +242,7 @@ configMap:
           audience: [ netbird ]
           redirect_uris:
             - http://localhost:53000
+            - http://localhost:54000
             - https://netbird.stonegarden.dev/callback
             - https://netbird.stonegarden.dev/silent-callback
           scopes: [ openid, profile, email, offline_access ]

@@ -1,0 +1,272 @@
+# https://github.com/netbirdio/helms/blob/main/charts/netbird/values.yaml
+# https://github.com/vehagn/helms/blob/main/charts/netbird/values.yaml
+gateway-route: &gateway-route
+  enabled: true
+  hostnames: [ netbird.stonegarden.dev ]
+  parentRefs:
+    - { name: external, namespace: gateway }
+    - { name: internal, namespace: gateway }
+
+management:
+  enabled: true
+  image:
+    repository: ghcr.io/netbirdio/management
+    tag: 0.66.2 # renovate: docker=ghcr.io/netbirdio/management
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault
+  securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
+    runAsNonRoot: false
+    capabilities:
+      drop: [ ALL ]
+      add: [ NET_ADMIN, NET_RAW, PERFMON, BPF ]
+  podCommand:
+    args:
+      - --port=80
+      - --log-file=console
+      - --log-level=info
+      - --disable-anonymous-metrics=true
+      - --single-account-mode-domain=stonegarden.netbird
+      - --dns-domain=stonegarden.netbird
+      - --idp-sign-key-refresh-enabled
+  metrics:
+    enabled: true
+  httpRoute: *gateway-route
+  grpcRoute: *gateway-route
+  ingress:
+    enabled: false
+  env:
+    STUN_PROTOCOL: udp
+    STUN_URI: stun:coturn.stonegarden.dev:5349
+    TURN_PROTOCOL: udp
+    TURN_URI: turn:coturn.stonegarden.dev:5349
+    RELAY_URI: rels://netbird.stonegarden.dev:443/relay
+    SIGNAL_PROTOCOL: https
+    SIGNAL_URI: netbird.stonegarden.dev:443
+    AUTH_AUTHORITY: https://authelia.stonegarden.dev
+    AUTH_AUDIENCE: netbird
+    AUTH_USER_ID_CLAIM: sub
+    AUTH_SUPPORTED_SCOPES: openid profile email offline_access
+    AUTH_PKCE_USE_ID_TOKEN: true
+  envFromSecret:
+    TURN_USER: coturn-credentials/COTURN_USER
+    TURN_PASSWORD: coturn-credentials/COTURN_PASSWORD
+    RELAY_SECRET: relay-secret/NB_AUTH_SECRET
+    AUTH_CLIENT_ID: authelia-oidc-credentials/AUTH_CLIENT_ID
+    AUTH_CLIENT_SECRET: authelia-oidc-credentials/AUTH_CLIENT_SECRET
+    DATASTORE_ENCRYPTION_KEY: management/datastoreEncryptionKey
+  configmap: |-
+    {
+      "Stuns": [
+        {
+          "Proto": "{{ .STUN_PROTOCOL }}",
+          "URI": "{{ .STUN_URI }}",
+          "Username": "",
+          "Password": null
+        }
+      ],
+      "TURNConfig": {
+        "Turns": [
+          {
+            "Proto": "{{ .TURN_PROTOCOL }}",
+            "URI": "{{ .TURN_URI }}",
+            "Username": "{{ .TURN_USER }}",
+            "Password": "{{ .TURN_PASSWORD }}"
+          }
+        ],
+        "CredentialsTTL": "12h0m0s",
+        "Secret": "secret",
+        "TimeBasedCredentials": false
+      },
+      "Relay": {
+        "Addresses": [ "{{ .RELAY_URI }}" ],
+        "CredentialsTTL": "24h",
+        "Secret": "{{ .RELAY_SECRET }}"
+      },
+      "Signal": {
+        "Proto": "{{ .SIGNAL_PROTOCOL }}",
+        "URI": "{{ .SIGNAL_URI }}",
+        "Username": "",
+        "Password": null
+      },
+      "Datadir": "/var/lib/netbird/",
+      "DataStoreEncryptionKey": "{{ .DATASTORE_ENCRYPTION_KEY }}",
+      "HttpConfig": {
+        "AuthAudience": "{{ .AUTH_CLIENT_ID }}",
+        "AuthUserIDClaim": "{{ .AUTH_USER_ID_CLAIM }}",
+        "OIDCConfigEndpoint": "{{ .AUTH_AUTHORITY }}/.well-known/openid-configuration",
+        "IdpSignKeyRefreshEnabled": false
+      },
+      "IdpManagerConfig": { },
+      "DeviceAuthorizationFlow": { },
+      "PKCEAuthorizationFlow": {
+        "ProviderConfig": {
+          "Audience": "{{ .AUTH_AUDIENCE }}",
+          "ClientID": "{{ .AUTH_CLIENT_ID }}",
+          "ClientSecret": "{{ .AUTH_CLIENT_SECRET }}",
+          "Domain": "",
+          "Scope": "{{ .AUTH_SUPPORTED_SCOPES }}",
+          "RedirectURLs": [ "http://localhost:53000", "http://localhost:54000" ],
+          "UseIDToken": {{ .AUTH_PKCE_USE_ID_TOKEN }}
+        }
+      }
+    }
+  resources:
+    requests:
+      cpu: 10m
+      memory: 512Mi
+    limits:
+      memory: 512Mi
+  #dnsConfig:
+  #  nameservers:
+  #    - 10.96.0.12 # AdGuard Home
+  #    - 10.96.0.11 # Unbound
+  #dnsPolicy: None
+  nodeSelector:
+    topology.kubernetes.io/zone: abel
+  persistentVolume:
+    enabled: true
+    storageClass: proxmox-csi
+    volumeName: pv-netbird-management
+    size: 512M
+    accessModes:
+      - ReadWriteOnce
+
+signal:
+  enabled: true
+  logLevel: info
+  image:
+    repository: ghcr.io/netbirdio/signal
+    tag: 0.66.2 # renovate: docker=ghcr.io/netbirdio/signal
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault
+  securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    runAsNonRoot: false
+    capabilities:
+      drop: [ ALL ]
+      add: [ NET_ADMIN, NET_RAW, PERFMON, BPF ]
+  metrics:
+    enabled: true
+  grpcRoute: *gateway-route
+  ingress:
+    enabled: false
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      memory: 32Mi
+
+relay:
+  enabled: true
+  logLevel: info
+  image:
+    repository: ghcr.io/netbirdio/relay
+    tag: 0.66.2 # renovate: docker=ghcr.io/netbirdio/relay
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault
+  securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    runAsNonRoot: false
+    capabilities:
+      drop: [ ALL ]
+      add: [ NET_ADMIN, NET_RAW, PERFMON, BPF ]
+  env:
+    NB_LISTEN_ADDRESS: ":33080"
+    NB_EXPOSED_ADDRESS: rels://netbird.stonegarden.dev:443/relay
+  envFromSecret:
+    NB_AUTH_SECRET: relay-secret/NB_AUTH_SECRET
+  metrics:
+    enabled: true
+  httpRoute: *gateway-route
+  ingress:
+    enabled: false
+  resources:
+    requests:
+      memory: 32Mi
+      cpu: 10m
+    limits:
+      memory: 32Mi
+
+dashboard:
+  enabled: true
+  loglevel: info
+  image:
+    repository: docker.io/netbirdio/dashboard
+    tag: v2.33.0 # renovate: docker=docker.io/netbirdio/dashboard
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault
+  securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
+    capabilities:
+      drop: [ ALL ]
+      add: [ NET_BIND_SERVICE, CHOWN, SETGID, SETUID, DAC_OVERRIDE ]
+  env:
+    AUTH_AUDIENCE: netbird
+    AUTH_AUTHORITY: https://authelia.stonegarden.dev
+    AUTH_REDIRECT_URI: /callback
+    AUTH_SILENT_REDIRECT_URI: /silent-callback
+    AUTH_SUPPORTED_SCOPES: openid profile email
+    USE_AUTH0: false
+    NETBIRD_MGMT_API_ENDPOINT: https://netbird.stonegarden.dev
+    NETBIRD_MGMT_GRPC_API_ENDPOINT: https://netbird.stonegarden.dev
+    NETBIRD_TOKEN_SOURCE: idToken
+  envFromSecret:
+    AUTH_CLIENT_ID: authelia-oidc-credentials/AUTH_CLIENT_ID
+    AUTH_CLIENT_SECRET: authelia-oidc-credentials/AUTH_CLIENT_SECRET
+  httpRoute: *gateway-route
+  ingress:
+    enabled: false
+  resources:
+    requests:
+      memory: 64Mi
+      cpu: 10m
+    limits:
+      memory: 64Mi
+  volumeMounts:
+    - name: tmp
+      mountPath: /tmp
+  volumes:
+    - name: tmp
+      emptyDir: { }
+
+agent:
+  enabled: true
+  image:
+    repository: ghcr.io/netbirdio/netbird
+    tag: 0.66.2 # renovate: docker=ghcr.io/netbirdio/netbird
+  podSecurityContext:
+    seccompProfile:
+      type: RuntimeDefault
+    sysctls:
+      # Considered unsafe, need to enable with kubelet argument.
+      # see https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/#enabling-unsafe-sysctls
+      - name: net.ipv4.conf.all.src_valid_mark
+        value: "1"
+  securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
+    runAsNonRoot: false
+    capabilities:
+      drop: [ ALL ]
+      add: [ NET_ADMIN, NET_RAW, PERFMON, BPF ]
+  env:
+    NB_HOSTNAME: talos-agent
+    NB_LOG_LEVEL: info
+    NB_MANAGEMENT_URL: https://netbird.stonegarden.dev
+    NB_ADMIN_URL: https://netbird.stonegarden.dev
+  envFromSecret:
+    NB_SETUP_KEY: agent-setup-key/NB_SETUP_KEY
+
+metrics:
+  serviceMonitor:
+    enabled: true
