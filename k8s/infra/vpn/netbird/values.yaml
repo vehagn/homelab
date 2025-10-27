@@ -1,0 +1,211 @@
+# https://github.com/netbirdio/helms/blob/main/charts/netbird/values.yaml
+
+fullnameOverride: netbird
+management:
+  configmap: |-
+    {
+      "Stuns": [
+        {
+          "Proto": "udp",
+          "URI": "{{ .STUN_SERVER }}",
+          "Username": "",
+          "Password": ""
+        }
+      ],
+      "TURNConfig": {
+        "TimeBasedCredentials": false,
+        "CredentialsTTL": "12h0m0s",
+        "Secret": "secret",
+        "Turns": [
+          {
+            "Proto": "udp",
+            "URI": "{{ .TURN_SERVER }}",
+            "Username": "{{ .TURN_SERVER_USER }}",
+            "Password": "{{ .TURN_SERVER_PASSWORD }}"
+          }
+        ]
+      },
+      "Relay": {
+        "Addresses": ["rels://netbird.example.com:443/relay"],
+        "CredentialsTTL": "24h",
+        "Secret": "{{ .RELAY_PASSWORD }}"
+      },
+      "Signal": {
+        "Proto": "https",
+        "URI": "netbird.example.com:443",
+        "Username": "",
+        "Password": ""
+      },
+      "Datadir": "/var/lib/netbird/",
+      "DataStoreEncryptionKey": "{{ .DATASTORE_ENCRYPTION_KEY }}",
+      "HttpConfig": {
+        "LetsEncryptDomain": "",
+        "CertFile": "",
+        "CertKey": "",
+        "AuthAudience": "{{ .IDP_CLIENT_ID }}",
+        "AuthIssuer": "https://idp.example.com/application/o/netbird/",
+        "AuthUserIDClaim": "",
+        "AuthKeysLocation": "https://idp.example.com/application/o/netbird/jwks/",
+        "OIDCConfigEndpoint": "https://idp.example.com/application/o/netbird/.well-known/openid-configuration",
+        "IdpSignKeyRefreshEnabled": false
+      },
+      "IdpManagerConfig": {
+        "ManagerType": "authentik",
+        "ClientConfig": {
+          "Issuer": "https://idp.example.com/application/o/totmicro-traefik-netbird",
+          "TokenEndpoint": "https://idp.example.com/application/o/token/",
+          "ClientID": "{{ .IDP_CLIENT_ID }}",
+          "ClientSecret": "",
+          "GrantType": "client_credentials"
+        },
+        "ExtraConfig": {
+          "Password": "{{ .IDP_SERVICE_ACCOUNT_PASSWORD }}",
+          "Username": "{{ .IDP_SERVICE_ACCOUNT_USER }}"
+        },
+        "Auth0ClientCredentials": null,
+        "AzureClientCredentials": null,
+        "KeycloakClientCredentials": null,
+        "ZitadelClientCredentials": null
+      },
+      "DeviceAuthorizationFlow": {
+        "Provider": "hosted",
+        "ProviderConfig": {
+          "ClientID": "{{ .IDP_CLIENT_ID }}",
+          "ClientSecret": "",
+          "Domain": "idp.example.com",
+          "Audience": "{{ .IDP_CLIENT_ID }}",
+          "TokenEndpoint": "https://idp.example.com/application/o/token/",
+          "DeviceAuthEndpoint": "https://idp.example.com/application/o/device/",
+          "AuthorizationEndpoint": "",
+          "Scope": "openid",
+          "UseIDToken": false,
+          "RedirectURLs": null
+        }
+      },
+      "PKCEAuthorizationFlow": {
+        "ProviderConfig": {
+          "ClientID": "{{ .IDP_CLIENT_ID }}",
+          "ClientSecret": "",
+          "Domain": "",
+          "Audience": "{{ .IDP_CLIENT_ID }}",
+          "TokenEndpoint": "https://idp.example.com/application/o/token/",
+          "DeviceAuthEndpoint": "",
+          "AuthorizationEndpoint": "https://idp.example.com/application/o/authorize/",
+          "Scope": "openid profile email offline_access api",
+          "UseIDToken": false,
+          "RedirectURLs": ["http://localhost:53000"]
+        }
+      },
+      "StoreConfig": {
+        "Engine": "postgres"
+      },
+      "ReverseProxy": {
+        "TrustedHTTPProxies": null,
+        "TrustedHTTPProxiesCount": 0,
+        "TrustedPeers": null
+      }
+    }
+
+  image:
+    tag: 0.32.0
+  persistentVolume:
+    enabled: false
+  envFromSecret:
+    NETBIRD_STORE_ENGINE_POSTGRES_DSN: netbird/postgresDSN
+    STUN_SERVER: netbird/stunServer
+    TURN_SERVER: netbird/turnServer
+    TURN_SERVER_USER: netbird/turnServerUser
+    TURN_SERVER_PASSWORD: netbird/turnServerPassword
+    RELAY_PASSWORD: netbird/relayPassword
+    IDP_CLIENT_ID: netbird/idpClientID
+    IDP_SERVICE_ACCOUNT_USER: netbird/idpServiceAccountUser
+    IDP_SERVICE_ACCOUNT_PASSWORD: netbird/idpServiceAccountPassword
+    DATASTORE_ENCRYPTION_KEY: netbird/datastoreEncryptionKey
+
+signal:
+  image:
+    tag: 0.32.0
+
+relay:
+  image:
+    tag: 0.32.0
+  envFromSecret:
+    NB_AUTH_SECRET: netbird/relayPassword
+  env:
+    NB_LOG_LEVEL: info
+    NB_LISTEN_ADDRESS: ":33080"
+    NB_EXPOSED_ADDRESS: rels://netbird.example.com:443/relay
+
+dashboard:
+  enabled: true
+  image:
+    tag: v2.9.0
+  env:
+    # Endpoints
+    NETBIRD_MGMT_API_ENDPOINT: https://netbird.example.com:443
+    NETBIRD_MGMT_GRPC_API_ENDPOINT: https://netbird.example.com:443
+    # OIDC
+    AUTH_CLIENT_SECRET:
+    AUTH_AUTHORITY: https://idp.example.com/application/o/netbird/
+    USE_AUTH0: false
+    AUTH_SUPPORTED_SCOPES: openid profile email offline_access api
+    AUTH_REDIRECT_URI:
+    AUTH_SILENT_REDIRECT_URI:
+    NETBIRD_TOKEN_SOURCE: accessToken
+    NGINX_SSL_PORT:
+    LETSENCRYPT_DOMAIN:
+    LETSENCRYPT_EMAIL:
+  envFromSecret:
+    AUTH_CLIENT_ID: netbird/idpClientID
+    AUTH_AUDIENCE: netbird/idpClientID
+
+#extraManifests:
+#  - apiVersion: traefik.io/v1alpha1
+#    kind: IngressRoute
+#    metadata:
+#      name: netbird-traefik
+#      labels:
+#        argocd.argoproj.io/instance: netbird-traefik
+#    spec:
+#      entryPoints:
+#        - websecure
+#      routes:
+#        - kind: Rule
+#          match: Host(`netbird.example.com`) && !PathPrefix(`/api`) && !PathPrefix(`/management`) && !PathPrefix(`/signalexchange`) && !PathPrefix(`/relay`)
+#          services:
+#            - name: netbird-traefik-dashboard
+#              namespace: netbird-traefik
+#              passHostHeader: true
+#              port: 80
+#        - kind: Rule
+#          match: Host(`netbird.example.com`) && PathPrefix(`/api`)
+#          services:
+#            - name: netbird-traefik-management
+#              namespace: netbird-traefik
+#              passHostHeader: true
+#              port: 80
+#        - kind: Rule
+#          match: Host(`netbird.example.com`) && PathPrefix(`/relay`)
+#          services:
+#            - name: netbird-traefik-relay
+#              namespace: netbird-traefik
+#              passHostHeader: true
+#              port: 33080
+#        - kind: Rule
+#          match: Host(`netbird.example.com`) && PathPrefix(`/management`)
+#          services:
+#            - name: netbird-traefik-management
+#              namespace: netbird-traefik
+#              passHostHeader: true
+#              port: 80
+#              scheme: h2c
+#        - kind: Rule
+#          match: Host(`netbird.example.com`) && PathPrefix(`/signalexchange`)
+#          services:
+#            - name: netbird-traefik-signal
+#              namespace: netbird-traefik
+#              passHostHeader: true
+#              port: 80
+#              scheme: h2c
+#      tls:
+#        secretName: netbird-tls

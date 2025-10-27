@@ -3,8 +3,6 @@ kind: Service
 metadata:
   name: relay
   namespace: netbird
-  labels:
-    app.kubernetes.io/name: relay
 spec:
   type: ClusterIP
   selector:
