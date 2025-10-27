@@ -20,7 +20,6 @@ spec:
         topology.kubernetes.io/zone: abel
       dnsConfig:
         nameservers:
-          - 172.20.10.153 # AdGuard Home
           - 10.96.0.12 # AdGuard Home
           - 10.96.0.11 # Unbound
       dnsPolicy: None

@@ -12,6 +12,11 @@ spec:
       labels:
         app: agent
     spec:
+      dnsConfig:
+        nameservers:
+          - 10.96.0.12 # AdGuard Home
+          - 10.96.0.11 # Unbound
+      dnsPolicy: None
       securityContext:
         seccompProfile:
           type: RuntimeDefault
