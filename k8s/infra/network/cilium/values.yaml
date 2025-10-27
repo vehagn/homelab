@@ -81,7 +81,7 @@ loadBalancer:
 gatewayAPI:
   enabled: true
   enableAlpn: true
-  # enableAppProtocol: true
+  enableAppProtocol: true
 
 envoy:
   prometheus:

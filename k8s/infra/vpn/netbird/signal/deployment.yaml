@@ -39,6 +39,8 @@ spec:
           ports:
             - name: http
               containerPort: 80
+            - name: legacy-grpc
+              containerPort: 10000
           livenessProbe:
             tcpSocket:
               port: http
