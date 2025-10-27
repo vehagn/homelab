@@ -19,8 +19,10 @@ configMapGenerator:
       - RELAY_URI="rels://netbird.stonegarden.dev:443"
       - SIGNAL_URI="netbird.stonegarden.dev:443"
       - SIGNAL_PROTOCOL="https"
-      - STUN_URI="stun:coturn.stonegarden.dev:5349"
-      - TURN_URI="turn:coturn.stonegarden.dev:5349"
+#      - STUN_URI="stun:coturn.stonegarden.dev:5349"
+#      - TURN_URI="turn:coturn.stonegarden.dev:5349"
+      - STUN_URI="stun:coturn:5349"
+      - TURN_URI="turn:coturn:5349"
   - name: management-runtime-config
     namespace: netbird
     literals:
