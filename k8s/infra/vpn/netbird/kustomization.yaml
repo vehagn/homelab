@@ -13,3 +13,12 @@ resources:
   - management
   - relay
   - signal
+
+#helmCharts:
+#  - name: netbird
+#    repo: https://netbirdio.github.io/helms
+#    version: 1.9.0 # renovate: github-releases=netbirdio/helms
+#    releaseName: netbird
+#    includeCRDs: true
+#    namespace: netbird
+#    valuesFile: values.yaml
