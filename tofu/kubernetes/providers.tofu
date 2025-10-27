@@ -6,7 +6,7 @@ terraform {
     }
     proxmox = {
       source  = "bpg/proxmox"
-      version = "0.96.0"
+      version = "0.100.0"
     }
     talos = {
       source  = "siderolabs/talos"
@@ -14,7 +14,7 @@ terraform {
     }
     restapi = {
       source  = "Mastercard/restapi"
-      version = "2.0.1"
+      version = "3.0.0"
     }
   }
 }
