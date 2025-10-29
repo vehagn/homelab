@@ -12,8 +12,8 @@ spec:
     - backendRefs: [ { name: management, port: 80 } ]
       matches:
         - headers: [ { name: Content-Type, value: application/grpc } ]
-        - method: { service: management.ManagementService }
-    - backendRefs: [ { name: signal, port: 10000 } ]
+          method: { service: management.ManagementService }
+    - backendRefs: [ { name: signal, port: 80 } ]
       matches:
         - headers: [ { name: Content-Type, value: application/grpc } ]
-        - method: { service: signalexchange.SignalExchange }
+          method: { service: signalexchange.SignalExchange }

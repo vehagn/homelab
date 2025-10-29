@@ -11,7 +11,7 @@ spec:
     - name: http
       port: 80
       targetPort: http
-#      appProtocol: kubernetes.io/h2c
+      appProtocol: kubernetes.io/h2c
     - name: grpc
       port: 10000
       targetPort: legacy-grpc
