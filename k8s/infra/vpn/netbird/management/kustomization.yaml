@@ -25,7 +25,7 @@ configMapGenerator:
     namespace: netbird
     literals:
       - LOG_LEVEL="info"
-      - DNS_DOMAIN="stonegarden.dev"
+      - DNS_DOMAIN="stonegarden.netbird"
 
 resources:
   - deployment.yaml
