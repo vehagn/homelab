@@ -5,9 +5,13 @@ metadata:
   namespace: gateway
 spec:
   gatewayClassName: cilium
+  infrastructure:
+    labels:
+      bgp.cilium.io/advertise-service: default
+      lb-ipam.cilium.io/ip-pool: default-bgp
   addresses:
     - type: IPAddress
-      value: 192.168.1.220
+      value: 172.20.10.100
   listeners:
     - protocol: TLS
       port: 443

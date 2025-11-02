@@ -1,0 +1,10 @@
+apiVersion: cilium.io/v2alpha1
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: default-bgp-ip-pool
+spec:
+  blocks:
+    - cidr: 172.20.10.0/24
+  serviceSelector:
+    matchLabels:
+      lb-ipam.cilium.io/ip-pool: default-bgp
