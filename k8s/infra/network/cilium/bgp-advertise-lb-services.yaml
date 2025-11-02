@@ -1,0 +1,15 @@
+apiVersion: cilium.io/v2
+kind: CiliumBGPAdvertisement
+metadata:
+  name: loadbalancer-services
+  labels:
+    bgp.cilium.io/advertise: loadbalancer-services
+spec:
+  advertisements:
+    - advertisementType: Service
+      service:
+        addresses:
+          - LoadBalancerIP
+      selector:
+        matchLabels:
+          bgp.cilium.io/advertise-service: default

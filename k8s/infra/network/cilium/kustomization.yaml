@@ -2,8 +2,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - announce.yaml
-  - ip-pool.yaml
+  - bgp-ip-pool.yaml
+  - bgp-advertise-lb-services.yaml
+  - bgp-peer-ucg-max-config.yaml
+  - bgp-peer-ucg-max-password.yaml
+  - bgp-cluster-config.yaml
   - dashboards/cilium.yaml
   - dashboards/cilium-operator.yaml
 
