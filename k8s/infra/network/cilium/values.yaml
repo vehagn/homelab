@@ -59,13 +59,11 @@ resources:
 #debug:
 #  enabled: true
 
-# Increase rate limit when doing L2 announcements
-k8sClientRateLimit:
-  qps: 20
-  burst: 100
-
-l2announcements:
+# https://docs.cilium.io/en/latest/network/bgp-control-plane/bgp-control-plane-v2/
+bgpControlPlane:
   enabled: true
+  secretsNamespace:
+    name: cilium-secrets
 
 externalIPs:
   enabled: true

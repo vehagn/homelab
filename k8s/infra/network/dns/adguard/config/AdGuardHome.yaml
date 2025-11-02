@@ -144,12 +144,12 @@ filtering:
   parental_block_host: family-block.dns.adguard.com
   safebrowsing_block_host: standard-block.dns.adguard.com
   rewrites:
-    - domain: '*.stonegarden.dev'
-      answer: 192.168.1.220
-    - domain: stonegarden.dev
-      answer: 192.168.1.220
     - domain: coturn.stonegarden.dev
-      answer: 192.168.1.226
+      answer: 172.20.10.140
+    - domain: '*.stonegarden.dev'
+      answer: 172.20.10.100
+    - domain: stonegarden.dev
+      answer: 172.20.10.100
   safe_fs_patterns:
     - /opt/adguardhome/work/data/userfilters/*
   safebrowsing_cache_size: 1048576
