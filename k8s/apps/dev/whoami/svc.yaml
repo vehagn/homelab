@@ -4,9 +4,13 @@ metadata:
   name: whoami
   namespace: whoami
   annotations:
-    io.cilium/lb-ipam-ips: 192.168.1.223
+    io.cilium/lb-ipam-ips: 172.20.10.200
+  labels:
+    bgp.cilium.io/advertise-service: default
+    bgp.cilium.io/ip-pool: default
 spec:
   type: LoadBalancer
+  externalTrafficPolicy: Local
   selector:
     app: whoami
   ports:

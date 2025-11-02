@@ -1,0 +1,17 @@
+apiVersion: cilium.io/v2
+kind: CiliumBGPPeerConfig
+metadata:
+  name: ucg-max
+spec:
+  authSecretRef: bgp-peer-ucg-max-password
+  timers:
+    connectRetryTimeSeconds: 10
+  gracefulRestart:
+    enabled: true
+    restartTimeSeconds: 15
+  families:
+    - afi: ipv4
+      safi: unicast
+      advertisements:
+        matchLabels:
+          bgp.cilium.io/advertise: loadbalancer-services
