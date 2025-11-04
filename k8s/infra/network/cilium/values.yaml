@@ -22,6 +22,8 @@ cgroup:
 # https://docs.cilium.io/en/stable/operations/performance/tuning/#ebpf-host-routing
 bpf:
   hostLegacyRouting: true
+  # due to loadBalancer.mode: "dsr".
+  masquerade: true
 
 # https://docs.cilium.io/en/stable/network/concepts/ipam/
 ipam:
@@ -59,6 +61,9 @@ resources:
 #debug:
 #  enabled: true
 
+l2announcements:
+  enabled: false
+
 # https://docs.cilium.io/en/latest/network/bgp-control-plane/bgp-control-plane-v2/
 bgpControlPlane:
   enabled: true
@@ -71,6 +76,26 @@ externalIPs:
 loadBalancer:
   # https://docs.cilium.io/en/stable/network/kubernetes/kubeproxy-free/#maglev-consistent-hashing
   algorithm: maglev
+  # https://docs.cilium.io/en/stable/network/kubernetes/kubeproxy-free/#dsr-mode
+  mode: dsr
+  l7:
+    backend: envoy
+
+# The default "vxlan" is incompatible with loadBalancer.mode: "dsr".
+routingMode: native
+#tunnelProtocol: ""
+
+ipMasqAgent:
+  enabled: true
+
+#
+#enableIPv4Masquerade: true
+
+# invalid daemon configuration: native routing cidr must be configured with option
+# --ipv4-native-routing-cidr
+#  in combination with --enable-ipv4=true
+# --enable-ipv4-masquerade=true
+#  --enable-ip-masq-agent=false --routing-mode=native --ipam=kubernetes"
 
 gatewayAPI:
   enabled: true

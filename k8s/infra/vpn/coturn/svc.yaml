@@ -10,6 +10,8 @@ metadata:
     lb-ipam.cilium.io/ip-pool: default-bgp
 spec:
   type: LoadBalancer
+  externalTrafficPolicy: Local
+  internalTrafficPolicy: Local
   selector:
     app.kubernetes.io/name: coturn
   ports:

@@ -6,12 +6,13 @@ spec:
   nodeSelector:
     matchLabels:
       node-role.kubernetes.io/control-plane: ""
+      kubernetes.io/hostname: "ctrl-01"
   bgpInstances:
     - name: "65200"
       localASN: 65200
       peers:
         - name: "ucg-max-65100"
           peerASN: 65100
-          peerAddress: 172.20.10.1
+          peerAddress: 192.168.1.1
           peerConfigRef:
             name: ucg-max
