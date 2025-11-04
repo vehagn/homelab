@@ -7,6 +7,11 @@ machine:
     topology.kubernetes.io/zone: ${node_name}
   network:
     hostname: ${hostname}
+  features:
+      hostDNS:
+        enabled: true
+        forwardKubeDNSToHost: true
+        resolveMemberNames: true
   sysctls:
     fs.inotify.max_user_watches: 1048576   # Watchdog
     fs.inotify.max_user_instances: 8192    # Watchdog
