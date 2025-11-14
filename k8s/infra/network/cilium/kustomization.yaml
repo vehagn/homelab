@@ -9,6 +9,8 @@ resources:
   - bgp-cluster-config.yaml
   - dashboards/cilium.yaml
   - dashboards/cilium-operator.yaml
+  - l2-announce.yaml
+  - l2-ip-pool.yaml
 
 helmCharts:
   - name: cilium

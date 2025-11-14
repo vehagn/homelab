@@ -58,6 +58,13 @@ resources:
 #debug:
 #  enabled: true
 
+k8sClientRateLimit:
+  qps: 20
+  burst: 100
+
+l2announcements:
+  enabled: true
+
 # https://docs.cilium.io/en/latest/network/bgp-control-plane/bgp-control-plane-v2/
 bgpControlPlane:
   enabled: true
