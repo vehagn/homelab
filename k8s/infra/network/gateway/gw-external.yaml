@@ -10,6 +10,8 @@ spec:
       bgp.cilium.io/advertise-service: default
       bgp.cilium.io/ip-pool: default
       l2.cilium.io/ip-pool: default
+    annotations:
+      service.cilium.io/forwarding-mode: dsr
   addresses:
     - type: IPAddress
       value: 172.20.10.110
