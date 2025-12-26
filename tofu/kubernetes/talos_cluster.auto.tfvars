@@ -14,7 +14,7 @@ talos_cluster_config = {
     bootstrap_manifest_path = "talos/inline-manifests/cilium-install.yaml"
     values_file_path        = "../../k8s/infra/network/cilium/values.yaml"
   }
-  gateway_api_version = "v1.3.0" # renovate: github-releases=kubernetes-sigs/gateway-api
+  gateway_api_version = "v1.4.1" # renovate: github-releases=kubernetes-sigs/gateway-api
   extra_manifests     = []
   kubelet             = <<-EOT
     extraArgs:
