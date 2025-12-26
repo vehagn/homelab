@@ -7,8 +7,7 @@ spec:
   selector:
     matchLabels:
       app: lldap
-  strategy:
-    type: Recreate
+  replicas: 2
   template:
     metadata:
       namespace: lldap
@@ -44,6 +43,10 @@ spec:
             - { name: ldap, containerPort: 3890 }
             - { name: ldaps, containerPort: 6360 }
             - { name: web, containerPort: 17170 }
+          livenessProbe:
+            exec:
+              command: [ /app/lldap, healthcheck ]
+            initialDelaySeconds: 5
           volumeMounts:
             - { name: lldap-data, mountPath: /data }
             - { name: cert, mountPath: /cert }

@@ -7,9 +7,8 @@ spec:
   parentRefs:
     - name: internal
       namespace: gateway
-  hostnames:
-    - "lldap.stonegarden.dev"
+  hostnames: [ lldap.stonegarden.dev ]
   rules:
     - backendRefs:
-        - name: lldap
+        - name: lldap-web
           port: 80
