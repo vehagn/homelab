@@ -9,12 +9,12 @@ talos_cluster_config = {
   # Uncomment to use this instead of version from talos_image.
   # talos_machine_config_version = "v1.9.2"
   proxmox_cluster    = "homelab"
-  kubernetes_version = "v1.34.1" # renovate: github-releases=kubernetes/kubernetes
+  kubernetes_version = "v1.35.0" # renovate: github-releases=kubernetes/kubernetes
   cilium = {
     bootstrap_manifest_path = "talos/inline-manifests/cilium-install.yaml"
     values_file_path        = "../../k8s/infra/network/cilium/values.yaml"
   }
-  gateway_api_version = "v1.3.0" # renovate: github-releases=kubernetes-sigs/gateway-api
+  gateway_api_version = "v1.4.1" # renovate: github-releases=kubernetes-sigs/gateway-api
   extra_manifests     = []
   kubelet             = <<-EOT
     extraArgs:
