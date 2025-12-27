@@ -30,7 +30,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: git-sync-vuetorrent
-          image: registry.k8s.io/git-sync/git-sync:v4.5.0 # renovate: docker=registry.k8s.io/git-sync/git-sync
+          image: registry.k8s.io/git-sync/git-sync:v4.5.1 # renovate: docker=registry.k8s.io/git-sync/git-sync
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
