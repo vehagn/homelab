@@ -16,6 +16,6 @@ helmCharts:
     repo: oci://ghcr.io/grafana/helm-charts
     includeCRDs: true
     namespace: grafana
-    version: v5.20.0 # renovate: github-releases=grafana/grafana-operator
+    version: 5.21.3 # renovate: github-releases=grafana/grafana-operator
     releaseName: grafana-operator
     valuesFile: ./values.yaml
