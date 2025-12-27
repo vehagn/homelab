@@ -30,7 +30,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: audiobookshelf
-          image: ghcr.io/advplyr/audiobookshelf:2.30.0 # renovate: docker=ghcr.io/advplyr/audiobookshelf
+          image: ghcr.io/advplyr/audiobookshelf:2.32.1 # renovate: docker=ghcr.io/advplyr/audiobookshelf
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
