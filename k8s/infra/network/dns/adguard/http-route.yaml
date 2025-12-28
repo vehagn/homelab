@@ -8,12 +8,12 @@ spec:
     - name: internal
       namespace: gateway
   hostnames:
-    - "adguard.stonegarden.dev"
+    - adguard.stonegarden.dev
   rules:
     - matches:
         - path:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: adguard
+        - name: adguard-web
           port: 3000
