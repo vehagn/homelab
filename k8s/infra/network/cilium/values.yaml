@@ -75,6 +75,9 @@ bpf:
   masquerade: true
   #tproxy: true
 
+ipMasqAgent:
+  enabled: true
+
 loadBalancer:
   # https://cilium.io/blog/2022/04/12/cilium-standalone-L4LB-XDP/
   # https://cilium.io/blog/2021/05/20/cilium-110/#standalonelb
