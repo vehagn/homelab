@@ -73,6 +73,7 @@ externalIPs:
 # https://docs.cilium.io/en/stable/operations/performance/tuning/#ebpf-host-routing
 bpf:
   masquerade: true
+  lbModeAnnotation: true
   #tproxy: true
 
 ipMasqAgent:
