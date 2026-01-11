@@ -89,7 +89,7 @@ loadBalancer:
   #dsrDispatch: opt # Use with native routing
   dsrDispatch: geneve # Use with tunnelling
   l7:
-    backend: disabled
+    backend: envoy
 
 # https://docs.cilium.io/en/stable/network/concepts/routing/
 #routingMode: native
