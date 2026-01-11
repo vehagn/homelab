@@ -76,8 +76,8 @@ bpf:
   lbModeAnnotation: true
   #tproxy: true
 
-ipMasqAgent:
-  enabled: true
+#ipMasqAgent:
+#  enabled: true
 
 loadBalancer:
   # https://cilium.io/blog/2022/04/12/cilium-standalone-L4LB-XDP/
