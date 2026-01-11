@@ -73,6 +73,7 @@ externalIPs:
 # https://docs.cilium.io/en/stable/operations/performance/tuning/#ebpf-host-routing
 bpf:
   masquerade: true
+  #tproxy: true
 
 loadBalancer:
   # https://cilium.io/blog/2022/04/12/cilium-standalone-L4LB-XDP/
@@ -81,7 +82,10 @@ loadBalancer:
   # https://docs.cilium.io/en/stable/network/kubernetes/kubeproxy-free/#maglev-consistent-hashing
   algorithm: maglev
   mode: dsr
-  dsrDispatch: geneve
+  dsrDispatch: geneve # Use with tunneling
+  # dsrDispatch: opt # Use with native routing
+  l7:
+    backend: envoy
 
 # https://docs.cilium.io/en/stable/network/concepts/routing/
 routingMode: tunnel
