@@ -93,7 +93,7 @@ loadBalancer:
 
 # https://docs.cilium.io/en/stable/network/concepts/routing/
 routingMode: native
-ipv4NativeRoutingCIDR: 10.244.0.0/16
+ipv4NativeRoutingCIDR: 10.244.0.0/16 # Same as Talos PodCIDR
 autoDirectNodeRoutes: true
 
 # The default tunnel protocol "vxlan" is incompatible with loadBalancer.mode: "dsr"
