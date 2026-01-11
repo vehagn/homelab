@@ -3,6 +3,10 @@ kind: Kustomization
 
 resources:
   - ns.yaml
-  - svc.yaml
+  #- svc.yaml
   - http-route.yaml
   - deployment.yaml
+  - svc-cluster-dsr.yaml
+  - svc-cluster-snat.yaml
+  - svc-local-dsr.yaml
+  - svc-local-snat.yaml
