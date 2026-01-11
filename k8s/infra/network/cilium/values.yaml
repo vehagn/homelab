@@ -86,17 +86,19 @@ loadBalancer:
   # https://docs.cilium.io/en/stable/network/kubernetes/kubeproxy-free/#maglev-consistent-hashing
   algorithm: maglev
   mode: dsr
-  dsrDispatch: geneve # Use with tunneling
-  # dsrDispatch: opt # Use with native routing
+  # dsrDispatch: geneve # Use with tunneling
+  dsrDispatch: opt # Use with native routing
   #l7:
   #  backend: envoy
 
 # https://docs.cilium.io/en/stable/network/concepts/routing/
-routingMode: tunnel
-#ipv4NativeRoutingCIDR: 10.244.0.0/16
-#autoDirectNodeRoutes: true
+routingMode: native
+ipv4NativeRoutingCIDR: 10.244.0.0/16
+autoDirectNodeRoutes: true
+
 # The default tunnel protocol "vxlan" is incompatible with loadBalancer.mode: "dsr"
-tunnelProtocol: geneve
+#routingMode: tunnel
+#tunnelProtocol: geneve
 
 gatewayAPI:
   enabled: true
