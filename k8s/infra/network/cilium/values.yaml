@@ -80,7 +80,7 @@ loadBalancer:
   standalone: true
   # https://docs.cilium.io/en/stable/network/kubernetes/kubeproxy-free/#maglev-consistent-hashing
   algorithm: maglev
-  mode: snat
+  mode: dsr
 
 # https://docs.cilium.io/en/stable/network/concepts/routing/
 routingMode: tunnel
