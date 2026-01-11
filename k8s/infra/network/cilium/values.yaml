@@ -80,6 +80,11 @@ loadBalancer:
   standalone: true
   # https://docs.cilium.io/en/stable/network/kubernetes/kubeproxy-free/#maglev-consistent-hashing
   algorithm: maglev
+  mode: snat
+
+routingMode: tunnel
+# The default tunnel protocol "vxlan" is incompatible with loadBalancer.mode: "dsr"
+tunnelProtocol: geneve
 
 gatewayAPI:
   enabled: true
