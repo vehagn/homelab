@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: arp-local-dsr
+  namespace: whoami
+  annotations:
+    io.cilium/lb-ipam-ips: 192.168.1.210
+    service.cilium.io/forwarding-mode: dsr
+  labels:
+    l2.cilium.io/ip-pool: default
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  selector:
+    app: whoami
+  ports:
+    - name: web
+      port: 80
+      targetPort: http

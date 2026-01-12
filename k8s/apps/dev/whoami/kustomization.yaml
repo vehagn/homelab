@@ -6,7 +6,11 @@ resources:
   #- svc.yaml
   - http-route.yaml
   - deployment.yaml
-  - svc-cluster-dsr.yaml
-  - svc-cluster-snat.yaml
-  - svc-local-dsr.yaml
-  - svc-local-snat.yaml
+  - svc-arp-cluster-dsr.yaml
+  - svc-arp-cluster-snat.yaml
+  - svc-arp-local-dsr.yaml
+  - svc-arp-local-snat.yaml
+  - svc-bgp-cluster-dsr.yaml
+  - svc-bgp-cluster-snat.yaml
+  - svc-bgp-local-dsr.yaml
+  - svc-bgp-local-snat.yaml
