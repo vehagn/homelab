@@ -23,25 +23,33 @@ spec:
               - matchExpressions:
                   - key: node-role.kubernetes.io/control-plane
                     operator: DoesNotExist
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 999
-        runAsGroup: 999
-        fsGroup: 999
-        fsGroupChangePolicy: OnRootMismatch
-        seccompProfile:
-          type: RuntimeDefault
+      #securityContext:
+      #  runAsNonRoot: true
+      #  runAsUser: 999
+      #  runAsGroup: 999
+      #  fsGroup: 999
+      #  fsGroupChangePolicy: OnRootMismatch
+      #  seccompProfile:
+      #    type: RuntimeDefault
       containers:
         - name: whoami
-          image: ghcr.io/traefik/whoami:latest
-          securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
-            capabilities:
-              drop: [ "ALL" ]
+          #image: ghcr.io/nicolaka/netshoot:v0.15
+          image: ubuntu
+          #command: [ /opt/whoami/whoami ]
+          command: [ sleep, infinity ]
+          #securityContext:
+          #  allowPrivilegeEscalation: false
+          #  readOnlyRootFilesystem: true
+          #  capabilities:
+          #    drop: [ "ALL" ]
           ports:
             - name: http
               containerPort: 80
+          volumeMounts:
+            - name: whoami
+              mountPath: /opt/whoami
+            #- name: volume
+            #  mountPath: /volume
           resources:
             requests:
               cpu: 50m
@@ -49,3 +57,12 @@ spec:
             limits:
               cpu: 1000m
               memory: 24Mi
+      volumes:
+        - name: whoami
+          image:
+            reference: ghcr.io/traefik/whoami:latest
+            pullPolicy: Always
+        #- name: volume
+        #  image:
+        #    reference: quay.io/crio/artifact:v2
+        #    pullPolicy: Always
