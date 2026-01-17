@@ -39,5 +39,6 @@ talos_nodes = {
     vm_id         = 810
     cpu           = 8
     ram_dedicated = 4096
+    #update        = true
   }
 }
