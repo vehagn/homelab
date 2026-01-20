@@ -18,10 +18,6 @@ cgroup:
     enabled: false
   hostRoot: /sys/fs/cgroup
 
-# https://docs.cilium.io/en/stable/operations/performance/tuning/#ebpf-host-routing
-bpf:
-  masquerade: true
-
 # https://docs.cilium.io/en/stable/network/concepts/ipam/
 ipam:
   mode: kubernetes
@@ -74,7 +70,19 @@ bgpControlPlane:
 externalIPs:
   enabled: true
 
+# https://docs.cilium.io/en/stable/operations/performance/tuning/#ebpf-host-routing
+bpf:
+  masquerade: true
+  lbModeAnnotation: true
+  #tproxy: true
+
+#ipMasqAgent:
+#  enabled: true
+
 loadBalancer:
+  # https://cilium.io/blog/2022/04/12/cilium-standalone-L4LB-XDP/
+  # https://cilium.io/blog/2021/05/20/cilium-110/#standalonelb
+  standalone: true
   # https://docs.cilium.io/en/stable/network/kubernetes/kubeproxy-free/#maglev-consistent-hashing
   algorithm: maglev
 

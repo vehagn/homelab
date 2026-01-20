@@ -6,7 +6,7 @@ metadata:
   labels:
     app: whoami
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: whoami
@@ -16,13 +16,13 @@ spec:
       labels:
         app: whoami
     spec:
-      #affinity:
-      #  nodeAffinity:
-      #    requiredDuringSchedulingIgnoredDuringExecution:
-      #      nodeSelectorTerms:
-      #        - matchExpressions:
-      #            - key: node-role.kubernetes.io/control-plane
-      #              operator: DoesNotExist
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: DoesNotExist
       #securityContext:
       #  runAsNonRoot: true
       #  runAsUser: 999
