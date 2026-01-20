@@ -2,6 +2,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
+  - arp-announce .yaml
+  - arp-ip-pool.yaml
   - bgp-ip-pool.yaml
   - bgp-advertise-lb-services.yaml
   - bgp-peer-ucg-max-config.yaml
@@ -9,8 +11,6 @@ resources:
   - bgp-cluster-config.yaml
   - dashboards/cilium.yaml
   - dashboards/cilium-operator.yaml
-  - l2-announce.yaml
-  - l2-ip-pool.yaml
 
 helmCharts:
   - name: cilium

@@ -8,4 +8,4 @@ spec:
       stop: 192.168.1.255
   serviceSelector:
     matchLabels:
-      l2.cilium.io/ip-pool: default
+      arp.cilium.io/ip-pool: default
