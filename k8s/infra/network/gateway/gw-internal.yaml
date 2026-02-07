@@ -10,7 +10,7 @@ spec:
       bgp.cilium.io/advertise-service: default
       bgp.cilium.io/ip-pool: default
     annotations:
-      service.cilium.io/forwarding-mode: dsr
+      service.cilium.io/forwarding-mode: snat
   addresses:
     - type: IPAddress
       value: 172.20.10.100
