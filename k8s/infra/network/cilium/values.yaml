@@ -73,23 +73,24 @@ externalIPs:
 # https://docs.cilium.io/en/stable/operations/performance/tuning/#ebpf-host-routing
 bpf:
   masquerade: true
-  lbModeAnnotation: true
-  #tproxy: true
-
-#ipMasqAgent:
-#  enabled: true
 
 loadBalancer:
-  # https://cilium.io/blog/2022/04/12/cilium-standalone-L4LB-XDP/
-  # https://cilium.io/blog/2021/05/20/cilium-110/#standalonelb
-  standalone: true
   # https://docs.cilium.io/en/stable/network/kubernetes/kubeproxy-free/#maglev-consistent-hashing
   algorithm: maglev
+  mode: dsr
+  dsrDispatch: geneve
+  l7:
+    backend: envoy
+
+# https://docs.cilium.io/en/stable/network/concepts/routing/
+# The default tunnel protocol "vxlan" is incompatible with loadBalancer.mode: "dsr"
+routingMode: tunnel
+tunnelProtocol: geneve
 
 gatewayAPI:
   enabled: true
   enableAlpn: true
-  # enableAppProtocol: true
+  enableAppProtocol: true
 
 envoy:
   prometheus:
