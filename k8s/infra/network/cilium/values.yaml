@@ -63,6 +63,9 @@ bgpControlPlane:
 externalIPs:
   enabled: true
 
+l2announcements:
+  enabled: false
+
 # https://docs.cilium.io/en/stable/operations/performance/tuning/#ebpf-host-routing
 bpf:
   masquerade: true
