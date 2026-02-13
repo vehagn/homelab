@@ -6,6 +6,8 @@ crds:
 extraArgs:
   - "--enable-gateway-api"
 
+dns01RecursiveNameservers: "1.1.1.1:53"
+
 resources:
   limits:
     cpu: 100m
