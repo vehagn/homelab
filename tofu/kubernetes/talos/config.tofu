@@ -54,11 +54,13 @@ data "talos_machine_configuration" "this" {
   machine_type    = each.value.machine_type
   machine_secrets = talos_machine_secrets.this.machine_secrets
   config_patches = [
+    templatefile("${path.module}/machine-config/hostname-config.yaml.tftpl", {
+      hostname = each.key
+    }),
     templatefile("${path.module}/machine-config/common.yaml.tftpl", {
       node_name          = each.value.host_node
       cluster_name       = var.cluster.proxmox_cluster
       kubernetes_version = var.cluster.kubernetes_version
-      hostname           = each.key
       kubelet            = var.cluster.kubelet
     }), each.value.machine_type == "controlplane" ?
     templatefile("${path.module}/machine-config/control-plane.yaml.tftpl", {
@@ -86,6 +88,7 @@ resource "talos_machine_configuration_apply" "this" {
   node                        = each.value.ip
   client_configuration        = talos_machine_secrets.this.client_configuration
   machine_configuration_input = data.talos_machine_configuration.this[each.key].machine_configuration
+  apply_mode                  = "auto"
   lifecycle {
     # re-run config apply if vm changes
     replace_triggered_by = [proxmox_virtual_environment_vm.this[each.key]]
