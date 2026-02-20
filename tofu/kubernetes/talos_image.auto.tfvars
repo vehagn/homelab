@@ -1,5 +1,5 @@
 talos_image = {
-  version        = "v1.12.1"
+  version        = "v1.12.4"
   update_version = "v1.12.4" # renovate: github-releases=siderolabs/talos
   schematic_path = "talos/image/schematic.yaml"
   # Point this to a new schematic file to update the schematic
