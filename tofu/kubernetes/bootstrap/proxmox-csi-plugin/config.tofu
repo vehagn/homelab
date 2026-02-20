@@ -26,7 +26,7 @@ resource "proxmox_virtual_environment_user_token" "kubernetes-csi-token" {
   privileges_separation = false
 }
 
-resource "kubernetes_namespace" "csi-proxmox" {
+resource "kubernetes_namespace_v1" "csi-proxmox" {
   metadata {
     name = "csi-proxmox"
     labels = {
@@ -37,10 +37,10 @@ resource "kubernetes_namespace" "csi-proxmox" {
   }
 }
 
-resource "kubernetes_secret" "proxmox-csi-plugin" {
+resource "kubernetes_secret_v1" "proxmox-csi-plugin" {
   metadata {
     name      = "proxmox-csi-plugin"
-    namespace = kubernetes_namespace.csi-proxmox.id
+    namespace = kubernetes_namespace_v1.csi-proxmox.id
   }
 
   data = {

@@ -1,4 +1,4 @@
-resource "kubernetes_persistent_volume" "pv" {
+resource "kubernetes_persistent_volume_v1" "pv" {
   metadata {
     name = var.volume.name
   }
