@@ -1,0 +1,28 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: valkey
+  namespace: authelia
+spec:
+  secretName: valkey-self-signed-cert
+  duration: 720h
+  renewBefore: 72h
+  subject:
+    organizations:
+      - Stonegarden
+  commonName: valkey.authelia.svc.cluster.local
+  dnsNames:
+    - valkey
+    - valkey.authelia
+    - valkey.authelia.svc
+    - valkey.authelia.svc.cluster.local
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - server auth
+    - client auth
+  issuerRef:
+    name: stonegarden-ca-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io

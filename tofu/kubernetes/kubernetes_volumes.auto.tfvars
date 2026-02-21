@@ -27,10 +27,6 @@ kubernetes_volumes = {
     node = "euclid"
     size = "1G"
   }
-  pv-authelia = {
-    node = "euclid"
-    size = "5G"
-  }
   pv-lldap = {
     node = "euclid"
     size = "5G"

@@ -12,8 +12,10 @@ resources:
   - crypto.yaml
   - lldap-credentials.yaml
   - smtp-credentials.yaml
+  - valkey-credentials.yaml
   - cert-rsa-jwk.yaml
   - cert-ecdsa-jwk.yaml
+  - cert-valkey.yaml
   - http-route.yaml
   - cnpg-db.yaml
   - clients/argocd.yaml
@@ -30,5 +32,9 @@ helmCharts:
     version: 0.10.49
     valuesFile: values.yaml
 
-patches:
-  - path: patches/deployment-host-aliases.yaml
+  - name: valkey
+    repo: https://valkey.io/valkey-helm/
+    releaseName: valkey
+    namespace: authelia
+    version: 0.9.3
+    valuesFile: valkey-values.yaml
