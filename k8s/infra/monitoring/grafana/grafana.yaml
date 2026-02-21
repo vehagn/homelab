@@ -33,7 +33,7 @@ spec:
       allow_assign_grafana_admin: "true"
       role_attribute_path: contains(grafana[*], 'grafana_admin') && 'GrafanaAdmin' || contains(grafana[*], 'admin') && 'Admin' || contains(grafana[*], 'editor') && 'Editor' || 'Viewer'
       auto_login: "true"
-  version: 12.3.1 # renovate: docker=docker.io/grafana/grafana
+  version: 12.3.3 # renovate: docker=docker.io/grafana/grafana
   deployment:
     spec:
       template:
