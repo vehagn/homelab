@@ -1,0 +1,15 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: cnpg
+  namespace: cnpg-system
+spec:
+  allowCrossNamespaceImport: true
+  folder: CNPG
+  resyncPeriod: 10m
+  instanceSelector:
+    matchLabels:
+      app: grafana
+  configMapRef:
+    name: cnpg-grafana-dashboard
+    key: cnp.json
