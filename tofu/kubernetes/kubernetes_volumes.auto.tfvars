@@ -31,9 +31,9 @@ kubernetes_volumes = {
     node = "euclid"
     size = "2G"
   }
-  pv-lldap-postgres = {
+  pv-lldap = {
     node = "euclid"
-    size = "2G"
+    size = "5G"
   }
   pv-jellyfin-config = {
     node = "euclid"
