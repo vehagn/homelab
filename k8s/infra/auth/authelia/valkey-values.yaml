@@ -1,0 +1,29 @@
+# https://github.com/valkey-io/valkey-helm/blob/main/valkey/values.yaml
+
+dataStorage:
+  enabled: false
+
+auth:
+  enabled: true
+  usersExistingSecret: valkey-credentials
+  aclUsers:
+    default:
+      permissions: "~* &* +@all"
+      passwordKey: password
+    authelia:
+      permissions: "~* &* +@all"
+      passwordKey: password
+
+tls:
+  enabled: true
+  existingSecret: valkey-self-signed-cert
+  serverPublicKey: tls.crt
+  serverKey: tls.key
+  caPublicKey: ca.crt
+
+valkeyLogLevel: notice
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: false

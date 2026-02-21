@@ -4,10 +4,7 @@ metadata:
   name: authelia-postgres
   namespace: authelia
 spec:
-  instances: 1
-  affinity:
-    nodeSelector:
-      topology.kubernetes.io/zone: euclid
+  instances: 3
   postgresql:
     parameters:
       timezone: Europe/Oslo
@@ -15,9 +12,9 @@ spec:
     initdb:
       database: authelia
       owner: authelia
-  managed:
-    services:
-      disabledDefaultServices: [ "ro", "r" ]
+#  managed:
+#    services:
+#      disabledDefaultServices: [ "ro", "r" ]
 #      additional:
 #        - selectorType: rw
 #          updateStrategy: patch
@@ -35,6 +32,5 @@ spec:
     size: 5G
     pvcTemplate:
       storageClassName: proxmox-csi
-      volumeName: pv-authelia
       accessModes:
         - ReadWriteOnce

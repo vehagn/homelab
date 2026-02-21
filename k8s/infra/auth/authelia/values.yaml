@@ -9,7 +9,7 @@ certificates:
   existingSecret: stonegarden-ca-bundle
 
 pod:
-  kind: Deployment
+  kind: DaemonSet
   env:
     - name: TZ
       value: Europe/Oslo
@@ -47,25 +47,37 @@ configMap:
 
   session:
     cookies: [ { domain: stonegarden.dev } ]
+    redis:
+      enabled: true
+      deploy: false
+      host: valkey.authelia.svc.cluster.local
+      port: 6379
+      username: authelia
+      password: { secret_name: valkey-credentials }
+      database_index: 0
+      maximum_active_connections: 8
+      minimum_idle_connections: 0
+      tls:
+        enabled: true
 
   server:
     asset_path: /config/assets/
 
   storage:
-    local: { enabled: true }
-    #postgres:
-    #  enabled: true
-    #  deploy: false
-    #  address: tcp://authelia-postgres-rw:5432
-    #  database: authelia
-    #  username: authelia
-    #  password: { secret_name: authelia-postgres-app }
+    #local: { enabled: true }
+    postgres:
+      enabled: true
+      deploy: false
+      address: tcp://authelia-postgres-rw:5432
+      database: authelia
+      username: authelia
+      password: { secret_name: authelia-postgres-app }
 
   notifier:
     smtp:
       enabled: true
       address: smtp://smtp.mailersend.net:587
-      sender: Authelia <ikkje-noko-svar@stonegarden.dev>
+      sender: Stonegarden - Authelia <ikkje-noko-svar@stonegarden.dev>
       disable_html_emails: false
       password: { secret_name: smtp-credentials }
 
@@ -73,7 +85,7 @@ configMap:
     ldap:
       enabled: true
       implementation: lldap
-      address: ldaps://lldap.stonegarden.dev
+      address: ldaps://lldap.lldap.svc.cluster.local
       base_dn: DC=stonegarden,DC=dev
       user: UID=authelia,OU=people,DC=stonegarden,DC=dev
       password: { secret_name: lldap-credentials }
@@ -82,6 +94,8 @@ configMap:
           argocd: { multi_valued: true, value_type: string }
           audiobookshelf: { multi_valued: true, value_type: string }
           grafana: { multi_valued: true, value_type: string }
+      tls:
+        server_name: lldap.stonegarden.dev
 
   identity_providers:
     oidc:
@@ -230,6 +244,8 @@ secret:
       items: [ { key: password, path: authentication.ldap.password.txt } ]
     smtp-credentials:
       items: [ { key: password, path: notifier.smtp.password.txt } ]
+    valkey-credentials:
+      items: [ { key: password, path: session.redis.password.txt } ]
     jwk-rsa:
       items:
         - { key: tls.key, path: tls.key }
