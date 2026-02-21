@@ -4,7 +4,7 @@ metadata:
   name: authelia-postgres
   namespace: authelia
 spec:
-  instances: 1
+  instances: 3
   affinity:
     nodeSelector:
       topology.kubernetes.io/zone: euclid
@@ -15,9 +15,9 @@ spec:
     initdb:
       database: authelia
       owner: authelia
-  managed:
-    services:
-      disabledDefaultServices: [ "ro", "r" ]
+#  managed:
+#    services:
+#      disabledDefaultServices: [ "ro", "r" ]
 #      additional:
 #        - selectorType: rw
 #          updateStrategy: patch
