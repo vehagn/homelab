@@ -35,6 +35,6 @@ spec:
     size: 5G
     pvcTemplate:
       storageClassName: proxmox-csi
-      volumeName: pv-authelia
-      accessModes:
-        - ReadWriteOnce
+#      volumeName: pv-authelia-db
+#      accessModes:
+#        - ReadWriteOnce

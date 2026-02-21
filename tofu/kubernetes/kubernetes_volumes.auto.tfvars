@@ -27,7 +27,7 @@ kubernetes_volumes = {
     node = "euclid"
     size = "1G"
   }
-  pv-authelia = {
+  pv-authelia-db = {
     node = "euclid"
     size = "5G"
   }
