@@ -49,13 +49,14 @@ configMap:
     asset_path: /config/assets/
 
   storage:
-    postgres:
-      enabled: true
-      deploy: false
-      address: tcp://authelia-postgres-rw:5432
-      database: authelia
-      username: authelia
-      password: { secret_name: authelia-postgres-app }
+    local: { enabled: true }
+    #postgres:
+    #  enabled: true
+    #  deploy: false
+    #  address: tcp://authelia-postgres-rw:5432
+    #  database: authelia
+    #  username: authelia
+    #  password: { secret_name: authelia-postgres-app }
 
   notifier:
     smtp:
