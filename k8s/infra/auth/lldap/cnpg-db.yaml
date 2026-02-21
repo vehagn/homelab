@@ -31,9 +31,9 @@ spec:
   #            spec:
   #              type: LoadBalancer
   storage:
-    size: 2G
+    size: 5G
     pvcTemplate:
       storageClassName: proxmox-csi
-      volumeName: pv-lldap-postgres
+      volumeName: pv-lldap
       accessModes:
         - ReadWriteOnce
