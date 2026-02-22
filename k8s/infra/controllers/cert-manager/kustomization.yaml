@@ -21,7 +21,7 @@ helmCharts:
 
   - name: trust-manager
     repo: https://charts.jetstack.io
-    version: v0.21.0 # renovate: github-releases=cert-manager/trust-manager
+    version: v0.21.1 # renovate: github-releases=cert-manager/trust-manager
     releaseName: trust-manager
     namespace: cert-manager
     valuesFile: trust-manager-values.yaml
