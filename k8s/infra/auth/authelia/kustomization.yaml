@@ -6,6 +6,12 @@ configMapGenerator:
   - name: consent
     namespace: authelia
     files: [ ./locales/en/consent.json ]
+  - name: email-templates
+    namespace: authelia
+    files:
+      - email_templates/Event.html
+      - email_templates/IdentityVerificationJWT.html
+      - email_templates/IdentityVerificationOTC.html
 
 resources:
   - ns.yaml
