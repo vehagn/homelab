@@ -5,6 +5,10 @@ resources:
   - ns.yaml
   - cloudflare-api-token.yaml
   - cluster-issuer.yaml
+  - selfsigned-bootstrap-issuer.yaml
+  - stonegarden-root-ca.yaml
+  - stonegarden-ca-issuer.yaml
+  - trust-bundle.yaml
   - dashboard.yaml
 
 helmCharts:
@@ -14,3 +18,10 @@ helmCharts:
     releaseName: cert-manager
     namespace: cert-manager
     valuesFile: values.yaml
+
+  - name: trust-manager
+    repo: https://charts.jetstack.io
+    version: v0.21.0 # renovate: github-releases=cert-manager/trust-manager
+    releaseName: trust-manager
+    namespace: cert-manager
+    valuesFile: trust-manager-values.yaml
