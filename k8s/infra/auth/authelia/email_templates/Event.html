@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html dir="ltr" lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+  <meta name="x-apple-disable-message-reformatting"/>
+  <style>
+      body {
+          background-color: rgb(90, 110, 105);
+          margin: 0;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+      }
+
+      .container {
+          background-color: rgb(90, 110, 105);
+          padding: 0.5rem;
+      }
+
+      .card {
+          max-width: 465px;
+          border: 1px solid rgb(120, 135, 130);
+          border-radius: 0.25rem;
+          background-color: rgb(230, 235, 233);
+          margin: 40px auto;
+          padding: 20px;
+      }
+
+      .header {
+          text-align: center;
+          margin-bottom: 30px;
+      }
+
+      .brand {
+          color: rgb(0, 77, 64);
+          font-size: 24px;
+          font-weight: 400;
+          margin: 0;
+      }
+
+      .subtitle {
+          color: rgb(60, 80, 75);
+          font-size: 11px;
+          padding: 4px 0;
+          margin: 8px 0 0 0;
+          letter-spacing: 0.5px;
+      }
+
+      .title {
+          color: rgb(0, 0, 0);
+          font-size: 24px;
+          font-weight: 400;
+          text-align: center;
+          padding: 0;
+          margin: 30px 0;
+      }
+
+      .text-primary {
+          color: rgb(0, 0, 0);
+      }
+
+      .text-muted {
+          color: rgb(60, 80, 75);
+      }
+
+      p {
+          font-size: 14px;
+          line-height: 24px;
+          margin: 16px 0;
+          color: rgb(0, 0, 0);
+      }
+
+      .text-sm {
+          font-size: 14px;
+          line-height: 24px;
+      }
+
+      .text-center {
+          text-align: center;
+      }
+
+      strong {
+          color: rgb(0, 77, 64);
+      }
+
+      hr {
+          width: 100%;
+          border: none;
+          border-top: 1px solid rgb(190, 200, 198);
+          margin: 26px 0;
+      }
+
+      .details-box {
+          margin: 16px 0;
+      }
+
+      .footer {
+          font-size: 10px;
+          line-height: 24px;
+          color: rgb(190, 205, 200);
+          text-align: center;
+          margin: 16px 0;
+      }
+
+      a {
+          color: rgb(0, 100, 85);
+          text-decoration: none;
+      }
+  </style>
+</head>
+<body>
+<table border="0" width="100%" cellPadding="0" cellSpacing="0" role="presentation" align="center">
+  <tbody>
+  <tr>
+    <td class="container">
+      <table align="center" width="100%" border="0" cellPadding="0" cellSpacing="0" role="presentation" class="card">
+        <tbody>
+        <tr style="width:100%">
+          <td>
+            <div class="header">
+              <h2 class="brand">🪨 Stonegarden 🌳</h2>
+              <p class="subtitle">ACCOUNT NOTIFICATION</p>
+            </div>
+            <p class="title">{{ .Title }}</p>
+            <p>Hi {{ .DisplayName }},</p>
+            <p>This notification has been sent to you in order to notify you that {{ .BodyPrefix }} <strong><i>{{
+              .BodyEvent }}</i></strong> {{ .BodySuffix }}</p>
+            <hr/>
+            <p>Event Details:</p>
+            <table align="center" width="100%" border="0" cellPadding="0" cellSpacing="0" role="presentation"
+                   class="details-box">
+              <tbody>
+              <tr>
+                <td>{{- $keys := sortAlpha (keys .Details) }}{{- range $key := $keys }}
+                  <p class="text-sm" style="margin:8px 0">
+                    <strong>{{ $key }}:</strong> {{ index $.Details $key }}
+                  </p>{{ end }}
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            <hr/>
+            <p class="text-muted text-sm text-center">
+              This notification was intended for <span class="text-primary">{{ .DisplayName }}</span>. This event
+              notification was generated due to an action from <span class="text-primary">{{ .RemoteIP }}</span>. If you
+              do not believe that your actions could have triggered this event or if you are concerned about your
+              account's safety, please change your password and reach out to an administrator.
+            </p>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <p class="footer">
+        Powered by <a href="https://www.authelia.com" style="color:rgb(190,205,200)" target="_blank">Authelia</a>
+      </p>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>
