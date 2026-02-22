@@ -20,11 +20,24 @@ pod:
     - name: consent
       mountPath: /config/assets/locales/en/consent.json
       subPath: consent.json
+    - name: email-templates
+      mountPath: /config/assets/email_templates/Event.html
+      subPath: Event.html
+    - name: email-templates
+      mountPath: /config/assets/email_templates/IdentityVerificationJWT.html
+      subPath: IdentityVerificationJWT.html
+    - name: email-templates
+      mountPath: /config/assets/email_templates/IdentityVerificationOTC.html
+      subPath: IdentityVerificationOTC.html
   extraVolumes:
     - name: consent
       configMap:
         defaultMode: 0644
         name: consent
+    - name: email-templates
+      configMap:
+        defaultMode: 0644
+        name: email-templates
 
 configMap:
   default_2fa_method: totp
@@ -64,7 +77,6 @@ configMap:
     asset_path: /config/assets/
 
   storage:
-    #local: { enabled: true }
     postgres:
       enabled: true
       deploy: false
@@ -74,6 +86,7 @@ configMap:
       password: { secret_name: authelia-postgres-app }
 
   notifier:
+    #template_path: /config/assets/email_templates
     smtp:
       enabled: true
       address: smtp://smtp.mailersend.net:587
