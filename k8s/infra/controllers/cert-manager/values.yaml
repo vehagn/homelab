@@ -9,27 +9,24 @@ extraArgs:
 dns01RecursiveNameservers: "1.1.1.1:53"
 
 resources:
-  limits:
-    cpu: 100m
-    memory: 128Mi
   requests:
     cpu: 10m
     memory: 64Mi
+  limits:
+    memory: 64Mi
 webhook:
   resources:
-    limits:
-      cpu: 100m
-      memory: 64Mi
     requests:
       cpu: 10m
-      memory: 32Mi
+      memory: 64Mi
+    limits:
+      memory: 64Mi
 cainjector:
   resources:
-    limits:
-      cpu: 100m
-      memory: 128Mi
     requests:
       cpu: 10m
+      memory: 64Mi
+    limits:
       memory: 64Mi
 
 prometheus:

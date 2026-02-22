@@ -1,0 +1,7 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: stonegarden-ca-issuer
+spec:
+  ca:
+    secretName: stonegarden-root-ca-secret

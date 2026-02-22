@@ -5,6 +5,9 @@ image:
   tag: 4.39.15 # renovate: docker=ghcr.io/authelia/authelia
   pullPolicy: IfNotPresent
 
+certificates:
+  existingSecret: stonegarden-ca-bundle
+
 pod:
   kind: Deployment
   env:

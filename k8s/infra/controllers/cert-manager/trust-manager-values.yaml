@@ -1,0 +1,19 @@
+# https://github.com/cert-manager/trust-manager/blob/main/deploy/charts/trust-manager/values.yaml
+
+app:
+  trust:
+    namespace: cert-manager
+
+defaultPackage:
+  enabled: true
+
+secretTargets:
+  enabled: true
+  authorizedSecrets: [ stonegarden-ca-bundle ]
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 32Mi
+  limits:
+    memory: 32Mi

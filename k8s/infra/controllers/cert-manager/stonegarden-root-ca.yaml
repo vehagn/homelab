@@ -1,0 +1,23 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: stonegarden-root-ca
+  namespace: cert-manager
+spec:
+  isCA: true
+  commonName: Stonegarden Root CA
+  subject:
+    organizations:
+      - Stonegarden
+    organizationalUnits:
+      - Infrastructure
+  secretName: stonegarden-root-ca-secret
+  privateKey:
+    algorithm: ECDSA
+    size: 521
+  duration: 8760h
+  renewBefore: 720h
+  issuerRef:
+    name: selfsigned-bootstrap-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io

@@ -1,0 +1,15 @@
+apiVersion: trust.cert-manager.io/v1alpha1
+kind: Bundle
+metadata:
+  name: stonegarden-ca-bundle
+spec:
+  sources:
+    - secret:
+        name: stonegarden-root-ca-secret
+        key: ca.crt
+  target:
+    secret:
+      key: stonegarden-self-signed-root-ca.crt
+    namespaceSelector:
+      matchLabels:
+        stonegarden.dev/inject-self-signed-root-ca: "true"
