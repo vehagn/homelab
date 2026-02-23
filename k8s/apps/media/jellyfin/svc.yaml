@@ -10,3 +10,5 @@ spec:
   ports:
     - name: web
       port: 8096
+    - name: udp
+      port: 7359

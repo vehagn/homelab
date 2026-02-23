@@ -14,7 +14,6 @@ spec:
     type: Recreate
   template:
     metadata:
-      namespace: lidarr
       labels:
         app: lidarr
     spec:
