@@ -11,6 +11,9 @@ spec:
     matchLabels:
       app: jellyfin
   template:
+    metadata:
+      labels:
+        app: jellyfin
     spec:
       nodeSelector:
         topology.kubernetes.io/zone: euclid
@@ -45,6 +48,8 @@ spec:
           ports:
             - name: http
               containerPort: 8096
+            - name: udp
+              containerPort: 7359
           volumeMounts:
             - name: config
               mountPath: /config
@@ -63,6 +68,8 @@ spec:
             server: 192.168.1.117
             path: /mnt/pool-0/data/media
         - name: cache
-          emptyDir: { }
+          emptyDir:
+            medium: Memory
         - name: tmp
-          emptyDir: { }
+          emptyDir:
+            medium: Memory
