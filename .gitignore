@@ -31,3 +31,5 @@ override.tf.json
 
 *.pem
 *.crt
+
+processed_adblock_chunks
