@@ -11,7 +11,7 @@ management:
   enabled: true
   image:
     repository: ghcr.io/netbirdio/management
-    tag: 0.66.2 # renovate: docker=ghcr.io/netbirdio/management
+    tag: 0.67.2 # renovate: docker=ghcr.io/netbirdio/management
   podSecurityContext:
     seccompProfile:
       type: RuntimeDefault
@@ -139,7 +139,7 @@ signal:
   logLevel: info
   image:
     repository: ghcr.io/netbirdio/signal
-    tag: 0.66.2 # renovate: docker=ghcr.io/netbirdio/signal
+    tag: 0.67.2 # renovate: docker=ghcr.io/netbirdio/signal
   podSecurityContext:
     seccompProfile:
       type: RuntimeDefault
@@ -167,7 +167,7 @@ relay:
   logLevel: info
   image:
     repository: ghcr.io/netbirdio/relay
-    tag: 0.66.2 # renovate: docker=ghcr.io/netbirdio/relay
+    tag: 0.67.2 # renovate: docker=ghcr.io/netbirdio/relay
   podSecurityContext:
     seccompProfile:
       type: RuntimeDefault
@@ -200,7 +200,7 @@ dashboard:
   loglevel: info
   image:
     repository: docker.io/netbirdio/dashboard
-    tag: v2.33.0 # renovate: docker=docker.io/netbirdio/dashboard
+    tag: v2.36.0 # renovate: docker=docker.io/netbirdio/dashboard
   podSecurityContext:
     seccompProfile:
       type: RuntimeDefault
@@ -243,7 +243,7 @@ agent:
   enabled: true
   image:
     repository: ghcr.io/netbirdio/netbird
-    tag: 0.66.2 # renovate: docker=ghcr.io/netbirdio/netbird
+    tag: 0.67.2 # renovate: docker=ghcr.io/netbirdio/netbird
   podSecurityContext:
     seccompProfile:
       type: RuntimeDefault
