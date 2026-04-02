@@ -3,8 +3,14 @@ kind: Service
 metadata:
   name: jellyfin
   namespace: jellyfin
+  annotations:
+    io.cilium/lb-ipam-ips: 172.20.10.20
+    service.cilium.io/forwarding-mode: dsr
+  labels:
+    bgp.cilium.io/advertise-service: default
+    bgp.cilium.io/ip-pool: default
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: jellyfin
   ports:
