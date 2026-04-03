@@ -3,13 +3,24 @@ kind: Kustomization
 
 resources:
   - ns.yaml
-  - http-route.yaml
-  - grpc-route.yaml
+  - agent-setup-key.yaml
   - relay-secret.yaml
   - coturn-credentials.yaml
   - authelia-oidc-credentials.yaml
-  - agent
-  - dashboard
-  - management
-  - relay
-  - signal
+  - secret-management.yaml
+
+helmCharts:
+  - name: netbird
+    repo: https://vehagn.github.io/helms
+    version: 1.11.4 # renovate: github-releases=netbirdio/helms
+    releaseName: netbird
+    namespace: netbird
+    valuesFile: netbird-values.yaml
+
+  #- name: kubernetes-operator
+  #  repo: https://netbirdio.github.io/helms
+  #  version: 0.2.2 # renovate: github-releases=netbirdio/helms
+  #  releaseName: kubernetes-operator
+  #  includeCRDs: true
+  #  namespace: netbird
+  #  valuesFile: operator-values.yaml

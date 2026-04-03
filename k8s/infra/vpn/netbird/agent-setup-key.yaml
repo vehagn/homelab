@@ -1,0 +1,13 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: agent-setup-key
+  namespace: netbird
+spec:
+  encryptedData:
+    NB_SETUP_KEY: AgB1cN5NhzXXALAN9n/sFJbuEt8ZAeRgwKh3oAphED9By5V85UBVi6+EIIyUo0npBUoXL2WUyie+94Fg90pGhmUrGp9h1kVXVSvy/hOFyCEuhnjrhgooRTkAF1MGGay8k4KWO5xuH/brXnVbNS1eh8QwRQGaRcbfNm1IgipN/CrrTG6rM3RU/w09OgTm71O9IsLMTMa8BkPhnnA9AOxBFfq5xQxBF8V7+ilOiDQVQN914ODaOXuQUNbFY/+HajvvVg+36+6SdS/G6iQexITmBv4Q1RRr7n+7S1Sdcm3ay8PQZqPBz7bKt1+vGpktO1CcjzVULOs0Am56GdqoU0S4D/TKu9bNb07wrDkEYH04x97TlT3X8MrdTB/5z3hKYU4j0oodEaJ37ojdeWCP9MrncL4ACtK0Xa41C+2K9wbHaDXlwCC4ZJy6/y0J4Kup9qlSi9f4d+R9epDIOBIfQHpNWfR/Me7DkAKf/C4sCtFFfYudzN2hZe73nwXgbl3mmHooTtop9nZDbnodVpMzNe3CW90sFEfRnG5Lmwy5L2VlmgjkoMCxsF+KpaP/nrjc7jsBASvgaq+HqtlRUPbOiEU+UoaD+gBQSnvk1zftr/XDvrOYVJ8taU0KFcTgIcDQYwVma4dddmTPBFZkY9SUmcFj9MG8W3rBF3AVlIRDTESmbX+2GFPK1eOBn+vuvxk79FKlZ29iEnR0qnmGWfnh/BLkYpU7/iBaPZihF4GQzkK5GTBFJL5zIVs=
+  template:
+    metadata:
+      name: agent-setup-key
+      namespace: netbird
+    type: Opaque
