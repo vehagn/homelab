@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configMapGenerator:
+  - name: sws-config
+    namespace: s9n
+    literals:
+      - TZ=Europe/Oslo
+      - SERVER_LOG_LEVEL=warn
+      - SERVER_PORT=8080
+  - name: sws-site
+    namespace: s9n
+    files:
+      - site/index.html
+      - site/style.css
+
+resources:
+  - ns.yaml
+  - svc.yaml
+  - http-route.yaml
+  - deployment.yaml

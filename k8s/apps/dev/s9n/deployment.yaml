@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: s9n
+  namespace: s9n
+  labels:
+    app: s9n
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: s9n
+  template:
+    metadata:
+      namespace: whoami
+      labels:
+        app: s9n
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: static-web-server
+          image: docker.io/joseluisq/static-web-server:2.42.0-alpine
+          imagePullPolicy: Always
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ "ALL" ]
+          envFrom:
+            - configMapRef:
+                name: sws-config
+          ports:
+            - name: http
+              containerPort: 8080
+          volumeMounts:
+            - name: site
+              mountPath: /home/sws/public/index.html
+              subPath: index.html
+            - name: site
+              mountPath: /home/sws/public/style.css
+              subPath: style.css
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              memory: 128Mi
+      volumes:
+        - name: site
+          configMap:
+            name: sws-site

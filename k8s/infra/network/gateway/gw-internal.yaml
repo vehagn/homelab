@@ -44,3 +44,14 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
+    - protocol: HTTPS
+      port: 443
+      name: s9n-no
+      hostname: s9n.no
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: cert-s9n-no
+      allowedRoutes:
+        namespaces:
+          from: All

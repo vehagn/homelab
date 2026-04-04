@@ -11,6 +11,8 @@ spec:
       server: '*'
     - namespace: 'whoami'
       server: '*'
+    - namespace: 's9n'
+      server: '*'
   clusterResourceWhitelist:
     - group: '*'
       kind: '*'

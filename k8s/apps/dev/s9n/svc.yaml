@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: s9n
+  namespace: s9n
+spec:
+  selector:
+    app: s9n
+  ports:
+    - name: web
+      port: 80
+      targetPort: http

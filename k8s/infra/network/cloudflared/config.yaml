@@ -17,4 +17,12 @@ ingress:
     service: https://cilium-gateway-external.gateway.svc.cluster.local:443
     originRequest:
       originServerName: stonegarden.dev
+  - hostname: "*.s9n.no"
+    service: https://cilium-gateway-external.gateway.svc.cluster.local:443
+    originRequest:
+      originServerName: "*.s9n.no"
+  - hostname: s9n.no
+    service: https://cilium-gateway-external.gateway.svc.cluster.local:443
+    originRequest:
+      originServerName: s9n.no
   - service: http_status:404

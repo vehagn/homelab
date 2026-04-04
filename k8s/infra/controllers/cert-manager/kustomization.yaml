@@ -3,8 +3,10 @@ kind: Kustomization
 
 resources:
   - ns.yaml
-  - cloudflare-api-token.yaml
-  - cluster-issuer.yaml
+  - cf-api-s9n-no.yaml
+  - cluster-issuer-s9n-no.yaml
+  - cf-api-stonegarden-dev.yaml
+  - cluster-issuer-stonegarden-dev.yaml
   - selfsigned-bootstrap-issuer.yaml
   - stonegarden-root-ca.yaml
   - stonegarden-ca-issuer.yaml

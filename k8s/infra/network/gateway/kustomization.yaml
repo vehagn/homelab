@@ -2,6 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
+  - cert-s9n-no.yaml
   - cert-stonegarden.yaml
   - gateway-class.yaml
   - ns.yaml

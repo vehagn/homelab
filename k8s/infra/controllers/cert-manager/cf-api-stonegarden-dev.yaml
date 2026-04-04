@@ -1,0 +1,12 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: cf-api-stonegarden-dev
+  namespace: cert-manager
+spec:
+  encryptedData:
+    api-token: AgACBLUukTt7Q0kM7sAKSL7sd3kOAZknWZiHlehozenVWuGsV7xXiu0fvc3RdUFsAu8kZhoWwwYv+68LDMQy6etioGwDi95Ch1JjBGJJoP+4dEnCNzAfaqRAGMU+LV4x1C3uHY7tqgMtMGwhpwQKyUDQiMlksnuWc+FIQovG09btpCSUP1/M1nOztDaVvH4NCJgAqZ8cbPriO3azuNNDpXG90kFeRmqi3u5i3x06FqpOeZO6gILok0HcOQ93yLJrx/oYzMlW3FU1G9Rbb4YWw2zdUBN4uEtE5on4hRaUqjGXnPMOmIVBCwIAdu8dLwLg15chKnBiqtzWC17HU0asOubpnGOBq9isaPFfWW8ZeCmDvgOTDgxM4yMG2GhxmWNv2J0EjMCJkCZLhi5BFypTtIw8smA6YdCDqU2K/iKY4Ih54u1w/s+zzIlEZIBPRrRW7KxtaIV+Zm2AIRIqndbHrU6nh5C8FNZadIomQnYBccclpsOdkKbaDcq5XwJ8pp8K3YgZHkunywtPrgX/YaC18gh6Xg0qg1YhzrGj3WFE4fSP4WbCK0wg9jyZQC2tggr1qXhOrYW7YLdysdodnfTnnJh52Y9VBFD7Bh6XuCz/xRibaXjJOJaFoTL+DgUGDRny9YXsU6PDS/D2S61wHd1+J2fh4AXSwa/WMzQtMYYWMeq9pAdDRPkkxLX7u8i4dwOnOS3aLqbGaP+EL6Lh02EA44NCxuwbo1odRuuLjXY/7fSzhQihM/LIzLEZm1VyFz52nNoo8Mcd1A==
+  template:
+    metadata:
+      name: cf-api-stonegarden-dev
+      namespace: cert-manager

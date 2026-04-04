@@ -1,0 +1,12 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: cf-api-s9n-no
+  namespace: cert-manager
+spec:
+  encryptedData:
+    api-token: AgDDwZlDZUOXSHfWTUbSjOG8cqgyO5aMC54Ez7z4bbT4kXJmXcCC/Q8bsLxjkaC9OR+eVAhe7SDT7gwSXw0MnYZh8mUPGoQyX+BWlRS8GKwofIQimroJsimOdFNEeh7r8KbnBaREViP06fk/IYbaQfMYHhyjME46V6xfGJ0L2XYZdA+qGAx6OtA5vP7wBKctHFFG1FVEdQ1lmHUS0hJo+g72wqBtNX4PSW66k5BlKCvWrShtggXeSAnzCjTlblBL1CKzCUBMgkBMZX49v1OmSWTa4+8ID0GGsCD2m2HV5RP1CDziFhGDAh4rpU4bYnjPwJP1UxTelHyRcRO3eIHG7XailRYwEmiirPRNlxiKlS+mtum8N0ivWGd7qBugrYAG5Gs8nl7SvQ+xsuH8mnxhzymmkfOfst41SWMJm1mOcThXolN+LKG6aEIGQtMU/Vm9iRIfGwyM3moJeeACwfy/7Evvaup2Wa85tdFUa18v7DOxOQJZbpZHqFf7ADrQernCPakAT8Fm6u9+of0cx3H1T9QbOzpue/lnu27Yr8RLawkGzxFOrPTEi3DE9cD1WGcRtl8QRHhQtBebV35wzsjcVAQXnsbDOc6NRzujGCkTOAoh8ljmwpLaidbvC6fs8j+kSxI9zphlm9YBuN9FaxNk4vvJS6ImObFg9vv7xL+uRyRbH/HWy4ekrwSNa4q/frB18cbYs094DizckZFPcDEjlpEeUyAYoIYp6dvluE4ibrNCkuOaqZ7ONP3K+lF+4h+7DoA/OgF4fA==
+  template:
+    metadata:
+      name: cf-api-s9n-no
+      namespace: cert-manager

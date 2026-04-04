@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cert-s9n-no
+  namespace: gateway
+spec:
+  dnsNames:
+    - s9n.no
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: s9n-no
+  privateKey:
+    algorithm: ECDSA
+    encoding: PKCS8
+    size: 256
+  secretName: cert-s9n-no
+  usages:
+    - digital signature
+    - key encipherment

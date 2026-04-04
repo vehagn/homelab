@@ -12,5 +12,5 @@ spec:
       - dns01:
           cloudflare:
             apiTokenSecretRef:
-              name: cloudflare-api-token
+              name: cf-api-stonegarden-dev
               key: api-token
