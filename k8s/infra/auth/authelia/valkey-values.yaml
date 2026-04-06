@@ -8,7 +8,7 @@ auth:
   usersExistingSecret: valkey-credentials
   aclUsers:
     default:
-      permissions: "~* &* +@all"
+      permissions: "off ~* &* -@all"
       passwordKey: password
     authelia:
       permissions: "~* &* +@all"

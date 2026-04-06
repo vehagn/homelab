@@ -63,13 +63,10 @@ configMap:
     redis:
       enabled: true
       deploy: false
-      host: valkey.authelia.svc.cluster.local
+      host: valkey
       port: 6379
       username: authelia
       password: { secret_name: valkey-credentials }
-      database_index: 0
-      maximum_active_connections: 8
-      minimum_idle_connections: 0
       tls:
         enabled: true
 
