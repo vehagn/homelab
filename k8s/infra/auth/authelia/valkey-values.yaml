@@ -19,7 +19,20 @@ tls:
   existingSecret: valkey-self-signed-cert
   serverPublicKey: tls.crt
   serverKey: tls.key
-  caPublicKey: ca.crt
+#  caPublicKey: ca.crt
+
+extraVolumes:
+  - name: ca-cert
+    secret:
+      secretName: stonegarden-ca-bundle
+      items:
+        - key: stonegarden-self-signed-root-ca.crt
+          path: ca.crt
+
+extraVolumeMounts:
+  - name: ca-cert
+    mountPath: /tls/ca.crt
+    subPath: ca.crt
 
 valkeyLogLevel: notice
 

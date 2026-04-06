@@ -67,9 +67,6 @@ configMap:
       port: 6379
       username: authelia
       password: { secret_name: valkey-credentials }
-      database_index: 0
-      maximum_active_connections: 8
-      minimum_idle_connections: 0
       tls:
         enabled: true
 
