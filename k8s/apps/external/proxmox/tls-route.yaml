@@ -5,7 +5,9 @@ metadata:
   namespace: proxmox
 spec:
   parentRefs:
-    - { name: internal, namespace: gateway }
+    - name: internal
+      namespace: gateway
+      sectionName: tls-passthrough
   hostnames: [ proxmox.stonegarden.dev ]
   rules:
     - backendRefs: [ { name: proxmox, port: 443 } ]
