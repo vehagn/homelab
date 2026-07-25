@@ -1,4 +1,4 @@
-FROM docker.io/ubuntu:24.04
+FROM docker.io/ubuntu:26.04
 
 ARG TARGETARCH
 
@@ -73,62 +73,101 @@ RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
 
 # Add GitHub CLI repo
 RUN mkdir -p -m 755 /etc/apt/keyrings && \
-	  mkdir -p -m 755 /etc/apt/sources.list.d && \
-	  curl https://cli.github.com/packages/githubcli-archive-keyring.gpg \
-    | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null && \
-	  chmod 644 /etc/apt/keyrings/githubcli-archive-keyring.gpg && \
-	  echo "deb [arch=${TARGETARCH} signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
-    | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+    mkdir -p -m 755 /etc/apt/sources.list.d && \
+    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+    -o /etc/apt/keyrings/githubcli-archive-keyring.gpg && \
+    chmod 644 /etc/apt/keyrings/githubcli-archive-keyring.gpg && \
+    cat > /etc/apt/sources.list.d/github-cli.sources <<EOF
+Types: deb
+URIs: https://cli.github.com/packages
+Suites: stable
+Components: main
+Architectures: ${TARGETARCH}
+Signed-By: /etc/apt/keyrings/githubcli-archive-keyring.gpg
+EOF
 
 # Add Node repo for running GitHub actions
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
-    | gpg --dearmor \
-    | tee /usr/share/keyrings/nodesource.gpg > /dev/null && \
-    echo "deb [arch=${TARGETARCH} signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_VERSION}.x nodistro main" \
-    | tee /etc/apt/sources.list.d/nodesource.list > /dev/null && \
-    echo "Package: nodejs" | tee /etc/apt/preferences.d/nodejs > /dev/null && \
-    echo "Pin: origin deb.nodesource.com" | tee -a /etc/apt/preferences.d/nodejs > /dev/null && \
-    echo "Pin-Priority: 600" | tee -a /etc/apt/preferences.d/nodejs > /dev/null
+    | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    chmod 644 /etc/apt/keyrings/nodesource.gpg && \
+    cat > /etc/apt/sources.list.d/nodesource.sources <<EOF
+Types: deb
+URIs: https://deb.nodesource.com/node_${NODE_VERSION}.x
+Suites: nodistro
+Components: main
+Architectures: ${TARGETARCH}
+Signed-By: /etc/apt/keyrings/nodesource.gpg
+EOF
+RUN cat > /etc/apt/preferences.d/nodejs <<'EOF'
+Package: nodejs
+Pin: origin deb.nodesource.com
+Pin-Priority: 600
+EOF
 
-# Add Adoption repo for JRE needed by IDEA devcontainer
+# Add Adoptium repo for JRE needed by IDEA devcontainer
 RUN curl -fsSL https://packages.adoptium.net/artifactory/api/gpg/key/public \
-    | gpg --dearmor \
-    | tee /etc/apt/trusted.gpg.d/adoptium.gpg > /dev/null && \
-    echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" \
-    | tee /etc/apt/sources.list.d/adoptium.list > /dev/null
+    | gpg --dearmor -o /etc/apt/keyrings/adoptium.gpg && \
+    chmod 644 /etc/apt/keyrings/adoptium.gpg && \
+    cat > /etc/apt/sources.list.d/adoptium.sources <<EOF
+Types: deb
+URIs: https://packages.adoptium.net/artifactory/deb
+Suites: $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release)
+Components: main
+Signed-By: /etc/apt/keyrings/adoptium.gpg
+EOF
 
 # Add Postgresql repo
 RUN curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
-    | gpg --dearmor \
-    | tee /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg > /dev/null && \
-    echo "deb [arch=${TARGETARCH} signed-by=/etc/apt/trusted.gpg.d/apt.postgresql.org.gpg] https://apt.postgresql.org/pub/repos/apt $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release)-pgdg main" \
-    | tee /etc/apt/sources.list.d/pgdg.list > /dev/null
+    | gpg --dearmor -o /etc/apt/keyrings/apt.postgresql.org.gpg && \
+    chmod 644 /etc/apt/keyrings/apt.postgresql.org.gpg && \
+    cat > /etc/apt/sources.list.d/pgdg.sources <<EOF
+Types: deb
+URIs: https://apt.postgresql.org/pub/repos/apt
+Suites: $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release)-pgdg
+Components: main
+Architectures: ${TARGETARCH}
+Signed-By: /etc/apt/keyrings/apt.postgresql.org.gpg
+EOF
 
 # Add Helm repo
 RUN curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey \
-    | gpg --dearmor \
-    | tee tee /etc/apt/trusted.gpg.d/helm.gpg > /dev/null && \
-    echo "deb [signed-by=/etc/apt/trusted.gpg.d/helm.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main" \
-    | tee /etc/apt/sources.list.d/helm-stable-debian.list > /dev/null
+    | gpg --dearmor -o /etc/apt/keyrings/helm.gpg && \
+    chmod 644 /etc/apt/keyrings/helm.gpg && \
+    cat > /etc/apt/sources.list.d/helm-stable-debian.sources <<'EOF'
+Types: deb
+URIs: https://packages.buildkite.com/helm-linux/helm-debian/any/
+Suites: any
+Components: main
+Signed-By: /etc/apt/keyrings/helm.gpg
+EOF
 
 # Add OpenTofu repo
 RUN curl -fsSL https://get.opentofu.org/opentofu.gpg \
-    | tee /etc/apt/keyrings/opentofu.gpg > /dev/null && \
+    -o /etc/apt/keyrings/opentofu.gpg && \
     curl -fsSL https://packages.opentofu.org/opentofu/tofu/gpgkey \
-    | gpg --no-tty --batch --dearmor -o /etc/apt/keyrings/opentofu-repo.gpg > /dev/null && \
+    | gpg --no-tty --batch --dearmor -o /etc/apt/keyrings/opentofu-repo.gpg && \
     chmod 644 /etc/apt/keyrings/opentofu.gpg /etc/apt/keyrings/opentofu-repo.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/opentofu.gpg,/etc/apt/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main" \
-    | tee /etc/apt/sources.list.d/opentofu.list > /dev/null && \
-    echo "deb-src [signed-by=/etc/apt/keyrings/opentofu.gpg,/etc/apt/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main" \
-    | tee -a /etc/apt/sources.list.d/opentofu.list > /dev/null && \
-    chmod 644 /etc/apt/sources.list.d/opentofu.list
+    cat > /etc/apt/sources.list.d/opentofu.sources <<'EOF'
+Types: deb deb-src
+URIs: https://packages.opentofu.org/opentofu/tofu/any/
+Suites: any
+Components: main
+Signed-By:
+ /etc/apt/keyrings/opentofu.gpg
+ /etc/apt/keyrings/opentofu-repo.gpg
+EOF
 
 # Add gcloud CLI repo
 RUN curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg \
-    | gpg --dearmor \
-    | tee /usr/share/keyrings/cloud.google.gpg > /dev/null && \
-    echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" \
-    | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list > /dev/null
+    | gpg --dearmor -o /etc/apt/keyrings/cloud.google.gpg && \
+    chmod 644 /etc/apt/keyrings/cloud.google.gpg && \
+    cat > /etc/apt/sources.list.d/google-cloud-sdk.sources <<'EOF'
+Types: deb
+URIs: https://packages.cloud.google.com/apt
+Suites: cloud-sdk
+Components: main
+Signed-By: /etc/apt/keyrings/cloud.google.gpg
+EOF
 
 # Install packages from added repos
 RUN apt-get update && \
