@@ -59,7 +59,9 @@ configMap:
         policy: two_factor
 
   session:
-    cookies: [ { domain: stonegarden.dev } ]
+    cookies:
+      - domain: stonegarden.dev
+        authelia_url: https://authelia.stonegarden.dev
     redis:
       enabled: true
       deploy: false
