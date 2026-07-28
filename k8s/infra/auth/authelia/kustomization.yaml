@@ -35,7 +35,7 @@ helmCharts:
     repo: https://charts.authelia.com
     releaseName: authelia
     namespace: authelia
-    version: 0.10.50
+    version: 0.11.6 # renovate: github-releases=authelia/chartrepo extractVersion=^authelia-(?<version>.+)$
     valuesFile: values.yaml
 
   - name: valkey
