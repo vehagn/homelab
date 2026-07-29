@@ -85,7 +85,7 @@ configMap:
       password: { secret_name: authelia-postgres-app }
 
   notifier:
-    #template_path: /config/assets/email_templates
+    template_path: /config/assets/email_templates
     smtp:
       enabled: true
       address: smtp://smtp.mailersend.net:587

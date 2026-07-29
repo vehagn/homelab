@@ -32,10 +32,10 @@ resources:
 
 helmCharts:
   - name: authelia
-    repo: https://charts.authelia.com
+    repo: oci://ghcr.io/vehagn/chartrepo/
     releaseName: authelia
     namespace: authelia
-    version: 0.11.6 # renovate: github-releases=authelia/chartrepo extractVersion=^authelia-(?<version>.+)$
+    version: 0.11.7 # renovate: github-releases=authelia/chartrepo extractVersion=^authelia-(?<version>.+)$
     valuesFile: values.yaml
 
   - name: valkey
