@@ -3,8 +3,10 @@
 crds:
   enabled: true
   keep: true
-extraArgs:
-  - "--enable-gateway-api"
+
+config:
+  gatewayAPI:
+    enabled: true
 
 dns01RecursiveNameservers: "1.1.1.1:53"
 
