@@ -7,7 +7,7 @@ spec:
   parentRefs:
     - name: internal
       namespace: gateway
-      sectionName: tls-passthrough
+      sectionName: proxmox-passthrough
   hostnames: [ proxmox.stonegarden.dev ]
   rules:
     - backendRefs: [ { name: proxmox, port: 443 } ]

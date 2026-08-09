@@ -15,8 +15,17 @@ spec:
   listeners:
     - protocol: TLS
       port: 443
-      name: tls-passthrough
-      hostname: "*.stonegarden.dev"
+      name: proxmox-passthrough
+      hostname: proxmox.stonegarden.dev
+      tls:
+        mode: Passthrough
+      allowedRoutes:
+        namespaces:
+          from: All
+    - protocol: TLS
+      port: 443
+      name: truenas-passthrough
+      hostname: truenas.stonegarden.dev
       tls:
         mode: Passthrough
       allowedRoutes:
