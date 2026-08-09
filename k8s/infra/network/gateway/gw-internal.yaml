@@ -6,6 +6,8 @@ metadata:
 spec:
   gatewayClassName: cilium
   infrastructure:
+    annotations:
+      service.cilium.io/forwarding-mode: snat
     labels:
       bgp.cilium.io/advertise-service: default
       bgp.cilium.io/ip-pool: default
