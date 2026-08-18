@@ -15,24 +15,24 @@ spec:
     - type: IPAddress
       value: 172.20.10.100
   listeners:
-    - protocol: TLS
-      port: 443
-      name: proxmox-passthrough
-      hostname: proxmox.stonegarden.dev
-      tls:
-        mode: Passthrough
-      allowedRoutes:
-        namespaces:
-          from: All
-    - protocol: TLS
-      port: 443
-      name: truenas-passthrough
-      hostname: truenas.stonegarden.dev
-      tls:
-        mode: Passthrough
-      allowedRoutes:
-        namespaces:
-          from: All
+#    - protocol: TLS
+#      port: 443
+#      name: proxmox-passthrough
+#      hostname: proxmox.stonegarden.dev
+#      tls:
+#        mode: Passthrough
+#      allowedRoutes:
+#        namespaces:
+#          from: All
+#    - protocol: TLS
+#      port: 443
+#      name: truenas-passthrough
+#      hostname: truenas.stonegarden.dev
+#      tls:
+#        mode: Passthrough
+#      allowedRoutes:
+#        namespaces:
+#          from: All
     - protocol: HTTPS
       port: 443
       name: https-gateway
