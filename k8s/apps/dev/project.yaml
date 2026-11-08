@@ -13,6 +13,8 @@ spec:
       server: '*'
     - namespace: 's9n'
       server: '*'
+    - namespace: 'innby'
+      server: '*'
   clusterResourceWhitelist:
     - group: '*'
       kind: '*'

@@ -5,6 +5,7 @@ metadata:
   namespace: gateway
 spec:
   dnsNames:
+    - "*.s9n.no"
     - s9n.no
   issuerRef:
     group: cert-manager.io
