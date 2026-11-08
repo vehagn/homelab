@@ -1,0 +1,85 @@
+# Values for the Innby chart, see https://github.com/vehagn/innby/blob/main/charts/innby/values.yaml
+siteUrl: https://innby.s9n.no
+
+# The data controller named on /privacy.
+controller:
+  name: Vegard Hagen
+  email: vegard@stonegarden.dev
+  # The mail service, as /privacy names it: the one mailer.smtpUrl sends through.
+  mailProcessor: MailerSend (MailerSend UAB, Lithuania)
+  # The authority guests may complain to, linked on /privacy.
+  authority:
+    name: Datatilsynet
+    url: https://www.datatilsynet.no/en/
+
+# The CloudNativePG cluster in cnpg-db.yaml.
+database:
+  cnpg:
+    cluster: innby-postgres
+
+# Sealed Secret in innby-credentials.yaml.
+secrets:
+  existingSecret: innby
+
+# The gateways append the client address to X-Forwarded-For.
+trustForwarded: true
+
+admin:
+  # Under the site's hostname; its route is attached to the internal gateway only.
+  url: https://innby.s9n.no/admin
+
+# Single sign-on through Authelia. Needs INNBY_OIDC_CLIENT_SECRET in the Secret.
+# oidc:
+#   issuer: https://authelia.stonegarden.dev
+#   clientId: innby
+#   name: Authelia
+
+# The example games, on an origin of their own, as Innby requires.
+games:
+  enabled: true
+  url: https://innby-games.s9n.no
+  keys:
+    # Sealed Secret in innby-games-credentials.yaml. Kept apart from the `innby` Secret,
+    # since the games pod gets all of it as env.
+    existingSecret: innby-games
+
+mailer:
+  # The sender domain must be verified in MailerSend (SPF, DKIM, DMARC).
+  from: Innby <ikkje-noko-svar@stonegarden.dev>
+  smtpUrl: smtp://smtp.mailersend.net:587?tls=required
+
+janitor:
+  timeZone: Europe/Oslo
+
+# Attached to the *.s9n.no listener of each gateway.
+httpRoute:
+  enabled: true
+  parentRefs:
+    - { name: external, namespace: gateway, sectionName: s9n-no-wildcard }
+    - { name: internal, namespace: gateway, sectionName: s9n-no-wildcard }
+  admin:
+    parentRefs:
+      - { name: internal, namespace: gateway, sectionName: s9n-no-wildcard }
+
+ciliumNetworkPolicy:
+  enabled: true
+  # Only Prometheus may scrape the metrics.
+  metricsFromEndpoints:
+    - matchLabels:
+        k8s:io.kubernetes.pod.namespace: monitoring
+        app.kubernetes.io/name: prometheus
+  cnpg:
+    enabled: true
+
+# Anonymous metrics, scraped by kube-prometheus-stack, which takes every ServiceMonitor,
+# and a dashboard for the Grafana Operator's Grafana.
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+  grafanaDashboard:
+    enabled: true
+    resyncPeriod: 10m
+    instanceSelector:
+      matchLabels:
+        app: grafana

@@ -22,6 +22,8 @@ spec:
     spec:
       project: dev
       source:
+        plugin:
+          name: kustomize-build-with-helm
         repoURL: https://github.com/vehagn/homelab
         targetRevision: HEAD
         path: '{{ path }}'
