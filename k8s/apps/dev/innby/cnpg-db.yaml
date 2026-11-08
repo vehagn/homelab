@@ -1,0 +1,26 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: innby-postgres
+  namespace: innby
+spec:
+  instances: 1
+  # "minimal": no backup tooling, since nothing here should outlive the 30 days after the event.
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.6-minimal-trixie
+  postgresql:
+    parameters:
+      timezone: Europe/Oslo
+  bootstrap:
+    initdb:
+      database: innby
+      owner: innby
+  enableSuperuserAccess: false
+  managed:
+    services:
+      disabledDefaultServices: [ "ro", "r" ]
+  storage:
+    size: 2Gi
+    pvcTemplate:
+      storageClassName: proxmox-csi
+      accessModes:
+        - ReadWriteOnce
