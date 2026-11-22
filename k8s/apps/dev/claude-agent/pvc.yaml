@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: claude-agent-home
+  namespace: claude-agent
+spec:
+  storageClassName: proxmox-csi
+  volumeName: pv-claude-agent-01-home
+  accessModes: [ ReadWriteOnce ]
+  resources:
+    requests:
+      storage: 24G

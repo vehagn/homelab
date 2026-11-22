@@ -1,0 +1,134 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: claude-agent
+  namespace: claude-agent
+  labels:
+    app: claude-agent
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: claude-agent
+  template:
+    metadata:
+      labels:
+        app: claude-agent
+    spec:
+      # A control-plane node, as the cluster is designed (work-00 is too small).
+      nodeSelector:
+        topology.kubernetes.io/zone: abel
+        node-role.kubernetes.io/control-plane: ""
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        # The image's uid 1000 is "node", home /home/node. SSH (and all that
+        # reads the passwd database, not $HOME) would look there: make uid
+        # 1000 "agent" with home /home/agent in the container's passwd/group.
+        - name: passwd
+          image: docker.io/library/node:24-trixie
+          command:
+            - sh
+            - -c
+            - |
+              from='^node:[^:]*:1000:1000:[^:]*:[^:]*:'
+              to='agent:x:1000:1000::/home/agent:'
+              sed "s|$from|$to|" /etc/passwd > /out/passwd
+              sed 's|^node:x:1000:|agent:x:1000:|' /etc/group > /out/group
+              grep -q '^agent:x:1000:1000::/home/agent:' /out/passwd
+              grep -q '^agent:x:1000:' /out/group
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ ALL ]
+          volumeMounts:
+            - name: passwd
+              mountPath: /out
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              memory: 32Mi
+      containers:
+        - name: claude
+          image: docker.io/library/node:24-trixie
+          command: [ bash, /opt/agent/start.sh ]
+          stdin: true
+          tty: true
+          env:
+            - name: HOME
+              value: /home/agent
+            - name: PATH
+              value: /home/agent/.local/bin:/usr/local/bin:/usr/bin:/bin
+            - name: CLAUDE_CODE_VERSION
+              value: 2.1.311
+            - name: GH_VERSION
+              value: 2.105.0
+            - name: DISABLE_AUTOUPDATER
+              value: "1"
+            - name: AGENT_NAME
+              value: k8s-agent
+            - name: AGENT_REPO
+              value: vehagn/vibe-rations
+            # bypassPermissions: runs everything except start.sh's deny rules.
+            # auto would ask a classifier first, and stop risky actions.
+            - name: AGENT_PERMISSION_MODE
+              value: bypassPermissions
+            # Concurrent sessions, ~260 MiB each (default 32): fits the limit.
+            - name: AGENT_CAPACITY
+              value: "16"
+            - name: GH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: claude-agent-gh
+                  key: token
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ ALL ]
+          volumeMounts:
+            - name: home
+              mountPath: /home/agent
+            - name: start
+              mountPath: /opt/agent
+              readOnly: true
+            - name: ssh
+              mountPath: /etc/agent-ssh
+              readOnly: true
+            - name: passwd
+              mountPath: /etc/passwd
+              subPath: passwd
+              readOnly: true
+            - name: passwd
+              mountPath: /etc/group
+              subPath: group
+              readOnly: true
+          resources:
+            requests:
+              cpu: 250m
+              memory: 2Gi
+            limits:
+              memory: 8Gi
+      volumes:
+        - name: passwd
+          emptyDir:
+            sizeLimit: 1Mi
+        - name: home
+          persistentVolumeClaim:
+            claimName: claude-agent-home
+        - name: start
+          configMap:
+            name: claude-agent-start
+        - name: ssh
+          secret:
+            secretName: claude-agent-ssh
+            defaultMode: 0440
