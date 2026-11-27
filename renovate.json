@@ -1,9 +1,9 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended",
-    ":rebaseStalePrs"
+    "config:recommended"
   ],
+  "rebaseWhen": "conflicted",
   "terraform": {
     "managerFilePatterns": [
       "/\\.tf$/",
